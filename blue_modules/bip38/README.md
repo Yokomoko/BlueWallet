@@ -1,4 +1,4 @@
-# bip38
+# bip38grs
 
 [![build status](https://secure.travis-ci.org/bitcoinjs/bip38.svg)](http://travis-ci.org/bitcoinjs/bip38)
 [![Coverage Status](https://img.shields.io/coveralls/cryptocoinjs/bip38.svg)](https://coveralls.io/r/cryptocoinjs/bip38)
@@ -10,7 +10,7 @@ A JavaScript component that adheres to the [BIP38](https://github.com/bitcoin/bi
 
 
 ## Why?
-BIP38 is a standard process to encrypt Bitcoin and crypto currency private keys that is imprevious to brute force attacks thus protecting the user.
+BIP38GRS is a standard process to encrypt Groestlcoin and crypto currency private keys that is imprevious to brute force attacks thus protecting the user.
 
 
 ## Package Info
@@ -26,7 +26,7 @@ BIP38 is a standard process to encrypt Bitcoin and crypto currency private keys 
 
 ### Installation
 
-    npm install --save bip38
+    npm install --save bip38grs
 
 
 ### API
@@ -34,30 +34,30 @@ BIP38 is a standard process to encrypt Bitcoin and crypto currency private keys 
 
 ``` javascript
 var bip38 = require('bip38')
-var wif = require('wif')
+var wif = require('wifgrs')
 
-var myWifString = '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR'
+var myWifString = '5KGUthnCyV7hxAp4EJ3wixaVmmBMgwj1Rps9AStA9j2DeQaihtk'
 var decoded = wif.decode(myWifString)
 
 var encryptedKey = bip38.encrypt(decoded.privateKey, decoded.compressed, 'TestingOneTwoThree')
 console.log(encryptedKey)
-// => '6PRVWUbkzzsbcVac2qwfssoUJAN1Xhrg6bNk8J7Nzm5H7kxEbn2Nh2ZoGg'
+// => '6PRJZa3mD7BM9Y2vpnPCZWoPsFgRXW79u7A3LtW6MifAnakB5bJ5pZY9oE'
 ```
 
 
 ### decrypt(encryptedKey, passhprase[, progressCallback, scryptParams])
 
 ``` javascript
-var bip38 = require('bip38')
-var wif = require('wif')
+var bip38 = require('bip38grs')
+var wif = require('wifgrs')
 
-var encryptedKey = '6PRVWUbkzzsbcVac2qwfssoUJAN1Xhrg6bNk8J7Nzm5H7kxEbn2Nh2ZoGg'
+var encryptedKey = '6PRJZa3mD7BM9Y2vpnPCZWoPsFgRXW79u7A3LtW6MifAnakB5bJ5pZY9oE'
 var decryptedKey = bip38.decrypt(encryptedKey, 'TestingOneTwoThree', function (status) {
   console.log(status.percent) // will print the precent every time current increases by 1000
 })
 
 console.log(wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed))
-// => '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR'
+// => '5KGUthnCyV7hxAp4EJ3wixaVmmBMgwj1Rps9AStA9j2DeQaihtk'
 ```
 
 
@@ -67,4 +67,3 @@ console.log(wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed))
 - https://github.com/casascius/Bitcoin-Address-Utility/tree/master/Model
 - https://github.com/nomorecoin/python-bip38-testing/blob/master/bip38.py
 - https://github.com/pointbiz/bitaddress.org/blob/master/src/ninja.key.js
-
