@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, InteractionManager, Platform, TextInput, KeyboardAvoidingView, Keyboard, StyleSheet, ScrollView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
-import bip21 from 'bip21';
+import bip21 from 'bip21grs';
 import {
   BlueLoading,
   SafeBlueArea,

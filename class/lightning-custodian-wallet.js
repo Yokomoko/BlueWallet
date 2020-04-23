@@ -1,6 +1,6 @@
 import { LegacyWallet } from './legacy-wallet';
 import Frisbee from 'frisbee';
-import bolt11 from 'bolt11';
+import bolt11 from 'bolt11grs';
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
 
 export class LightningCustodianWallet extends LegacyWallet {

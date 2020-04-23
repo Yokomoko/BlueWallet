@@ -35,7 +35,7 @@ let EV = require('../../events');
 let BlueElectrum = require('../../BlueElectrum');
 /** @type {AppStorage} */
 const BlueApp = require('../../BlueApp');
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const { height, width } = Dimensions.get('window');
 
 export default class PsbtWithHardwareWallet extends Component {

@@ -1,11 +1,11 @@
 import bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 import signer from '../models/signer';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
-const bitcoin = require('bitcoinjs-lib');
-const HDNode = require('bip32');
+const bitcoin = require('groestlcoinjs-lib');
+const HDNode = require('bip32grs');
 
 /**
  * HD Wallet (BIP39).
@@ -34,7 +34,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
   _getWIFByIndex(internal, index) {
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32.fromSeed(seed);
+    const root = bitcoin.bip32grs.fromSeed(seed);
     const path = `m/49'/0'/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
 

@@ -1,11 +1,11 @@
 import { NativeModules } from 'react-native';
 import bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 import { AbstractHDWallet } from './abstract-hd-wallet';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const BlueElectrum = require('../BlueElectrum');
-const HDNode = require('bip32');
+const HDNode = require('bip32grs');
 const coinSelectAccumulative = require('coinselect/accumulative');
 const coinSelectSplit = require('coinselect/split');
 const reverse = require('buffer-reverse');

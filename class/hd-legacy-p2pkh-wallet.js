@@ -2,8 +2,8 @@ import bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
 import signer from '../models/signer';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
-const bitcoin = require('bitcoinjs-lib');
-const HDNode = require('bip32');
+const bitcoin = require('groestlcoinjs-lib');
+const HDNode = require('bip32grs');
 
 /**
  * HD Wallet (BIP39).
@@ -24,7 +24,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     }
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32.fromSeed(seed);
+    const root = bitcoin.bip32grs.fromSeed(seed);
 
     const path = "m/44'/0'/0'";
     const child = root.derivePath(path).neutered();
@@ -63,7 +63,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     index = index * 1; // cast to int
     if (this.external_addresses_cache[index]) return this.external_addresses_cache[index]; // cache hit
 
-    const node = bitcoin.bip32.fromBase58(this.getXpub());
+    const node = bitcoin.bip32grs.fromBase58(this.getXpub());
     const address = bitcoin.payments.p2pkh({
       pubkey: node.derive(0).derive(index).publicKey,
     }).address;
@@ -75,7 +75,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     index = index * 1; // cast to int
     if (this.internal_addresses_cache[index]) return this.internal_addresses_cache[index]; // cache hit
 
-    const node = bitcoin.bip32.fromBase58(this.getXpub());
+    const node = bitcoin.bip32grs.fromBase58(this.getXpub());
     const address = bitcoin.payments.p2pkh({
       pubkey: node.derive(1).derive(index).publicKey,
     }).address;

@@ -122,7 +122,7 @@ const About = () => {
             <BlueTextCentered>Built with the awesome 👍</BlueTextCentered>
             <BlueSpacing20 />
             <BlueTextCentered>React Native</BlueTextCentered>
-            <BlueTextCentered>bitcoinjs-lib</BlueTextCentered>
+            <BlueTextCentered>groestlcoinjs-lib</BlueTextCentered>
             <BlueTextCentered>Nodejs</BlueTextCentered>
             <BlueTextCentered>Electrum server</BlueTextCentered>
           </View>

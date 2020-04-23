@@ -4,7 +4,7 @@ import BitcoinBIP70TransactionDecode from '../bip70/bip70';
 import RNFS from 'react-native-fs';
 import url from 'url';
 import { Chain } from '../models/bitcoinUnits';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const BlueApp: AppStorage = require('../BlueApp');
 
 class DeeplinkSchemaMatch {

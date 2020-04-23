@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { BlueLoading, BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueNavigationStyle } from '../BlueComponents';
 import PropTypes from 'prop-types';
 import { SegwitP2SHWallet, LegacyWallet, HDSegwitP2SHWallet, HDSegwitBech32Wallet } from '../class';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
 let BigNumber = require('bignumber.js');
 let encryption = require('../encryption');
@@ -204,7 +204,7 @@ export default class Selftest extends Component {
       let mnemonic =
         'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
       let seed = bip39.mnemonicToSeed(mnemonic);
-      let root = bitcoin.bip32.fromSeed(seed);
+      let root = bitcoin.bip32grs.fromSeed(seed);
 
       let path = "m/49'/0'/0'/0/0";
       let child = root.derivePath(path);

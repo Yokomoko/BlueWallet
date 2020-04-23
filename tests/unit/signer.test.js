@@ -1,5 +1,5 @@
 /* global describe, it */
-const bitcoinjs = require('bitcoinjs-lib');
+const bitcoinjs = require('groestlcoinjs-lib');
 let assert = require('assert');
 
 describe('unit - signer', function() {

@@ -6,7 +6,7 @@
  * https://github.com/Overtorment/Cashier-BTC
  *
  **/
-const bitcoinjs = require('bitcoinjs-lib');
+const bitcoinjs = require('groestlcoinjs-lib');
 const _p2wpkh = bitcoinjs.payments.p2wpkh;
 const _p2sh = bitcoinjs.payments.p2sh;
 const toSatoshi = num => parseInt((num * 100000000).toFixed(0));

@@ -1,7 +1,7 @@
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 import bip39 from 'bip39';
-const bip32 = require('bip32');
-const bitcoinjs = require('bitcoinjs-lib');
+const bip32 = require('bip32grs');
+const bitcoinjs = require('groestlcoinjs-lib');
 
 /**
  * HD Wallet (BIP39).

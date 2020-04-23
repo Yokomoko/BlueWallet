@@ -19,7 +19,7 @@ const A = require('../analytics');
 const BlueApp = require('../BlueApp');
 const loc = require('../loc');
 const bip38 = require('../blue_modules/bip38');
-const wif = require('wif');
+const wif = require('wifgrs');
 const prompt = require('../prompt');
 
 export default class WalletImport {
