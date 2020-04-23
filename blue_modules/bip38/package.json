@@ -31,6 +31,7 @@
   "dependencies": {
     "bigi": "^1.2.0",
     "browserify-aes": "^1.0.1",
+    "bs58check": "<3.0.0",
     "bs58grscheck": "<3.0.0",
     "buffer-xor": "^1.0.2",
     "create-hash": "^1.1.1",
@@ -45,7 +46,7 @@
     "mocha": "^2.3.3",
     "mochify": "^2.1.1",
     "standard": "^9.0.2",
-    "wif": "^2.0.1"
+    "wifgrs": "^2.0.6"
   },
   "homepage": "http://cryptocoinjs.com/modules/currency/bip38/",
   "keywords": [

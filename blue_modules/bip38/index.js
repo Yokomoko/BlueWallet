@@ -2,7 +2,8 @@ const BlueCrypto = require('react-native-blue-crypto');
 var aes = require('browserify-aes')
 var assert = require('assert')
 var Buffer = require('safe-buffer').Buffer
-var bs58check = require('bs58grscheck')
+var bs58check = require('bs58check')
+var bs58grscheck = require('bs58grscheck')
 var createHash = require('create-hash')
 var scrypt = require('./scryptsy')
 var xor = require('buffer-xor/inplace')
@@ -36,10 +37,10 @@ function getAddress (d, compressed) {
   var Q = curve.G.multiply(d).getEncoded(compressed)
   var hash = hash160(Q)
   var payload = Buffer.allocUnsafe(21)
-  payload.writeUInt8(0x00, 0) // XXX TODO FIXME bitcoin only??? damn you BIP38
+  payload.writeUInt8(0x24, 0) // XXX TODO FIXME bitcoin only??? damn you BIP38
   hash.copy(payload, 1)
 
-  return bs58check.encode(payload)
+  return bs58grscheck.encode(payload)
 }
 
 async function scryptWrapper(secret, salt, N, r, p, dkLen, progressCallback) {
@@ -227,7 +228,7 @@ async function decryptECMult (buffer, passphrase, progressCallback, scryptParams
 }
 
 function verify (string) {
-  var decoded = bs58check.decodeUnsafe(string)
+  var decoded = bs58grscheck.decodeUnsafe(string)
   if (!decoded) return false
 
   if (decoded.length !== 39) return false
