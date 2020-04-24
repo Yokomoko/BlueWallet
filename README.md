@@ -1,4 +1,4 @@
-# BlueWallet - A Bitcoin & Lightning Wallet
+# BlueWallet - A Groestlcoin & Lightning Wallet
 
 [![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/BlueWallet/BlueWallet/master/package.json&query=$.version&label=Version)](https://github.com/BlueWallet/BlueWallet)
 [![CircleCI](https://circleci.com/gh/BlueWallet/BlueWallet.svg?style=svg)](https://circleci.com/gh/BlueWallet/BlueWallet)
@@ -6,7 +6,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![](https://img.shields.io/github/license/BlueWallet/BlueWallet.svg)
 
-Thin Bitcoin Wallet.
+Thin Groestlcoin Wallet.
 Built with React Native and Electrum.
 
 [![Appstore](https://bluewallet.io/img/app-store-badge.svg)](https://itunes.apple.com/us/app/bluewallet-bitcoin-wallet/id1376878040?l=ru&ls=1&mt=8)
@@ -92,7 +92,7 @@ Builds automated and tested with BrowserStack
 
 ## MOTIVATION TO BUILD IT
 
-I was not satisfied with existing iOS Bitcoin apps, especially with BreadWallet (the one I mainly used) where development stalled and they could not even deliver such features as SegWit, RBF and custom fees (at the times where custom fees were especially needed).
+I was not satisfied with existing iOS Groestlcoin apps, especially with BreadWallet (the one I mainly used) where development stalled and they could not even deliver such features as SegWit, RBF and custom fees (at the times where custom fees were especially needed).
 So I knew I could create one to use myself and let others use it.
 I had experience with awesome bitcoin-js lib (javascript), and since I dont own any Macs, don't plan to and not going to learn ObjC/Swift - ReactNative (where you also write in javascript) was an obvious choice.
 
