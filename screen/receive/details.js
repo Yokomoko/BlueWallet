@@ -190,7 +190,7 @@ const ReceiveDetails = () => {
     <SafeBlueArea style={{ flex: 1 }}>
       {isHandOffUseEnabled && address !== undefined && (
         <Handoff
-          title={`Bitcoin Transaction ${address}`}
+          title={`Groestlcoin Transaction ${address}`}
           type="io.bluewallet.bluewallet"
           url={`https://blockstream.info/address/${address}`}
         />

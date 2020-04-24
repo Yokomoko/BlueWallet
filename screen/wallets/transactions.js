@@ -267,7 +267,7 @@ export default class WalletTransactions extends Component {
               onPress={a => {
                 const wallets = [...BlueApp.getWallets().filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
                 if (wallets.length === 0) {
-                  alert('In order to proceed, please create a Bitcoin wallet to refill with.');
+                  alert('In order to proceed, please create a Groestlcoin wallet to refill with.');
                 } else {
                   this.setState({ isManageFundsModalVisible: false });
                   this.props.navigation.navigate('SelectWallet', { onWalletSelect: this.onWalletSelect, chainType: Chain.ONCHAIN });
@@ -570,7 +570,7 @@ export default class WalletTransactions extends Component {
       <View style={{ flex: 1 }}>
         {this.state.wallet.chain === Chain.ONCHAIN && this.state.isHandOffUseEnabled && (
           <Handoff
-            title={`Bitcoin Wallet ${this.state.wallet.getLabel()}`}
+            title={`Groestlcoin Wallet ${this.state.wallet.getLabel()}`}
             type="io.bluewallet.bluewallet"
             url={`https://blockpath.com/search/addr?q=${this.state.wallet.getXpub()}`}
           />

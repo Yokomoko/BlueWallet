@@ -79,7 +79,7 @@ export default class SendDetails extends Component {
     const wallets = BlueApp.getWallets().filter(wallet => wallet.type !== LightningCustodianWallet.type);
 
     if (wallets.length === 0) {
-      alert('Before creating a transaction, you must first add a Bitcoin wallet.');
+      alert('Before creating a transaction, you must first add a Groestlcoin wallet.');
       return props.navigation.goBack(null);
     } else {
       if (!fromWallet && wallets.length > 0) {
@@ -121,7 +121,7 @@ export default class SendDetails extends Component {
   /**
    * TODO: refactor this mess, get rid of regexp, use https://github.com/bitcoinjs/bitcoinjs-lib/issues/890 etc etc
    *
-   * @param data {String} Can be address or `bitcoin:xxxxxxx` uri scheme, or invalid garbage
+   * @param data {String} Can be address or `groestlcoin:xxxxxxx` uri scheme, or invalid garbage
    */
   processAddressData = data => {
     this.setState({ isLoading: true }, async () => {
@@ -137,7 +137,7 @@ export default class SendDetails extends Component {
         });
       } else {
         let recipients = this.state.addresses;
-        const dataWithoutSchema = data.replace('bitcoin:', '');
+        const dataWithoutSchema = data.replace('groestlcoin:', '');
         if (
           btcAddressRx.test(dataWithoutSchema) ||
           ((dataWithoutSchema.indexOf('bc1') === 0 || dataWithoutSchema.indexOf('BC1') === 0) && dataWithoutSchema.indexOf('?') === -1)
@@ -152,8 +152,8 @@ export default class SendDetails extends Component {
           let address = '';
           let options;
           try {
-            if (!data.toLowerCase().startsWith('bitcoin:')) {
-              data = `bitcoin:${data}`;
+            if (!data.toLowerCase().startsWith('groestlcoin:')) {
+              data = `groestlcoin:${data}`;
             }
             const decoded = bip21.decode(data);
             address = decoded.address;
@@ -205,7 +205,7 @@ export default class SendDetails extends Component {
           this.setState({ addresses, memo: initialMemo, isLoading: false });
         } catch (error) {
           console.log(error);
-          alert('Error: Unable to decode Bitcoin address');
+          alert('Error: Unable to decode Groestlcoin address');
         }
       }
     } else if (this.props.navigation.state.params.address) {
@@ -248,7 +248,7 @@ export default class SendDetails extends Component {
             } catch (error) {
               console.log(error);
               this.setState({ isLoading: false });
-              alert('Error: Unable to decode Bitcoin address');
+              alert('Error: Unable to decode Groestlcoin address');
             }
           }
         }
@@ -593,7 +593,7 @@ export default class SendDetails extends Component {
       ReactNativeHapticFeedback.trigger('notificationWarning');
       Alert.alert(
         'Wallet Selection',
-        `The selected wallet does not support sending Bitcoin to multiple recipients. Are you sure to want to select this wallet?`,
+        `The selected wallet does not support sending Groestlcoin to multiple recipients. Are you sure to want to select this wallet?`,
         [
           {
             text: loc._.ok,
