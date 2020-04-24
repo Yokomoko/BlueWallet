@@ -106,7 +106,7 @@ describe('HodlHodl API', function() {
     );
 
     assert.ok(offers[0]);
-    assert.ok(offers[0].asset_code === 'BTC');
+    assert.ok(offers[0].asset_code === 'GRS');
     assert.ok(offers[0].country_code);
     assert.ok(offers[0].side === HodlHodlApi.FILTERS_SIDE_VALUE_SELL);
     assert.ok(offers[0].title || offers[0].description);

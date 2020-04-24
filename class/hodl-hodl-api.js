@@ -5,8 +5,8 @@ export class HodlHodlApi {
   static PAGINATION_OFFSET = 'offset'; // int
 
   static FILTERS_ASSET_CODE = 'asset_code';
-  static FILTERS_ASSET_CODE_VALUE_BTC = 'BTC';
-  static FILTERS_ASSET_CODE_VALUE_BTCLN = 'BTCLN';
+  static FILTERS_ASSET_CODE_VALUE_BTC = 'GRS';
+  static FILTERS_ASSET_CODE_VALUE_BTCLN = 'GRSLN';
 
   static FILTERS_SIDE = 'side';
   static FILTERS_SIDE_VALUE_BUY = 'buy';

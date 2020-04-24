@@ -22,8 +22,8 @@ class NumericKeypadInterfaceController: WKInterfaceController {
     static let keypadDataChanged = Notification(name: NotificationName.keypadDataChanged)
   }
   enum NumericKeypadType: String {
-    case BTC = "BTC"
-    case SATS = "sats"
+    case BTC = "GRS"
+    case SATS = "gros"
   }
   
   @IBOutlet weak var periodButton: WKInterfaceButton!

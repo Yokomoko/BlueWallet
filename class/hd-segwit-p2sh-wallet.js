@@ -100,7 +100,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
   /**
    *
    * @param utxos
-   * @param amount Either float (BTC) or string 'MAX' (BitcoinUnit.MAX) to send all
+   * @param amount Either float (GRS) or string 'MAX' (BitcoinUnit.MAX) to send all
    * @param fee
    * @param address
    * @returns {string}
@@ -144,7 +144,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
   }
 
   /**
-   * Creates Segwit P2SH Bitcoin address
+   * Creates Segwit P2SH Groestlcoin address
    * @param hdNode
    * @returns {String}
    */
