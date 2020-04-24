@@ -4,9 +4,9 @@ const assert = require('assert');
 
 describe('unit - DeepLinkSchemaMatch', function() {
   it('hasSchema', () => {
-    assert.ok(DeeplinkSchemaMatch.hasSchema('bitcoin:12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG'));
-    assert.ok(DeeplinkSchemaMatch.hasSchema('bitcoin:bc1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7?amount=666&label=Yo'));
-    assert.ok(DeeplinkSchemaMatch.hasSchema('bitcoin:BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7?amount=666&label=Yo'));
+    assert.ok(DeeplinkSchemaMatch.hasSchema('groestlcoin:12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG'));
+    assert.ok(DeeplinkSchemaMatch.hasSchema('groestlcoin:bc1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7?amount=666&label=Yo'));
+    assert.ok(DeeplinkSchemaMatch.hasSchema('groestlcoin:BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7?amount=666&label=Yo'));
   });
 
   it('isBitcoin Address', () => {
@@ -23,10 +23,10 @@ describe('unit - DeepLinkSchemaMatch', function() {
     );
   });
 
-  it('isBoth Bitcoin & Invoice', () => {
+  it('isBoth Groestlcoin & Invoice', () => {
     assert.ok(
       DeeplinkSchemaMatch.isBothBitcoinAndLightning(
-        'bitcoin:1DamianM2k8WfNEeJmyqSe2YW1upB7UATx?amount=0.000001&lightning=lnbc1u1pwry044pp53xlmkghmzjzm3cljl6729cwwqz5hhnhevwfajpkln850n7clft4sdqlgfy4qv33ypmj7sj0f32rzvfqw3jhxaqcqzysxq97zvuq5zy8ge6q70prnvgwtade0g2k5h2r76ws7j2926xdjj2pjaq6q3r4awsxtm6k5prqcul73p3atveljkn6wxdkrcy69t6k5edhtc6q7lgpe4m5k4',
+        'groestlcoin:1DamianM2k8WfNEeJmyqSe2YW1upB7UATx?amount=0.000001&lightning=lnbc1u1pwry044pp53xlmkghmzjzm3cljl6729cwwqz5hhnhevwfajpkln850n7clft4sdqlgfy4qv33ypmj7sj0f32rzvfqw3jhxaqcqzysxq97zvuq5zy8ge6q70prnvgwtade0g2k5h2r76ws7j2926xdjj2pjaq6q3r4awsxtm6k5prqcul73p3atveljkn6wxdkrcy69t6k5edhtc6q7lgpe4m5k4',
       ),
     );
   });

@@ -238,14 +238,14 @@ describe('unit - signer', function() {
         label: 'nolabel',
         amount: 1000000,
       });
-      assert.strictEqual(url, 'bitcoin:3Bsssbs4ANCGNETvGLJ3Fvri6SiVnH1fbi?amount=0.01&message=For%20goods%20%26%20services&label=nolabel');
+      assert.strictEqual(url, 'groestlcoin:3Bsssbs4ANCGNETvGLJ3Fvri6SiVnH1fbi?amount=0.01&message=For%20goods%20%26%20services&label=nolabel');
 
       url = signer.URI({
         address: '1DzJepHCRD2C9vpFjk11eXJi97juEZ3ftv',
         message: 'wheres the money lebowski',
         amount: 400000,
       });
-      assert.strictEqual(url, 'bitcoin:1DzJepHCRD2C9vpFjk11eXJi97juEZ3ftv?amount=0.004&message=wheres%20the%20money%20lebowski');
+      assert.strictEqual(url, 'groestlcoin:1DzJepHCRD2C9vpFjk11eXJi97juEZ3ftv?amount=0.004&message=wheres%20the%20money%20lebowski');
       done();
     });
   });
