@@ -11,7 +11,7 @@ module.exports = {
     select_wallet: 'Valitse Lompakko',
     options: 'valinnat',
     createBitcoinWallet:
-      'Sinulla ei tällä hetkellä ole Bitcoin lompakkoa. Rahoittaaksesi Lightning lompakkoa, Bitcoin lompakko tulee tuoda tai luoda. Haluatko kuitenkin jatkaa?',
+      'Sinulla ei tällä hetkellä ole Groestlcoin lompakkoa. Rahoittaaksesi Lightning lompakkoa, Groestlcoin lompakko tulee tuoda tai luoda. Haluatko kuitenkin jatkaa?',
     list: {
       app_name: 'BlueWallet',
       title: 'lompakot',
@@ -48,7 +48,7 @@ module.exports = {
       imported: 'Tuotu',
       coming_soon: 'Tulossa',
       lightning: 'Lightning',
-      bitcoin: 'Bitcoin',
+      bitcoin: 'Groestlcoin',
     },
     details: {
       title: 'Lompakko',
@@ -127,8 +127,8 @@ module.exports = {
       total_exceeds_balance: 'Lähetettävä summa ylittää katteen',
       create_tx_error: 'Virhe siirron luonnissa. Varmista, että osoite on oikein.',
       address: 'osoite',
-      amount_placeholder: 'lähetettävä summa (BTC)',
-      fee_placeholder: 'plus siirtokulu (BTC)',
+      amount_placeholder: 'lähetettävä summa (GRS)',
+      fee_placeholder: 'plus siirtokulu (GRS)',
       note_placeholder: 'muistiinpano',
       cancel: 'Peruuta',
       scan: 'Skannaa',

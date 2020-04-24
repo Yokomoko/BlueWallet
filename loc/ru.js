@@ -10,12 +10,12 @@ module.exports = {
   wallets: {
     options: 'Настройки',
     select_wallet: 'Выбрать кошелек',
-    createBitcoinWallet: 'Чтобы воспользоватья кошельком Lightning, нужно сначала пополнить его с помощью кошелька Bitcoin. Продолжить?',
+    createBitcoinWallet: 'Чтобы воспользоватья кошельком Lightning, нужно сначала пополнить его с помощью кошелька Groestlcoin. Продолжить?',
 
     list: {
       app_name: 'BlueWallet',
       title: 'Кошельки',
-      header: 'Кошелек - это секретный (приватный) ключ и соответствующий ему адрес на который можно получать Bitcoin',
+      header: 'Кошелек - это секретный (приватный) ключ и соответствующий ему адрес на который можно получать Groestlcoin',
       add: 'Добавить Кошелек',
       create_a_wallet: 'Создать кошелек',
       create_a_wallet1: 'Это бесплатно и ты можешь создать',
@@ -26,7 +26,7 @@ module.exports = {
       empty_txs1_lightning:
         'Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and speed is blazing fast.',
       empty_txs2_lightning: '\nTo start using it tap on "manage funds" and topup your balance.',
-      tap_here_to_buy: 'Купить Bitcoin',
+      tap_here_to_buy: 'Купить Groestlcoin',
     },
     reorder: {
       title: 'Отсортировать кошельки',
@@ -46,7 +46,7 @@ module.exports = {
       imported: 'Кошелек импортирован',
       coming_soon: 'Скоро будет',
       lightning: 'Lightning',
-      bitcoin: 'Bitcoin',
+      bitcoin: 'Groestlcoin',
     },
     details: {
       title: 'Информация о кошельке',
@@ -63,7 +63,7 @@ module.exports = {
       no_cancel: 'Нет, отмена',
       delete_this_wallet: 'Удалить этот кошелек',
       export_backup: 'Экспорт / резервная копия',
-      buy_bitcoin: 'Купить Bitcoin',
+      buy_bitcoin: 'Купить Groestlcoin',
       show_xpub: 'Показать XPUB',
     },
     export: {
@@ -129,8 +129,8 @@ module.exports = {
       fee_field_is_not_valid: 'Введенная комиссия неверна',
       address_field_is_not_valid: 'Введенный адрес неверный',
       receiver_placeholder: 'Адрес получателя',
-      amount_placeholder: 'сколько отправить (в BTC)',
-      fee_placeholder: 'плюс комиссия за перевод (в BTC)',
+      amount_placeholder: 'сколько отправить (в GRS)',
+      fee_placeholder: 'плюс комиссия за перевод (в GRS)',
       note_placeholder: 'примечание платежа',
       create_tx_error: 'Ошибка при создании транзакции. Пожалуйста, проверь правильность адреса.',
       cancel: 'Отмена',
@@ -158,7 +158,7 @@ module.exports = {
     },
   },
   buyBitcoin: {
-    header: 'Купить Bitcoin',
+    header: 'Купить Groestlcoin',
     tap_your_address: 'Нажми на адрес, чтобы скопировать его:',
     copied: 'Скопировано',
   },
@@ -203,14 +203,14 @@ module.exports = {
     title: 'Правдоподобная имитация',
     help:
       'При определенных обстоятельствах тебя могут вынудить раскрыть пароль. ' +
-      'Чтобы сохранить свой Bitcoin в безопасности, BlueWallet может создать ' +
+      'Чтобы сохранить свой Groestlcoin в безопасности, BlueWallet может создать ' +
       'еще одно зашифрованое хранилище, с другим паролем. В случае шантажа ' +
       'ты можешь раскрыть третьим лицам этот пароль. Если ввести этот пароль в ' +
       "BlueWallet, разблокируется 'фальшивое' хранилище. Это будет выглядеть " +
       'правдоподобно для третьих лиц, но при этом сохранит ваше основное хранилище ' +
-      'с Bitcoin в безопасности.',
+      'с Groestlcoin в безопасности.',
     help2:
-      'Новое хранилище будет полностью функциональным и ты даже можешь хранить на нем немного Bitcoin, ' +
+      'Новое хранилище будет полностью функциональным и ты даже можешь хранить на нем немного Groestlcoin, ' +
       'чтобы это выглядело более правдоподобно.',
     create_fake_storage: 'Создать фальшивое хранилище',
     go_back: 'Назад',

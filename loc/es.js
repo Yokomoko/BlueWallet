@@ -11,7 +11,7 @@ module.exports = {
     options: 'opciones',
     select_wallet: 'Selecciona billetera',
     createBitcoinWallet:
-      'In order to use a Lightning wallet, a Bitcoin wallet is needed in order to fund it. Would you like to continue anyway?',
+      'In order to use a Lightning wallet, a Groestlcoin wallet is needed in order to fund it. Would you like to continue anyway?',
     list: {
       app_name: 'BlueWallet',
       title: 'billeteras',
@@ -26,7 +26,7 @@ module.exports = {
       empty_txs1_lightning:
         'Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and speed is blazing fast.',
       empty_txs2_lightning: '\nTo start using it tap on "manage funds" and topup your balance.',
-      tap_here_to_buy: 'Tap here to buy Bitcoin',
+      tap_here_to_buy: 'Tap here to buy Groestlcoin',
     },
     reorder: {
       title: 'Reorganizar Billetera',
@@ -46,7 +46,7 @@ module.exports = {
       imported: 'Importado',
       coming_soon: 'Viene pronto',
       lightning: 'Lightning',
-      bitcoin: 'Bitcoin',
+      bitcoin: 'Groestlcoin',
     },
     details: {
       title: 'Detalles de la billetera',
@@ -63,7 +63,7 @@ module.exports = {
       no_cancel: 'No, cancelar',
       delete_this_wallet: 'Eliminar esta carterqa',
       export_backup: 'Exportar / Guardar',
-      buy_bitcoin: 'Buy Bitcoin',
+      buy_bitcoin: 'Buy Groestlcoin',
       show_xpub: 'Show wallet XPUB',
     },
     export: {
@@ -130,8 +130,8 @@ module.exports = {
       fee_field_is_not_valid: 'La tasa no es válida',
       address_field_is_not_valid: 'La dirección no es válida',
       receiver_placeholder: 'La dirección de recipiente',
-      amount_placeholder: 'cantidad para enviar (in BTC)',
-      fee_placeholder: 'más tasa de transaccion (in BTC)',
+      amount_placeholder: 'cantidad para enviar (in GRS)',
+      fee_placeholder: 'más tasa de transaccion (in GRS)',
       note_placeholder: 'comentario (para ti mismo)',
       create_tx_error: 'Se ha producido un error al crear la transacción. Por favor, asegúrese de que la dirección es válida.',
       cancel: 'Cancelar',
@@ -171,7 +171,7 @@ module.exports = {
     scan_lnurl: 'Scan to receive',
   },
   buyBitcoin: {
-    header: 'Buy Bitcoin',
+    header: 'Buy Groestlcoin',
     tap_your_address: 'Tap your address to copy it to clipboard:',
     copied: 'Copied to Clipboard!',
   },
