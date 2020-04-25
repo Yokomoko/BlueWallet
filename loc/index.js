@@ -167,7 +167,7 @@ strings.formatBalance = (balance, toUnit, withFormatting = false) => {
   if (toUnit === undefined) {
     return balance + ' ' + BitcoinUnit.BTC;
   }
-  if (toUnit === BitcoinUnit.GRS) {
+  if (toUnit === BitcoinUnit.BTC) {
     const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
     return removeTrailingZeros(value) + ' ' + BitcoinUnit.BTC;
   } else if (toUnit === BitcoinUnit.SATS) {
