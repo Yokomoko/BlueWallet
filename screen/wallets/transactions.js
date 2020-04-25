@@ -228,9 +228,9 @@ export default class WalletTransactions extends Component {
 
             For ONCHAIN wallet type no LappBrowser button should be displayed, its Lightning-network specific.
            */}
-          {this.renderMarketplaceButton()}
+          {/*this.renderMarketplaceButton()*/}
           {this.state.wallet.type === LightningCustodianWallet.type && Platform.OS === 'ios' && this.renderLappBrowserButton()}
-          {this.state.wallet.allowHodlHodlTrading() && this.renderHodlHodlButton()}
+          {/*this.state.wallet.allowHodlHodlTrading() && this.renderHodlHodlButton()*/}
         </View>
         <Text
           style={{
