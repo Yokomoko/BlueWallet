@@ -48,22 +48,23 @@ async function updateExchangeRate() {
   let json;
   try {
     const api = new Frisbee({
-      baseURI: 'https://api.coindesk.com',
+      baseURI: 'https://api.coingecko.com',
     });
-    let response = await api.get('/v1/bpi/currentprice/' + preferredFiatCurrency.endPointKey + '.json');
-    json = JSON.parse(response.body);
-    if (!json || !json.bpi || !json.bpi[preferredFiatCurrency.endPointKey] || !json.bpi[preferredFiatCurrency.endPointKey].rate_float) {
+    let response = await api.get('/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false' + preferredFiatCurrency.endPointKey + '.json');
+
+    json = response.body;
+    if (!json || !json.market_data.current_price || !json.market_data.current_price[preferredFiatCurrency.endPointKey.toLowerCase()]) {
       throw new Error('Could not update currency rate: ' + response.err);
     }
   } catch (Err) {
     console.warn(Err);
     const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
-    exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = lastSavedExchangeRate['BTC_' + preferredFiatCurrency.endPointKey] * 1;
+    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey] * 1;
     return;
   }
 
   exchangeRates[STRUCT.LAST_UPDATED] = +new Date();
-  exchangeRates['BTC_' + preferredFiatCurrency.endPointKey] = json.bpi[preferredFiatCurrency.endPointKey].rate_float * 1;
+  exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = json.market_data.current_price[preferredFiatCurrency.endPointKey] * 1;
   await AsyncStorage.setItem(AppStorage.EXCHANGE_RATES, JSON.stringify(exchangeRates));
   await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(preferredFiatCurrency));
   DeviceQuickActions.setQuickActions();
@@ -81,7 +82,7 @@ async function startUpdater() {
 }
 
 function satoshiToLocalCurrency(satoshi) {
-  if (!exchangeRates['BTC_' + preferredFiatCurrency.endPointKey]) {
+  if (!exchangeRates['GRS_' + preferredFiatCurrency.endPointKey]) {
     startUpdater();
     return '...';
   }
@@ -89,7 +90,7 @@ function satoshiToLocalCurrency(satoshi) {
   let b = new BigNumber(satoshi);
   b = b
     .dividedBy(100000000)
-    .multipliedBy(exchangeRates['BTC_' + preferredFiatCurrency.endPointKey])
+    .multipliedBy(exchangeRates['GRS_' + preferredFiatCurrency.endPointKey])
     .toString(10);
   b = parseFloat(b).toFixed(2);
 
