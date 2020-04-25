@@ -194,7 +194,7 @@ class DeeplinkSchemaMatch {
   static isBitcoinAddress(address) {
     address = address
       .replace('groestlcoin:', '')
-      .replace('bitcoin=', '')
+      .replace('groestlcoin=', '')
       .split('?')[0];
     let isValidBitcoinAddress = false;
     try {
@@ -228,14 +228,14 @@ class DeeplinkSchemaMatch {
   }
 
   static isBothBitcoinAndLightning(url) {
-    if (url.includes('lightning') && url.includes('bitcoin')) {
-      const txInfo = url.split(/(groestlcoin:|lightning:|lightning=|bitcoin=)+/);
+    if (url.includes('lightning') && url.includes('groestlcoin')) {
+      const txInfo = url.split(/(groestlcoin:|lightning:|lightning=|groestlcoin=)+/);
       let bitcoin;
       let lndInvoice;
       for (const [index, value] of txInfo.entries()) {
         try {
           // Inside try-catch. We dont wan't to  crash in case of an out-of-bounds error.
-          if (value.startsWith('bitcoin')) {
+          if (value.startsWith('groestlcoin')) {
             bitcoin = `groestlcoin:${txInfo[index + 1]}`;
             if (!DeeplinkSchemaMatch.isBitcoinAddress(bitcoin)) {
               bitcoin = false;
