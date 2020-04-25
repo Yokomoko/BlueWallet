@@ -17,11 +17,17 @@ const hardcodedPeers = [
   // { host: 'Bitkoins.nl', tcp: '50001' }, // down
   // { host: 'fullnode.coinkite.com', tcp: '50001' },
   // { host: 'preperfect.eleCTruMioUS.com', tcp: '50001' }, // down
-  { host: 'electrum1.bluewallet.io', ssl: '443' },
-  { host: 'electrum1.bluewallet.io', ssl: '443' }, // 2x weight
-  { host: 'electrum2.bluewallet.io', ssl: '443' },
-  { host: 'electrum3.bluewallet.io', ssl: '443' },
-  { host: 'electrum3.bluewallet.io', ssl: '443' }, // 2x weight
+  { host: 'electrum1.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum2.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum3.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum4.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum5.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum6.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum7.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum8.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum9.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum10.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum11.groestlcoin.org', tcp: '50001' },
 ];
 
 let mainClient: ElectrumClient = false;
