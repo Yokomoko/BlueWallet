@@ -35,7 +35,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
     const root = bitcoin.bip32grs.fromSeed(seed);
-    const path = `m/49'/0'/0'/${internal ? 1 : 0}/${index}`;
+    const path = `m/49'/17'/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
 
     return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
@@ -84,7 +84,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
     const seed = bip39.mnemonicToSeed(mnemonic);
     const root = HDNode.fromSeed(seed);
 
-    const path = "m/49'/0'/0'";
+    const path = "m/49'/17'/0'";
     const child = root.derivePath(path).neutered();
     const xpub = child.toBase58();
 
