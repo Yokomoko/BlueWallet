@@ -192,7 +192,7 @@ const ReceiveDetails = () => {
         <Handoff
           title={`Groestlcoin Transaction ${address}`}
           type="io.bluewallet.bluewallet"
-          url={`https://blockstream.info/address/${address}`}
+          url={`https://esplora.groestlcoin.org/address/${address}`}
         />
       )}
       <ScrollView contentContainerStyle={{ justifyContent: 'space-between' }}>

@@ -151,7 +151,7 @@ export default class TransactionsStatus extends Component {
           <Handoff
             title={`Groestlcoin Transaction ${this.state.tx.hash}`}
             type="io.bluewallet.bluewallet"
-            url={`https://blockstream.info/tx/${this.state.tx.hash}`}
+            url={`https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`}
           />
         )}
         <View style={{ flex: 1, justifyContent: 'space-between' }}>

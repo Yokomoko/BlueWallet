@@ -95,7 +95,7 @@ export default class TransactionsDetails extends Component {
           <Handoff
             title={`Groestlcoin Transaction ${this.state.tx.hash}`}
             type="io.bluewallet.bluewallet"
-            url={`https://blockstream.info/tx/${this.state.tx.hash}`}
+            url={`https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`}
           />
         )}
         <BlueHeaderDefaultSub leftText={loc.transactions.details.title} rightComponent={null} />
@@ -152,7 +152,7 @@ export default class TransactionsDetails extends Component {
                 <BlueText style={{ marginBottom: 8, color: 'grey' }}>{this.state.tx.hash}</BlueText>
                 <TouchableOpacity
                   onPress={() => {
-                    const url = `https://blockstream.info/tx/${this.state.tx.hash}`;
+                    const url = `https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`;
                     Linking.canOpenURL(url).then(supported => {
                       if (supported) {
                         Linking.openURL(url);
