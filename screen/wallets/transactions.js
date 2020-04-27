@@ -571,7 +571,7 @@ export default class WalletTransactions extends Component {
         {this.state.wallet.chain === Chain.ONCHAIN && this.state.isHandOffUseEnabled && (
           <Handoff
             title={`Groestlcoin Wallet ${this.state.wallet.getLabel()}`}
-            type="io.bluewallet.bluewallet"
+            type="org.groestlcoin.bluewallet"
             url={`https://blockpath.com/search/addr?q=${this.state.wallet.getXpub()}`}
           />
         )}

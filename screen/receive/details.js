@@ -191,7 +191,7 @@ const ReceiveDetails = () => {
       {isHandOffUseEnabled && address !== undefined && (
         <Handoff
           title={`Groestlcoin Transaction ${address}`}
-          type="io.bluewallet.bluewallet"
+          type="org.groestlcoin.bluewallet"
           url={`https://esplora.groestlcoin.org/address/${address}`}
         />
       )}
