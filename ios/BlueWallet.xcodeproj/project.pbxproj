@@ -1252,7 +1252,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet;
 				PRODUCT_NAME = BlueWallet;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BlueWallet-Bridging-Header.h";
@@ -1288,9 +1288,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet;
 				PRODUCT_NAME = BlueWallet;
-				PROVISIONING_PROFILE_SPECIFIER = "io.bluewallet.bluewallet AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "org.groestlcoin.bluewallet AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "BlueWallet-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1532,7 +1532,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.TodayExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.TodayExtension;
 				PRODUCT_NAME = "BlueWallet - Bitcoin Price";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -1563,7 +1563,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.TodayExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.TodayExtension;
 				PRODUCT_NAME = "BlueWallet - Bitcoin Price";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -1698,7 +1698,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.watch.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.watch.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueWallet for Apple Watch Extension Dist";
 				SDKROOT = watchos;
@@ -1732,7 +1732,7 @@
 				INFOPLIST_FILE = "BlueWalletWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.watch.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.watch.extension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueWallet for Apple Watch Extension Dist";
 				SDKROOT = watchos;
@@ -1765,7 +1765,7 @@
 				INFOPLIST_FILE = BlueWalletWatch/Info.plist;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueWallet for Apple Watch Distribution";
 				SDKROOT = watchos;
@@ -1799,7 +1799,7 @@
 				IBSC_MODULE = BlueWalletWatch_Extension;
 				INFOPLIST_FILE = BlueWalletWatch/Info.plist;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.bluewallet.bluewallet.watch;
+				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BlueWallet for Apple Watch Distribution";
 				SDKROOT = watchos;
