@@ -169,7 +169,7 @@ export default class EncryptStorage extends Component {
               hideChevron
               disabled={!this.state.storageIsEncrypted}
               switchDisabled={!this.state.storageIsEncrypted}
-              title="Delete if BlueWallet is uninstalled"
+              title="Delete if Groestlcoin BlueWallet is uninstalled"
               switchButton
               onSwitch={this.onDeleteWalletsAfterUninstallSwitch}
               switched={this.state.deleteWalletsAfterUninstall}

@@ -1,6 +1,6 @@
 /* global it, describe, expect, element, by, waitFor, device */
 
-describe('BlueWallet UI Tests', () => {
+describe('Groestlcoin BlueWallet UI Tests', () => {
   it('selftest passes', async () => {
     await waitFor(element(by.id('WalletsList')))
       .toBeVisible()

@@ -90,7 +90,7 @@ export default class Language extends Component {
           renderItem={this.renderItem}
         />
         <BlueCard>
-          <BlueText>When selecting a new language, restarting BlueWallet may be required for the change to take effect.</BlueText>
+          <BlueText>When selecting a new language, restarting Groestlcoin BlueWallet may be required for the change to take effect.</BlueText>
         </BlueCard>
       </SafeBlueArea>
     );

@@ -59,7 +59,7 @@ const DefaultView = () => {
           onSwitch={onViewAllWalletsSwitchValueChanged}
         />
         <BlueCard>
-          <BlueText>When disabled, BlueWallet will immediately open the selected wallet at launch.</BlueText>
+          <BlueText>When disabled, Groestlcoin BlueWallet will immediately open the selected wallet at launch.</BlueText>
         </BlueCard>
         {!viewAllWalletsEnabled && (
           <BlueListItem title="Default into" component={TouchableOpacity} onPress={selectWallet} rightTitle={defaultWalletLabel} />
