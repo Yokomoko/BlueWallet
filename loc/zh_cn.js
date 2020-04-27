@@ -12,7 +12,7 @@ module.exports = {
     options: '选项',
     createBitcoinWallet: '您当前没有bitcoin钱包. 为了支持闪电钱包, 我们需要创建或者导入一个比特币钱包. 是否需要继续?',
     list: {
-      app_name: 'BlueWallet',
+      app_name: 'Groestlcoin BlueWallet',
       title: '钱包',
       header: '一个钱包代表一对的私钥和地址' + '你可以通过分享收款.',
       add: '添加钱包',
@@ -199,7 +199,7 @@ module.exports = {
       '密码. 为了让你的比特币更加安全, BlueWallet可以创建一些 ' +
       '加密空间, 用不同的密码. 在压力之下, ' +
       '你可以暴露这个钱包密码. 再次进入 ' +
-      'BlueWallet, 我们会解锁一些虚拟空间. 对第三方来说看上去' +
+      'Groestlcoin BlueWallet, 我们会解锁一些虚拟空间. 对第三方来说看上去' +
       '是合理的, 但会偷偷的帮你保证主钱包的安全 ' +
       '币也就安全了.',
     help2: '新的空间具备完整的功能，你可以存在 ' + '少量的金额在里面.',

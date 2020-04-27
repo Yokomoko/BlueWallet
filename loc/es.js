@@ -13,7 +13,7 @@ module.exports = {
     createBitcoinWallet:
       'In order to use a Lightning wallet, a Groestlcoin wallet is needed in order to fund it. Would you like to continue anyway?',
     list: {
-      app_name: 'BlueWallet',
+      app_name: 'Groestlcoin BlueWallet',
       title: 'billeteras',
       header: 'Un Monedero esta representado con secreto (clave privada) y una dirección' + 'que puedes compartir para recibir monedas.',
       add: 'Añadir Carterqa',
@@ -76,7 +76,7 @@ module.exports = {
     import: {
       title: 'importar',
       explanation:
-        'Escriba aquí mnemotécnica, clave privada, WIF o cualquier cosa que tenga. BlueWallet hará todo lo posible para adivinar el formato correcto e importar su billetera.',
+        'Escriba aquí mnemotécnica, clave privada, WIF o cualquier cosa que tenga. Groestlcoin BlueWallet hará todo lo posible para adivinar el formato correcto e importar su billetera.',
       imported: 'Importado',
       error: 'No se pudo importar. ¿Es valido?',
       success: 'Exito',
@@ -204,10 +204,10 @@ module.exports = {
     title: 'Negación plausible',
     help:
       'Bajo ciertas circunstancias, usted podría verse obligado a revelar un ' +
-      'contraseña. Para mantener sus monedas seguras, BlueWallet puede crear otro ' +
+      'contraseña. Para mantener sus monedas seguras, Groestlcoin BlueWallet puede crear otro ' +
       'almacenamiento cifrado, con una contraseña diferente. Bajo la presión' +
       'puede revelar esta contraseña a un tercero. Si se ingresa en ' +
-      'BlueWallet, desbloqueará un nuevo almacenamiento `falso`. Esto parecerá ' +
+      'Groestlcoin BlueWallet, desbloqueará un nuevo almacenamiento `falso`. Esto parecerá ' +
       'legítimo para un tercero, pero en secreto mantendrá su almacenamiento principal ' +
       'con monedas seguras.',
     help2: 'El nuevo almacen sera completamente funcional, y puedes almacenar ' + 'cantidades minimas para que sea mas creible.',

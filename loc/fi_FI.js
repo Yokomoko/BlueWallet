@@ -13,7 +13,7 @@ module.exports = {
     createBitcoinWallet:
       'Sinulla ei tällä hetkellä ole Groestlcoin lompakkoa. Rahoittaaksesi Lightning lompakkoa, Groestlcoin lompakko tulee tuoda tai luoda. Haluatko kuitenkin jatkaa?',
     list: {
-      app_name: 'BlueWallet',
+      app_name: 'Groestlcoin BlueWallet',
       title: 'lompakot',
       header:
         'Lompakko koostuu salaisesta avaimesta (private key) sekä julkisesta osoitteesta' +
@@ -78,7 +78,7 @@ module.exports = {
     import: {
       title: 'tuo',
       explanation:
-        'Kirjoita tähän muistisanasi, private key, WIF tai jotain mitä sinulla on. BlueWallet tekee parhaansa arvatakseen oikean muodon ja tuo lompakkosi',
+        'Kirjoita tähän muistisanasi, private key, WIF tai jotain mitä sinulla on. Groestlcoin BlueWallet tekee parhaansa arvatakseen oikean muodon ja tuo lompakkosi',
       imported: 'Tuotu',
       error: 'Tuonti epäonnistui. Varmista, että annettu tieto on oikein',
       success: 'Onnistui',
@@ -203,7 +203,7 @@ module.exports = {
     title: 'Uskottava Kiistettävyys',
     help:
       'Joissain tilanteissa, saatat olla pakotettu kertomaan ' +
-      'salasanasi. Pitääksesi kolikkosi turvassa, BlueWallet voi luoda toisen ' +
+      'salasanasi. Pitääksesi kolikkosi turvassa, Groestlcoin BlueWallet voi luoda toisen ' +
       'salatun tallennustilan, toisella salasanalla. Paineen alla, ' +
       'voit kertoa tämän salasanan kolmannelle osapuolelle. Annettaessa ' +
       'BlueWalletiin, se avaa uuden väärennetyn tallennustilan. Se näyttää ' +

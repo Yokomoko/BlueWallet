@@ -13,7 +13,7 @@ module.exports = {
     createBitcoinWallet:
       'Groestlcoin ウォレットを持っていません。Lightning ウォレットへ課金する場合は Groestlcoin ウォレットを新規作成するかインポートする必要があります。続行しますか?',
     list: {
-      app_name: 'BlueWallet',
+      app_name: 'Groestlcoin BlueWallet',
       title: 'ウォレット',
       header: 'ウォレットは秘密鍵(プライベートキー)とウォレットアドレスのペアで構成されています。' + 'コインを受信するために共有できます。',
       add: 'ウォレットの追加',
@@ -75,7 +75,7 @@ module.exports = {
     import: {
       title: 'インポート',
       explanation:
-        'ここにニモニック、秘密鍵(プライベートキー）、WIFなどを入力してください。BlueWallet が正しい形式を推測しウォレットをインポートします。',
+        'ここにニモニック、秘密鍵(プライベートキー）、WIFなどを入力してください。Groestlcoin BlueWallet が正しい形式を推測しウォレットをインポートします。',
       imported: 'インポート完了',
       error: 'インポートに失敗しました。入力したデータが有効か確認してください。',
       success: '成功',
@@ -191,7 +191,7 @@ module.exports = {
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: '保存',
-    about: 'BlueWallet について',
+    about: 'Groestlcoin BlueWallet について',
     language: '言語',
     currency: '通貨',
     advanced_options: 'Advanced Options',
@@ -203,7 +203,7 @@ module.exports = {
       'BuleWallet のウォレットの復号に必要なパスワードを第三者に強要される場合、' +
       'コインを安全に保護するためにメインのウォレットとは異なるパスワードで' +
       '暗号化されたダミーのウォレットを作成することが可能です。' +
-      '第三者へ異なるパスワードを提供すれば、BlueWallet のダミーの' +
+      '第三者へ異なるパスワードを提供すれば、Groestlcoin BlueWallet のダミーの' +
       '暗号化ウォレットを復号することとなり、メインのウォレットは隠匿され' +
       'コインは安全に保護されます。',
     help2:
