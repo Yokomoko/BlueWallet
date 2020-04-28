@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 240 239.99999"
+   version="1.1"
+   id="svg22"
+   sodipodi:docname="qr-code.svg"
+   width="240"
+   height="240"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/development/hashengineering/Groestlcoin-Projects/BlueWallet/img/qr-code@3x.png"
+   inkscape:export-xdpi="256"
+   inkscape:export-ydpi="256">
+  <metadata
+     id="metadata26">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>qr-code</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1613"
+     inkscape:window-height="989"
+     id="namedview24"
+     showgrid="false"
+     inkscape:zoom="0.85244715"
+     inkscape:cx="164.03233"
+     inkscape:cy="138.425"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1-2" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{isolation:isolate;}.cls-2{fill:#032a30;}.cls-3{fill:#08718b;}.cls-4{fill:#1291ad;}.cls-5{opacity:0.6;mix-blend-mode:multiply;}.cls-6{font-size:48px;fill:#b9e8ef;font-family:MicrosoftYaHei, Microsoft YaHei;}</style>
+  </defs>
+  <title
+     id="title6">qr-code</title>
+  <g
+     class="cls-1"
+     id="g20"
+     style="isolation:isolate"
+     transform="matrix(0.86689543,0,0,0.86689543,4,3.999994)">
+    <g
+       id="Layer_2"
+       data-name="Layer 2">
+      <g
+         id="Layer_1-2"
+         data-name="Layer 1">
+        <rect
+           class="cls-2"
+           width="269.41"
+           height="116.15"
+           rx="14"
+           id="rect8"
+           x="0"
+           y="0"
+           style="fill:#032a30" />
+        <rect
+           class="cls-3"
+           y="69.029999"
+           width="269.41"
+           height="116.15"
+           rx="14"
+           id="rect10"
+           x="0"
+           style="fill:#08718b" />
+        <rect
+           class="cls-4"
+           y="152.85001"
+           width="269.41"
+           height="116.15"
+           rx="14"
+           id="rect12"
+           x="0"
+           style="fill:#1291ad" />
+        <image
+           class="cls-5"
+           width="108"
+           height="60"
+           transform="translate(160.9,216.85)"
+           xlink:href="data:image/png;base64,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"
+           id="image14"
+           style="opacity:0.6;mix-blend-mode:multiply" />
+        <text
+           class="cls-6"
+           transform="translate(163.66,259.12)"
+           id="text16"
+           style="font-size:48px;font-family:MicrosoftYaHei, 'Microsoft YaHei';fill:#b9e8ef">blue</text>
+      </g>
+    </g>
+  </g>
+</svg>
