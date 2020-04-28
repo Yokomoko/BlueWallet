@@ -25,5 +25,5 @@ if [ -f $FILENAME ]; then
     rm "$FILENAME_UNIQ"
     DLOAD_APK="http://filestorage.bluewallet.io:1488/$HASH.apk"
 
-    curl -X POST --data "{\"body\":\"♫ This was a triumph. I'm making a note here: HUGE SUCCESS ♫\n\n [android in browser] $APPURL\n\n[download apk]($DLOAD_APK) \"}"  -u "$GITHUB" "https://api.github.com/repos/BlueWallet/BlueWallet/issues/$PR/comments"
+    curl -X POST --data "{\"body\":\"♫ This was a triumph. I'm making a note here: HUGE SUCCESS ♫\n\n [android in browser] $APPURL\n\n[download apk]($DLOAD_APK) \"}"  -u "$GITHUB" "https://api.github.com/repos/Groestlcoin/BlueWallet/issues/$PR/comments"
 fi

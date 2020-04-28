@@ -11,9 +11,9 @@ const req = https.request(
   {
     hostname: 'api.github.com',
     port: 443,
-    path: '/repos/BlueWallet/BlueWallet/pulls',
+    path: '/repos/Groestlcoin/BlueWallet/pulls',
     method: 'GET',
-    headers: { 'User-Agent': 'BlueWallet bot', Authorization: auth },
+    headers: { 'User-Agent': 'Groestlcoin BlueWallet bot', Authorization: auth },
   },
   resp => {
     let data = '';
