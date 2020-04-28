@@ -1,8 +1,8 @@
-# BlueWallet - A Groestlcoin & Lightning Wallet
+# Groestlcoin BlueWallet - A Groestlcoin & Lightning Wallet
 
-[![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/BlueWallet/BlueWallet/master/package.json&query=$.version&label=Version)](https://github.com/BlueWallet/BlueWallet)
-[![CircleCI](https://circleci.com/gh/BlueWallet/BlueWallet.svg?style=svg)](https://circleci.com/gh/BlueWallet/BlueWallet)
-[![e2e on master](https://travis-ci.com/BlueWallet/BlueWallet.svg?branch=master)](https://travis-ci.com/BlueWallet/BlueWallet)
+[![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/Groestlcoin/BlueWallet/master/package.json&query=$.version&label=Version)](https://github.com/Groestlcoin/BlueWallet)
+[![CircleCI](https://circleci.com/gh/BlueWallet/BlueWallet.svg?style=svg)](https://circleci.com/gh/Groestlcoin/BlueWallet)
+[![e2e on master](https://travis-ci.com/BlueWallet/BlueWallet.svg?branch=master)](https://travis-ci.com/Groestlcoin/BlueWallet)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![](https://img.shields.io/github/license/BlueWallet/BlueWallet.svg)
 
@@ -10,11 +10,11 @@ Thin Groestlcoin Wallet.
 Built with React Native and Electrum.
 
 [![Appstore](https://bluewallet.io/img/app-store-badge.svg)](https://itunes.apple.com/us/app/bluewallet-bitcoin-wallet/id1376878040?l=ru&ls=1&mt=8)
-[![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet)
+[![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=org.groestlcoin.bluewallet)
 
-Website: [bluewallet.io](http://bluewallet.io)
+Website: [bluewallet.io](https://groestlcoin.org)
 
-Community: [telegram group](https://t.me/bluewallet)
+Community: [telegram group](https://t.me/Groestlcoin)
 
 * Private keys never leave your device
 * Lightning Network supported
@@ -39,7 +39,7 @@ node --version && npm --version
 * In your console:
 
 ```
-git clone https://github.com/BlueWallet/BlueWallet.git
+git clone https://github.com/Groestlcoin/BlueWallet.git
 cd BlueWallet
 npm install
 ``` 
@@ -92,9 +92,7 @@ Builds automated and tested with BrowserStack
 
 ## MOTIVATION TO BUILD IT
 
-I was not satisfied with existing iOS Groestlcoin apps, especially with BreadWallet (the one I mainly used) where development stalled and they could not even deliver such features as SegWit, RBF and custom fees (at the times where custom fees were especially needed).
-So I knew I could create one to use myself and let others use it.
-I had experience with awesome bitcoin-js lib (javascript), and since I dont own any Macs, don't plan to and not going to learn ObjC/Swift - ReactNative (where you also write in javascript) was an obvious choice.
+This is a fork of https://github.com/BlueWallet/BlueWallet
 
 
 ## LICENSE
@@ -103,9 +101,9 @@ MIT
 
 ## WANT TO CONTRIBUTE?
 
-Grab an issue from [the backlog](https://github.com/BlueWallet/BlueWallet/projects/1), try to start or submit a PR, any doubts we will try to guide you.
+Grab an issue from [the backlog](https://github.com/Groestlcoin/BlueWallet/projects/1), try to start or submit a PR, any doubts we will try to guide you.
 
-Join us at our [telegram group](https://t.me/bluewallet) where we hangout :+1:
+Join us at our [telegram group](https://t.me/Groestlcoin) where we hangout :+1:
 
 ## Responsible disclosure
 
