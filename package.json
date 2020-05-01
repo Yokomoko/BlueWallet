@@ -1,6 +1,6 @@
 {
   "name": "bluewallet",
-  "version": "5.3.4",
+  "version": "5.3.5",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -10,7 +10,7 @@
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.9.0",
     "babel-preset-flow": "^6.23.0",
-    "detox": "16.1.1",
+    "detox": "^16.4.0",
     "eslint": "^6.5.1",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.18.0",
@@ -41,7 +41,8 @@
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npm run releasenotes2json; npm run podinstall; npx jetify",
     "test": "npm run unit && npm run jest && npm run lint",
     "jest": "node node_modules/jest/bin/jest.js -b -w 1 tests/integration/*",
-    "e2e:release": "detox build -c android.emu.release; detox test -c android.emu.release --record-videos all --take-screenshots all --headless",
+    "e2e:release": "detox build -c android.emu.release; npm run e2e:release-no-build",
+    "e2e:release-no-build": "detox test -c android.emu.release --record-videos all --take-screenshots all --headless",
     "e2e:debug": "(test -f android/app/build/outputs/apk/debug/app-debug.apk && test -f android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk) || detox build -c android.emu.debug; detox test -c android.emu.debug",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ tests/integration/ tests/e2e/ tests/unit/",
     "lint:fix": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ tests/integration/ tests/e2e/ tests/unit/ --fix",
@@ -58,7 +59,7 @@
     ]
   },
   "dependencies": {
-    "@babel/preset-env": "7.8.7",
+    "@babel/preset-env": "7.9.5",
     "@react-native-community/async-storage": "1.8.1",
     "@react-native-community/blur": "3.4.1",
     "@react-native-community/slider": "2.0.8",
@@ -73,7 +74,7 @@
     "bip39": "2.5.0",
     "groestlcoinjs-lib": "5.1.7",
     "bolt11grs": "https://github.com/Groestlcoin/bolt11grs",
-    "buffer": "5.4.3",
+    "buffer": "5.5.0",
     "buffer-reverse": "1.0.1",
     "coinselect": "3.1.11",
     "crypto-js": "3.1.9-1",
@@ -119,7 +120,7 @@
     "react-native-popup-menu-android": "1.0.3",
     "react-native-privacy-snapshot": "git+https://github.com/BlueWallet/react-native-privacy-snapshot.git",
     "react-native-prompt-android": "git+https://github.com/marcosrdz/react-native-prompt-android.git",
-    "react-native-qrcode-svg": "5.3.2",
+    "react-native-qrcode-svg": "6.0.6",
     "react-native-quick-actions": "0.3.13",
     "react-native-randombytes": "3.5.3",
     "react-native-rate": "1.1.10",
