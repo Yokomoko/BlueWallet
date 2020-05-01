@@ -137,7 +137,7 @@ export class AbstractWallet {
       .replace('groestlcoin:', '')
       .replace('GROESTLCOIN:', '');
 
-    if (this.secret.startsWith('BC1')) this.secret = this.secret.toLowerCase();
+    if (this.secret.startsWith('GRS1')) this.secret = this.secret.toLowerCase();
 
     try {
       const parsedSecret = JSON.parse(this.secret);
