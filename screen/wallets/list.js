@@ -421,7 +421,7 @@ export default class WalletsList extends Component {
                     ref={c => (this.walletsCarousel = c)}
                   />
                   <BlueList>
-                    {this.renderLocalTrader()}
+                    {/*this.renderLocalTrader()*/}
                     <FlatList
                       ListHeaderComponent={this.renderListHeaderComponent}
                       ListEmptyComponent={
