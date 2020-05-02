@@ -2,7 +2,7 @@ import { HDLegacyP2PKHWallet } from './';
 
 const bitcoin = require('groestlcoinjs-lib');
 const mn = require('electrum-mnemonic');
-const HDNode = require('bip32');
+const HDNode = require('bip32grs');
 
 /**
  * ElectrumSeed means that instead of BIP39 seed format it works with the format invented by Electrum wallet. Otherwise

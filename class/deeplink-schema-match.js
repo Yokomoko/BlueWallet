@@ -5,7 +5,7 @@ import RNFS from 'react-native-fs';
 import url from 'url';
 import { Chain } from '../models/bitcoinUnits';
 const bitcoin = require('groestlcoinjs-lib');
-const bip21 = require('bip21');
+const bip21 = require('bip21grs');
 const BlueApp: AppStorage = require('../BlueApp');
 
 class DeeplinkSchemaMatch {
@@ -271,7 +271,7 @@ class DeeplinkSchemaMatch {
   }
 
   static bip21decode(uri) {
-    return bip21.decode(uri.replace('BITCOIN:', 'bitcoin:'));
+    return bip21.decode(uri.replace('GROESTLCOIN:', 'groestlcoin:'));
   }
 
   static bip21encode() {
