@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 108 108"
+   id="svg3666"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="adaptive-icon.svg"
+   width="108"
+   height="108"
+   inkscape:export-filename="/Users/hashengineering/Development/hashengineering/BlueWallet/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
+   inkscape:export-xdpi="64.14016"
+   inkscape:export-ydpi="64.14016">
+  <metadata
+     id="metadata3690">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>icon</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1144"
+     inkscape:window-height="729"
+     id="namedview3688"
+     showgrid="false"
+     inkscape:zoom="1.199175"
+     inkscape:cx="43.896414"
+     inkscape:cy="111.42774"
+     inkscape:window-x="661"
+     inkscape:window-y="135"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3666" />
+  <defs
+     id="defs3668">
+    <style
+       id="style3670">.cls-1{isolation:isolate;}.cls-2{fill:#032a30;}.cls-3{fill:#08718b;}.cls-4{fill:#1291ad;}.cls-5{opacity:0.6;mix-blend-mode:multiply;}.cls-6{font-size:48px;fill:#b9e8ef;font-family:MicrosoftYaHei, Microsoft YaHei;}</style>
+  </defs>
+  <title
+     id="title3672">icon</title>
+  <g
+     id="g4612"
+     transform="matrix(0.36829457,0,0,0.36829457,5.265138,4.3465302)">
+    <rect
+       class="cls-2"
+       width="260.66092"
+       height="112.54932"
+       rx="13.545351"
+       id="rect3678"
+       x="4.3745356"
+       y="4.3745289"
+       style="isolation:isolate;fill:#032a30" />
+    <rect
+       class="cls-3"
+       y="71.26458"
+       width="260.66092"
+       height="112.54932"
+       rx="13.545351"
+       id="rect3680"
+       x="4.3745356"
+       style="isolation:isolate;fill:#08718b" />
+    <rect
+       class="cls-4"
+       y="152.48615"
+       width="260.66092"
+       height="112.54932"
+       rx="13.545351"
+       id="rect3682"
+       x="4.3745356"
+       style="isolation:isolate;fill:#1291ad" />
+  </g>
+</svg>
