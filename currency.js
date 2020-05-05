@@ -59,12 +59,12 @@ async function updateExchangeRate() {
   } catch (Err) {
     console.warn(Err);
     const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
-    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey] * 1;
+    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] = lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
     return;
   }
 
   exchangeRates[STRUCT.LAST_UPDATED] = +new Date();
-  exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = json.market_data.current_price[preferredFiatCurrency.endPointKey] * 1;
+  exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = json.market_data.current_price[preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
   await AsyncStorage.setItem(AppStorage.EXCHANGE_RATES, JSON.stringify(exchangeRates));
   await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(preferredFiatCurrency));
   DeviceQuickActions.setQuickActions();

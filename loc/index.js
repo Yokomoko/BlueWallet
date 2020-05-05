@@ -193,7 +193,7 @@ strings.formatBalanceWithoutSuffix = (balance = 0, toUnit, withFormatting = fals
     return balance;
   }
   if (balance !== 0) {
-    if (toUnit === BitcoinUnit.GRS) {
+    if (toUnit === BitcoinUnit.BTC) {
       const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
       return removeTrailingZeros(value);
     } else if (toUnit === BitcoinUnit.SATS) {
