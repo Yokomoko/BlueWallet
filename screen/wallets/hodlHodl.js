@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   blueTextContainer: {
-    backgroundColor: '#CCDDF9',
+    backgroundColor: '#006593',
     borderRadius: 20,
     width: 110,
     flex: 1,

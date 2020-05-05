@@ -89,7 +89,7 @@ export default class Success extends Component {
         </BlueCard>
         <View
           style={{
-            backgroundColor: '#ccddf9',
+            backgroundColor: '#006593',
             width: 120,
             height: 120,
             borderRadius: 60,

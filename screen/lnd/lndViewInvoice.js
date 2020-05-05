@@ -211,7 +211,7 @@ export default class LNDViewInvoice extends Component {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <View
                 style={{
-                  backgroundColor: '#ccddf9',
+                  backgroundColor: '#006593',
                   width: 120,
                   height: 120,
                   borderRadius: 60,
