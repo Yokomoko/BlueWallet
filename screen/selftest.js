@@ -59,8 +59,8 @@ export default class Selftest extends Component {
       //
 
       let l = new LegacyWallet();
-      l.setSecret('L4ccWrPMmFDZw4kzAKFqJNxgHANjdy6b7YKNXMwB4xac4FLF3Tov');
-      assertStrictEqual(l.getAddress(), '14YZ6iymQtBVQJk6gKnLCk49UScJK7SH4M');
+      l.setSecret('L3rPE6WwpxofhUSPJhK7oQwPWgpSs623B86ESLRK9pacoyJ3WC9a');
+      assertStrictEqual(l.getAddress(), 'FcLwUSWYGMggXcoy7KsNKzVwB7YiCUsLkF');
       let utxos = [
         {
           txid: 'cc44e933a094296d9fe424ad7306f16916253a3d154d52e4f1a757c18242cec4',
@@ -85,16 +85,16 @@ export default class Selftest extends Component {
       //
 
       l = new SegwitP2SHWallet();
-      l.setSecret('Kxr9tQED9H44gCmp6HAdmemAzU3n84H3dGkuWTKvE23JgHMW8gct');
-      if (l.getAddress() !== '34AgLJhwXrvmkZS1o5TrcdeevMt22Nar53') {
+      l.setSecret('L1PfnzGXgSH8gVXYs5RbdtGPDQsUobnEih7uHgWSYg9yR17WMBha');
+      if (l.getAddress() !== '36CZdzjnFDvdsTvHLqu3Fq64DgTKYqaf4x') {
         throw new Error('failed to generate segwit P2SH address from WIF');
       }
 
       //
 
       let wallet = new SegwitP2SHWallet();
-      wallet.setSecret('Ky1vhqYGCiCbPd8nmbUeGfwLdXB1h5aGwxHwpXrzYRfY5cTZPDo4');
-      assertStrictEqual(wallet.getAddress(), '3CKN8HTCews4rYJYsyub5hjAVm5g5VFdQJ');
+      wallet.setSecret('KwZoFNfgbp62JyQY571j639L5cRJxKcx8AUJr4hBvt3hN82Sg5VV');
+      assertStrictEqual(wallet.getAddress(), '3J5xoxEVcoWV9Eam9Af2223nNwuTj36HNw');
 
       utxos = [
         {
@@ -143,7 +143,7 @@ export default class Selftest extends Component {
         network: bitcoin.networks.bitcoin,
       }).address;
 
-      if (address !== '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK') {
+      if (address !== '395AFhKYJCYGGR7P4rwvgqBTTfQukiHrWy') {
         throw new Error('bip49 is not ok');
       }
 

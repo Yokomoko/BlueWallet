@@ -8,24 +8,24 @@ it('can create a Segwit HD (BIP49)', async function() {
     'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
   let hd = new HDSegwitP2SHWallet();
   hd.setSecret(mnemonic);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', hd._getExternalAddressByIndex(0));
-  assert.strictEqual('35p5LwCAE7mH2css7onyQ1VuS1jgWtQ4U3', hd._getExternalAddressByIndex(1));
-  assert.strictEqual('32yn5CdevZQLk3ckuZuA8fEKBco8mEkLei', hd._getInternalAddressByIndex(0));
+  assert.strictEqual('395AFhKYJCYGGR7P4rwvgqBTTfQukiHrWy', hd._getExternalAddressByIndex(0));
+  assert.strictEqual('37547yv9AQUsE9abAoJqqdFZw8C2zj9k8E', hd._getExternalAddressByIndex(1));
+  assert.strictEqual('38DBbhHEBFWbwm9abjjUVdTV2zs4FDRcp5', hd._getInternalAddressByIndex(0));
   assert.strictEqual(true, hd.validateMnemonic());
 
   assert.strictEqual(
     hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-    '0348192db90b753484601aaf1e6220644ffe37d83a9a5feff32b4da43739f736be',
+    '02c3beeba8bbf24bfa336e03749683b1208b4aea13290337b00262d5afbe5f15c7',
   );
   assert.strictEqual(
     hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),
-    '03c107e6976d59e17490513fbed3fb321736b7231d24f3d09306c72714acf1859d',
+    '03c3ff5233bc11fa0273b508d42a144e5e475a7e5f17473d211d40d035db9da483',
   );
 
-  assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/0'/0'/0/0"); // wrong, FIXME
-  assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/0'/0'/1/0"); // wrong, FIXME
+  assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/17'/0'/0/0"); // wrong, FIXME
+  assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/17'/0'/1/0"); // wrong, FIXME
 
-  assert.strictEqual('L4MqtwJm6hkbACLG4ho5DF8GhcXdLEbbvpJnbzA9abfD6RDpbr2m', hd._getExternalWIFByIndex(0));
+  assert.strictEqual('KzoosK4MqjwBBNANduQn9PpL2Y4a9sxEJNyAiQPzNArQ7XrPcPN7', hd._getExternalWIFByIndex(0));
   assert.strictEqual(
     'ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp',
     hd.getXpub(),
@@ -50,7 +50,7 @@ it('can convert witness to address', () => {
 });
 
 it('Segwit HD (BIP49) can generate addressess only via ypub', function() {
-  let ypub = 'ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp';
+  let ypub = 'ypub6YQxchNW9joEqtY2yKNEn43b6Vb6jcxZmMmWc8oaYHWTXtRLbZevAngHHFRgj5ovKJH95D4S4X37i9ESTzYbPyCBvLEbTKCxHNLEhCZuVJ3';
   let hd = new HDSegwitP2SHWallet();
   hd._xpub = ypub;
   assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', hd._getExternalAddressByIndex(0));
