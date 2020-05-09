@@ -136,7 +136,7 @@ export class HDSegwitBech32Transaction {
    * * fee - current tx fee
    * * utxos - UTXOs current tx consumes
    * * changeAmount - amount of satoshis that sent to change address (or addresses) we control
-   * * feeRate - sat/byte for current tx
+   * * feeRate - gro/byte for current tx
    * * targets - destination(s) of funds (outputs we do not control)
    * * unconfirmedUtxos - UTXOs created by this transaction (only the ones we control)
    *
@@ -237,7 +237,7 @@ export class HDSegwitBech32Transaction {
    * output to the one our wallet controls). Note, this cannot add more utxo in RBF transaction if
    * newFeerate is too high
    *
-   * @param newFeerate {number} Sat/byte. Should be greater than previous tx feerate
+   * @param newFeerate {number} Gro/byte. Should be greater than previous tx feerate
    * @returns {Promise<{outputs: Array, tx: Transaction, inputs: Array, fee: Number}>}
    */
   async createRBFcancelTx(newFeerate) {
@@ -262,7 +262,7 @@ export class HDSegwitBech32Transaction {
    * Creates an RBF transaction that can bumps fee of previous one. Note, this cannot add more utxo in RBF
    * transaction if newFeerate is too high
    *
-   * @param newFeerate {number} Sat/byte
+   * @param newFeerate {number} Gro/byte
    * @returns {Promise<{outputs: Array, tx: Transaction, inputs: Array, fee: Number}>}
    */
   async createRBFbumpFee(newFeerate) {
@@ -292,7 +292,7 @@ export class HDSegwitBech32Transaction {
    * Creates a CPFP transaction that can bumps fee of previous one (spends created but not confirmed outputs
    * that belong to us). Note, this cannot add more utxo in CPFP transaction if newFeerate is too high
    *
-   * @param newFeerate {number} sat/byte
+   * @param newFeerate {number} gro/byte
    * @returns {Promise<{outputs: Array, tx: Transaction, inputs: Array, fee: Number}>}
    */
   async createCPFPbumpFee(newFeerate) {

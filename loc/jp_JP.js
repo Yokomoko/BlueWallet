@@ -151,7 +151,7 @@ module.exports = {
       amount: '送金額',
       fee: '手数料',
       tx_size: 'TX サイズ',
-      satoshi_per_byte: 'Satoshi/byte',
+      satoshi_per_byte: 'Gro/byte',
       memo: 'メモ',
       broadcast: '送信',
       not_enough_fee: '手数料不足です。増額してください',

@@ -151,7 +151,7 @@ module.exports = {
       amount: 'Jumlah',
       fee: 'Tarif',
       tx_size: 'Ukuran TX',
-      satoshi_per_byte: 'Satoshi per byte',
+      satoshi_per_byte: 'Gro per byte',
       memo: 'Memo',
       broadcast: 'Siarkan',
       not_enough_fee: 'Tarif tidak cukup. Naikkan tarif',

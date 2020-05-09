@@ -2140,7 +2140,7 @@ export class BlueReplaceFeeSuggestions extends Component {
             <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.FAST)}>
               <BlueListItem
                 title={'Fast'}
-                rightTitle={`${this.state.networkFees.fastestFee} sat/b`}
+                rightTitle={`${this.state.networkFees.fastestFee} gro/b`}
                 {...(this.state.selectedFeeType === NetworkTransactionFeeType.FAST
                   ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
                   : { hideChevron: true })}
@@ -2149,7 +2149,7 @@ export class BlueReplaceFeeSuggestions extends Component {
             <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.MEDIUM)}>
               <BlueListItem
                 title={'Medium'}
-                rightTitle={`${this.state.networkFees.halfHourFee} sat/b`}
+                rightTitle={`${this.state.networkFees.halfHourFee} gro/b`}
                 {...(this.state.selectedFeeType === NetworkTransactionFeeType.MEDIUM
                   ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
                   : { hideChevron: true })}
@@ -2158,7 +2158,7 @@ export class BlueReplaceFeeSuggestions extends Component {
             <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.SLOW)}>
               <BlueListItem
                 title={'Slow'}
-                rightTitle={`${this.state.networkFees.hourFee} sat/b`}
+                rightTitle={`${this.state.networkFees.hourFee} gro/b`}
                 {...(this.state.selectedFeeType === NetworkTransactionFeeType.SLOW
                   ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
                   : { hideChevron: true })}
@@ -2200,17 +2200,17 @@ export class BlueReplaceFeeSuggestions extends Component {
                 }}
                 onFocus={() => this.onCustomFeeTextChange(this.state.customFeeValue)}
                 defaultValue={`${this.props.transactionMinimum}`}
-                placeholder="Custom sat/b"
+                placeholder="Custom gro/b"
                 inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
               />
-              <Text style={{ color: BlueApp.settings.alternativeTextColor, marginHorizontal: 8 }}>sat/b</Text>
+              <Text style={{ color: BlueApp.settings.alternativeTextColor, marginHorizontal: 8 }}>gro/b</Text>
               {this.state.selectedFeeType === NetworkTransactionFeeType.CUSTOM && <Icon name="check" type="font-awesome" color="#0c2550" />}
             </View>
             <BlueDismissKeyboardInputAccessory />
           </View>
         </TouchableOpacity>
         <BlueText>
-          The total fee rate (satoshi per byte) you want to pay should be higher than {this.props.transactionMinimum} sat/byte
+          The total fee rate (satoshi per byte) you want to pay should be higher than {this.props.transactionMinimum} gro/byte
         </BlueText>
       </View>
     );
@@ -2233,12 +2233,15 @@ export class BlueBitcoinAmount extends Component {
   render() {
     const amount = this.props.amount || 0;
     let localCurrency = loc.formatBalanceWithoutSuffix(amount, BitcoinUnit.LOCAL_CURRENCY, false);
+    console.log("render() => localCurrency: ", localCurrency)
     if (this.props.unit === BitcoinUnit.BTC) {
       let sat = new BigNumber(amount);
       sat = sat.multipliedBy(100000000).toString();
       localCurrency = loc.formatBalanceWithoutSuffix(sat, BitcoinUnit.LOCAL_CURRENCY, false);
+      console.log("render() => localCurrency(BTC): ", localCurrency)
     } else {
       localCurrency = loc.formatBalanceWithoutSuffix(amount.toString(), BitcoinUnit.LOCAL_CURRENCY, false);
+      console.log("render() => localCurrency(else): ", localCurrency)
     }
     if (amount === BitcoinUnit.MAX) localCurrency = ''; // we dont want to display NaN
     return (

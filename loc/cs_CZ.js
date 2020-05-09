@@ -151,7 +151,7 @@ module.exports = {
       amount: 'Částka',
       fee: 'Poplatek',
       tx_size: 'velikost transakce',
-      satoshi_per_byte: 'Satoshi/byte',
+      Gro_per_byte: 'Gro/byte',
       memo: 'Popisek',
       broadcast: 'Odeslat do sítě',
       not_enough_fee: 'Nedostatečný poplatek. Zvyšte poplatek.',

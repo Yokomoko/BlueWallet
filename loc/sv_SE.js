@@ -152,7 +152,7 @@ module.exports = {
       amount: 'Belopp',
       fee: 'Avgift',
       tx_size: 'Transaktionsstorlek',
-      satoshi_per_byte: 'Satoshi per byte',
+      satoshi_per_byte: 'Gro per byte',
       memo: 'Memo',
       broadcast: 'Publicera',
       not_enough_fee: 'För låg avgift. Öka avgiften',

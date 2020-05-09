@@ -154,7 +154,7 @@
       amount: 'Bedrag',
       fee: 'Fooi',
       tx_size: 'TX groote',
-      satoshi_per_byte: 'Satoshi per byte',
+      satoshi_per_byte: 'Gro per byte',
       memo: 'Memo',
       broadcast: 'Saai uit',
       not_enough_fee: 'Fooi te laag. Vermeerder die fooi',

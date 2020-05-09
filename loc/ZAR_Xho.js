@@ -152,7 +152,7 @@
       amount: 'Isixa',
       fee: 'Ntlawulo',
       tx_size: 'TX ubungakanani',
-      satoshi_per_byte: 'Satoshi nge-byte',
+      satoshi_per_byte: 'Gro nge-byte',
       memo: 'Memo',
       broadcast: 'Sasazwa',
       not_enough_fee: 'Akukho mali e neleyo. UKwandisa intlawulo ',

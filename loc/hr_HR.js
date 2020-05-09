@@ -151,7 +151,7 @@ module.exports = {
       amount: 'Iznos',
       fee: 'Trošak slanja',
       tx_size: 'TX veličina',
-      satoshi_per_byte: 'Satoshi / byte',
+      satoshi_per_byte: 'Gro / byte',
       memo: 'Bilješka',
       broadcast: 'Objavi',
       not_enough_fee: 'Trošak slanja je premalen. Povećaj ga.',

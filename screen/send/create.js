@@ -175,7 +175,7 @@ export default class SendCreate extends Component {
               <Text style={styles.transactionDetailsSubtitle}>{this.state.size} bytes</Text>
 
               <Text style={styles.transactionDetailsTitle}>{loc.send.create.satoshi_per_byte}</Text>
-              <Text style={styles.transactionDetailsSubtitle}>{this.state.satoshiPerByte} Sat/B</Text>
+              <Text style={styles.transactionDetailsSubtitle}>{this.state.satoshiPerByte} Gro/B</Text>
               {this.state.memo.length > 0 && (
                 <>
                   <Text style={styles.transactionDetailsTitle}>{loc.send.create.memo}</Text>

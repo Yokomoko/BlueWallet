@@ -30,7 +30,7 @@ Be in control
 Private keys never leave your device.  You control your private keys
 
 Flexible fees
-Starting from 1 Satoshi.  Defined by you, the user
+Starting from 1 Gro.  Defined by you, the user
 
 Replace-By-Fee
 (RBF) Speed-up your transactions by increasing the fee (BIP125)

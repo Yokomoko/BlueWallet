@@ -28,7 +28,7 @@ Esteja em control
 As chaves privadas nunca saiem do celular, você controla as suas chaves privadas
 
 Fees flexíveis
-A começar em 1 Satoshi. Não page a mais por transações
+A começar em 1 Gro. Não page a mais por transações
 
 Substituição de Fee (RBF)
 Acelere as suas transações aumentendo o fee (BIP125). Pode também alterar o endereço de destinatário em transações não confirmadas

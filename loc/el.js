@@ -154,7 +154,7 @@ module.exports = {
       amount: 'Ποσό',
       fee: 'Έξοδα',
       tx_size: 'Μέγεθος συναλλαγής',
-      satoshi_per_byte: 'Satoshi ανά byte',
+      satoshi_per_byte: 'Gro ανά byte',
       memo: 'Σημείωση',
       broadcast: 'Στείλε στο δίκτυο',
       not_enough_fee: 'Τα έξοδα συναλλαγής δεν είναι αρκετά. Αυξήστε τα.',

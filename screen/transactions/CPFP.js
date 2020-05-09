@@ -90,7 +90,7 @@ export default class CPFP extends Component {
     if ((await tx.isToUsTransaction()) && (await tx.getRemoteConfirmationsNum()) === 0) {
       let info = await tx.getInfo();
       return this.setState({ nonReplaceable: false, feeRate: info.feeRate + 1, isLoading: false, tx });
-      // 1 sat makes a lot of difference, since sometimes because of rounding created tx's fee might be insufficient
+      // 1 gro makes a lot of difference, since sometimes because of rounding created tx's fee might be insufficient
     } else {
       return this.setState({ nonReplaceable: true, isLoading: false });
     }

@@ -152,7 +152,7 @@ module.exports = {
       amount: 'Összeg',
       fee: 'Díj',
       tx_size: 'Tranzakció mérete',
-      satoshi_per_byte: 'Satoshi per byte',
+      satoshi_per_byte: 'Gro per byte',
       memo: 'Memo',
       broadcast: 'Küldés',
       not_enough_fee: 'Díj túl alacsony. Növeld a megadott díjat',

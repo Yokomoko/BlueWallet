@@ -561,7 +561,7 @@ export default class SendDetails extends Component {
                   marginBottom: 14,
                 }}
               >
-                sat/b
+                gro/b
               </Text>
             </TouchableOpacity>
             {this.state.networkTransactionFees.fastestFee > 1 && (
@@ -932,7 +932,7 @@ export default class SendDetails extends Component {
                   }}
                 >
                   <Text style={{ color: '#37c0a1', marginBottom: 0, marginRight: 4, textAlign: 'right' }}>{this.state.fee}</Text>
-                  <Text style={{ color: '#37c0a1', paddingRight: 4, textAlign: 'left' }}>sat/b</Text>
+                  <Text style={{ color: '#37c0a1', paddingRight: 4, textAlign: 'left' }}>gro/b</Text>
                 </View>
               </TouchableOpacity>
               {this.renderCreateButton()}

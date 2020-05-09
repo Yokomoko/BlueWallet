@@ -154,7 +154,7 @@ module.exports = {
       amount: 'Importo',
       fee: 'Commissione',
       tx_size: 'Grandezza TX',
-      satoshi_per_byte: 'Satoshi per byte',
+      satoshi_per_byte: 'Gro per byte',
       memo: 'Memo',
       broadcast: 'Trasmetti',
       not_enough_fee: 'Commissione non sufficiente. Aumenta la commissione',

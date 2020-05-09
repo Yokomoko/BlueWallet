@@ -153,7 +153,7 @@ module.exports = {
       amount: 'Betrag',
       fee: 'Gebühr',
       tx_size: 'Größe',
-      satoshi_per_byte: 'Satoshi pro Byte',
+      satoshi_per_byte: 'Gro pro Byte',
       memo: 'Memo',
       broadcast: 'Übertragen',
       not_enough_fee: 'Gebühr zu gering. Erhöhe die Gebühr',

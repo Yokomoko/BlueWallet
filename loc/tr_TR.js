@@ -152,7 +152,7 @@ module.exports = {
       amount: 'Miktar',
       fee: 'Ücret',
       tx_size: 'TX boyutu',
-      satoshi_per_byte: 'Bayt başına Satoshi',
+      satoshi_per_byte: 'Bayt başına Gro',
       memo: 'Not',
       broadcast: 'Yayınla',
       not_enough_fee: 'Yetersiz ücret. Ücreti arttırın',
