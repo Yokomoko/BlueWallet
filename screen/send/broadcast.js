@@ -148,7 +148,7 @@ function SuccessScreen({ tx }) {
           <BlueSpacing20 />
           <BlueTextCentered>Success! You transaction has been broadcasted!</BlueTextCentered>
           <BlueSpacing10 />
-          <Text style={styles.link} onPress={() => Linking.openURL(`https://blockstream.info/tx/${tx}`)}>
+          <Text style={styles.link} onPress={() => Linking.openURL(`https://esplora.groestlcoin.org/tx/${tx}`)}>
             Open link in explorer
           </Text>
         </View>
