@@ -38,15 +38,15 @@ const About = () => {
   };
 
   const handleOnTwitterPress = () => {
-    Linking.openURL('https://twitter.com/bluewalletio');
+    Linking.openURL('https://twitter.com/GroestlcoinTeam');
   };
 
   const handleOnGithubPress = () => {
-    Linking.openURL('https://github.com/BlueWallet/BlueWallet');
+    Linking.openURL('https://github.com/Groestlcoin/BlueWallet');
   };
 
   const handleOnTelegramPress = () => {
-    Linking.openURL('https://t.me/bluewallet');
+    Linking.openURL('https://t.me/groestlcoin');
   };
 
   const handleOnRatePress = () => {
@@ -56,7 +56,7 @@ const About = () => {
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: true,
       openAppStoreIfInAppFails: true,
-      fallbackPlatformURL: 'https://bluewallet.io',
+      fallbackPlatformURL: 'https://groestlcoin.org',
     };
     Rate.rate(options, success => {
       if (success) {
@@ -88,24 +88,6 @@ const About = () => {
             <BlueButton onPress={handleOnRatePress} title="help with a review ⭐🙏" />
           </View>
         </BlueCard>
-        <BlueListItem
-          leftIcon={{
-            name: 'twitter',
-            type: 'font-awesome',
-            color: '#1da1f2',
-          }}
-          onPress={handleOnTwitterPress}
-          title="Follow us on Twitter"
-        />
-        <BlueListItem
-          leftIcon={{
-            name: 'telegram',
-            type: 'font-awesome',
-            color: '#0088cc',
-          }}
-          onPress={handleOnTelegramPress}
-          title="Telegram chat"
-        />
         <BlueListItem
           leftIcon={{
             name: 'github',
