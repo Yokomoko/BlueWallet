@@ -215,8 +215,8 @@ export default class PsbtWithHardwareWallet extends Component {
           <TouchableOpacity style={{ marginVertical: 24 }} onPress={() => Clipboard.setString(this.state.txhex)}>
             <Text style={{ color: '#9aa0aa', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>Copy and broadcast later</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginVertical: 24 }} onPress={() => Linking.openURL('https://coinb.in/?verify=' + this.state.txhex)}>
-            <Text style={{ color: '#9aa0aa', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>Verify on coinb.in</Text>
+          <TouchableOpacity style={{ marginVertical: 24 }} onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + this.state.txhex)}>
+            <Text style={{ color: '#9aa0aa', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>Verify on groestlcoin.org/webwallet</Text>
           </TouchableOpacity>
           <BlueSpacing20 />
           <BlueButton onPress={this.broadcast} title={loc.send.confirm.sendNow} />
