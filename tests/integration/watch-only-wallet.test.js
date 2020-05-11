@@ -46,17 +46,17 @@ describe('Watch only wallet', () => {
   it('can fetch TXs with values', async () => {
     let w = new WatchOnlyWallet();
     for (let sec of [
-      'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv',
-      'BC1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8WY29UV',
-      'groestlcoin:bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv',
-      'GROESTLCOIN:BC1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8WY29UV',
-      'groestlcoin:BC1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8WY29UV',
-      'GROESTLCOIN:bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv',
+      'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
+      'GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
+      'groestlcoin:grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
+      'GROESTLCOIN:GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
+      'groestlcoin:GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
+      'GROESTLCOIN:grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
     ]) {
       w.setSecret(sec);
-      assert.strictEqual(w.getAddress(), 'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv');
-      assert.strictEqual(await w.getAddressAsync(), 'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv');
-      assert.ok(w.weOwnAddress('bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv'));
+      assert.strictEqual(w.getAddress(), 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d');
+      assert.strictEqual(await w.getAddressAsync(), 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d');
+      assert.ok(w.weOwnAddress('grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d'));
       await w.fetchTransactions();
 
       for (let tx of w.getTransactions()) {
@@ -73,7 +73,7 @@ describe('Watch only wallet', () => {
 
   it('can fetch complex TXs', async () => {
     let w = new WatchOnlyWallet();
-    w.setSecret('3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC');
+    w.setSecret('3NLnALo49CFEF4tCRhCvz45ySSfz2hjD7w');
     await w.fetchTransactions();
     for (let tx of w.getTransactions()) {
       assert.ok(tx.value, 'incorrect tx.value');

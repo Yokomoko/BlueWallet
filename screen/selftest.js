@@ -71,7 +71,7 @@ export default class Selftest extends Component {
         },
       ];
 
-      let txNew = l.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
+      let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
       let txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
@@ -79,7 +79,7 @@ export default class Selftest extends Component {
       );
       assertStrictEqual(txBitcoin.ins.length, 1);
       assertStrictEqual(txBitcoin.outs.length, 2);
-      assertStrictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(txBitcoin.outs[0].script)); // to address
+      assertStrictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(txBitcoin.outs[0].script)); // to address
       assertStrictEqual(l.getAddress(), bitcoin.address.fromOutputScript(txBitcoin.outs[1].script)); // change address
 
       //
@@ -104,15 +104,15 @@ export default class Selftest extends Component {
         },
       ];
 
-      txNew = wallet.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, wallet.getAddress());
+      txNew = wallet.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, wallet.getAddress());
       let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014139dc70d73097f9d775f8a3280ba3e3435515641ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac6f3303000000000017a914749118baa93fb4b88c28909c8bf0a8202a0484f487024730440220086b55a771f37daadbe64fe557a32fd68ee92995445af0b0a5b9343db67505e1022064c9a9778a19a0276761af69b8917d19ed4b791c785dd8cb4aae327f2a6b526f012103a5de146762f84055db3202c1316cd9008f16047f4f408c1482fdb108217eda0800000000',
+        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014f4436ffe8041cdf97b217aa1a0836e3bd5786b8affffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a914247521a8d1aa867aa2fd1d331e84174b2a4f77ee87024730440220625292fcf01c2d8ea1cfafd139b9d44229b9cddc0635650c5fe0afc38a579f6b02205b8cc23978c571e62a96c3cf0e64724bbfa51fb5863c5236d4cdf1dd1f58e0870121036a47812eec720bf18843458c374dc3561ffcd94b3dcd395c9105359c78b519ba00000000',
       );
       assertStrictEqual(tx.ins.length, 1);
       assertStrictEqual(tx.outs.length, 2);
-      assertStrictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+      assertStrictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
       assertStrictEqual(bitcoin.address.fromOutputScript(tx.outs[1].script), wallet.getAddress()); // change address
 
       //

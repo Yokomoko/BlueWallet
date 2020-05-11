@@ -3,7 +3,7 @@ let assert = require('assert');
 
 it('bip38 decodes', async () => {
   const bip38 = require('../../blue_modules/bip38');
-  const wifgrs = require('wif');
+  const wifgrs = require('wifgrs');
 
   let encryptedKey = '6PRVWUbkzq2VVjRuv58jpwVjTeN46MeNmzUHqUjQptBJUHGcBakduhrUNc';
   let decryptedKey = await bip38.decrypt(
@@ -15,7 +15,7 @@ it('bip38 decodes', async () => {
 
   assert.strictEqual(
     wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-    '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR',
+    '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3PvKFYq',
   );
 });
 
@@ -39,7 +39,7 @@ it('bip38 decodes slow', async () => {
 
   assert.strictEqual(
     wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-    'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
+    'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3',
   );
 
   let wasError = false;

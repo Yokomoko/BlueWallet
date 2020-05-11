@@ -31,13 +31,13 @@ describe('LegacyWallet', function() {
 
   it('can validate addresses', () => {
     let w = new LegacyWallet();
-    assert.ok(w.isAddressValid('12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG'));
+    assert.ok(w.isAddressValid('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs'));
     assert.ok(!w.isAddressValid('12eQ9m4sgAwTSQoNXkRABKhCXCsjm2j'));
     assert.ok(w.isAddressValid('3BDsBDxDimYgNZzsqszNZobqQq3yeUoJf2'));
     assert.ok(!w.isAddressValid('3BDsBDxDimYgNZzsqszNZobqQq3yeUo'));
     assert.ok(!w.isAddressValid('12345'));
     assert.ok(w.isAddressValid('bc1quuafy8htjjj263cvpj7md84magzmc8svmh8lrm'));
-    assert.ok(w.isAddressValid('BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7'));
+    assert.ok(w.isAddressValid('GRS1QLE4ZLJDMPT77DTC98WHYZ90MSAMWJJE8U6D6K5'));
   });
 
   it('can fetch balance', async () => {
@@ -56,7 +56,7 @@ describe('LegacyWallet', function() {
 
   it('can fetch TXs', async () => {
     let w = new LegacyWallet();
-    w._address = '12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG';
+    w._address = 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs';
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 2);
 
@@ -120,7 +120,7 @@ describe('SegwitBech32Wallet', function() {
 
   it('can fetch TXs', async () => {
     let w = new LegacyWallet();
-    w._address = 'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv';
+    w._address = 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d';
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 2);
 

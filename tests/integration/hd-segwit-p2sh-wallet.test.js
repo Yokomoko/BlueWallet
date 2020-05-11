@@ -70,7 +70,7 @@ it('HD (BIP49) can create TX', async () => {
 
   let txNew = hd.createTransaction(
     hd.getUtxo(),
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 500 }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', value: 500 }],
     1,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );
@@ -85,14 +85,14 @@ it('HD (BIP49) can create TX', async () => {
   assert.strictEqual(tx.outs[1].value, 25275);
   let toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
   let changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', toAddress);
   assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 
   //
 
   txNew = hd.createTransaction(
     hd.getUtxo(),
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 25000 }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', value: 25000 }],
     5,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );
@@ -100,7 +100,7 @@ it('HD (BIP49) can create TX', async () => {
   assert.strictEqual(tx.ins.length, 1);
   assert.strictEqual(tx.outs.length, 1);
   toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', toAddress);
 
   // testing sendMAX
 
@@ -139,7 +139,7 @@ it('HD (BIP49) can create TX', async () => {
 
   txNew = hd.createTransaction(
     utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR' }],
     1,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );

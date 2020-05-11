@@ -1,13 +1,13 @@
 /* global it, describe */
 import { LegacyWallet } from '../../class';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');
 
 describe('Legacy wallet', () => {
   it('can create transaction', async () => {
     let l = new LegacyWallet();
-    l.setSecret('L4ccWrPMmFDZw4kzAKFqJNxgHANjdy6b7YKNXMwB4xac4FLF3Tov');
-    assert.strictEqual(l.getAddress(), '14YZ6iymQtBVQJk6gKnLCk49UScJK7SH4M');
+    l.setSecret('5K5w71YVbZEQcY1xnarM69vQMmysAWCXSmtiBHFuiEcfDKJFcFH');
+    assert.strictEqual(l.getAddress(), 'FqVvdTvLSxdv4YEVvptjL7BZfr9qqs8gN4');
     assert.strictEqual(await l.getChangeAddressAsync(), l.getAddress());
 
     let utxos = [
@@ -21,7 +21,7 @@ describe('Legacy wallet', () => {
     ];
     // ^^ only non-segwit inputs need full transaction txhex
 
-    let txNew = l.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
+    let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
     let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(
       txNew.tx.toHex(),
@@ -29,14 +29,14 @@ describe('Legacy wallet', () => {
     );
     assert.strictEqual(tx.ins.length, 1);
     assert.strictEqual(tx.outs.length, 2);
-    assert.strictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+    assert.strictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
     assert.strictEqual(l.getAddress(), bitcoin.address.fromOutputScript(tx.outs[1].script)); // change address
 
     // sendMax
-    txNew = l.createTransaction(utxos, [{ address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
+    txNew = l.createTransaction(utxos, [{ address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(tx.ins.length, 1);
     assert.strictEqual(tx.outs.length, 1);
-    assert.strictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+    assert.strictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
   });
 });

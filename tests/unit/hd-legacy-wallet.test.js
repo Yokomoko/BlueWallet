@@ -1,7 +1,7 @@
 /* global it */
 import { HDLegacyP2PKHWallet } from '../../class';
 const assert = require('assert');
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 
 it('Legacy HD (BIP44) works', async () => {
   if (!process.env.HD_MNEMONIC) {
@@ -102,7 +102,7 @@ it.only('Legacy HD (BIP44) can create TX', async () => {
 
   let txNew = hd.createTransaction(
     utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', value: 80000 }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', value: 80000 }],
     1,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );
@@ -113,13 +113,13 @@ it.only('Legacy HD (BIP44) can create TX', async () => {
   assert.strictEqual(tx.outs[1].value, 19334); // change
   let toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
   let changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', toAddress);
   assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 
   // testing sendMax
   txNew = hd.createTransaction(
     utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR' }],
     1,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );
@@ -127,5 +127,5 @@ it.only('Legacy HD (BIP44) can create TX', async () => {
   assert.strictEqual(tx.ins.length, 4);
   assert.strictEqual(tx.outs.length, 1);
   toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', toAddress);
+  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', toAddress);
 });

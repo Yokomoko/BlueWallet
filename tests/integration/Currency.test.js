@@ -14,13 +14,13 @@ describe('currency', () => {
     cur = JSON.parse(cur);
     assert.ok(Number.isInteger(cur[currency.STRUCT.LAST_UPDATED]));
     assert.ok(cur[currency.STRUCT.LAST_UPDATED] > 0);
-    assert.ok(cur['BTC_USD'] > 0);
+    assert.ok(cur['GRS_USD'] > 0);
 
     // now, setting other currency as default
     await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(FiatUnit.JPY));
     await currency.startUpdater();
     cur = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
-    assert.ok(cur['BTC_JPY'] > 0);
+    assert.ok(cur['GRS_JPY'] > 0);
 
     // now setting with a proper setter
     await currency.setPrefferedCurrency(FiatUnit.EUR);
@@ -28,6 +28,6 @@ describe('currency', () => {
     let preferred = await currency.getPreferredCurrency();
     assert.strictEqual(preferred.endPointKey, 'EUR');
     cur = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
-    assert.ok(cur['BTC_EUR'] > 0);
+    assert.ok(cur['GRS_EUR'] > 0);
   });
 });

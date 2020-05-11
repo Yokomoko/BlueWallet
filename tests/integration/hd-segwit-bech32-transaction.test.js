@@ -78,7 +78,7 @@ describe('HDSegwitBech32Transaction', () => {
     assert.strictEqual(feeRate, 12);
     assert.strictEqual(targets.length, 1);
     assert.strictEqual(targets[0].value, 200000);
-    assert.strictEqual(targets[0].address, '3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC');
+    assert.strictEqual(targets[0].address, '3NLnALo49CFEF4tCRhCvz45ySSfz2hjD7w');
     assert.strictEqual(
       JSON.stringify(utxos),
       JSON.stringify([
@@ -144,7 +144,7 @@ describe('HDSegwitBech32Transaction', () => {
     assert.strictEqual(createdTx.outs.length, 2);
     let addr0 = SegwitP2SHWallet.scriptPubKeyToAddress(createdTx.outs[0].script);
     assert.ok(!hd.weOwnAddress(addr0));
-    assert.strictEqual(addr0, '3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC'); // dest address
+    assert.strictEqual(addr0, '3NLnALo49CFEF4tCRhCvz45ySSfz2hjD7w'); // dest address
     let addr1 = SegwitBech32Wallet.scriptPubKeyToAddress(createdTx.outs[1].script);
     assert.ok(hd.weOwnAddress(addr1));
 

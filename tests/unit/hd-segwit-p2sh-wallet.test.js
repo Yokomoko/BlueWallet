@@ -27,35 +27,35 @@ it('can create a Segwit HD (BIP49)', async function() {
 
   assert.strictEqual('KzoosK4MqjwBBNANduQn9PpL2Y4a9sxEJNyAiQPzNArQ7XrPcPN7', hd._getExternalWIFByIndex(0));
   assert.strictEqual(
-    'ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp',
+    'ypub6XnFnMGmSrB2RyVTUQk7NDyZQ4Aq4KyevntuMmRsNnJMyYmWopWYGp7aE21wQ6mXrxYH4dRHFfiqC5Sv9HLro5A4VoLjswSmGNZju8AhhLQ',
     hd.getXpub(),
   );
 });
 
 it('can convert witness to address', () => {
   let address = SegwitP2SHWallet.witnessToAddress('035c618df829af694cb99e664ce1b34f80ad2c3b49bcd0d9c0b1836c66b2d25fd8');
-  assert.strictEqual(address, '34ZVGb3gT8xMLT6fpqC6dNVqJtJmvdjbD7');
+  assert.strictEqual(address, '34ZVGb3gT8xMLT6fpqC6dNVqJtJmuXR3Tf');
 
   address = SegwitP2SHWallet.scriptPubKeyToAddress('a914e286d58e53f9247a4710e51232cce0686f16873c87');
-  assert.strictEqual(address, '3NLnALo49CFEF4tCRhCvz45ySSfz3UktZC');
+  assert.strictEqual(address, '3NLnALo49CFEF4tCRhCvz45ySSfz2hjD7w');
 
   address = SegwitBech32Wallet.witnessToAddress('035c618df829af694cb99e664ce1b34f80ad2c3b49bcd0d9c0b1836c66b2d25fd8');
-  assert.strictEqual(address, 'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv');
+  assert.strictEqual(address, 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d');
 
   address = SegwitBech32Wallet.scriptPubKeyToAddress('00144d757460da5fcaf84cc22f3847faaa1078e84f6a');
-  assert.strictEqual(address, 'bc1qf46hgcx6tl90snxz9uuy0742zpuwsnm27ysdh7');
+  assert.strictEqual(address, 'grs1qf46hgcx6tl90snxz9uuy0742zpuwsnm2r4vvwl');
 
   address = LegacyWallet.scriptPubKeyToAddress('76a914d0b77eb1502c81c4093da9aa6eccfdf560cdd6b288ac');
-  assert.strictEqual(address, '1L2bNMGRQQLT2AVUek4K9L7sn3SSMioMgE');
+  assert.strictEqual(address, 'FpCJpFznxu1zTmWbXr3nbqvCSCiQ38hvNz');
 });
 
 it('Segwit HD (BIP49) can generate addressess only via ypub', function() {
-  let ypub = 'ypub6YQxchNW9joEqtY2yKNEn43b6Vb6jcxZmMmWc8oaYHWTXtRLbZevAngHHFRgj5ovKJH95D4S4X37i9ESTzYbPyCBvLEbTKCxHNLEhCZuVJ3';
+  let ypub = 'ypub6X46SconPpL9QhXPnMGuPLB9jYai7nrHz7ki4zq3awHb462iPSG5eV19oBWv22RWt69npsi75XGcANsevtTWE8YFgqpygrGUPnEKp6vty5v';
   let hd = new HDSegwitP2SHWallet();
   hd._xpub = ypub;
-  assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK', hd._getExternalAddressByIndex(0));
-  assert.strictEqual('35p5LwCAE7mH2css7onyQ1VuS1jgWtQ4U3', hd._getExternalAddressByIndex(1));
-  assert.strictEqual('32yn5CdevZQLk3ckuZuA8fEKBco8mEkLei', hd._getInternalAddressByIndex(0));
+  assert.strictEqual('3299Qf2x9BnzLaZu4HCLvm26RbBB3ZRf4u', hd._getExternalAddressByIndex(0));
+  assert.strictEqual('37WFkjwMYBkJrpnSA92iHjtFcXneDcQFTW', hd._getExternalAddressByIndex(1));
+  assert.strictEqual('34e4had5XuUMLhqSoHakxoU9Kg9teFWW3R', hd._getInternalAddressByIndex(0));
 });
 
 it('can generate Segwit HD (BIP49)', async () => {
@@ -101,11 +101,11 @@ it('can work with malformed mnemonic', () => {
 });
 
 it('Legacy HD (BIP44) can generate addressess based on xpub', async function() {
-  let xpub = 'xpub6CQdfC3v9gU86eaSn7AhUFcBVxiGhdtYxdC5Cw2vLmFkfth2KXCMmYcPpvZviA89X6DXDs4PJDk5QVL2G2xaVjv7SM4roWHr1gR4xB3Z7Ps';
+  let xpub = 'xpub6D1UJDwSYnrC6811wgE7QztbeciyL7zZs8r9a1kurTXiYgQUk9LibZ6mq6BPGgewxQvNXKmg8g6eqmiHofVUyX3nED1iACybAETVpzdzTGG';
   let hd = new HDLegacyP2PKHWallet();
   hd._xpub = xpub;
-  assert.strictEqual(hd._getExternalAddressByIndex(0), '12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG');
-  assert.strictEqual(hd._getInternalAddressByIndex(0), '1KZjqYHm7a1DjhjcdcjfQvYfF2h6PqatjX');
-  assert.strictEqual(hd._getExternalAddressByIndex(1), '1QDCFcpnrZ4yrAQxmbvSgeUC9iZZ8ehcR5');
-  assert.strictEqual(hd._getInternalAddressByIndex(1), '13CW9WWBsWpDUvLtbFqYziWBWTYUoQb4nU');
+  assert.strictEqual(hd._getExternalAddressByIndex(0), 'FYN8Svwh3NpWta7UDVmHADgX5i6gpHKBG4');
+  assert.strictEqual(hd._getInternalAddressByIndex(0), 'FmqnRqTe1nd7V9Bnm1WNMQnHxgb2yTBFXT');
+  assert.strictEqual(hd._getExternalAddressByIndex(1), 'FYgX5ujkspKchM8cgpgeiBMxjv7EMmsvio');
+  assert.strictEqual(hd._getInternalAddressByIndex(1), 'Fpe3XJo1gj9jkXh4UxHPdoXNDMVvaHNiYt');
 });

@@ -26,7 +26,7 @@ class DeeplinkSchemaMatch {
    * If the content is recognizable, create a dictionary with the respective
    * navigation dictionary required by react-navigation
    *
-   * @param event {{url: string}} URL deeplink as passed to app, e.g. `bitcoin:bc1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7?amount=666&label=Yo`
+   * @param event {{url: string}} URL deeplink as passed to app, e.g. `groestlcoin:grs1qle4zljdmpt77dtc98whyz90msamwjje8u6d6k5?amount=666&label=Yo`
    * @param completionHandler {function} Returns {routeName: string, params: object}
    */
   static navigationRouteFor(event, completionHandler) {
@@ -37,7 +37,7 @@ class DeeplinkSchemaMatch {
       return;
     }
 
-    if (event.url.toLowerCase().startsWith('bluewallet:bitcoin:') || event.url.toLowerCase().startsWith('bluewallet:lightning:')) {
+    if (event.url.toLowerCase().startsWith('bluewallet:groestlcoin:') || event.url.toLowerCase().startsWith('bluewallet:lightning:')) {
       event.url = event.url.substring(11);
     }
 
@@ -216,7 +216,7 @@ class DeeplinkSchemaMatch {
 
   static isLightningInvoice(invoice) {
     let isValidLightningInvoice = false;
-    if (invoice.toLowerCase().startsWith('lightning:lnb') || invoice.toLowerCase().startsWith('lnb')) {
+    if (invoice.toLowerCase().startsWith('lightning:lng') || invoice.toLowerCase().startsWith('lng')) {
       isValidLightningInvoice = true;
     }
     return isValidLightningInvoice;
