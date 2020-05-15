@@ -190,7 +190,7 @@ module.exports = {
     lightning_settings: 'Lightning asetukset',
     lightning_settings_explain:
       'Yhdistääksesi omaan LND noodiin, asenna LndHub' +
-      ' ja laita sen URL tänne. Jätä tyhjäksi käyttääksesi BlueWalletin LNDHubia (lndhub.io). Muutosten tallentamisen jälkeen luodut lompakot yhdistävät annettuun LNDHubiin.',
+      ' ja laita sen URL tänne. Jätä tyhjäksi käyttääksesi BlueWalletin LNDHubia (lndhub.groestlcoin.org). Muutosten tallentamisen jälkeen luodut lompakot yhdistävät annettuun LNDHubiin.',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'Tallenna',

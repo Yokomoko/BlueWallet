@@ -191,7 +191,7 @@ module.exports = {
     lightning_settings_explain:
       'Para se ligar ao seu próprio node LND, por favor instale o LndHub ' +
       'e coloque o seu endereço aqui nas definições. ' +
-      'Deixe em branco para usar o LNDHub da Groestlcoin BlueWallet (lndhub.io). ' +
+      'Deixe em branco para usar o LNDHub da Groestlcoin BlueWallet (lndhub.groestlcoin.org). ' +
       'Wallets criadas depois desta alteração ligar-se-ão ao LNDHub especificado.',
     electrum_settings: 'Definições do Electrum',
     electrum_settings_explain: 'Deixe em branco para usar o valor por omissão',

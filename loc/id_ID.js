@@ -187,7 +187,7 @@ module.exports = {
     lightning_settings: 'Pengaturan Lightning',
     lightning_settings_explain:
       'Pasang LndHub untuk menghubungkan ke node LND kamu' +
-      ' dan masukkan URL di sini. Biarkan kosong untuk menghubungkan ke LndHub standar (lndhub.io)',
+      ' dan masukkan URL di sini. Biarkan kosong untuk menghubungkan ke LndHub standar (lndhub.groestlcoin.org)',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'simpan',

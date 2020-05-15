@@ -188,7 +188,7 @@ module.exports = {
     lightning_settings_explain:
       'Za spajanje na tvoj vlastiti LND čvor trebaš instalirati LndHub' +
       ' i upisati njegov URL ovdje. Ostavi prazno za standardni ' +
-      'ndHub\n (lndhub.io)',
+      'ndHub\n (lndhub.groestlcoin.org)',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'Spremi',

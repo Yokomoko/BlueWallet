@@ -2210,7 +2210,7 @@ export class BlueReplaceFeeSuggestions extends Component {
           </View>
         </TouchableOpacity>
         <BlueText>
-          The total fee rate (satoshi per byte) you want to pay should be higher than {this.props.transactionMinimum} gro/byte
+          The total fee rate (gro per byte) you want to pay should be higher than {this.props.transactionMinimum} gro/byte
         </BlueText>
       </View>
     );

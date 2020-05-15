@@ -188,7 +188,7 @@ module.exports = {
     lightning_settings_explain:
       '他の LND ノードへ接続するには LndHub をインストール後、' +
       'URL を入力してください。既定の設定を使用するには空欄にします' +
-      'ndHub\n (lndhub.io)',
+      'ndHub\n (lndhub.groestlcoin.org)',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: '保存',

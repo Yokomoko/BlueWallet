@@ -188,7 +188,7 @@ module.exports = {
     lightning_settings: 'Lightning Beállítások',
     lightning_settings_explain:
       'Saját LND-csomóponthoz való csatlakozáshoz telepítsd az LndHub-ot' +
-      ' és írd be az URL-ét alul. Hagyd üresen, ha a Groestlcoin BlueWallet saját LNDHub-jához (lndhub.io) szeretnél csatlakozni.' +
+      ' és írd be az URL-ét alul. Hagyd üresen, ha a Groestlcoin BlueWallet saját LNDHub-jához (lndhub.groestlcoin.org) szeretnél csatlakozni.' +
       ' A beállítások mentése után, minden újonnan létrehozott tárca a megadott LDNHubot fogja használni.',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',

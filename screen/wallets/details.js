@@ -87,7 +87,7 @@ export default class WalletDetails extends Component {
     ReactNativeHapticFeedback.trigger('notificationWarning', { ignoreAndroidSystemSettings: false });
     const walletBalanceConfirmation = await prompt(
       'Wallet Balance',
-      `This wallet has a balance. Before proceeding, please be aware that you will not be able to recover the funds without this wallet's seed phrase. In order to avoid accidental removal this wallet, please enter your wallet's balance of ${this.state.wallet.getBalance()} satoshis.`,
+      `This wallet has a balance. Before proceeding, please be aware that you will not be able to recover the funds without this wallet's seed phrase. In order to avoid accidental removal this wallet, please enter your wallet's balance of ${this.state.wallet.getBalance()} gros.`,
       true,
       'plain-text',
     );

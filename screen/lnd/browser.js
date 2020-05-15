@@ -303,7 +303,7 @@ export default class Browser extends Component {
             );
             Alert.alert(
               'Page',
-              'This page wants to pay you ' + amount + ' sats (' + json.makeInvoice.defaultMemo + ')',
+              'This page wants to pay you ' + amount + ' gros (' + json.makeInvoice.defaultMemo + ')',
               [
                 { text: 'No thanks', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                 {

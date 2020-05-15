@@ -190,7 +190,7 @@ module.exports = {
     lightning_settings_explain:
       'Bitte installier Lndhub, um mit deiner eigenen LND Node zu verbinden' +
       ' und setz seine URL hier in den Einstellungen. Lass das Feld leer, um Standard- ' +
-      'LndHub\n (lndhub.io) zu verwenden',
+      'LndHub\n (lndhub.groestlcoin.org) zu verwenden',
     electrum_settings: 'Electrum Einstellungen',
     electrum_settings_explain: 'Leer lassen, um den Standard zu verwenden.',
     save: 'Speichern',

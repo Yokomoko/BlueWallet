@@ -188,7 +188,7 @@ module.exports = {
     lightning_settings: 'Lightning innstillinger',
     lightning_settings_explain:
       'For å koble til din egen LND-node, vennligst installer LndHub' +
-      ' og legg URLen her i innstillinger. La feltet være tomt for å bruke BlueWallets LNDHub (lndhub.io). Lommebøker opprettet etter lagring av endringer, vil koble til den angitte LNDHub.',
+      ' og legg URLen her i innstillinger. La feltet være tomt for å bruke BlueWallets LNDHub (lndhub.groestlcoin.org). Lommebøker opprettet etter lagring av endringer, vil koble til den angitte LNDHub.',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'Lagre',

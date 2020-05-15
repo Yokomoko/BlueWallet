@@ -191,7 +191,7 @@
     lightning_settings_explain:
       'Om u eie LND node te konnekteer, installeer asseblief LndHub' +
       ' and put its URL here in settings. Leave blank om die standaard LndHub' +
-      '(lndhub.io) te gebruik',
+      '(lndhub.groestlcoin.org) te gebruik',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'stoor',

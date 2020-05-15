@@ -188,7 +188,7 @@ module.exports = {
     lightning_settings: 'Lightning Ayarları',
     lightning_settings_explain:
       'Kendi LND düğümünüze bağlanmak için lütfen LndHubı yükleyin.' +
-      " ve URL’sini buraya, ayarlara yazın. Groestlcoin BlueWallet'in LNDHub (lndhub.io) programını kullanmak için boş bırakın. Değişiklikleri kaydettikten sonra oluşturulan cüzdanlar belirtilen LNDHub'a bağlanacaktır.",
+      " ve URL’sini buraya, ayarlara yazın. Groestlcoin BlueWallet'in LNDHub (lndhub.groestlcoin.org) programını kullanmak için boş bırakın. Değişiklikleri kaydettikten sonra oluşturulan cüzdanlar belirtilen LNDHub'a bağlanacaktır.",
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'Kaydet',

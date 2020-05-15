@@ -183,7 +183,7 @@ module.exports = {
     passwords_do_not_match: '两次输入密码不同',
     encrypt_storage: '加密存储',
     lightning_settings: '闪电网络设置',
-    lightning_settings_explain: '如要要连接你自己的闪电节点请安装LndHub' + ' 并把url地址输入到下面. 空白将使用默认的LndHub (lndhub.io)',
+    lightning_settings_explain: '如要要连接你自己的闪电节点请安装LndHub' + ' 并把url地址输入到下面. 空白将使用默认的LndHub (lndhub.groestlcoin.org)',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: '保存',

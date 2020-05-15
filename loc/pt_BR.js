@@ -192,7 +192,7 @@ module.exports = {
     lightning_settings: 'Preferências Lightning',
     lightning_settings_explain:
       'Para se conectar ao seu próprio ponto LND, você precisa instalar a aplicação LndHub' +
-      ' e copiar sua URL para cá. Deixe em branco para usar a LndHub padrão fornecida pela Groestlcoin BlueWallet (lndhub.io).' +
+      ' e copiar sua URL para cá. Deixe em branco para usar a LndHub padrão fornecida pela Groestlcoin BlueWallet (lndhub.groestlcoin.org).' +
       ' Carteiras criadas após mudanças nestas preferências ficarão ligadas à instância LndHub que estiver especificada.',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
