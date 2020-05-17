@@ -67,6 +67,9 @@ module.exports = {
       export_backup: 'Exportieren / Backup',
       buy_bitcoin: 'Groestlcoin kaufen',
       show_xpub: 'Wallet XPUB zeigen',
+      connected_to: 'Connected to',
+      advanced: 'Advanced',
+      use_with_hardware_wallet: 'Use with hardware wallet',
     },
     export: {
       title: 'Wallet exportieren',
@@ -235,7 +238,7 @@ module.exports = {
   pleasebackup: {
     title: 'Ihr Wallet wird erstellt...',
     text:
-      'Nimm Dir Zeit die mnemonischen Wörter zur späteren Wiederherstellung des Wallets aufzuschreiben. Die Wörter sind dien einziges Backup im Fall eines Geräteverlustes.',
+      'Nimm Dir Zeit die mnemonischen Wörter zur späteren Wiederherstellung des Wallets aufzuschreiben. Die Wörter sind dein einziges Backup im Fall eines Geräteverlustes.',
     ok: 'Ja, mein Geld ist sicher!',
   },
   lndViewInvoice: {

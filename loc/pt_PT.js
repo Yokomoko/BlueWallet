@@ -65,7 +65,10 @@ module.exports = {
       delete_this_wallet: 'Apagar esta wallet',
       export_backup: 'Exportar / backup',
       buy_bitcoin: 'Comprar Groestlcoin',
-      show_xpub: 'Mostar XPUB da wallet',
+      show_xpub: 'Mostrar XPUB da wallet',
+      connected_to: 'Connected to',
+      advanced: 'Advanced',
+      use_with_hardware_wallet: 'Use with hardware wallet',
     },
     export: {
       title: 'Exportar Wallet',

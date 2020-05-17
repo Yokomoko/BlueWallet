@@ -590,9 +590,8 @@ export class BlueListItem extends Component {
           color: BlueApp.settings.foregroundColor,
           fontSize: 16,
           fontWeight: '500',
-          marginLeft: 16,
         }}
-        subtitleStyle={{ color: BlueApp.settings.alternativeTextColor, marginLeft: 16, fontWeight: '400', width: 230 }}
+        subtitleStyle={{ flexWrap: 'wrap', color: BlueApp.settings.alternativeTextColor, fontWeight: '400', fontSize: 14 }}
         subtitleNumberOfLines={1}
         titleNumberOfLines={0}
         {...this.props}
@@ -731,34 +730,33 @@ export class BlueHeaderDefaultMain extends Component {
       <SafeAreaView style={{ backgroundColor: BlueApp.settings.brandingColor }}>
         <Header
           {...this.props}
-          backgroundColor={BlueApp.settings.brandingColor}
-          outerContainerStyles={{
-            borderBottomColor: 'transparent',
-            borderBottomWidth: 0,
-          }}
           statusBarProps={{ barStyle: 'default' }}
-          leftComponent={
-            <Text
-              numberOfLines={0}
-              style={{
-                fontWeight: 'bold',
-                fontSize: 34,
-                color: BlueApp.settings.foregroundColor,
-              }}
-            >
-              {
-                // eslint-disable-next-line
-                this.props.leftText
-              }
-            </Text>
-          }
+          leftComponent={{
+            // eslint-disable-next-line
+            text: this.props.leftText,
+            style: {
+              fontWeight: 'bold',
+              fontSize: 34,
+              color: BlueApp.settings.foregroundColor,
+            },
+          }}
+          leftContainerStyle={{
+            minWidth: '70%',
+            height: 70,
+          }}
+          bottomDivider={false}
+          containerStyle={{
+            height: 64,
+            flexDirection: 'row',
+            borderBottomColor: BlueApp.settings.brandingColor,
+            backgroundColor: '#ffffff',
+          }}
           rightComponent={
             this.props.onNewWalletPress && (
               <TouchableOpacity
                 onPress={this.props.onNewWalletPress}
                 style={{
-                  height: 48,
-                  alignSelf: 'flex-end',
+                  height: 90,
                 }}
               >
                 <BluePlusIcon />
@@ -1117,7 +1115,7 @@ export class BlueTransactionExpiredIcon extends Component {
       <View {...this.props}>
         <View style={stylesBlueIcon.boxIncoming}>
           <View style={stylesBlueIcon.ballOutgoingExpired}>
-            <Icon {...this.props} name="clock" size={16} type="octicon" color="#9AA0AA" iconStyle={{ left: 0, top: 6 }} />
+            <Icon {...this.props} name="clock" size={16} type="octicon" color="#9AA0AA" iconStyle={{ left: 0, top: 0 }} />
           </View>
         </View>
       </View>
@@ -1137,7 +1135,7 @@ export class BlueTransactionOnchainIcon extends Component {
               size={16}
               type="font-awesome"
               color={BlueApp.settings.incomingForegroundColor}
-              iconStyle={{ left: 0, top: 7, transform: [{ rotate: '-45deg' }] }}
+              iconStyle={{ left: 0, top: 0, transform: [{ rotate: '-45deg' }] }}
             />
           </View>
         </View>
@@ -1158,7 +1156,7 @@ export class BlueTransactionOffchainIcon extends Component {
               size={16}
               type="font-awesome"
               color={BlueApp.settings.outgoingForegroundColor}
-              iconStyle={{ left: 0, top: 7 }}
+              iconStyle={{ left: 0, marginTop: 6 }}
             />
           </View>
         </View>
@@ -1179,7 +1177,7 @@ export class BlueTransactionOffchainIncomingIcon extends Component {
               size={16}
               type="font-awesome"
               color={BlueApp.settings.incomingForegroundColor}
-              iconStyle={{ left: 0, top: 7 }}
+              iconStyle={{ left: 0, marginTop: 6 }}
             />
           </View>
         </View>
@@ -1465,8 +1463,10 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC,
 
     return {
       fontWeight: '600',
-      fontSize: 16,
+      fontSize: 14,
       color: color,
+      textAlign: 'right',
+      width: 96,
     };
   };
 
@@ -1575,15 +1575,11 @@ export const BlueTransactionListItem = ({ item, itemPriceUnit = BitcoinUnit.BTC,
       title={transactionTimeToReadable}
       titleNumberOfLines={subtitleNumberOfLines}
       subtitle={subtitle()}
-      subtitleNumberOfLines={subtitleNumberOfLines}
+      subtitleProps={{ numberOfLines: subtitleNumberOfLines }}
       onPress={onPress}
       onLongPress={onLongPress}
-      badge={{
-        value: 3,
-        textStyle: { color: 'orange' },
-        containerStyle: { marginTop: 0 },
-      }}
-      hideChevron
+      chevron={false}
+      Component={TouchableOpacity}
       rightTitle={rowTitle()}
       rightTitleStyle={rowTitleStyle()}
     />
@@ -1655,7 +1651,7 @@ export class BlueListTransactionItem extends Component {
 
     return {
       fontWeight: '600',
-      fontSize: 16,
+      fontSize: 14,
       color: color,
     };
   };
@@ -2137,37 +2133,43 @@ export class BlueReplaceFeeSuggestions extends Component {
         {this.state.networkFees && (
           <>
             <BlueText>Suggestions</BlueText>
-            <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.FAST)}>
-              <BlueListItem
-                title={'Fast'}
-                rightTitle={`${this.state.networkFees.fastestFee} gro/b`}
-                {...(this.state.selectedFeeType === NetworkTransactionFeeType.FAST
-                  ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
-                  : { hideChevron: true })}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.MEDIUM)}>
-              <BlueListItem
-                title={'Medium'}
-                rightTitle={`${this.state.networkFees.halfHourFee} gro/b`}
-                {...(this.state.selectedFeeType === NetworkTransactionFeeType.MEDIUM
-                  ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
-                  : { hideChevron: true })}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onFeeSelected(NetworkTransactionFeeType.SLOW)}>
-              <BlueListItem
-                title={'Slow'}
-                rightTitle={`${this.state.networkFees.hourFee} gro/b`}
-                {...(this.state.selectedFeeType === NetworkTransactionFeeType.SLOW
-                  ? { rightIcon: <Icon name="check" type="font-awesome" color="#0c2550" /> }
-                  : { hideChevron: true })}
-              />
-            </TouchableOpacity>
+            <BlueListItem
+              onPress={() => this.onFeeSelected(NetworkTransactionFeeType.FAST)}
+              containerStyle={{ paddingHorizontal: 0, marginHorizontal: 0 }}
+              bottomDivider={false}
+              title={'Fast'}
+              rightTitle={`${this.state.networkFees.fastestFee} gro/b`}
+              rightTitleStyle={{ fontSize: 13, color: BlueApp.settings.alternativeTextColor }}
+              {...(this.state.selectedFeeType === NetworkTransactionFeeType.FAST
+                ? { rightIcon: <Icon name="check" type="octaicon" color="#0070FF" /> }
+                : { hideChevron: true })}
+            />
+            <BlueListItem
+              onPress={() => this.onFeeSelected(NetworkTransactionFeeType.MEDIUM)}
+              containerStyle={{ paddingHorizontal: 0, marginHorizontal: 0 }}
+              bottomDivider={false}
+              title={'Medium'}
+              rightTitle={`${this.state.networkFees.halfHourFee} gro/b`}
+              rightTitleStyle={{ fontSize: 13, color: BlueApp.settings.alternativeTextColor }}
+              {...(this.state.selectedFeeType === NetworkTransactionFeeType.MEDIUM
+                ? { rightIcon: <Icon name="check" type="octaicon" color="#0070FF" /> }
+                : { hideChevron: true })}
+            />
+            <BlueListItem
+              onPress={() => this.onFeeSelected(NetworkTransactionFeeType.SLOW)}
+              containerStyle={{ paddingHorizontal: 0, marginHorizontal: 0 }}
+              bottomDivider={false}
+              title={'Slow'}
+              rightTitle={`${this.state.networkFees.hourFee} gro/b`}
+              rightTitleStyle={{ fontSize: 13, color: BlueApp.settings.alternativeTextColor }}
+              {...(this.state.selectedFeeType === NetworkTransactionFeeType.SLOW
+                ? { rightIcon: <Icon name="check" type="octaicon" color="#0070FF" /> }
+                : { hideChevron: true })}
+            />
           </>
         )}
         <TouchableOpacity onPress={() => this.customTextInput.focus()}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: 18, marginRight: 18, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 0, alignItems: 'center' }}>
             <Text style={{ color: BlueApp.settings.foregroundColor, fontSize: 16, fontWeight: '500' }}>Custom</Text>
             <View
               style={{
@@ -2204,12 +2206,12 @@ export class BlueReplaceFeeSuggestions extends Component {
                 inputAccessoryViewID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}
               />
               <Text style={{ color: BlueApp.settings.alternativeTextColor, marginHorizontal: 8 }}>gro/b</Text>
-              {this.state.selectedFeeType === NetworkTransactionFeeType.CUSTOM && <Icon name="check" type="font-awesome" color="#0c2550" />}
+              {this.state.selectedFeeType === NetworkTransactionFeeType.CUSTOM && <Icon name="check" type="octaicon" color="#0070FF" />}
             </View>
             <BlueDismissKeyboardInputAccessory />
           </View>
         </TouchableOpacity>
-        <BlueText>
+        <BlueText style={{ color: BlueApp.settings.alternativeTextColor }}>
           The total fee rate (gro per byte) you want to pay should be higher than {this.props.transactionMinimum} gro/byte
         </BlueText>
       </View>
