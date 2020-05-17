@@ -1,4 +1,4 @@
-package io.bluewallet.bluewallet;
+package org.groestlcoin.bluewallet;
 
 import com.facebook.react.ReactActivity;
 

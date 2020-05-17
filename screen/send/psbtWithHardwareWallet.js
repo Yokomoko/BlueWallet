@@ -259,7 +259,7 @@ export default class PsbtWithHardwareWallet extends Component {
   openSignedTransaction = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: Platform.OS === 'ios' ? ['org.groestlcoin.psbt', 'io.bluewallt.psbt.txn'] : [DocumentPicker.types.allFiles],
+        type: Platform.OS === 'ios' ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn'] : [DocumentPicker.types.allFiles],
       });
       const file = await RNFS.readFile(res.uri);
       if (file) {
