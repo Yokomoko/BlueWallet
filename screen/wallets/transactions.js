@@ -230,7 +230,7 @@ export default class WalletTransactions extends Component {
             - Shows Marketplace button to open in browser (iOS)
 
             The idea is to avoid showing on iOS an appstore/market style app that goes against the TOS.
-  
+
            */}
           {/* this.state.wallet.getTransactions().length > 0 &&
             this.state.wallet.type !== LightningCustodianWallet.type &&
@@ -292,29 +292,6 @@ export default class WalletTransactions extends Component {
                 );
               }}
               title={'Refill with External Wallet'}
-            />
-
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={a => {
-                this.setState({ isManageFundsModalVisible: false }, async () => {
-                  this.props.navigation.navigate('BuyBitcoin', {
-                    wallet: this.state.wallet,
-                  });
-                });
-              }}
-              title={'Refill with bank card'}
-            />
-
-            <BlueListItem
-              title={loc.lnd.withdraw}
-              hideChevron
-              component={TouchableOpacity}
-              onPress={a => {
-                this.setState({ isManageFundsModalVisible: false });
-                Linking.openURL('https://zigzag.io/?utm_source=integration&utm_medium=bluewallet&utm_campaign=withdrawLink');
-              }}
             />
           </View>
         </KeyboardAvoidingView>
