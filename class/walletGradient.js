@@ -13,12 +13,12 @@ import { HDSegwitElectrumSeedP2WPKHWallet } from './hd-segwit-electrum-seed-p2wp
 export default class WalletGradient {
   static hdSegwitP2SHWallet = ['#00A5BD', '#00618F'];
   static hdSegwitBech32Wallet = ['#00A5BD', '#00618F'];
-  static segwitBech32Wallet = ['#f8bbe1', '#945a90'];
-  static watchOnlyWallet = ['#7d7d7d', '#4a4a4a'];
-  static legacyWallet = ['#40fad1', '#15be98'];
-  static hdLegacyP2PKHWallet = ['#e36dfa', '#bd10e0'];
-  static hdLegacyBreadWallet = ['#fe6381', '#f99c42'];
-  static defaultGradients = ['#c65afb', '#9053fe'];
+  static segwitBech32Wallet = ['#00A5BD', '#00618F'];
+  static watchOnlyWallet = ['#00A5BD', '#00618F'];
+  static legacyWallet = ['#00A5BD', '#00618F'];
+  static hdLegacyP2PKHWallet = ['#00A5BD', '#00618F'];
+  static hdLegacyBreadWallet = ['#00A5BD', '#00618F'];
+  static defaultGradients = ['#00A5BD', '#00618F'];
   static lightningCustodianWallet = ['#00A5BD', '#00618F'];
   static createWallet = ['#eef0f4', '#eef0f4'];
 
