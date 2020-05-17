@@ -9,10 +9,10 @@
 import Foundation
 
 class API {
-  
+
   static func fetchPrice(currency: String, completion: @escaping ((Dictionary<String, Any>?, Error?) -> Void)) {
-    guard let url = URL(string: "https://api.coindesk.com/v1/bpi/currentPrice/\(currency).json") else {return}
-    
+    guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false\(currency).json") else {return}
+
     URLSession.shared.dataTask(with: url) { (data, response, error) in
       guard let dataResponse = data,
         let json = ((try? JSONSerialization.jsonObject(with: dataResponse, options: .mutableContainers) as? Dictionary<String, Any>) as Dictionary<String, Any>??),
@@ -20,27 +20,27 @@ class API {
           print(error?.localizedDescription ?? "Response Error")
           completion(nil, error)
           return }
-      
+
       completion(json, nil)
     }.resume()
   }
-  
+
   static func getUserPreferredCurrency() -> String {
     guard let userDefaults = UserDefaults(suiteName: "group.org.groestlcoin.bluewallet1"),
       let preferredCurrency = userDefaults.string(forKey: "preferredCurrency")
       else {
         return "USD"
     }
-    
+
     if preferredCurrency != API.getLastSelectedCurrency() {
       UserDefaults.standard.removeObject(forKey: TodayData.TodayCachedDataStoreKey)
       UserDefaults.standard.removeObject(forKey: TodayData.TodayDataStoreKey)
       UserDefaults.standard.synchronize()
     }
-    
+
     return preferredCurrency
   }
-  
+
   static func getUserPreferredCurrencyLocale() -> String {
     guard let userDefaults = UserDefaults(suiteName: "group.org.groestlcoin.bluewallet1"),
       let preferredCurrency = userDefaults.string(forKey: "preferredCurrencyLocale")
@@ -49,17 +49,17 @@ class API {
     }
     return preferredCurrency
   }
-  
+
   static func getLastSelectedCurrency() -> String {
     guard let dataStore = UserDefaults.standard.string(forKey: "currency") else {
       return "USD"
     }
-    
+
     return dataStore
   }
-  
+
   static func saveNewSelectedCurrency() {
     UserDefaults.standard.setValue(API.getUserPreferredCurrency(), forKey: "currency")
   }
-  
+
 }

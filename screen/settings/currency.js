@@ -57,7 +57,7 @@ const Currency = () => {
           }}
         />
         <BlueCard>
-          <BlueText>Prices are obtained from CoinDesk</BlueText>
+          <BlueText>Prices are obtained from CoinGecko</BlueText>
         </BlueCard>
       </SafeBlueArea>
     );
