@@ -236,7 +236,7 @@ module.exports = {
     wasnt_paid_and_expired: 'This invoice was not paid for and has expired',
     has_been_paid: 'This invoice has been paid for',
     please_pay: 'Please pay',
-    sats: 'sats',
+    sats: 'gros',
     for: 'For:',
     additional_info: 'Additional Information',
     open_direct_channel: 'Open direct channel with this node:',

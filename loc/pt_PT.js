@@ -245,7 +245,7 @@ module.exports = {
     wasnt_paid_and_expired: 'Esta factura não foi paga e expirou',
     has_been_paid: 'Esta factura foi paga',
     please_pay: 'Por favor pague',
-    sats: 'sats',
+    sats: 'gros',
     for: 'Para:',
     additional_info: 'Informação adicional',
     open_direct_channel: 'Abrir canal directo com este node:',

@@ -242,7 +242,7 @@ module.exports = {
     wasnt_paid_and_expired: 'Denna faktura har ej betalats och är nu utgången',
     has_been_paid: 'Denna faktura är betald',
     please_pay: 'Var god betala',
-    sats: 'sats',
+    sats: 'gros',
     for: 'För:',
     additional_info: 'Ytterligare information',
     open_direct_channel: 'Öppna en direkt kanal med denna nod:',

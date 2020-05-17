@@ -245,7 +245,7 @@ module.exports = {
     wasnt_paid_and_expired: 'Diese Rechnung ist unbezahlt und abgelaufen.',
     has_been_paid: 'Diese Rechnung wurde bezahlt.',
     please_pay: 'Bitte zahle',
-    sats: 'sats',
+    sats: 'gros',
     for: 'für:',
     additional_info: 'Additional Information',
     open_direct_channel: 'Direkten Kanal zu diesem Knoten eröffnen:',

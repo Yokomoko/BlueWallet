@@ -243,7 +243,7 @@ module.exports = {
     wasnt_paid_and_expired: 'Ezt a számlát nem fizették ki és lejárt',
     has_been_paid: 'Ezt a számlát kifizették',
     please_pay: 'Kérlek fizess',
-    sats: 'sats',
+    sats: 'gros',
     for: 'Cím:',
     additional_info: 'További információk',
     open_direct_channel: 'Közvetlen csatorna nyitása erre a csomópontra:',
