@@ -33,7 +33,7 @@ BIP38GRS is a standard process to encrypt Groestlcoin and crypto currency privat
 ### encrypt(buffer, compressed, passphrase[, progressCallback, scryptParams])
 
 ``` javascript
-var bip38 = require('bip38')
+var bip38 = require('bip38grs')
 var wif = require('wifgrs')
 
 var myWifString = '5KGUthnCyV7hxAp4EJ3wixaVmmBMgwj1Rps9AStA9j2DeQaihtk'

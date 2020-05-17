@@ -18,7 +18,7 @@ const A = require('../analytics');
 /** @type {AppStorage} */
 const BlueApp = require('../BlueApp');
 const loc = require('../loc');
-const bip38 = require('../blue_modules/bip38');
+const bip38 = require('../blue_modules/bip38grs');
 const wif = require('wifgrs');
 const prompt = require('../prompt');
 

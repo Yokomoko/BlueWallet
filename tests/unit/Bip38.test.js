@@ -2,8 +2,8 @@
 let assert = require('assert');
 
 it('bip38 decodes', async () => {
-  const bip38 = require('../../blue_modules/bip38');
-  const wifgrs = require('wifgrs');
+  const bip38 = require('../../blue_modules/bip38grs');
+  const wif = require('wifgrs');
 
   let encryptedKey = '6PRVWUbkzq2VVjRuv58jpwVjTeN46MeNmzUHqUjQptBJUHGcBakduhrUNc';
   let decryptedKey = await bip38.decrypt(
@@ -25,7 +25,7 @@ it('bip38 decodes slow', async () => {
     return;
   }
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
-  const bip38 = require('../../blue_modules/bip38');
+  const bip38 = require('../../blue_modules/bip38grs');
   const wif = require('wifgrs');
 
   let encryptedKey = '6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN';

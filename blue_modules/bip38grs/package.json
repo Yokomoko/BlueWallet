@@ -1,31 +1,31 @@
 {
-  "_from": "git+https://github.com/Overtorment/bip38.git",
-  "_id": "bip38@2.0.2",
+  "_from": "git+https://github.com/Groestlcoin/bip38grs.git",
+  "_id": "bip38grs@2.0.2",
   "_inBundle": false,
-  "_integrity": "sha1-AhDzWwDTKrQ656q2Kxb4xmDIitY=",
-  "_location": "/bip38",
+  "_integrity": "sha512-pIYHpwDNjruo3XNkzK8rrOx+l95uer7eziQhrkH5UFSwrAWV/rJGu8sHclCgk21k0ZNtl/LPAMDPP8PNMB3C3g==",
+  "_location": "/bip38grs",
   "_phantomChildren": {},
   "_requested": {
     "type": "git",
-    "raw": "bip38@git+https://github.com/Overtorment/bip38.git",
-    "name": "bip38",
-    "escapedName": "bip38",
-    "rawSpec": "git+https://github.com/Overtorment/bip38.git",
-    "saveSpec": "git+https://github.com/Overtorment/bip38.git",
-    "fetchSpec": "https://github.com/Overtorment/bip38.git",
+    "raw": "bip38grs@git+https://github.com/Groestlcoin/bip38grs.git",
+    "name": "bip38grs",
+    "escapedName": "bip38grs",
+    "rawSpec": "git+https://github.com/Groestlcoin/bip38grs.git",
+    "saveSpec": "git+https://github.com/Groestlcoin/bip38grs.git",
+    "fetchSpec": "https://github.com/Groestlcoin/bip38grs.git",
     "gitCommittish": "master"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "git+https://github.com/Overtorment/bip38.git#7eb8701bf845f84eab71f0ef9a8db219420d080d",
-  "_spec": "bip38@git+https://github.com/Overtorment/bip38.git",
+  "_resolved": "git+https://github.com/Groestlcoin/bip38grs.git",
+  "_spec": "bip38grs@git+https://github.com/Groestlcoin/bip38grs.git",
   "_where": "/home/burn/Documents/BlueWallet",
   "author": {
     "name": "JP Richardson"
   },
   "bugs": {
-    "url": "https://github.com/bitcoinjs/bip38/issues"
+    "url": "https://github.com/Groestlcoin/bip38grs/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
@@ -39,7 +39,7 @@
     "pbkdf2": "^3.0.14"
   },
   "deprecated": false,
-  "description": "BIP38 is a standard process to encrypt Bitcoin and crypto currency private keys that is impervious to brute force attacks thus protecting the user.",
+  "description": "BIP38GRS is a standard process to encrypt Groestlcoin and crypto currency private keys that is impervious to brute force attacks thus protecting the user.",
   "devDependencies": {
     "coveralls": "^2.10.0",
     "istanbul": "^0.2.11",
@@ -50,15 +50,15 @@
   },
   "homepage": "http://cryptocoinjs.com/modules/currency/bip38/",
   "keywords": [
-    "bitcoin",
+    "groestlcoin",
     "crypto",
     "cryptography",
-    "litecoin"
+    "grs"
   ],
   "main": "index.js",
-  "name": "bip38",
+  "name": "bip38grs",
   "repository": {
-    "url": "git+ssh://git@github.com/bitcoinjs/bip38.git",
+    "url": "git+ssh://git@github.com/groestlcoin/bip38grs.git",
     "type": "git"
   },
   "scripts": {
