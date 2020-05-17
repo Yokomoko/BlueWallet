@@ -72,6 +72,7 @@
     "bip21grs": "2.0.2",
     "bip32grs": "2.0.5",
     "bip39": "2.5.0",
+    "bs58check": "<3.0.0",
     "groestlcoinjs-lib": "5.1.7",
     "bolt11grs": "https://github.com/Groestlcoin/bolt11grs",
     "buffer": "5.5.0",
