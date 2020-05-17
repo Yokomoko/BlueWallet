@@ -1,8 +1,8 @@
 import { HDSegwitBech32Wallet } from './';
 
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const mn = require('electrum-mnemonic');
-const HDNode = require('bip32');
+const HDNode = require('bip32grs');
 
 const PREFIX = mn.PREFIXES.segwit;
 const MNEMONIC_TO_SEED_OPTS = {
