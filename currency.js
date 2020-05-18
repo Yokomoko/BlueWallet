@@ -21,7 +21,7 @@ const STRUCT = {
  */
 async function setPrefferedCurrency(item) {
   await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(item));
-  await DefaultPreference.setName('group.org.groestlcoin.bluewallet1');
+  await DefaultPreference.setName('group.org.groestlcoin.bluewallet');
   await DefaultPreference.set('preferredCurrency', item.endPointKey);
   await DefaultPreference.set('preferredCurrencyLocale', item.locale.replace('-', '_'));
   DeviceQuickActions.setQuickActions();
