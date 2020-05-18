@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Groestlcoin BlueWallet</string>
+	<string>Groestlcoin&#x2007;BlueWallet</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
