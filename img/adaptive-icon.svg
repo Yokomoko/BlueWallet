@@ -1,90 +1,52 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   viewBox="0 0 108 108"
-   id="svg3666"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="adaptive-icon.svg"
-   width="108"
-   height="108"
-   inkscape:export-filename="/Users/hashengineering/Development/hashengineering/BlueWallet/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
-   inkscape:export-xdpi="64.14016"
-   inkscape:export-ydpi="64.14016">
-  <metadata
-     id="metadata3690">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>icon</dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1144"
-     inkscape:window-height="729"
-     id="namedview3688"
-     showgrid="false"
-     inkscape:zoom="1.199175"
-     inkscape:cx="43.896414"
-     inkscape:cy="111.42774"
-     inkscape:window-x="661"
-     inkscape:window-y="135"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg3666" />
-  <defs
-     id="defs3668">
-    <style
-       id="style3670">.cls-1{isolation:isolate;}.cls-2{fill:#032a30;}.cls-3{fill:#08718b;}.cls-4{fill:#1291ad;}.cls-5{opacity:0.6;mix-blend-mode:multiply;}.cls-6{font-size:48px;fill:#b9e8ef;font-family:MicrosoftYaHei, Microsoft YaHei;}</style>
-  </defs>
-  <title
-     id="title3672">icon</title>
-  <g
-     id="g4612"
-     transform="matrix(0.36829457,0,0,0.36829457,5.265138,4.3465302)">
-    <rect
-       class="cls-2"
-       width="260.66092"
-       height="112.54932"
-       rx="13.545351"
-       id="rect3678"
-       x="4.3745356"
-       y="4.3745289"
-       style="isolation:isolate;fill:#032a30" />
-    <rect
-       class="cls-3"
-       y="71.26458"
-       width="260.66092"
-       height="112.54932"
-       rx="13.545351"
-       id="rect3680"
-       x="4.3745356"
-       style="isolation:isolate;fill:#08718b" />
-    <rect
-       class="cls-4"
-       y="152.48615"
-       width="260.66092"
-       height="112.54932"
-       rx="13.545351"
-       id="rect3682"
-       x="4.3745356"
-       style="isolation:isolate;fill:#1291ad" />
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="svg3666" inkscape:export-filename="/Users/hashengineering/Development/hashengineering/BlueWallet/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" inkscape:export-xdpi="64.14016" inkscape:export-ydpi="64.14016" inkscape:version="0.91 r13725" sodipodi:docname="adaptive-icon.svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 108"
+	 style="enable-background:new 0 0 108 108;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#032A30;}
+	.st1{fill:#08718B;}
+	.st2{fill:#1291AD;}
+	.st3{enable-background:new    ;}
+	.st4{fill:#FFFFFF;}
+</style>
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview3688" inkscape:current-layer="svg3666" inkscape:cx="43.896414" inkscape:cy="111.42774" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="729" inkscape:window-maximized="0" inkscape:window-width="1144" inkscape:window-x="661" inkscape:window-y="135" inkscape:zoom="1.199175" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
+	</sodipodi:namedview>
+<title  id="title3672">icon</title>
+<g>
+	<g>
+		<g>
+			<g id="Layer_1-2">
+				<path class="st0" d="M11,6h86c2.8,0,5,2.2,5,5v31.5c0,2.8-2.2,5-5,5H11c-2.8,0-5-2.2-5-5V11C6,8.2,8.2,6,11,6z"/>
+				<path class="st1" d="M11,30.6h86c2.8,0,5,2.2,5,5v31.5c0,2.8-2.2,5-5,5H11c-2.8,0-5-2.2-5-5V35.6C6,32.9,8.2,30.6,11,30.6z"/>
+				<path class="st2" d="M11,60.5h86c2.8,0,5,2.2,5,5V97c0,2.8-2.2,5-5,5H11c-2.8,0-5-2.2-5-5V65.5C6,62.8,8.2,60.5,11,60.5z"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<path class="st0" d="M101.9,22.1c0-8.8-7.2-16.1-16-16.1H22.1c-8.8,0-16,7.2-16,16.1V46c0,8.8,7.2,16.1,16,16.1h63.8
+			c8.8,0,16-7.2,16-16.1V22.1z"/>
+		<path class="st1" d="M101.9,48.8c0-8.8-7.2-16.1-16-16.1H22.1c-8.8,0-16,7.2-16,16.1v23.9c0,8.8,7.2,16.1,16,16.1h63.8
+			c8.8,0,16-7.2,16-16.1V48.8z"/>
+		<path class="st2" d="M101.9,76.6c0-8.8-7.2-16.1-16-16.1H22.1c-8.8,0-16,7.2-16,16.1v9.3c0,8.8,7.2,16.1,16,16.1h63.8
+			c8.8,0,16-7.2,16-16.1V76.6z"/>
+		<g class="st3">
+			<path class="st4" d="M44.3,71.7l-2.7,8.9h-1.5l-1.9-6.5l-1.9,6.5h-1.5l-2.7-8.9h1.7l1.6,6.8l2-6.8H39l2,6.8l1.6-6.8H44.3z"/>
+			<path class="st4" d="M51.2,79.7c-0.8,0.7-1.8,1.1-3.1,1.1c-0.9,0-1.6-0.2-2.2-0.7c-0.6-0.5-0.9-1.1-0.9-1.8
+				c0-2.1,1.8-3.1,5.4-3.1h0.8c0-0.6,0-1.1-0.1-1.4c-0.1-0.3-0.3-0.5-0.6-0.7s-0.8-0.3-1.5-0.3c-1.4,0-2.1,0.5-2.2,1.5h-1.6
+				c0.1-1.8,1.4-2.7,3.8-2.7c1.1,0,2,0.2,2.7,0.7c0.6,0.5,1,1.3,1,2.7v5.7h-1.6V79.7z M51.2,78.3v-2h-1.1c-2.3,0-3.4,0.6-3.4,1.9
+				c0,0.5,0.2,0.8,0.5,1c0.3,0.2,0.8,0.4,1.4,0.4c0.5,0,1-0.1,1.5-0.4C50.5,79,50.9,78.7,51.2,78.3z"/>
+			<path class="st4" d="M56.7,80.6h-1.6V68.4h1.6V80.6z"/>
+			<path class="st4" d="M60.6,80.6H59V68.4h1.6V80.6z"/>
+			<path class="st4" d="M66.7,80.8c-1.3,0-2.3-0.4-3.1-1.2s-1.2-2-1.2-3.4c0-1.4,0.4-2.6,1.1-3.4c0.8-0.8,1.8-1.2,3-1.2
+				c1.3,0,2.3,0.4,3,1.2c0.8,0.8,1.1,2,1.1,3.4v0.4H64c0.1,1,0.3,1.8,0.8,2.3c0.5,0.5,1.1,0.7,1.8,0.7c0.6,0,1-0.1,1.5-0.4
+				s0.7-0.7,0.7-1.2h1.6c-0.1,0.9-0.5,1.6-1.2,2.1S67.7,80.8,66.7,80.8z M69,75.3c-0.1-0.9-0.4-1.5-0.9-1.9s-1-0.6-1.6-0.6
+				c-0.6,0-1.2,0.2-1.6,0.6c-0.5,0.4-0.7,1.1-0.9,1.9H69z"/>
+			<path class="st4" d="M75.8,80.6c-0.3,0.1-0.7,0.1-1.1,0.1c-0.6,0-1.1-0.1-1.4-0.3c-0.3-0.2-0.5-0.5-0.6-0.9
+				c-0.1-0.4-0.1-0.9-0.1-1.5v-5h-1.1v-1.2h1.1v-2.2h1.6v2.2h1.4V73h-1.4v5.1c0,0.6,0.1,1,0.2,1.2c0.2,0.2,0.4,0.2,0.6,0.2
+				c0.3,0,0.5,0,0.8-0.1V80.6z"/>
+		</g>
+	</g>
+</g>
 </svg>
