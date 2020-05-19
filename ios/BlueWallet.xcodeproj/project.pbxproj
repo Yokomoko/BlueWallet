@@ -1533,7 +1533,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.TodayExtension;
-				PRODUCT_NAME = "BlueWallet - Bitcoin Price";
+				PRODUCT_NAME = "Groestlcoin BlueWallet - Groestlcoin Price";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1564,7 +1564,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.groestlcoin.bluewallet.TodayExtension;
-				PRODUCT_NAME = "BlueWallet - Bitcoin Price";
+				PRODUCT_NAME = "Groestlcoin BlueWallet - Groestlcoin Price";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
