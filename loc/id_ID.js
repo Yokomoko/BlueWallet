@@ -11,7 +11,7 @@ module.exports = {
     select_wallet: 'Pilih dompet',
     options: 'Opsi',
     createBitcoinWallet:
-      'Belum ada dompet bitcoin. Untuk mendanai dompet Lightning, dompet Groestlcoin harus dibuat atau diimpor. Yakin ingin melanjutkan?',
+      'Belum ada dompet groestlcoin. Untuk mendanai dompet Lightning, dompet Groestlcoin harus dibuat atau diimpor. Yakin ingin melanjutkan?',
     list: {
       app_name: 'Groestlcoin BlueWallet',
       title: 'Dompet',
@@ -27,7 +27,7 @@ module.exports = {
       empty_txs1_lightning:
         'Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and speed is blazing fast.',
       empty_txs2_lightning: '\nTo start using it tap on "manage funds" and topup your balance.',
-      tap_here_to_buy: 'Tap di sini untuk membeli bitcoin',
+      tap_here_to_buy: 'Tap di sini untuk membeli groestlcoin',
     },
     reorder: {
       title: 'Susun Dompet',

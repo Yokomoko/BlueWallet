@@ -11,7 +11,7 @@
     select_wallet: 'Khetha ingxowa',
     options: 'Ukhetho',
     createBitcoinWallet:
-      'Okwangoku awunayo ingxowa yebitcoin. Ukuze kuxhaswe ingxowa ekhawulezayo, Ingxowa yeBitcoin kufuneka idalwe okanye ikhutshelwe. Ungathanda ukuqhubeka ?',
+      'Okwangoku awunayo ingxowa yegroestlcoin. Ukuze kuxhaswe ingxowa ekhawulezayo, Ingxowa yeGroestlcoin kufuneka idalwe okanye ikhutshelwe. Ungathanda ukuqhubeka ?',
     list: {
       app_name: 'Groestlcoin BlueWallet',
       title: 'Ingxowa',
@@ -27,7 +27,7 @@
       empty_txs1_lightning:
         'Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and speed is blazing fast.',
       empty_txs2_lightning: '\nTo start using it tap on "manage funds" and topup your balance.',
-      tap_here_to_buy: 'Cofa apha ukuthenga ibitcoin',
+      tap_here_to_buy: 'Cofa apha ukuthenga igroestlcoin',
     },
     reorder: {
       title: 'Yenza kwakhona ingxowa',
@@ -64,7 +64,7 @@
       save: 'Gcina',
       delete_this_wallet: 'Cima le ngxowa',
       export_backup: 'Ukuthumela ngaphandle / yokugcina',
-      buy_bitcoin: 'Thenga ibitcoin',
+      buy_bitcoin: 'Thenga igroestlcoin',
       show_xpub: 'Bonise ingxowa XPUB',
       connected_to: 'Connected to',
       advanced: 'Advanced',
@@ -174,7 +174,7 @@
     scan_lnurl: 'Scan to receive',
   },
   buyBitcoin: {
-    header: 'Thenga Ibitcoin',
+    header: 'Thenga Igroestlcoin',
     tap_your_address: 'Thepha idilesi yakho ukuyikopisha kwi-clipboard:',
     copied: 'Ikhutshelwe kwi-clipboard!',
   },

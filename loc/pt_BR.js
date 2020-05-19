@@ -210,7 +210,7 @@ module.exports = {
     title: 'Negação plausível',
     help:
       'Em algumas circunstâncias, você pode ser forçado a revelar uma ' +
-      'senha. Para manter seus bitcoins seguros, A Groestlcoin BlueWallet pode criar ' +
+      'senha. Para manter seus groestlcoins seguros, A Groestlcoin BlueWallet pode criar ' +
       'uma senha alternativa. Sob pressão, você pode revelar essa senha ao ' +
       'invés da senha principal. Quando inserida na Groestlcoin BlueWallet, esta abrirá ' +
       'uma interface falsa, que parecerá legítima a um terceiro, enquanto ' +

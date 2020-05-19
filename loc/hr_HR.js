@@ -63,7 +63,7 @@ module.exports = {
       save: 'Spremi',
       delete_this_wallet: 'Obriši ovaj volet',
       export_backup: 'Izvoz / bekap',
-      buy_bitcoin: 'Kupovina Bitcoina',
+      buy_bitcoin: 'Kupovina Groestlcoina',
       show_xpub: 'Prikaži voletov XPUB',
       connected_to: 'Connected to',
       advanced: 'Advanced',
@@ -173,7 +173,7 @@ module.exports = {
     scan_lnurl: 'Scan to receive',
   },
   buyBitcoin: {
-    header: 'Kupovina Bitcoina',
+    header: 'Kupovina Groestlcoina',
     tap_your_address: 'Klikni na adresu za spremanje u međuspremnik:',
     copied: 'Spremljeno u međuspremnik!',
   },

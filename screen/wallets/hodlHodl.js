@@ -438,8 +438,8 @@ export default class HodlHodl extends Component {
               style={{ width: '100%' }}
               ItemSeparatorComponent={() => <View style={{ height: 0.5, width: '100%', backgroundColor: '#C8C8C8' }} />}
               data={[
-                { code: HodlHodlApi.FILTERS_SIDE_VALUE_SELL, name: "I'm buying bitcoin" },
-                { code: HodlHodlApi.FILTERS_SIDE_VALUE_BUY, name: "I'm selling bitcoin" },
+                { code: HodlHodlApi.FILTERS_SIDE_VALUE_SELL, name: "I'm buying groestlcoin" },
+                { code: HodlHodlApi.FILTERS_SIDE_VALUE_BUY, name: "I'm selling groestlcoin" },
               ]}
               keyExtractor={(item, index) => item.code}
               renderItem={({ item, index, separators }) => (

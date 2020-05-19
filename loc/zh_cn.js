@@ -10,7 +10,7 @@ module.exports = {
   wallets: {
     select_wallet: '选择钱包',
     options: '选项',
-    createBitcoinWallet: '您当前没有bitcoin钱包. 为了支持闪电钱包, 我们需要创建或者导入一个比特币钱包. 是否需要继续?',
+    createBitcoinWallet: '您当前没有groestlcoin钱包. 为了支持闪电钱包, 我们需要创建或者导入一个比特币钱包. 是否需要继续?',
     list: {
       app_name: 'Groestlcoin BlueWallet',
       title: '钱包',

@@ -207,7 +207,7 @@ module.exports = {
     title: 'Glaubhafte Täuschung',
     help:
       'Unter bestimmten Umständen könntest du dazu gezwungen werden, ' +
-      'dein Passwort preiszugeben. Um deine Bitcoins zu sichern, kann ' +
+      'dein Passwort preiszugeben. Um deine Groestlcoins zu sichern, kann ' +
       'Groestlcoin BlueWallet einen weiteren verschlüsselten Speicher mit einem ' +
       'anderen Passwort erstellen. Unter Druck kannst du das ' +
       'zweite Passwort an Fremde weitergeben. Wenn eingegeben, öffnet ' +

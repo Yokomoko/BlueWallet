@@ -15,7 +15,7 @@ module.exports = {
     list: {
       app_name: 'Groestlcoin BlueWallet',
       title: 'tárcák',
-      header: 'Egy tárca nem más, mint egy kulcspár, és egy cím. A cím nyilvános, és megoszhatod másokkal, ha szeretnél Bitcoint fogadni',
+      header: 'Egy tárca nem más, mint egy kulcspár, és egy cím. A cím nyilvános, és megoszhatod másokkal, ha szeretnél Groestlcoint fogadni',
       add: 'Új Tárca',
       create_a_wallet: 'Új tárca',
       create_a_wallet1: 'Ingyenes, és annyit hozhatsz létre',

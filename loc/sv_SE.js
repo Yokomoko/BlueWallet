@@ -11,7 +11,7 @@ module.exports = {
     select_wallet: 'Välj plånbok',
     options: 'inställningar',
     createBitcoinWallet:
-      'Du har ännu ingen Bitcoinplånbok. För att kunna sätta in pengar i en Lightningplånbok behöver en Bitcoinplånbok skapas eller importeras. Vill du fortsätta ändå?',
+      'Du har ännu ingen Groestlcoinplånbok. För att kunna sätta in pengar i en Lightningplånbok behöver en Groestlcoinplånbok skapas eller importeras. Vill du fortsätta ändå?',
     list: {
       app_name: 'Groestlcoin BlueWallet',
       title: 'plånböcker',
@@ -26,8 +26,8 @@ module.exports = {
       empty_txs2: 'men än så länge finns inga!',
       empty_txs1_lightning:
         'Lightningplånboken ska användas för dagliga småtransaktioner. Avgifterna är minimala och transaktioner sker direkt.',
-      empty_txs2_lightning: '\nFör att komma igång klicka på "sätt in / ta ut" ovan och sätt in dina första bitcoin.',
-      tap_here_to_buy: 'Tryck här för att köpa bitcoin',
+      empty_txs2_lightning: '\nFör att komma igång klicka på "sätt in / ta ut" ovan och sätt in dina första groestlcoin.',
+      tap_here_to_buy: 'Tryck här för att köpa groestlcoin',
     },
     reorder: {
       title: 'Sortera plånböcker',
@@ -64,7 +64,7 @@ module.exports = {
       save: 'Spara',
       delete_this_wallet: 'Radera denna plånbok',
       export_backup: 'Exportera / ta backup',
-      buy_bitcoin: 'Köp bitcoin',
+      buy_bitcoin: 'Köp groestlcoin',
       show_xpub: 'Visa plånbokens XPUB',
       connected_to: 'Connected to',
       advanced: 'Advanced',
@@ -174,7 +174,7 @@ module.exports = {
     scan_lnurl: 'Scan to receive',
   },
   buyBitcoin: {
-    header: 'Köp bitcoin',
+    header: 'Köp groestlcoin',
     tap_your_address: 'Tryck på adressen för att kopiera den till urklipp:',
     copied: 'Kopierad till urklipp!',
   },

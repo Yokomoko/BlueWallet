@@ -1,10 +1,10 @@
-Store, send and receive bitcoin with the wallet focus on security and simplicity.
+Store, send and receive groestlcoin with the wallet focus on security and simplicity.
 
 On Groestlcoin BlueWallet you own you private keys. A Groestlcoin wallet focused on us the users.
 
 You can instantly transact with anyone in the world and transform the financial system right from your pocket.
 
-Create for free unlimited number of bitcoin wallets or access your existing one on your iOS device. It's simple and fast.
+Create for free unlimited number of groestlcoin wallets or access your existing one on your iOS device. It's simple and fast.
 
 _____
 
@@ -27,7 +27,7 @@ SegWit supported and HD wallets enable
 2 - Focused on your experience
 
 Be in control
-On the Groestlcoin wallet the Private keys never leave your device.  You control your private keys
+On the Groestlcoin wallet the Private keys never leave your device. You control your private keys
 
 Flexible fees
 Starting from 1 Gro.  Defined by you, the user

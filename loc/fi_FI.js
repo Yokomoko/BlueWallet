@@ -29,7 +29,7 @@ module.exports = {
       empty_txs1_lightning:
         'Lightning wallet should be used for your daily transactions. Fees are unfairly cheap and speed is blazing fast.',
       empty_txs2_lightning: '\nTo start using it tap on "manage funds" and topup your balance.',
-      tap_here_to_buy: 'Napsauta tästä ostaaksesi Bitcoinia',
+      tap_here_to_buy: 'Napsauta tästä ostaaksesi Groestlcoinia',
     },
     reorder: {
       title: 'Järjestele Lompakot',
@@ -66,7 +66,7 @@ module.exports = {
       save: 'Tallenna',
       delete_this_wallet: 'Poista tämä lompakko',
       export_backup: 'Vie / varmuuskopioi',
-      buy_bitcoin: 'Osta Bitcoinia',
+      buy_bitcoin: 'Osta Groestlcoinia',
       show_xpub: 'Näytä lompakon XPUB',
       connected_to: 'Connected to',
       advanced: 'Advanced',
@@ -176,7 +176,7 @@ module.exports = {
     scan_lnurl: 'Scan to receive',
   },
   buyBitcoin: {
-    header: 'Osta Bitcoinia',
+    header: 'Osta Groestlcoinia',
     tap_your_address: 'Napsauta osoitettasi kopioidaksesi sen leikepöydälle:',
     copied: 'Kopioitu leikepöydälle!',
   },
