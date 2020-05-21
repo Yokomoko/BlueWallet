@@ -105,7 +105,7 @@ Grab an issue from [the backlog](https://github.com/Groestlcoin/BlueWallet/proje
 
 Join us at our [telegram group](https://t.me/Groestlcoin) where we hangout :+1:
 
-## Responsible disclosure
+## RESPONSIBLE DISCLOSURE
 
 Found critical bugs/vulnerabilities? Please email them bluewallet@bluewallet.io
 Thanks!
