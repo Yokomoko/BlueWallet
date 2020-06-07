@@ -236,7 +236,7 @@ class DeeplinkSchemaMatch {
   }
 
   static isBothBitcoinAndLightning(url) {
-    if (url.includes('lightning') && url.includes('groestlcoin')) {
+    if (url.includes('lightning') && (url.includes('groestlcoin') || url.includes('GROESTLCOIN'))) {
       const txInfo = url.split(/(groestlcoin:|GROESTLCOIN:|lightning:|lightning=|groestlcoin=)+/);
       let bitcoin;
       let lndInvoice;
