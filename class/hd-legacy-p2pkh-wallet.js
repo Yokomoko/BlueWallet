@@ -23,7 +23,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     }
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32grs.fromSeed(seed);
+    const root = bitcoin.bip32.fromSeed(seed);
 
     const path = "m/44'/17'/0'";
     const child = root.derivePath(path).neutered();
@@ -62,7 +62,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     index = index * 1; // cast to int
     if (this.external_addresses_cache[index]) return this.external_addresses_cache[index]; // cache hit
 
-    const node = bitcoin.bip32grs.fromBase58(this.getXpub());
+    const node = bitcoin.bip32.fromBase58(this.getXpub());
     const address = bitcoin.payments.p2pkh({
       pubkey: node.derive(0).derive(index).publicKey,
     }).address;
@@ -74,7 +74,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     index = index * 1; // cast to int
     if (this.internal_addresses_cache[index]) return this.internal_addresses_cache[index]; // cache hit
 
-    const node = bitcoin.bip32grs.fromBase58(this.getXpub());
+    const node = bitcoin.bip32.fromBase58(this.getXpub());
     const address = bitcoin.payments.p2pkh({
       pubkey: node.derive(1).derive(index).publicKey,
     }).address;

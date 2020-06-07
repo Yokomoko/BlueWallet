@@ -31,7 +31,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
   _getWIFByIndex(internal, index) {
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32grs.fromSeed(seed);
+    const root = bitcoin.bip32.fromSeed(seed);
     const path = `m/49'/17'/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
 
