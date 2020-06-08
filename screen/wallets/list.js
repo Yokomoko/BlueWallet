@@ -477,7 +477,7 @@ export default class WalletsList extends Component {
               renderSectionFooter={this.renderSectionFooter}
               sections={[
                 { key: WalletsListSections.CAROUSEL, data: [WalletsListSections.CAROUSEL] },
-                /*{ key: WalletsListSections.LOCALTRADER, data: [WalletsListSections.LOCALTRADER] },*/
+                /* { key: WalletsListSections.LOCALTRADER, data: [WalletsListSections.LOCALTRADER] }, */
                 { key: WalletsListSections.TRANSACTIONS, data: this.state.dataSource },
               ]}
             />
