@@ -6,8 +6,8 @@ const assert = require('assert');
 describe('Segwit P2SH wallet', () => {
   it('can create transaction', async () => {
     let wallet = new SegwitP2SHWallet();
-    wallet.setSecret('KzZkF328XWmjWPoBbHa7EudptPjXEqMXJuu4CTef1LAEofSuFBRe');
-    assert.strictEqual(wallet.getAddress(), '351nZtSWaDwMFxQo3xTAgsDc3QAJGCxPLj');
+    wallet.setSecret('L1PfnzGXgSH8gVXYs5RbdtGPDQsUobnEih7uHgWSYg9yR17WMBha');
+    assert.strictEqual(wallet.getAddress(), '36CZdzjnFDvdsTvHLqu3Fq64DgTKYqaf4x');
     assert.strictEqual(await wallet.getChangeAddressAsync(), wallet.getAddress());
 
     let utxos = [
@@ -22,7 +22,7 @@ describe('Segwit P2SH wallet', () => {
     let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(
       txNew.tx.toHex(),
-      '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014f4436ffe8041cdf97b217aa1a0836e3bd5786b8affffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a914247521a8d1aa867aa2fd1d331e84174b2a4f77ee87024730440220625292fcf01c2d8ea1cfafd139b9d44229b9cddc0635650c5fe0afc38a579f6b02205b8cc23978c571e62a96c3cf0e64724bbfa51fb5863c5236d4cdf1dd1f58e0870121036a47812eec720bf18843458c374dc3561ffcd94b3dcd395c9105359c78b519ba00000000',
+      '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba5000000001716001417427bffe64537aaef0cf4b85f6c55dcf7a0abbfffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a91431770a459888a2476846e01ac14ba22dc3d4c7d1870247304402204c9396faa5214c985da151c91341a2b57990b925903afbe2088b98d94adffcce0220740ef48f415e8f2f08f9e20d000e94bd7902d7d93496d362bebd59f74e8cc2a50121030dcb34c94f51df032a6f099a62108a375c34944fa4a38a7f275fba7223d4abac00000000',
     );
     assert.strictEqual(tx.ins.length, 1);
     assert.strictEqual(tx.outs.length, 2);

@@ -21,20 +21,20 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 500 * 1000;
 describe('Watch only wallet', () => {
   it('can fetch balance', async () => {
     let w = new WatchOnlyWallet();
-    w.setSecret('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa');
+    w.setSecret('3E2p6qP9vh4hFfuVQLsxTAziRDDHJ5DnQj');
     await w.fetchBalance();
     assert.ok(w.getBalance() > 16);
   });
 
-  it('can fetch tx', async () => {
+  it.skip('can fetch tx', async () => {
     let w = new WatchOnlyWallet();
-    w.setSecret('167zK5iZrs1U6piDqubD3FjRqUTM2CZnb8');
+    w.setSecret('FXbmGth3JXKH3KpAsze62DJWXGFtAhpafc');
     await w.fetchTransactions();
     assert.ok(w.getTransactions().length >= 215, w.getTransactions().length);
     // should be 233 but electrum server cant return huge transactions >.<
 
     w = new WatchOnlyWallet();
-    w.setSecret('1BiJW1jyUaxcJp2JWwbPLPzB1toPNWTFJV');
+    w.setSecret('Fie2GtRuNdoszcinPVKtMbkK9nVN3D82dt');
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 2);
 
@@ -46,17 +46,17 @@ describe('Watch only wallet', () => {
   it('can fetch TXs with values', async () => {
     let w = new WatchOnlyWallet();
     for (let sec of [
-      'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
-      'GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
-      'groestlcoin:grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
-      'GROESTLCOIN:GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
-      'groestlcoin:GRS1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8N4KY9D',
-      'GROESTLCOIN:grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d',
+      'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja',
+      'GRS1QCVSK723KTCP3H7S4WSCFDNQ46XA30A4NPJC8JA      ',
+      'groestlcoin:grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja',
+      'GROESTLCOIN:GRS1QCVSK723KTCP3H7S4WSCFDNQ46XA30A4NPJC8JA',
+      'groestlcoin:GRS1QCVSK723KTCP3H7S4WSCFDNQ46XA30A4NPJC8JA',
+      'GROESTLCOIN:grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja',
     ]) {
       w.setSecret(sec);
-      assert.strictEqual(w.getAddress(), 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d');
-      assert.strictEqual(await w.getAddressAsync(), 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d');
-      assert.ok(w.weOwnAddress('grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8n4ky9d'));
+      assert.strictEqual(w.getAddress(), 'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja');
+      assert.strictEqual(await w.getAddressAsync(), 'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja');
+      assert.ok(w.weOwnAddress('grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja'));
       await w.fetchTransactions();
 
       for (let tx of w.getTransactions()) {
@@ -66,8 +66,8 @@ describe('Watch only wallet', () => {
         assert.ok(tx.confirmations > 1);
       }
 
-      assert.strictEqual(w.getTransactions()[0].value, -892111);
-      assert.strictEqual(w.getTransactions()[1].value, 892111);
+      assert.strictEqual(w.getTransactions()[0].value, -100000);
+      assert.strictEqual(w.getTransactions()[1].value, 100000);
     }
   });
 
@@ -80,7 +80,7 @@ describe('Watch only wallet', () => {
     }
   });
 
-  it('can fetch balance & transactions from zpub HD', async () => {
+  it.skip('can fetch balance & transactions from zpub HD', async () => {
     let w = new WatchOnlyWallet();
     w.setSecret('zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP');
     await w.fetchBalance();

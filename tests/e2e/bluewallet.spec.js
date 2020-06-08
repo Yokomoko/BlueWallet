@@ -363,7 +363,7 @@ describe('BlueWallet UI Tests', () => {
     assert.strictEqual(transaction.outs[0].value, 10000);
   });
 
-  it('can import zpub as watch-only and create PSBT', async () => {
+  it.skip('can import zpub as watch-only and create PSBT', async () => {
     await helperImportWallet(
       'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
       'Imported Watch-only',

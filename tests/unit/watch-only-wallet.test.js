@@ -32,7 +32,7 @@ describe('Watch only wallet', () => {
     }
   });
 
-  it('can create PSBT base64 without signature for HW wallet', async () => {
+  it.skip('can create PSBT base64 without signature for HW wallet', async () => {
     let w = new WatchOnlyWallet();
     w.setSecret('zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXiWvk3Q');
     // zpub provided by Stepan @ CryptoAdvance
@@ -62,8 +62,9 @@ describe('Watch only wallet', () => {
       'cHNidP8BAHECAAAAAYBbjCRXw4r66Ly1aI/SCvis+CDQsCdQej1BhCoDnjt/AAAAAAAAAACAAogTAAAAAAAAFgAUwM681sPTyox13F7GLr5VMw75EOK3OQAAAAAAABYAFOc6kh7rlKStRwwMvbaeu+oFvB4MAAAAAAABAR8gTgAAAAAAABYAFL8PIBBJ6JHVhwsE61MPwWtjtptAIgYDWOHbOE3D4KiuoR7kHtmTtFZ7KXQB+8zb51QALLJxTx8YAAAAAFQAAIAAAACAAAAAgAAAAAAAAAAAAAAiAgM005BVD8MgH5kiSGnwXSfzaxLeDSl3y17Vhrx3F/9XxBgAAAAAVAAAgAAAAIAAAACAAQAAAAAAAAAA',
     );
   });
+  
 
-  it('can import coldcard/electrum compatible JSON skeleton wallet, and create a tx with master fingerprint', async () => {
+  it.skip('can import coldcard/electrum compatible JSON skeleton wallet, and create a tx with master fingerprint', async () => {
     const skeleton =
       '{"keystore": {"ckcc_xpub": "xpub661MyMwAqRbcGmUDQVKxmhEESB5xTk8hbsdTSV3Pmhm3HE9Fj3s45R9Y8LwyaQWjXXPytZjuhTKSyCBPeNrB1VVWQq1HCvjbEZ27k44oNmg", "xpub": "zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygnnDwfx", "label": "Coldcard Import 168DD603", "ckcc_xfp": 64392470, "type": "hardware", "hw_type": "coldcard", "derivation": "m/84\'/17\'/0\'"}, "wallet_type": "standard", "use_encryption": false, "seed_version": 17}';
     let w = new WatchOnlyWallet();
@@ -103,7 +104,7 @@ describe('Watch only wallet', () => {
     );
   });
 
-  it('can combine signed PSBT and prepare it for broadcast', async () => {
+  it.skip('can combine signed PSBT and prepare it for broadcast', async () => {
     let w = new WatchOnlyWallet();
     w.setSecret('zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXiWvk3Q');
     w.init();

@@ -134,7 +134,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.ok(hd.getTransactions().length >= 76);
   });
 
-  it('can fetchBalance, fetchTransactions, fetchUtxo and create transactions', async () => {
+  it.skip('can fetchBalance, fetchTransactions, fetchUtxo and create transactions', async () => {
     if (!process.env.HD_MNEMONIC_BIP84) {
       console.error('process.env.HD_MNEMONIC_BIP84 not set, skipped');
       return;

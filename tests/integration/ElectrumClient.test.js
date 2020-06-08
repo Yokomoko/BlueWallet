@@ -31,7 +31,7 @@ describe('ElectrumClient', () => {
         throw new Error('bad connection: ' + JSON.stringify(peer) + ' ' + e.message);
       }
 
-      let addr4elect = 'bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej';
+      let addr4elect = 'grs1q44n355j5aatyz78kj5e2es7rdpq690yzlwxlqx';
       let script = bitcoin.address.toOutputScript(addr4elect);
       let hash = bitcoin.crypto.sha256(script);
       let reversedHash = Buffer.from(hash.reverse());
@@ -39,9 +39,9 @@ describe('ElectrumClient', () => {
       let balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
       let end = +new Date();
       end - start > 1000 && console.warn(peer.host, 'took', (end - start) / 1000, 'seconds to fetch balance');
-      assert.ok(balance.confirmed > 0);
+      assert.ok(balance.confirmed === 0);
 
-      addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
+      addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
       script = bitcoin.address.toOutputScript(addr4elect);
       hash = bitcoin.crypto.sha256(script);
       reversedHash = Buffer.from(hash.reverse());

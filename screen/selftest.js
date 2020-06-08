@@ -45,7 +45,7 @@ export default class Selftest extends Component {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         await BlueElectrum.ping();
         await BlueElectrum.waitTillConnected();
-        let addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
+        let addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
         let electrumBalance = await BlueElectrum.getBalanceByAddress(addr4elect);
         if (electrumBalance.confirmed !== 51432)
           throw new Error('BlueElectrum getBalanceByAddress failure, got ' + JSON.stringify(electrumBalance));
@@ -59,23 +59,24 @@ export default class Selftest extends Component {
       //
 
       let l = new LegacyWallet();
-      l.setSecret('L3rPE6WwpxofhUSPJhK7oQwPWgpSs623B86ESLRK9pacoyJ3WC9a');
-      assertStrictEqual(l.getAddress(), 'FcLwUSWYGMggXcoy7KsNKzVwB7YiCUsLkF');
+      l.setSecret('L1NwUPQZKwGuPMS9R36rjezZpxKFYLmugFvDQBZCwYFukJ3pzWdb');
+      assertStrictEqual(l.getAddress(), 'FbThBimw1krwL3QWf6XEk2Xen6NigyzGBT');
       let utxos = [
         {
-          txid: 'cc44e933a094296d9fe424ad7306f16916253a3d154d52e4f1a757c18242cec4',
+          txid: '83b97118cbc82932f5cd6b4232247a6729b9b04975171b500199e2597896d0dd',
           vout: 0,
           value: 100000,
           txhex:
-            '0200000000010161890cd52770c150da4d7d190920f43b9f88e7660c565a5a5ad141abb6de09de00000000000000008002a0860100000000001976a91426e01119d265aa980390c49eece923976c218f1588ac3e17000000000000160014c1af8c9dd85e0e55a532a952282604f820746fcd02473044022072b3f28808943c6aa588dd7a4e8f29fad7357a2814e05d6c5d767eb6b307b4e6022067bc6a8df2dbee43c87b8ce9ddd9fe678e00e0f7ae6690d5cb81eca6170c47e8012102e8fba5643e15ab70ec79528833a2c51338c1114c4eebc348a235b1a3e13ab07100000000',
+            '01000000000101a518573c27dc6bfc6fcedbed81957d5ea3acbd50b2014dfbda6e7da925a364820100000017160014a3b2e49860a9e7296e2a769ac7bcdca033f4236ffeffffff0150da1100000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac024730440220315b6ed73ab1d27bef74c38dff0be000357a0a4f932bfa26bdfdc17aa442bb2e022043b0688e8e6a44c56c6745ac0d298278979a45bec3ad3edeebcfab01e566f160012102957467ae6eb2fa89458dff90b0c3a563e01865aa2a4a603c97c9f7c0f4eb7b2600000000',
         },
       ];
 
       let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
       let txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+      console.log(txNew.tx.toHex())
       assertStrictEqual(
         txNew.tx.toHex(),
-        '0200000001c4ce4282c157a7f1e4524d153d3a251669f10673ad24e49f6d2994a033e944cc000000006a47304402200faed160757433bcd4d9fe5f55eb92420406e8f3099a7e12ef720c77313c8c7e022044bc9e1abca6a81a8ad5c749f5ec4694301589172b83b1803bc134eda0487dbc01210337c09b3cb889801638078fd4e6998218b28c92d338ea2602720a88847aedceb3ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac2f260000000000001976a91426e01119d265aa980390c49eece923976c218f1588ac00000000',
+        '0200000001ddd0967859e29901501b177549b0b929677a2432426bcdf53229c8cb1871b983000000006a47304402201aaa66f8c8ec462c366885a4ba192c48ac985debc60a54768421c80e59558ee4022028f01505c8b78582f4801f646ced4286ad462320d03a3dd1548a233be8a1908e012103a371ab521dfdefefb6bce17ef9d066cbadd33cfb061e2482ac496c065ecddb45ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac2f260000000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac00000000',
       );
       assertStrictEqual(txBitcoin.ins.length, 1);
       assertStrictEqual(txBitcoin.outs.length, 2);
@@ -108,7 +109,7 @@ export default class Selftest extends Component {
       let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014f4436ffe8041cdf97b217aa1a0836e3bd5786b8affffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a914247521a8d1aa867aa2fd1d331e84174b2a4f77ee87024730440220625292fcf01c2d8ea1cfafd139b9d44229b9cddc0635650c5fe0afc38a579f6b02205b8cc23978c571e62a96c3cf0e64724bbfa51fb5863c5236d4cdf1dd1f58e0870121036a47812eec720bf18843458c374dc3561ffcd94b3dcd395c9105359c78b519ba00000000',
+        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e870247304402202195785bcde62bb934d7b0320bd9e054fd0c22f6ad880f5171796d7fda7f47f1022076d33289496cb23f0110072af3b251923f2eb7a98a01da39e96d5da4ec860e06012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
       );
       assertStrictEqual(tx.ins.length, 1);
       assertStrictEqual(tx.outs.length, 2);

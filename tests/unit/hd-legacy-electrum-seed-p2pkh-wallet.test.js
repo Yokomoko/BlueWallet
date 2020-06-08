@@ -5,28 +5,28 @@ let assert = require('assert');
 describe('HDLegacyElectrumSeedP2PKHWallet', () => {
   it('can import mnemonics and generate addresses and WIFs', async function() {
     let hd = new HDLegacyElectrumSeedP2PKHWallet();
-    hd.setSecret('hurdle alien first stock mail blade business ill mistake dust stereo van');
+    hd.setSecret('receive happy  wash prosper update    pet neck acid try profit proud hungry');
     assert.ok(hd.validateMnemonic());
     assert.strictEqual(
       hd.getXpub(),
-      'xpub661MyMwAqRbcG6vx5SspHUzrhRtPKyeGp41JJLBi3kgeMCFkR6mzGkhEttBHTZg6FYYij52pqD2cW7XsutiZrRukXNLqeo87mZAV5k5bC22',
+      'xpub661MyMwAqRbcG6vx5SspHUzrhRtPKyeGp41JJLBi3kgeMCFkR6mzGkhEttBHTZg6FYYij52pqD2cW7XsutiZrRukXNLqeo87mZAV5gUVvC6',
     );
 
     let address = hd._getExternalAddressByIndex(0);
-    assert.strictEqual(address, 'FcBN63fFz8riqokAUszsTgVJrngFdndrNQ');
+    assert.strictEqual(address, 'FVNHbUEFFmJsAKNMEUSjU7MAFswVuBNHNH');
 
     address = hd._getInternalAddressByIndex(0);
-    assert.strictEqual(address, 'FaRBsD6VgZFSikR6U9uhSUwZSggZrxGjbg');
+    assert.strictEqual(address, 'Fo9PcqBmzeP7c9hYYVS6kCZrHD9wKxAuac');
 
     let wif = hd._getExternalWIFByIndex(0);
-    assert.strictEqual(wif, 'KxDRPw1TQvgjyVLsYFsUoAssxKPF6UTwBzCfjVCykxscwSDFjDWu');
+    assert.strictEqual(wif, 'KxGPz9dyib26p6bL2vQPvBPHBMA8iHVqEetg3x5XA4Rk1ttJFfHa');
 
     wif = hd._getInternalWIFByIndex(0);
-    assert.strictEqual(wif, 'KwWUeGpzvxHRUfhLJuvHX9aPkMqRJ6Ezp5KEe2QabHDDapqz2p3v');
+    assert.strictEqual(wif, 'L52d26QmYGW8ctHo1omM5fZeJMgaonSkEWCGpnEekNvkVUpYDoZU');
 
     assert.strictEqual(
       hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
-      '02756a43892624fc7713b8346bee48001be71adedaf3a965be75018ba77a5b2d94',
+      '02a6e6b674f82796cb4776673d824bf0673364fab24e62dcbfff4c1a5b69e3519b',
     );
     assert.strictEqual(
       hd._getPubkeyByAddress(hd._getInternalAddressByIndex(0)).toString('hex'),

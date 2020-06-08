@@ -99,7 +99,7 @@ describe('LightningCustodianWallet', () => {
     await l2.authorize();
 
     let invoice =
-      'lnbc1u1pdcqpt3pp5ltuevvq2g69kdrzcegrs9gfqjer45rwjc0w736qjl92yvwtxhn6qdp8dp6kuerjv4j9xct5daeks6tnyp3xc6t50f582cscqp2zrkghzl535xjav52ns0rpskcn20takzdr2e02wn4xqretlgdemg596acq5qtfqhjk4jpr7jk8qfuuka2k0lfwjsk9mchwhxcgxzj3tsp09gfpy';
+      'lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm';
     let decoded = l2.decodeInvoice(invoice);
 
     assert.ok(decoded.payment_hash);
@@ -123,9 +123,9 @@ describe('LightningCustodianWallet', () => {
   it('decode can handle zero sats but present msats', async () => {
     let l = new LightningCustodianWallet();
     let decoded = l.decodeInvoice(
-      'lnbc89n1p0zptvhpp5j3h5e80vdlzn32df8y80nl2t7hssn74lzdr96ve0u4kpaupflx2sdphgfkx7cmtwd68yetpd5s9xct5v4kxc6t5v5s9gunpdeek66tnwd5k7mscqp2sp57m89zv0lrgc9zzaxy5p3d5rr2cap2pm6zm4n0ew9vyp2d5zf2mfqrzjqfxj8p6qjf5l8du7yuytkwdcjhylfd4gxgs48t65awjg04ye80mq7z990yqq9jsqqqqqqqqqqqqq05qqrc9qy9qsq9mynpa9ucxg53hwnvw323r55xdd3l6lcadzs584zvm4wdw5pv3eksdlcek425pxaqrn9u5gpw0dtpyl9jw2pynjtqexxgh50akwszjgq4ht4dh',
+      'lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
     );
-    assert.strictEqual(decoded.num_satoshis, '8.9');
+    assert.strictEqual(decoded.num_satoshis, '100000');
   });
 
   it('can decode invoice locally & remotely', async () => {
@@ -137,7 +137,7 @@ describe('LightningCustodianWallet', () => {
     l2.setSecret(process.env.BLITZHUB);
     await l2.authorize();
     let invoice =
-      'lnbc1u1pdcqpt3pp5ltuevvq2g69kdrzcegrs9gfqjer45rwjc0w736qjl92yvwtxhn6qdp8dp6kuerjv4j9xct5daeks6tnyp3xc6t50f582cscqp2zrkghzl535xjav52ns0rpskcn20takzdr2e02wn4xqretlgdemg596acq5qtfqhjk4jpr7jk8qfuuka2k0lfwjsk9mchwhxcgxzj3tsp09gfpy';
+      'lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm';
     let decodedLocally = l2.decodeInvoice(invoice);
     let decodedRemotely = await l2.decodeInvoiceRemote(invoice);
     assert.strictEqual(decodedLocally.destination, decodedRemotely.destination);
@@ -404,7 +404,7 @@ describe('LightningCustodianWallet', () => {
 
     // --> use to pay specific invoice
     // invoice =
-    //   'lnbc1pwrp35spp5z62nvj8yw6luq7ns4a8utpwn2qkkdwdt0ludwm54wjeazk2xv5wsdpu235hqurfdcsx7an9wf6x7undv4h8ggpgw35hqurfdchx6eff9p6nzvfc8q5scqzysxqyz5vqj8xq6wz6dezmunw6qxleuw67ensjnt3fldltrmmkvzurge0dczpn94fkwwh7hkh5wqrhsvfegtvhswn252hn6uw5kx99dyumz4v5n9sp337py2';
+    //   'lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm';
 
     let l2 = new LightningCustodianWallet();
     l2.setSecret(process.env.BLITZHUB);
