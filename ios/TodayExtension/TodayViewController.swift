@@ -81,6 +81,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
   }
   
+  func dateFormatTime(date: Date) -> String {
+    let dateFormatter = ISO8601DateFormatter()
+    //dateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss+00:00"
+    //dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    return dateFormatter.string(from: date)
+  }
   func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
     // Perform any setup necessary in order to update the view.
     
@@ -97,17 +103,18 @@ class TodayViewController: UIViewController, NCWidgetProviding {
           return
         }
         
-        guard let bpi = result["bpi"] as? Dictionary<String, Any>, let preferredCurrency = bpi[userPreferredCurrency] as? Dictionary<String, Any>, let rateString = preferredCurrency["rate"] as? String,
-          let time = result["time"] as? Dictionary<String, Any>, let lastUpdatedString = time["updatedISO"] as? String
+        guard let market_data = result["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>,
+        let rateString = current_price[userPreferredCurrency.lowercased()] as? Double,//, let rateString = preferredCurrency["rate"] as? String,
+          /*let time = result["time"] as? String,*/ let lastUpdatedString = self.dateFormatTime(date: Date()) as? String/*time["updatedISO"] as? String*/
           else {
             self.lastUpdatedDate.text = "Obtained unexpected information."
             completionHandler(.failed)
             return
         }
         
-        let latestRateDataStore = TodayDataStore(rate: rateString, lastUpdate: lastUpdatedString)
+        let latestRateDataStore = TodayDataStore(rate: String(rateString), lastUpdate: lastUpdatedString)
         
-        if let lastStoredTodayStore = TodayData.getPriceRateAndLastUpdate(), lastStoredTodayStore.lastUpdate == latestRateDataStore.lastUpdate, rateString == lastStoredTodayStore.rate, API.getLastSelectedCurrency() == userPreferredCurrency {
+        if let lastStoredTodayStore = TodayData.getPriceRateAndLastUpdate(), lastStoredTodayStore.lastUpdate == latestRateDataStore.lastUpdate, String(rateString) == lastStoredTodayStore.rate, API.getLastSelectedCurrency() == userPreferredCurrency {
           if let cached = TodayData.getCachedPriceRateAndLastUpdate() {
             self.processCachedStoredRateAndLastUpdate(new: lastStoredTodayStore, cached: cached)
           } else {
