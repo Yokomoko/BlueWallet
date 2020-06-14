@@ -60,7 +60,7 @@ const DefaultView = () => {
           }}
         />
         <BlueCard>
-          <BlueText>When disabled, Groestlcoin BlueWallet will immediately open the selected wallet at launch.</BlueText>
+          <BlueText>When disabled, GRS BlueWallet will immediately open the selected wallet at launch.</BlueText>
         </BlueCard>
         {!viewAllWalletsEnabled && (
           <BlueListItem title="Default into" component={TouchableOpacity} onPress={selectWallet} rightTitle={defaultWalletLabel} chevron />

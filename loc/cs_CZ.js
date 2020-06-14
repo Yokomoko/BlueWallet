@@ -12,7 +12,7 @@ module.exports = {
     options: 'možnosti',
     createBitcoinWallet: 'In order to use a Lightning wallet, a Groestlcoin wallet is needed to fund it. Would you like to continue anyway?',
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'peněženky',
       header: 'Peněženka reprezentuje pár tajného (privátního) klíče a adresy' + 'kterou můžete sdílet, abyste získali mince',
       add: 'Přidat peněženku',
@@ -79,7 +79,7 @@ module.exports = {
     import: {
       title: 'importovat',
       explanation:
-        'Zadejte zde svůj mnemonic seed, privátní klíč, WIF, nebo cokoliv co máte. Groestlcoin BlueWallet se pokusí uhodnout správný formát a naimportovat vaší peněženku',
+        'Zadejte zde svůj mnemonic seed, privátní klíč, WIF, nebo cokoliv co máte. GRS BlueWallet se pokusí uhodnout správný formát a naimportovat vaší peněženku',
       imported: 'Importováno',
       error: 'Chyba při importu. Prosím ujistěte se, že poskytnutá data jsou správná.',
       success: 'Úspěch',
@@ -195,7 +195,7 @@ module.exports = {
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
     save: 'save',
-    about: 'O Groestlcoin BlueWallet',
+    about: 'O GRS BlueWallet',
     language: 'Jazyk',
     currency: 'Měna',
     advanced_options: 'Advanced Options',
@@ -205,9 +205,9 @@ module.exports = {
     title: 'Plausible Deniability',
     help:
       'Za určitých okolností můžete být donuceni k prozrazení vašeho hesla.' +
-      'K zajištění bezpečností vašich prostředků, Groestlcoin BlueWallet může vytvořit' +
+      'K zajištění bezpečností vašich prostředků, GRS BlueWallet může vytvořit' +
       'další zašifrované úložiště s rozdílný heslem. V případě potřeby' +
-      'můžete toto heslo dát třetí straně. Pokud bude zadáno do Groestlcoin BlueWallet,' +
+      'můžete toto heslo dát třetí straně. Pokud bude zadáno do GRS BlueWallet,' +
       'odemkne nové "falešné" úložiště. Toto bude vypadat legitimně, ale' +
       'udrží vaše pravé hlavní úložiště v bezpečí.',
     help2: 'Nové úložiště bude plně funkční, můžete na něj uložit minimální částku, aby vypadalo více uvěřitelně.',

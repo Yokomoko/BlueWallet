@@ -13,7 +13,7 @@ module.exports = {
     createBitcoinWallet: 'In order to use a Lightning wallet, a Groestlcoin wallet is needed to fund it. Would you like to continue anyway?',
 
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'гаманці',
       header: 'Гаманець це секретний (приватний) ключ, і відповідна йому адреса на яку можна отримувати біткоїни',
       add: 'Додати Гаманець',
@@ -79,7 +79,7 @@ module.exports = {
     },
     import: {
       title: 'імпорт',
-      explanation: 'Мнемоніка, приватний ключ, чи будь що. Groestlcoin BlueWallet спробуе вгадати вірний формат',
+      explanation: 'Мнемоніка, приватний ключ, чи будь що. GRS BlueWallet спробуе вгадати вірний формат',
       imported: 'імпортовано',
       error: 'Невдача. Це взашалі валідно?',
       success: 'Успіх',

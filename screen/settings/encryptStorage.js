@@ -164,7 +164,7 @@ export default class EncryptStorage extends Component {
           {Platform.OS === 'ios' && (
             <BlueListItem
               hideChevron
-              title="Delete if Groestlcoin BlueWallet is uninstalled"
+              title="Delete if GRS BlueWallet is uninstalled"
               Component={TouchableWithoutFeedback}
               switch={{
                 onValueChange: this.onDeleteWalletsAfterUninstallSwitch,
