@@ -51,7 +51,7 @@ const About = () => {
 */
   const handleOnRatePress = () => {
     const options = {
-      AppleAppID: '1512707972',
+      AppleAppID: '1518766083',
       GooglePackageName: 'org.groestlcoin.blue',
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: true,
