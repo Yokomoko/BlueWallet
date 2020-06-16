@@ -1,4 +1,4 @@
-package org.groestlcoin.blue;
+package org.groestlcoin.bluewallet123;
 
 import com.wix.detox.Detox;
 
