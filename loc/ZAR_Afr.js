@@ -13,7 +13,7 @@
     createBitcoinWallet:
       'U het nie huidiglik `n geldige Groestlcoin Beursie nie. Skep of voer eers ‘n Groestlcoin Beursie in, sodat ‘n Groestlcoin Lightning Beursie geskep en bevonds mag word. Wil U voortgaan?',
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'beursies',
       header:
         'U beursie verteenwoordig ‘n sleutelkombinasie, bestaande uit geheims (privaat sleutel) en address' +
@@ -82,7 +82,7 @@
     import: {
       title: 'Invoer',
       explanation:
-        'Sleutel mnemonic, privaat sleutel, WIF, of enige text verwysing. Groestlcoin BlueWallet sal die korrekte formaat kies en u beursie importeer ',
+        'Sleutel mnemonic, privaat sleutel, WIF, of enige text verwysing. GRS BlueWallet sal die korrekte formaat kies en u beursie importeer ',
       imported: 'Invoer suksesvol',
       error: 'U invoer het misluk. Maak asseblief seker u data is korrek en geldig.',
       success: 'Suksesvol',

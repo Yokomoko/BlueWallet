@@ -13,7 +13,7 @@ const req = https.request(
     port: 443,
     path: '/repos/Groestlcoin/BlueWallet/pulls',
     method: 'GET',
-    headers: { 'User-Agent': 'Groestlcoin BlueWallet bot', Authorization: auth },
+    headers: { 'User-Agent': 'GRS BlueWallet bot', Authorization: auth },
   },
   resp => {
     let data = '';

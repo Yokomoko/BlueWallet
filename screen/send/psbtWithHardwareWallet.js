@@ -238,8 +238,8 @@ export default class PsbtWithHardwareWallet extends Component {
         });
     } else if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-        title: 'Groestlcoin BlueWallet Storage Access Permission',
-        message: 'BlueWallet needs your permission to access your storage to save this transaction.',
+        title: 'GRS BlueWallet Storage Access Permission',
+        message: 'GRS BlueWallet needs your permission to access your storage to save this transaction.',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',

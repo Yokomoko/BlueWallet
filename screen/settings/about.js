@@ -51,7 +51,7 @@ const About = () => {
 */
   const handleOnRatePress = () => {
     const options = {
-      AppleAppID: '1512707972',
+      AppleAppID: '1518766083',
       GooglePackageName: 'org.groestlcoin.bluewallet',
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: true,
@@ -80,7 +80,7 @@ const About = () => {
               }}
             />
             <Text style={{ maxWidth: 260, marginVertical: 24, color: '#9AA0AA', fontSize: 15, textAlign: 'center', fontWeight: '500' }}>
-              Groestlcoin BlueWallet a free and open source project. Crafted by Groestlcoin users.
+              GRS BlueWallet a free and open source project.
             </Text>
             <Text style={{ maxWidth: 260, marginBottom: 40, color: '#0C2550', fontSize: 15, textAlign: 'center', fontWeight: '500' }}>
               Always backup your keys!

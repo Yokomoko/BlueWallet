@@ -1,4 +1,4 @@
-# Groestlcoin BlueWallet - A Groestlcoin & Lightning Wallet
+# GRS BlueWallet - A Groestlcoin & Lightning Wallet
 
 [![GitHub tag](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/Groestlcoin/BlueWallet/master/package.json&query=$.version&label=Version)](https://github.com/Groestlcoin/BlueWallet)
 [![CircleCI](https://circleci.com/gh/BlueWallet/BlueWallet.svg?style=svg)](https://circleci.com/gh/Groestlcoin/BlueWallet)
@@ -10,7 +10,7 @@ Thin Groestlcoin Wallet.
 Built with React Native and Electrum.
 
 [![Appstore](https://bluewallet.io/img/app-store-badge.svg)](https://itunes.apple.com/us/app/bluewallet-bitcoin-wallet/id1376878040?l=ru&ls=1&mt=8)
-[![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=org.groestlcoin.bluewallet)
+[![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=org.groestlcoin.bluewallet123)
 
 Website: [bluewallet.io](https://groestlcoin.org)
 

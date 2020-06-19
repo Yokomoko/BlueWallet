@@ -1,10 +1,10 @@
 Uma carteira de Groestlcoin que permite guardar, enviar Groestlcoin, receber Groestlcoin e comprar Groestlcoin, com foco na segurança e simplicidade.
 
-Na Groestlcoin BlueWallet, uma Carteira de Groestlcoin em que você controla as chaves privadas. Uma Carteira de Groestlcoin criada por utilizadores de Groestlcoin para a comunidade.
+Na GRS BlueWallet, uma Carteira de Groestlcoin em que você controla as chaves privadas. Uma Carteira de Groestlcoin criada por utilizadores de Groestlcoin para a comunidade.
 
 Você pode fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro diretamente do seu bolso.
 
-Pode criar gratuitamente uma quantidade ilimitada de carteiras de Groestlcoin ou importar as carteiras que já tem para o seu aplicativo Groestlcoin BlueWallet. É fácil e rápido!
+Pode criar gratuitamente uma quantidade ilimitada de carteiras de Groestlcoin ou importar as carteiras que já tem para o seu aplicativo GRS BlueWallet. É fácil e rápido!
 
 ---
 
@@ -19,7 +19,7 @@ Negação plausível
 Senha falsa que decripta wallets falsas. Para casos especias onde possa ser obrigado a revelar a sua senha, pode revelar a senha falsa, mantenha as suas groestlcoin protegidas.
 
 Encriptação completa
-Construída em cima da multi-camada de criptografia do iOS, A Groestlcoin BlueWallet criptografa tudo com uma adicional senha de usuário.
+Construída em cima da multi-camada de criptografia do iOS, A GRS BlueWallet criptografa tudo com uma adicional senha de usuário.
 
 Carteiras SegWit e HD
 SegWit suportado (Ajuda a diminuir as taxas ainda mais) e carteiras HD ativadas.

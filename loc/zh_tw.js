@@ -12,7 +12,7 @@ module.exports = {
     options: '選項',
     createBitcoinWallet: '您當前沒有groestlcoin錢包. 為了支援閃電錢包, 我們需要建立或者匯入一個比特幣錢包. 是否需要繼續?',
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: '錢包',
       header: '一個錢包代表一對的私鑰和地址' + '你可以通過分享收款.',
       add: '新增錢包',
@@ -203,7 +203,7 @@ module.exports = {
       '密碼. 為了讓你的比特幣更加安全, BlueWallet可以建立一些 ' +
       '加密空間, 用不同的密碼. 在壓力之下, ' +
       '你可以暴露這個錢包密碼. 再次進入 ' +
-      'Groestlcoin BlueWallet, 我們會解鎖一些虛擬空間. 對第三方來說看上去' +
+      'GRS BlueWallet, 我們會解鎖一些虛擬空間. 對第三方來說看上去' +
       '是合理的, 但會偷偷的幫你保證主錢包的安全 ' +
       '幣也就安全了.',
     help2: '新的空間具備完整的功能，你可以存在 ' + '少量的金額在裡面.',

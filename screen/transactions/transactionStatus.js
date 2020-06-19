@@ -150,7 +150,7 @@ export default class TransactionsStatus extends Component {
         {this.state.isHandOffUseEnabled && (
           <Handoff
             title={`Groestlcoin Transaction ${this.state.tx.hash}`}
-            type="org.groestlcoin.bluewallet"
+            type="org.groestlcoin.bluewallet123"
             url={`https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`}
           />
         )}

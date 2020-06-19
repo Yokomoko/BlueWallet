@@ -13,7 +13,7 @@
     createBitcoinWallet:
       'Okwangoku awunayo ingxowa yegroestlcoin. Ukuze kuxhaswe ingxowa ekhawulezayo, Ingxowa yeGroestlcoin kufuneka idalwe okanye ikhutshelwe. Ungathanda ukuqhubeka ?',
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'Ingxowa',
       header: 'Ingxowa imele ukuba nemfihlelo yokuyivula nekheli kwaye unokuyisebenzisa ukwamkela imali.',
       add: 'Yongeza Ingxowa',
@@ -80,7 +80,7 @@
     import: {
       title: 'ukungenisa',
       explanation:
-        'Bhale apha imnemonic yakho, ngundoqo, WIF , okanye nantoni na onayo. Groestlcoin BlueWallet uya kwenza konke okusemandleni ukuqiqa ifomathi efanelekileyo kwaye ingenise ingxowa yakho',
+        'Bhale apha imnemonic yakho, ngundoqo, WIF , okanye nantoni na onayo. GRS BlueWallet uya kwenza konke okusemandleni ukuqiqa ifomathi efanelekileyo kwaye ingenise ingxowa yakho',
       imported: 'Ngenisiwe',
       error: 'Ayiphumelelanga ukungenisa. Nceda, uqiniseka ukuba idata ehlinzekiweyo iyasebenza.',
       success: 'Iphumelele',
@@ -205,10 +205,10 @@
     title: 'Ukuphika',
     help:
       'Phantsi kweemeko unokunyaneliswa ukuba uchaze a ' +
-      'inombolo yokuvula. Groestlcoin BlueWallet ukugcina imali yakho ikhuselekile, unokudala enye ' +
+      'inombolo yokuvula. GRS BlueWallet ukugcina imali yakho ikhuselekile, unokudala enye ' +
       'ukugcinwa kwekhowudi, ngegama eligqithisiweyo. Phantsi kwefuthe, ' +
       'unako ukutyhila le phasiwedi kumntu wesithatu. Ukuba ungenayo ' +
-      'Groestlcoin BlueWallet, iya kuvula ukugcinwa kwetyala ‘entsha’. Oku kuya kubonakala ' +
+      'GRS BlueWallet, iya kuvula ukugcinwa kwetyala ‘entsha’. Oku kuya kubonakala ' +
       'Umlenze kumntu wesithathu kodwa uza kugcina ngasese ukugcinwa kwakho ' +
       'ngemali ekhuselekile..',
     help2:

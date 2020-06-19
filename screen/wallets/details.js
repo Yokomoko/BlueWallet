@@ -269,8 +269,6 @@ export default class WalletDetails extends Component {
                         title={loc.wallets.details.show_xpub}
                       />
 
-                      <BlueSpacing20 />
-                      {this.renderMarketplaceButton()}
                     </React.Fragment>
                   )}
                   {this.state.wallet.type !== LightningCustodianWallet.type && (

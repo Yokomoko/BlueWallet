@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>5.3.8</string>
 	<key>CFBundleVersion</key>
-	<string>242</string>
+	<string>244</string>
 	<key>CLKComplicationPrincipalClass</key>
 	<string>$(PRODUCT_MODULE_NAME).ComplicationController</string>
 	<key>CLKComplicationSupportedFamilies</key>
@@ -42,7 +42,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>WKAppBundleIdentifier</key>
-			<string>org.groestlcoin.bluewallet.watch</string>
+			<string>org.groestlcoin.bluewallet123.watch</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>

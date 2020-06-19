@@ -14,7 +14,7 @@ module.exports = {
 
     list: {
       tabBarLabel: 'Carteiras',
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'carteiras',
       header: 'Uma carteira representa um par composto de uma chave privada secreta e um endereço de depósito que você pode compartilhar.',
       add: 'adicionar wallet',
@@ -195,7 +195,7 @@ module.exports = {
     lightning_settings: 'Preferências Lightning',
     lightning_settings_explain:
       'Para se conectar ao seu próprio ponto LND, você precisa instalar a aplicação LndHub' +
-      ' e copiar sua URL para cá. Deixe em branco para usar a LndHub padrão fornecida pela Groestlcoin BlueWallet (lndhub.groestlcoin.org).' +
+      ' e copiar sua URL para cá. Deixe em branco para usar a LndHub padrão fornecida pela GRS BlueWallet (lndhub.groestlcoin.org).' +
       ' Carteiras criadas após mudanças nestas preferências ficarão ligadas à instância LndHub que estiver especificada.',
     electrum_settings: 'Electrum Settings',
     electrum_settings_explain: 'Set to blank to use default',
@@ -210,9 +210,9 @@ module.exports = {
     title: 'Negação plausível',
     help:
       'Em algumas circunstâncias, você pode ser forçado a revelar uma ' +
-      'senha. Para manter seus groestlcoins seguros, A Groestlcoin BlueWallet pode criar ' +
+      'senha. Para manter seus groestlcoins seguros, A GRS BlueWallet pode criar ' +
       'uma senha alternativa. Sob pressão, você pode revelar essa senha ao ' +
-      'invés da senha principal. Quando inserida na Groestlcoin BlueWallet, esta abrirá ' +
+      'invés da senha principal. Quando inserida na GRS BlueWallet, esta abrirá ' +
       'uma interface falsa, que parecerá legítima a um terceiro, enquanto ' +
       'suas carteiras originais continuarão à salvo em segredo.',
     help2:

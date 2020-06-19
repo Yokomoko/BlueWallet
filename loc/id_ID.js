@@ -13,7 +13,7 @@ module.exports = {
     createBitcoinWallet:
       'Belum ada dompet groestlcoin. Untuk mendanai dompet Lightning, dompet Groestlcoin harus dibuat atau diimpor. Yakin ingin melanjutkan?',
     list: {
-      app_name: 'Groestlcoin BlueWallet',
+      app_name: 'GRS BlueWallet',
       title: 'Dompet',
       header: 'Sebuah dompet mewakili sepasang kunci rahasia dan sebuah alamat' + 'yang bisa dipilih untuk menerima koin.',
       add: 'Tambah dompet',
@@ -79,7 +79,7 @@ module.exports = {
     },
     import: {
       title: 'impor',
-      explanation: 'Ketik kata mnemonic, private key, WIF, atau apapun yang kamu punya. Groestlcoin BlueWallet akan mencoba mengimpor dompet kamu.',
+      explanation: 'Ketik kata mnemonic, private key, WIF, atau apapun yang kamu punya. GRS BlueWallet akan mencoba mengimpor dompet kamu.',
       imported: 'Diimpor',
       error: 'Gagal mengimpor. Pastikan data yang diketik benar.',
       success: 'Berhasil',
@@ -204,10 +204,10 @@ module.exports = {
     title: 'Plausible Deniability',
     help:
       'Under certain circumstances, you might be forced to disclose a ' +
-      'password. To keep your coins safe, Groestlcoin BlueWallet can create another ' +
+      'password. To keep your coins safe, GRS BlueWallet can create another ' +
       'encrypted storage, with a different password. Under pressure, ' +
       'you can disclose this password to a 3rd party. If entered in ' +
-      "Groestlcoin BlueWallet, it will unlock new 'fake' storage. This will seem " +
+      "GRS BlueWallet, it will unlock new 'fake' storage. This will seem " +
       'legit to a 3rd party, but will secretly keep your main storage ' +
       'with coins safe.',
     help2: 'New storage will be fully functional, and you can store some ' + 'minimum amounts there so it looks more believable.',
