@@ -136,7 +136,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "org.groestlcoin.bluewallet123"
+        applicationId "org.groestlcoin.bluewallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2

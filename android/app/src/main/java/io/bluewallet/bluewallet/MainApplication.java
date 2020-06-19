@@ -1,4 +1,4 @@
-package org.groestlcoin.bluewallet123;
+package org.groestlcoin.bluewallet;
 
 import android.app.Application;
 import android.content.Context;
