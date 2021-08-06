@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const currency = require('../../blue_modules/currency');
 const BigNumber = require('bignumber.js');
 

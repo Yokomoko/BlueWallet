@@ -3,7 +3,7 @@ import assert from 'assert';
 import { MultisigHDWallet } from '../../class/';
 import { decodeUR } from 'bc-ur/dist';
 import { MultisigCosigner } from '../../class/multisig-cosigner';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const Base43 = require('../../blue_modules/base43');
 
 const fp1cobo = 'D37EAD88';
@@ -314,7 +314,7 @@ describe('multisig-wallet (wrapped segwit)', () => {
   it('basic operations work', async () => {
     const w = new MultisigHDWallet();
     w.setSecret(txtFileFormatMultisigWrappedSegwit);
-    assert.strictEqual(w.getDerivationPath(), "m/48'/0'/0'/1'");
+    assert.strictEqual(w.getDerivationPath(), "m/48'/17'/0'/1'");
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 2);
     assert.strictEqual(w.howManySignaturesCanWeMake(), 0);
@@ -406,7 +406,7 @@ describe('multisig-wallet (wrapped segwit)', () => {
   });
 
   it('can coordinate tx creation and sign 1 of 2', async () => {
-    const path = "m/48'/0'/0'/1'";
+    const path = "m/48'/17'/0'/1'";
     const Ypub1 = 'Ypub6jtUX12KGcqFosZWP4YcHc9qbKRTvgBpb8aE58hsYqby3SQVTr5KGfMmdMg38ekmQ9iLhCdgbAbjih7AWSkA7pgRhiLfah3zT6u1PFvVEbc';
 
     const utxos = [
@@ -481,7 +481,7 @@ describe('multisig-wallet (wrapped segwit)', () => {
   });
 
   it('can coordinate tx creation and sign 1 of 2 (spend from change)', async () => {
-    const path = "m/48'/0'/0'/1'";
+    const path = "m/48'/17'/0'/1'";
     const Ypub1 = 'Ypub6jtUX12KGcqFosZWP4YcHc9qbKRTvgBpb8aE58hsYqby3SQVTr5KGfMmdMg38ekmQ9iLhCdgbAbjih7AWSkA7pgRhiLfah3zT6u1PFvVEbc';
 
     const utxos = [
@@ -619,7 +619,7 @@ describe('multisig-wallet (native segwit)', () => {
     assert.ok(!MultisigHDWallet.isXpubValid('Zpubinvalid'));
 
     assert.ok(MultisigHDWallet.isPathValid("m/45'"));
-    assert.ok(MultisigHDWallet.isPathValid("m/48'/0'/0'/2'"));
+    assert.ok(MultisigHDWallet.isPathValid("m/48'/17'/0'/2'"));
     assert.ok(!MultisigHDWallet.isPathValid('ROFLBOATS'));
     assert.ok(!MultisigHDWallet.isPathValid(''));
 
@@ -650,7 +650,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('basic operations work', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     let w = new MultisigHDWallet();
     w.addCosigner(Zpub1, fp1cobo);
@@ -661,11 +661,11 @@ describe('multisig-wallet (native segwit)', () => {
     assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
     assert.strictEqual(
       w._getDerivationPathByAddressWithCustomPath(w._getExternalAddressByIndex(2), w.getDerivationPath()),
-      "m/48'/0'/0'/2'/0/2",
+      "m/48'/17'/0'/2'/0/2",
     );
     assert.strictEqual(
       w._getDerivationPathByAddressWithCustomPath(w._getInternalAddressByIndex(3), w.getDerivationPath()),
-      "m/48'/0'/0'/2'/1/3",
+      "m/48'/17'/0'/2'/1/3",
     );
     assert.strictEqual(
       MultisigHDWallet.seedToXpub(process.env.MNEMONICS_COLDCARD, path),
@@ -732,7 +732,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('basic operations work for 2-of-3', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const w = new MultisigHDWallet();
     w.addCosigner(Zpub1, fp1cobo);
@@ -767,7 +767,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can coordinate tx creation', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const utxos = [
       {
@@ -877,7 +877,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can export/import wallet with all seeds in place, and also export coordination setup', () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const w = new MultisigHDWallet();
     w.addCosigner(process.env.MNEMONICS_COBO, false, path);
@@ -918,7 +918,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can coordinate tx creation and cosign 1 of 2', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const utxos = [
       {
@@ -984,7 +984,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can cosign PSBT that was created somewhere else (1 sig)', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
     const walletWithNoKeys = new MultisigHDWallet();
     walletWithNoKeys.addCosigner(Zpub1, fp1cobo);
     walletWithNoKeys.addCosigner(Zpub2, fp2coldcard);
@@ -1053,7 +1053,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can export/import when one of cosigners is mnemonic seed', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const w = new MultisigHDWallet();
     w.addCosigner(Zpub1, fp1cobo);
@@ -1088,7 +1088,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can import txt from Cobo and export it back', async () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     // can work with same secret win different formats: as TXT and as same TXT encoded in UR:
     const secrets = [
@@ -1150,10 +1150,10 @@ describe('multisig-wallet (native segwit)', () => {
       'Policy: 2 of 2\n' +
       'Format: P2WSH\n' +
       '\n' +
-      "# derivation: m/47'/0'/0'/1'\n" +
+      "# derivation: m/47'/17'/0'/1'\n" +
       'D37EAD88: Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ\n' +
       '\n' +
-      "# derivation: m/46'/0'/0'/1'\n" +
+      "# derivation: m/46'/17'/0'/1'\n" +
       '168DD603: Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn\n';
 
     const w = new MultisigHDWallet();
@@ -1165,8 +1165,8 @@ describe('multisig-wallet (native segwit)', () => {
     assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 2);
-    assert.strictEqual(w.getCustomDerivationPathForCosigner(1), "m/47'/0'/0'/1'");
-    assert.strictEqual(w.getCustomDerivationPathForCosigner(2), "m/46'/0'/0'/1'");
+    assert.strictEqual(w.getCustomDerivationPathForCosigner(1), "m/47'/17'/0'/1'");
+    assert.strictEqual(w.getCustomDerivationPathForCosigner(2), "m/46'/17'/0'/1'");
     assert.strictEqual(w.getDerivationPath(), '');
     assert.strictEqual(w.getCosigner(1), Zpub1);
     assert.strictEqual(w.getCosigner(2), Zpub2);
@@ -1199,11 +1199,11 @@ describe('multisig-wallet (native segwit)', () => {
       false,
     );
 
-    assert.strictEqual(psbt2.data.outputs[1].bip32Derivation[0].path, "m/47'/0'/0'/1'" + '/1/3');
-    assert.strictEqual(psbt2.data.outputs[1].bip32Derivation[1].path, "m/46'/0'/0'/1'" + '/1/3');
+    assert.strictEqual(psbt2.data.outputs[1].bip32Derivation[0].path, "m/47'/17'/0'/1'" + '/1/3');
+    assert.strictEqual(psbt2.data.outputs[1].bip32Derivation[1].path, "m/46'/17'/0'/1'" + '/1/3');
 
-    assert.strictEqual(psbt2.data.inputs[0].bip32Derivation[0].path, "m/47'/0'/0'/1'/0/0");
-    assert.strictEqual(psbt2.data.inputs[0].bip32Derivation[1].path, "m/46'/0'/0'/1'/0/0");
+    assert.strictEqual(psbt2.data.inputs[0].bip32Derivation[0].path, "m/47'/17'/0'/1'/0/0");
+    assert.strictEqual(psbt2.data.inputs[0].bip32Derivation[1].path, "m/46'/17'/0'/1'/0/0");
 
     // testing that custom paths survive export/import
 
@@ -1353,7 +1353,7 @@ describe('multisig-wallet (native segwit)', () => {
     assert.strictEqual(w.getM(), 0);
     assert.strictEqual(w.getN(), 0);
 
-    w.setSecret(MultisigHDWallet.seedToXpub(process.env.MNEMONICS_COLDCARD, "m/48'/0'/0'/1'"));
+    w.setSecret(MultisigHDWallet.seedToXpub(process.env.MNEMONICS_COLDCARD, "m/48'/17'/0'/1'"));
     assert.strictEqual(w.getM(), 0);
     assert.strictEqual(w.getN(), 0);
   });
@@ -1504,14 +1504,14 @@ describe('multisig-wallet (native segwit)', () => {
       'xpub6FE9uTPh1RxPRAfFVaET75vdfdQzXKZrT7LxukkqY4KhwUm4haMSPCwERfPouG6da6uZTRCXettvYFDck7nbw6JdBztGr1VBLonWch7NpJo',
     );
 
-    assert.strictEqual(w.getCustomDerivationPathForCosigner(1), "m/48'/0'/0'/2'");
-    assert.strictEqual(w.getCustomDerivationPathForCosigner(2), "m/48'/0'/0'/2'");
-    assert.strictEqual(w.getCustomDerivationPathForCosigner(3), "m/48'/0'/0'/2'");
+    assert.strictEqual(w.getCustomDerivationPathForCosigner(1), "m/48'/17'/0'/2'");
+    assert.strictEqual(w.getCustomDerivationPathForCosigner(2), "m/48'/17'/0'/2'");
+    assert.strictEqual(w.getCustomDerivationPathForCosigner(3), "m/48'/17'/0'/2'");
     assert.strictEqual(w.getDerivationPath(), '');
   });
 
   it('can edit cosigners', () => {
-    const path = "m/48'/0'/0'/2'";
+    const path = "m/48'/17'/0'/2'";
 
     const w = new MultisigHDWallet();
     w.addCosigner(Zpub1, fp1cobo);
@@ -1578,7 +1578,7 @@ describe('multisig-cosigner', () => {
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), fp1cobo);
     assert.strictEqual(cosigner.getXpub(), Zpub1);
-    assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
+    assert.strictEqual(cosigner.getPath(), "m/48'/17'/0'/2'");
     assert.strictEqual(cosigner.howManyCosignersWeHave(), 1);
   });
 
@@ -1595,9 +1595,9 @@ describe('multisig-cosigner', () => {
       '{\n' +
       '  "p2sh_deriv": "m/45\'",\n' +
       '  "p2sh": "xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR",\n' +
-      '  "p2wsh_p2sh_deriv": "m/48\'/0\'/0\'/1\'",\n' +
+      '  "p2wsh_p2sh_deriv": "m/48\'/17\'/0\'/1\'",\n' +
       '  "p2wsh_p2sh": "Ypub6kvtvTZpqGuWtQfg9bL5xe4vDWtwsirR8LzDvsY3vgXvyncW1NGXCUJ9Ps7CiizSSLV6NnnXSYyVDnxCu26QChWzWLg5YCAHam6cYjGtzRz",\n' +
-      '  "p2wsh_deriv": "m/48\'/0\'/0\'/2\'",\n' +
+      '  "p2wsh_deriv": "m/48\'/17\'/0\'/2\'",\n' +
       '  "p2wsh": "Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn",\n' +
       '  "xfp": "168DD603"\n' +
       '}\n';
@@ -1623,14 +1623,14 @@ describe('multisig-cosigner', () => {
       'Ypub6kvtvTZpqGuWtQfg9bL5xe4vDWtwsirR8LzDvsY3vgXvyncW1NGXCUJ9Ps7CiizSSLV6NnnXSYyVDnxCu26QChWzWLg5YCAHam6cYjGtzRz',
     );
     assert.strictEqual(c2.getFp(), '168DD603');
-    assert.strictEqual(c2.getPath(), "m/48'/0'/0'/1'");
+    assert.strictEqual(c2.getPath(), "m/48'/17'/0'/1'");
 
     assert.strictEqual(
       c3.getXpub(),
       'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn',
     );
     assert.strictEqual(c3.getFp(), '168DD603');
-    assert.strictEqual(c3.getPath(), "m/48'/0'/0'/2'");
+    assert.strictEqual(c3.getPath(), "m/48'/17'/0'/2'");
   });
 
   it('can parse files from sparrow wallet', () => {

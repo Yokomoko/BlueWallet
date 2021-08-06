@@ -14,7 +14,7 @@ const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 const createHash = require('create-hash');
 const fs = require('../../blue_modules/fs');
 const Base43 = require('../../blue_modules/base43');
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 
 const styles = StyleSheet.create({
   root: {

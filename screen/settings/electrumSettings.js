@@ -78,7 +78,7 @@ export default class ElectrumSettings extends Component {
           await AsyncStorage.setItem(AppStorage.ELECTRUM_TCP_PORT, '');
           await AsyncStorage.setItem(AppStorage.ELECTRUM_SSL_PORT, '');
           try {
-            await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+            await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
             await DefaultPreference.clear(AppStorage.ELECTRUM_HOST);
             await DefaultPreference.clear(AppStorage.ELECTRUM_SSL_PORT);
             await DefaultPreference.clear(AppStorage.ELECTRUM_TCP_PORT);
@@ -95,7 +95,7 @@ export default class ElectrumSettings extends Component {
           await AsyncStorage.setItem(AppStorage.ELECTRUM_TCP_PORT, port);
           await AsyncStorage.setItem(AppStorage.ELECTRUM_SSL_PORT, sslPort);
           try {
-            await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+            await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
             await DefaultPreference.set(AppStorage.ELECTRUM_HOST, host);
             await DefaultPreference.set(AppStorage.ELECTRUM_TCP_PORT, port);
             await DefaultPreference.set(AppStorage.ELECTRUM_SSL_PORT, sslPort);

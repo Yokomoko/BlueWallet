@@ -28,7 +28,7 @@ function WidgetCommunication() {
     }
   };
   const setValues = async () => {
-    await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+    await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
     const { allWalletsBalance, latestTransactionTime } = await allWalletsBalanceAndTransactionTime();
     await DefaultPreference.set(WidgetCommunicationAllWalletsSatoshiBalance, JSON.stringify(allWalletsBalance));
     await DefaultPreference.set(WidgetCommunicationAllWalletsLatestTransactionTime, JSON.stringify(latestTransactionTime));

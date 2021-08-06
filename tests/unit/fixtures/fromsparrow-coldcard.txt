@@ -2,7 +2,7 @@
 #
 Name: name
 Policy: 2 of 3
-Derivation: m/48'/0'/0'/2'
+Derivation: m/48'/17'/0'/2'
 Format: P2WSH
 
 A3909080: xpub6EJoguJn6okK6ymxkU53BZgjf4kqrL19uvTwqVnPRaV8qYvx1RhGtyKZxLhzY4YLCYtvB6DsGk1uR3GFBMvwgc5qz19WAxm2nSXZcoyNftY

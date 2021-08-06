@@ -20,8 +20,8 @@ import { useContext } from 'react';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import Notifications from '../blue_modules/notifications';
 const A = require('../blue_modules/analytics');
-const bip38 = require('../blue_modules/bip38');
-const wif = require('wif');
+const bip38 = require('../blue_modules/bip38grs');
+const wif = require('wifgrs');
 const prompt = require('../blue_modules/prompt');
 
 function WalletImport() {

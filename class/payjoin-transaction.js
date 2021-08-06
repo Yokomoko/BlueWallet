@@ -1,5 +1,5 @@
 /* global alert */
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));

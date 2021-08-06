@@ -2,7 +2,7 @@
 import { HDSegwitBech32Wallet } from '../../class';
 import PayjoinTransaction from '../../class/payjoin-transaction';
 import { PayjoinClient } from 'payjoin-client';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');
 jest.useFakeTimers();
 
@@ -10,7 +10,7 @@ const utxos = [
   {
     height: 666,
     value: 100000,
-    address: 'bc1q2j76s63hx6ue4hfklhtkny4fx822kzw2ycyn5r',
+    address: 'grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw',
     txId: '8e8c982479c18b4331748c97c424891a4a474a61e5fdf6ac442c47cd44f13614',
     vout: 0,
     txid: '8e8c982479c18b4331748c97c424891a4a474a61e5fdf6ac442c47cd44f13614',
@@ -30,7 +30,7 @@ describe('PayjoinTransaction', () => {
     w.setSecret(process.env.MNEMONICS_COLDCARD);
     const { tx: txOrig, psbt: psbtOrig } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qyvdzueznsh0rsyfqzdtj9ce7nlx4rlg2v93lcl', value: 10000 }],
+      [{ address: 'grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw', value: 10000 }],
       6,
       w._getInternalAddressByIndex(0),
     );
@@ -57,7 +57,7 @@ describe('PayjoinTransaction', () => {
     };
 
     const payjoinClient = new PayjoinClient({
-      paymentScript: bitcoin.address.toOutputScript('bc1qyvdzueznsh0rsyfqzdtj9ce7nlx4rlg2v93lcl'),
+      paymentScript: bitcoin.address.toOutputScript('grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw'),
       wallet,
       payjoinRequester: payjoinRequesterMock,
     });
@@ -76,10 +76,10 @@ describe('PayjoinTransaction', () => {
     }
     const w = new HDSegwitBech32Wallet();
     w.setSecret(process.env.MNEMONICS_COLDCARD);
-    // bitcoin:bc1qy0ydthpa35m37pvwl5tu76j0srcmcwtmaur3aw?amount=0.0001&pj=https://btc.donate.kukks.org/BTC/pj
+    // groestlcoin:grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw?amount=0.0001&pj=https://grspay.com/GRS/pj
     const { tx: txOrigin, psbt: psbtOrigin } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qy0ydthpa35m37pvwl5tu76j0srcmcwtmaur3aw', value: 10000 }],
+      [{ address: 'grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw', value: 10000 }],
       7,
       w._getInternalAddressByIndex(0),
     );
@@ -111,7 +111,7 @@ describe('PayjoinTransaction', () => {
     };
 
     const payjoinClient = new PayjoinClient({
-      paymentScript: bitcoin.address.toOutputScript('bc1qy0ydthpa35m37pvwl5tu76j0srcmcwtmaur3aw'),
+      paymentScript: bitcoin.address.toOutputScript('grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw'),
       wallet,
       payjoinRequester: payjoinRequesterMock,
     });

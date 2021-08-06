@@ -1,6 +1,6 @@
 import bip39 from 'bip39';
-import * as bip32 from 'bip32';
-import * as bitcoinjs from 'bitcoinjs-lib';
+import * as bip32 from 'bip32grs';
+import * as bitcoinjs from 'groestlcoinjs-lib';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 const BlueElectrum = require('../../blue_modules/BlueElectrum');

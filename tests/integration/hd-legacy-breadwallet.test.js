@@ -1,5 +1,5 @@
 /* global it, jasmine, afterAll, beforeAll */
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 import { HDLegacyBreadwalletWallet } from '../../class';
 import assert from 'assert';
 global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
