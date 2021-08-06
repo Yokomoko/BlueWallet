@@ -1,8 +1,9 @@
-/* global describe, it */
+/* global describe, it, jest */
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 const assert = require('assert');
+jest.useFakeTimers();
 
-describe('unit - DeepLinkSchemaMatch', function() {
+describe('unit - DeepLinkSchemaMatch', function () {
   it('hasSchema', () => {
     assert.ok(DeeplinkSchemaMatch.hasSchema('groestlcoin:FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs'));
     assert.ok(DeeplinkSchemaMatch.hasSchema('groestlcoin:grs1qle4zljdmpt77dtc98whyz90msamwjje8u6d6k5?amount=666&label=Yo'));
@@ -75,80 +76,120 @@ describe('unit - DeepLinkSchemaMatch', function() {
     const events = [
       {
         argument: { url: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' },
-        expected: {
-          routeName: 'SendDetails',
-          params: {
-            uri: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs',
-          },
-        },
+        expected: ['SendDetailsRoot', { screen: 'SendDetails', params: { uri: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' } }],
       },
       {
         argument: { url: 'groestlcoin:FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' },
-        expected: {
-          routeName: 'SendDetails',
-          params: {
-            uri: 'groestlcoin:FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs',
-          },
-        },
+        expected: ['SendDetailsRoot', { screen: 'SendDetails', params: { uri: 'groestlcoin:FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' } }],
       },
       {
         argument: { url: 'GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo' },
-        expected: {
-          routeName: 'SendDetails',
-          params: {
-            uri: 'GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo',
-          },
-        },
+        expected: [
+          'SendDetailsRoot',
+          { screen: 'SendDetails', params: { uri: 'GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo' } },
+        ],
       },
       {
         argument: { url: 'bluewallet:GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo' },
-        expected: {
-          routeName: 'SendDetails',
-          params: {
-            uri: 'GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo',
-          },
-        },
+        expected: [
+          'SendDetailsRoot',
+          { screen: 'SendDetails', params: { uri: 'GROESTLCOIN:GRS1Q44JTK2QL0XTGJPDWRYSZWC7W8TSW30HP6YCT3X?amount=666&label=Yo' } },
+        ],
       },
       {
         argument: {
           url:
             'lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
         },
-        expected: {
-          routeName: 'ScanLndInvoice',
-          params: {
-            uri:
-              'lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
+        expected: [
+          'ScanLndInvoiceRoot',
+          {
+            screen: 'ScanLndInvoice',
+            params: {
+              uri:
+                'lightning:lngrs10u1pwjqwkkpp5vlc3tttdzhpk9fwzkkue0sf2pumtza7qyw9vucxyyeh0yaqq66yqdq5f38z6mmwd3ujqar9wd6qcqzpgxq97zvuqrzjqvgptfurj3528snx6e3dtwepafxw5fpzdymw9pj20jj09sunnqmwqz9hx5qqtmgqqqqqqqlgqqqqqqgqjq5duu3fs9xq9vn89qk3ezwpygecu4p3n69wm3tnl28rpgn2gmk5hjaznemw0gy32wrslpn3g24khcgnpua9q04fttm2y8pnhmhhc2gncplz0zde',
+            },
           },
-        },
+        ],
       },
       {
         argument: {
           url:
             'bluewallet:lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
         },
-        expected: {
-          routeName: 'ScanLndInvoice',
-          params: {
-            uri:
-              'lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
+        expected: [
+          'ScanLndInvoiceRoot',
+          {
+            screen: 'ScanLndInvoice',
+            params: {
+              uri:
+                'lightning:lngrs10u1pwjqwkkpp5vlc3tttdzhpk9fwzkkue0sf2pumtza7qyw9vucxyyeh0yaqq66yqdq5f38z6mmwd3ujqar9wd6qcqzpgxq97zvuqrzjqvgptfurj3528snx6e3dtwepafxw5fpzdymw9pj20jj09sunnqmwqz9hx5qqtmgqqqqqqqlgqqqqqqgqjq5duu3fs9xq9vn89qk3ezwpygecu4p3n69wm3tnl28rpgn2gmk5hjaznemw0gy32wrslpn3g24khcgnpua9q04fttm2y8pnhmhhc2gncplz0zde',
+            },
           },
+        ],
+      },
+      {
+        argument: {
+          url: 'https://azte.co/?c1=3062&c2=2586&c3=5053&c4=5261',
         },
+        expected: [
+          'AztecoRedeemRoot',
+          {
+            screen: 'AztecoRedeem',
+            params: { c1: '3062', c2: '2586', c3: '5053', c4: '5261', uri: 'https://azte.co/?c1=3062&c2=2586&c3=5053&c4=5261' },
+          },
+        ],
+      },
+      {
+        argument: {
+          url: 'https://azte.co/?c1=3062&c2=2586&c3=5053&c4=5261',
+        },
+        expected: [
+          'AztecoRedeemRoot',
+          {
+            screen: 'AztecoRedeem',
+            params: { c1: '3062', c2: '2586', c3: '5053', c4: '5261', uri: 'https://azte.co/?c1=3062&c2=2586&c3=5053&c4=5261' },
+          },
+        ],
+      },
+      {
+        argument: {
+          url: 'bluewallet:?safello-state-token=TEST',
+        },
+        expected: [
+          'BuyBitcoin',
+          {
+            safelloStateToken: 'TEST',
+            uri: 'bluewallet:?safello-state-token=TEST',
+            wallet: undefined,
+          },
+        ],
       },
     ];
 
-    const asyncNavigationRouteFor = async function(event) {
-      return new Promise(function(resolve) {
+    const asyncNavigationRouteFor = async function (event) {
+      return new Promise(function (resolve) {
         DeeplinkSchemaMatch.navigationRouteFor(event, navValue => {
           resolve(navValue);
         });
       });
     };
 
-    for (let event of events) {
-      let navValue = await asyncNavigationRouteFor(event.argument);
+    for (const event of events) {
+      const navValue = await asyncNavigationRouteFor(event.argument);
       assert.deepStrictEqual(navValue, event.expected);
     }
+
+    // BIP21 w/BOLT11 support
+    assert.equal(
+      (
+        await asyncNavigationRouteFor({
+          url:
+            'groestlcoin:1DamianM2k8WfNEeJmyqSe2YW1upB7UATx?amount=0.000001&lightning=lnbc1u1pwry044pp53xlmkghmzjzm3cljl6729cwwqz5hhnhevwfajpkln850n7clft4sdqlgfy4qv33ypmj7sj0f32rzvfqw3jhxaqcqzysxq97zvuq5zy8ge6q70prnvgwtade0g2k5h2r76ws7j2926xdjj2pjaq6q3r4awsxtm6k5prqcul73p3atveljkn6wxdkrcy69t6k5edhtc6q7lgpe4m5k4',
+        })
+      )[0],
+      'SelectWallet',
+    );
   });
 
   it('decodes bip21', () => {
@@ -160,6 +201,11 @@ describe('unit - DeepLinkSchemaMatch', function() {
         label: 'Foobar',
       },
     });
+
+    decoded = DeeplinkSchemaMatch.bip21decode(
+      'groestlcoin:grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw?amount=0.0001&pj=https://grspay.com/GRS/pj',
+    );
+    assert.strictEqual(decoded.options.pj, 'https://grspay.com/GRS/pj');
 
     decoded = DeeplinkSchemaMatch.bip21decode('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar');
     assert.deepStrictEqual(decoded, {
@@ -179,5 +225,54 @@ describe('unit - DeepLinkSchemaMatch', function() {
       label: 'Foobar',
     });
     assert.strictEqual(encoded, 'groestlcoin:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar');
+  });
+
+  it('can decodeBitcoinUri', () => {
+    assert.deepStrictEqual(
+      DeeplinkSchemaMatch.decodeBitcoinUri(
+        'groestlcoin:grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw?amount=0.0001&pj=https://grspay.com/GRS/pj',
+      ),
+      {
+        address: 'grs1q6ve7qrz0gg9tt22022rx620uepkpkk2ed286gw',
+        amount: 0.0001,
+        memo: '',
+        payjoinUrl: 'https://grspay.com/GRS/pj',
+      },
+    );
+
+    assert.deepStrictEqual(DeeplinkSchemaMatch.decodeBitcoinUri('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar'), {
+      address: 'Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR',
+      amount: 20.3,
+      memo: 'Foobar',
+      payjoinUrl: '',
+    });
+  });
+
+  it('recognizes files', () => {
+    // txn files:
+    assert.ok(DeeplinkSchemaMatch.isTXNFile('file://com.android.externalstorage.documents/document/081D-1403%3Atxhex.txn'));
+    assert.ok(!DeeplinkSchemaMatch.isPossiblySignedPSBTFile('file://com.android.externalstorage.documents/document/081D-1403%3Atxhex.txn'));
+
+    assert.ok(DeeplinkSchemaMatch.isTXNFile('content://com.android.externalstorage.documents/document/081D-1403%3Atxhex.txn'));
+    assert.ok(
+      !DeeplinkSchemaMatch.isPossiblySignedPSBTFile('content://com.android.externalstorage.documents/document/081D-1403%3Atxhex.txn'),
+    );
+
+    // psbt files (signed):
+    assert.ok(
+      DeeplinkSchemaMatch.isPossiblySignedPSBTFile(
+        'content://com.android.externalstorage.documents/document/081D-1403%3Atxhex-signed.psbt',
+      ),
+    );
+    assert.ok(
+      DeeplinkSchemaMatch.isPossiblySignedPSBTFile('file://com.android.externalstorage.documents/document/081D-1403%3Atxhex-signed.psbt'),
+    );
+
+    assert.ok(!DeeplinkSchemaMatch.isTXNFile('content://com.android.externalstorage.documents/document/081D-1403%3Atxhex-signed.psbt'));
+    assert.ok(!DeeplinkSchemaMatch.isTXNFile('file://com.android.externalstorage.documents/document/081D-1403%3Atxhex-signed.psbt'));
+
+    // psbt files (unsigned):
+    assert.ok(DeeplinkSchemaMatch.isPossiblyPSBTFile('content://com.android.externalstorage.documents/document/081D-1403%3Atxhex.psbt'));
+    assert.ok(DeeplinkSchemaMatch.isPossiblyPSBTFile('file://com.android.externalstorage.documents/document/081D-1403%3Atxhex.psbt'));
   });
 });

@@ -32,7 +32,7 @@ class WatchDataSource: NSObject, WCSessionDelegate {
   }
   
   func processWalletsData(walletsInfo: [String: Any]) {
-    if let walletsToProcess = walletsInfo["wallets"] as? [[String: Any]], !walletsToProcess.isEmpty {
+    if let walletsToProcess = walletsInfo["wallets"] as? [[String: Any]] {
       wallets.removeAll();
       for (index, entry) in walletsToProcess.enumerated() {
         guard let label = entry["label"] as? String, let balance = entry["balance"] as? String, let type = entry["type"] as? String, let preferredBalanceUnit = entry["preferredBalanceUnit"] as? String, let transactions = entry["transactions"] as? [[String: Any]]  else {
@@ -45,7 +45,8 @@ class WatchDataSource: NSObject, WCSessionDelegate {
           transactionsProcessed.append(transaction)
         }
         let receiveAddress = entry["receiveAddress"] as? String ?? ""
-        let wallet = Wallet(label: label, balance: balance, type: type, preferredBalanceUnit: preferredBalanceUnit, receiveAddress: receiveAddress, transactions: transactionsProcessed, identifier: index)
+        let xpub = entry["xpub"] as? String ?? ""
+        let wallet = Wallet(label: label, balance: balance, type: type, preferredBalanceUnit: preferredBalanceUnit, receiveAddress: receiveAddress, transactions: transactionsProcessed, identifier: index, xpub: xpub)
         wallets.append(wallet)
       }
       
@@ -78,11 +79,11 @@ class WatchDataSource: NSObject, WCSessionDelegate {
     }
   }
   
-  func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+  func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
     WatchDataSource.shared.processWalletsData(walletsInfo: applicationContext)
   }
   
-  func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+  func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
     WatchDataSource.shared.processWalletsData(walletsInfo: applicationContext)
   }
   

@@ -1,49 +1,61 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { ActivityIndicator, View, BackHandler, Text, ScrollView } from 'react-native';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
+import { ActivityIndicator, View, BackHandler, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { BlueSpacing20, SafeBlueArea, BlueNavigationStyle, BlueText, BlueButton } from '../../BlueComponents';
 import Privacy from '../../Privacy';
-import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
-const loc = require('../../loc');
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 const PleaseBackup = () => {
+  const { wallets } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
-  const words = useNavigationParam('secret').split(' ');
-  const { dismiss } = useNavigation();
+  const { walletID } = useRoute().params;
+  const wallet = wallets.find(w => w.getID() === walletID);
+  const navigation = useNavigation();
+  const { colors } = useTheme();
+  const stylesHook = StyleSheet.create({
+    flex: {
+      backgroundColor: colors.elevated,
+    },
+    word: {
+      backgroundColor: colors.inputBackgroundColor,
+    },
+    wortText: {
+      color: colors.labelText,
+    },
+
+    successText: {
+      color: colors.foregroundColor,
+    },
+    pleaseText: {
+      color: colors.foregroundColor,
+    },
+  });
 
   const handleBackButton = useCallback(() => {
-    dismiss();
+    navigation.dangerouslyGetParent().pop();
     return true;
-  }, [dismiss]);
+  }, [navigation]);
 
   useEffect(() => {
     Privacy.enableBlur();
     setIsLoading(false);
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     return () => {
       Privacy.disableBlur();
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
     };
-  }, [handleBackButton, words]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderSecret = () => {
-    let component = [];
-    for (const [index, secret] of words.entries()) {
+    const component = [];
+    for (const [index, secret] of wallet.getSecret().split(/\s/).entries()) {
+      const text = `${index + 1}. ${secret}  `;
       component.push(
-        <View
-          style={{
-            width: 'auto',
-            marginRight: 8,
-            marginBottom: 8,
-            backgroundColor: '#f5f5f5',
-            paddingTop: 6,
-            paddingBottom: 6,
-            paddingLeft: 8,
-            paddingRight: 8,
-            borderRadius: 4,
-          }}
-          key={`${secret}${index}`}
-        >
-          <Text style={{ color: '#81868E', fontWeight: 'bold' }}>
-            {`${index}`}. {secret}
+        <View style={[styles.word, stylesHook.word]} key={`${index}`}>
+          <Text style={[styles.wortText, stylesHook.wortText]} textBreakStrategy="simple">
+            {text}
           </Text>
         </View>,
       );
@@ -52,34 +64,21 @@ const PleaseBackup = () => {
   };
 
   return isLoading ? (
-    <View style={{ flex: 1, paddingTop: 20 }}>
+    <View style={styles.loading}>
       <ActivityIndicator />
     </View>
   ) : (
-    <SafeBlueArea style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ justifyContent: 'space-between' }} testID="PleaseBackupScrollView">
-        <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
-          <BlueText style={{ textAlign: 'center', fontWeight: 'bold', color: '#0C2550' }}>{loc.pleasebackup.success}</BlueText>
-          <BlueText style={{ paddingBottom: 10, paddingRight: 0, paddingLeft: 0, color: '#0C2550' }}>{loc.pleasebackup.text}</BlueText>
+    <SafeBlueArea style={[styles.flex, stylesHook.flex]}>
+      <StatusBar barStyle="default" />
+      <ScrollView testID="PleaseBackupScrollView">
+        <View style={styles.please}>
+          <BlueText style={[styles.successText, stylesHook.successText]}>{loc.pleasebackup.success}</BlueText>
+          <BlueText style={[styles.pleaseText, stylesHook.pleaseText]}>{loc.pleasebackup.text}</BlueText>
 
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginTop: 14,
-            }}
-          >
-            {renderSecret()}
-          </View>
+          <View style={styles.secret}>{renderSecret()}</View>
 
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-            <View style={{ flex: 1 }}>
-              <BlueSpacing20 />
-              <BlueButton testID="PleasebackupOk" onPress={dismiss} title={loc.pleasebackup.ok} />
-            </View>
-          </View>
+          <BlueSpacing20 />
+          <BlueButton testID="PleasebackupOk" onPress={handleBackButton} title={loc.pleasebackup.ok} />
         </View>
       </ScrollView>
     </SafeBlueArea>
@@ -91,6 +90,49 @@ PleaseBackup.navigationOptions = ({ navigation }) => ({
   title: loc.pleasebackup.title,
   headerLeft: null,
   headerRight: null,
+  gestureEnabled: false,
+  swipeEnabled: false,
+});
+const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
+  loading: {
+    flex: 1,
+    paddingTop: 20,
+  },
+  word: {
+    marginRight: 8,
+    marginBottom: 8,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderRadius: 4,
+  },
+  wortText: {
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  please: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  successText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  pleaseText: {
+    paddingBottom: 10,
+    paddingRight: 0,
+    paddingLeft: 0,
+  },
+  secret: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginTop: 14,
+  },
 });
 
 export default PleaseBackup;

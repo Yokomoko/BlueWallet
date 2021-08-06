@@ -1,6 +1,6 @@
 /* global alert */
-import React, { Component } from 'react';
-import { View, Share } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Share, StyleSheet } from 'react-native';
 import {
   BlueLoading,
   BlueCopyTextToClipboard,
@@ -10,81 +10,120 @@ import {
   BlueText,
   BlueSpacing20,
 } from '../../BlueComponents';
-import PropTypes from 'prop-types';
 import QRCode from 'react-native-qrcode-svg';
-/** @type {AppStorage} */
-let BlueApp = require('../../BlueApp');
-const loc = require('../../loc');
+import loc from '../../loc';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
-export default class LNDViewAdditionalInvoiceInformation extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    ...BlueNavigationStyle(),
-    title: 'Additional Information',
+const LNDViewAdditionalInvoiceInformation = () => {
+  // state = { walletInfo: undefined };
+  const { walletID } = useRoute().params;
+  const { wallets } = useContext(BlueStorageContext);
+  const wallet = wallets.find(w => w.getID() === walletID);
+  const [walletInfo, setWalletInfo] = useState();
+  const { colors } = useTheme();
+  const { goBack } = useNavigation();
+  const stylesHook = StyleSheet.create({
+    loading: {
+      backgroundColor: colors.elevated,
+    },
+    root: {
+      backgroundColor: colors.elevated,
+    },
   });
 
-  state = { walletInfo: undefined };
-
-  async componentDidMount() {
-    const fromWallet = this.props.navigation.getParam('fromWallet');
-    try {
-      await fromWallet.fetchInfo();
-    } catch (_) {
-      alert('Network error');
-      return;
-    }
-    this.setState({ walletInfo: fromWallet.info_raw, addressText: fromWallet.info_raw.uris[0] });
-  }
-
-  render() {
-    if (typeof this.state.walletInfo === 'undefined') {
-      return (
-        <SafeBlueArea style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <BlueLoading />
-        </SafeBlueArea>
-      );
+  useEffect(() => {
+    if (wallet) {
+      wallet
+        .fetchInfo()
+        .then(_ => {
+          setWalletInfo(wallet.info_raw);
+        })
+        .catch(error => {
+          console.log(error);
+          alert(loc.errors.network);
+          goBack();
+        });
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet]);
+
+  if (walletInfo === undefined) {
     return (
-      <SafeBlueArea style={{ flex: 1 }}>
-        <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16 }}>
-            <QRCode
-              value={this.state.walletInfo.uris[0]}
-              logo={require('../../img/qr-code.png')}
-              size={300}
-              logoSize={90}
-              color={BlueApp.settings.foregroundColor}
-              logoBackgroundColor={BlueApp.settings.brandingColor}
-            />
-            <BlueSpacing20 />
-            <BlueText>{loc.lndViewInvoice.open_direct_channel}</BlueText>
-            <BlueCopyTextToClipboard text={this.state.walletInfo.uris[0]} />
-          </View>
-          <View style={{ marginBottom: 25 }}>
-            <BlueButton
-              icon={{
-                name: 'share-alternative',
-                type: 'entypo',
-                color: BlueApp.settings.buttonTextColor,
-              }}
-              onPress={async () => {
-                Share.share({
-                  message: this.state.walletInfo.uris[0],
-                });
-              }}
-              title={loc.receive.details.share}
-            />
-          </View>
-        </View>
+      <SafeBlueArea style={[styles.loading, stylesHook.loading]}>
+        <BlueLoading />
       </SafeBlueArea>
     );
   }
-}
 
-LNDViewAdditionalInvoiceInformation.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func,
-    getParam: PropTypes.func,
-    dismiss: PropTypes.func,
-  }),
+  return (
+    <SafeBlueArea style={[styles.root, stylesHook.root]}>
+      <View style={styles.wrapper}>
+        <View style={styles.qrcode}>
+          <QRCode
+            value={walletInfo.uris[0]}
+            logo={require('../../img/qr-code.png')}
+            size={300}
+            logoSize={90}
+            color="#000000"
+            logoBackgroundColor={colors.brandingColor}
+            backgroundColor="#FFFFFF"
+          />
+        </View>
+        <BlueSpacing20 />
+        <BlueText>{loc.lndViewInvoice.open_direct_channel}</BlueText>
+        <BlueCopyTextToClipboard text={walletInfo.uris[0]} />
+        <View style={styles.share}>
+          <BlueButton
+            icon={{
+              name: 'share-alternative',
+              type: 'entypo',
+              color: colors.buttonTextColor,
+            }}
+            onPress={async () => {
+              Share.share({
+                message: walletInfo.uris[0],
+              });
+            }}
+            title={loc.receive.details_share}
+          />
+        </View>
+      </View>
+    </SafeBlueArea>
+  );
 };
+
+const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  root: {
+    flex: 1,
+  },
+  wrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  qrcode: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    borderWidth: 6,
+    borderRadius: 8,
+    borderColor: '#FFFFFF',
+  },
+  share: {
+    marginBottom: 25,
+  },
+});
+
+export default LNDViewAdditionalInvoiceInformation;
+
+LNDViewAdditionalInvoiceInformation.navigationOptions = () => ({
+  ...BlueNavigationStyle(),
+  title: loc.lndViewInvoice.additional_info,
+});

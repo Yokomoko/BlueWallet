@@ -1,130 +1,181 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
+import LottieView from 'lottie-react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { View } from 'react-native';
-import { Text, Icon } from 'react-native-elements';
-import { BlueButton, SafeBlueArea, BlueCard } from '../../BlueComponents';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { Text } from 'react-native-elements';
+import { BlueButton, BlueCard } from '../../BlueComponents';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
+import loc from '../../loc';
 import PropTypes from 'prop-types';
-let loc = require('../../loc');
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
-export default class Success extends Component {
-  static navigationOptions = {
-    header: null,
-    gesturesEnabled: false,
+const Success = () => {
+  const pop = () => {
+    dangerouslyGetParent().pop();
   };
-
-  constructor(props) {
-    super(props);
-    console.log('send/success constructor');
-
-    this.state = {
-      amount: props.navigation.getParam('amount'),
-      fee: props.navigation.getParam('fee') || 0,
-      amountUnit: props.navigation.getParam('amountUnit') || BitcoinUnit.BTC,
-      invoiceDescription: props.navigation.getParam('invoiceDescription') || '',
-    };
-  }
-
-  async componentDidMount() {
-    console.log('send/success - componentDidMount');
+  const { colors } = useTheme();
+  const { dangerouslyGetParent } = useNavigation();
+  const { amount, fee, amountUnit = BitcoinUnit.BTC, invoiceDescription = '', onDonePressed = pop } = useRoute().params;
+  const stylesHook = StyleSheet.create({
+    root: {
+      backgroundColor: colors.elevated,
+    },
+    amountValue: {
+      color: colors.alternativeTextColor2,
+    },
+    amountUnit: {
+      color: colors.alternativeTextColor2,
+    },
+  });
+  useEffect(() => {
+    console.log('send/success - useEffect');
     ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  render() {
-    return (
-      <SafeBlueArea style={{ flex: 1, paddingTop: 19 }}>
-        <BlueCard style={{ alignItems: 'center', flex: 1 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 76, paddingBottom: 16 }}>
-            <Text
-              style={{
-                color: '#0f5cc0',
-                fontSize: 36,
-                fontWeight: '600',
-              }}
-            >
-              {this.state.amount}
-            </Text>
-            <Text
-              style={{
-                color: '#0f5cc0',
-                fontSize: 16,
-                marginHorizontal: 4,
-                paddingBottom: 6,
-                fontWeight: '600',
-                alignSelf: 'flex-end',
-              }}
-            >
-              {' ' + this.state.amountUnit}
-            </Text>
-          </View>
-          {this.state.fee > 0 && (
-            <Text
-              style={{
-                color: '#37c0a1',
-                fontSize: 14,
-                marginHorizontal: 4,
-                paddingBottom: 6,
-                fontWeight: '500',
-                alignSelf: 'center',
-              }}
-            >
-              {loc.send.create.fee}: {this.state.fee} {BitcoinUnit.BTC}
-            </Text>
-          )}
-          {this.state.fee <= 0 && (
-            <Text
-              numberOfLines={0}
-              style={{
-                color: '#37c0a1',
-                fontSize: 14,
-                marginHorizontal: 4,
-                paddingBottom: 6,
-                fontWeight: '500',
-                alignSelf: 'center',
-              }}
-            >
-              {this.state.invoiceDescription}
-            </Text>
-          )}
-        </BlueCard>
-        <View
-          style={{
-            backgroundColor: '#006593',
-            width: 120,
-            height: 120,
-            borderRadius: 60,
-            alignSelf: 'center',
-            justifyContent: 'center',
-            marginTop: 43,
-            marginBottom: 53,
-          }}
-        >
-          <Icon name="check" size={50} type="font-awesome" color="#0f5cc0" />
-        </View>
-        <BlueCard>
-          <BlueButton
-            onPress={() => {
-              this.props.navigation.dismiss();
-            }}
-            title={loc.send.success.done}
-          />
-        </BlueCard>
-      </SafeBlueArea>
-    );
-  }
-}
-
-Success.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func,
-    getParam: PropTypes.func,
-    navigate: PropTypes.func,
-    dismiss: PropTypes.func,
-    state: PropTypes.shape({
-      params: PropTypes.shape({
-        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        fee: PropTypes.number,
-      }),
-    }),
-  }),
+  return (
+    <SafeAreaView style={[styles.root, stylesHook.root]}>
+      <SuccessView
+        amount={amount}
+        amountUnit={amountUnit}
+        fee={fee}
+        invoiceDescription={invoiceDescription}
+        onDonePressed={onDonePressed}
+      />
+      <View style={styles.buttonContainer}>
+        <BlueButton onPress={onDonePressed} title={loc.send.success_done} />
+      </View>
+    </SafeAreaView>
+  );
 };
+
+export default Success;
+
+export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shouldAnimate = true }) => {
+  const animationRef = useRef();
+  const { colors } = useTheme();
+
+  const stylesHook = StyleSheet.create({
+    amountValue: {
+      color: colors.alternativeTextColor2,
+    },
+    amountUnit: {
+      color: colors.alternativeTextColor2,
+    },
+  });
+
+  useEffect(() => {
+    if (shouldAnimate) {
+      animationRef.current.reset();
+      animationRef.current.resume();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colors]);
+
+  return (
+    <View style={styles.root}>
+      <BlueCard style={styles.amount}>
+        <View style={styles.view}>
+          {amount && (
+            <>
+              <Text style={[styles.amountValue, stylesHook.amountValue]}>{amount}</Text>
+              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' ' + amountUnit}</Text>
+            </>
+          )}
+        </View>
+        {fee > 0 && (
+          <Text style={styles.feeText}>
+            {loc.send.create_fee}: {fee} {BitcoinUnit.BTC}
+          </Text>
+        )}
+        <Text numberOfLines={0} style={styles.feeText}>
+          {invoiceDescription}
+        </Text>
+      </BlueCard>
+      <View style={styles.ready}>
+        <LottieView
+          style={styles.lottie}
+          source={require('../../img/bluenice.json')}
+          autoPlay={shouldAnimate}
+          ref={animationRef}
+          loop={false}
+          progress={shouldAnimate ? 0 : 1}
+          colorFilters={[
+            {
+              keypath: 'spark',
+              color: colors.success,
+            },
+            {
+              keypath: 'circle',
+              color: colors.success,
+            },
+            {
+              keypath: 'Oval',
+              color: colors.successCheck,
+            },
+          ]}
+        />
+      </View>
+    </View>
+  );
+};
+
+SuccessView.propTypes = {
+  amount: PropTypes.number,
+  amountUnit: PropTypes.string,
+  fee: PropTypes.number,
+  invoiceDescription: PropTypes.string,
+  shouldAnimate: PropTypes.bool,
+};
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    paddingTop: 19,
+  },
+  buttonContainer: {
+    padding: 58,
+  },
+  amount: {
+    alignItems: 'center',
+  },
+  view: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 76,
+    paddingBottom: 16,
+  },
+  amountValue: {
+    fontSize: 36,
+    fontWeight: '600',
+  },
+  amountUnit: {
+    fontSize: 16,
+    marginHorizontal: 4,
+    paddingBottom: 6,
+    fontWeight: '600',
+    alignSelf: 'flex-end',
+  },
+  feeText: {
+    color: '#37c0a1',
+    fontSize: 14,
+    marginHorizontal: 4,
+    paddingBottom: 6,
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  ready: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 43,
+    marginBottom: 53,
+  },
+  lottie: {
+    width: 400,
+    height: 400,
+  },
+});

@@ -1,12 +1,12 @@
 import { AppStorage, LightningCustodianWallet } from './';
 import AsyncStorage from '@react-native-community/async-storage';
-import BitcoinBIP70TransactionDecode from '../bip70/bip70';
 import RNFS from 'react-native-fs';
 import url from 'url';
 import { Chain } from '../models/bitcoinUnits';
+import Lnurl from './lnurl';
+import Azteco from './azteco';
 const bitcoin = require('groestlcoinjs-lib');
 const bip21 = require('bip21grs');
-const BlueApp: AppStorage = require('../BlueApp');
 
 class DeeplinkSchemaMatch {
   static hasSchema(schemaString) {
@@ -26,10 +26,10 @@ class DeeplinkSchemaMatch {
    * If the content is recognizable, create a dictionary with the respective
    * navigation dictionary required by react-navigation
    *
-   * @param event {{url: string}} URL deeplink as passed to app, e.g. `groestlcoin:grs1qle4zljdmpt77dtc98whyz90msamwjje8u6d6k5?amount=666&label=Yo`
-   * @param completionHandler {function} Returns {routeName: string, params: object}
+   * @param event {{url: string}} URL deeplink as passed to app, e.g. `groestlcoin:grs1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7?amount=666&label=Yo`
+   * @param completionHandler {function} Callback that returns [string, params: object]
    */
-  static navigationRouteFor(event, completionHandler) {
+  static navigationRouteFor(event, completionHandler, context = { wallets: [], saveToDisk: () => {}, addWallet: () => {} }) {
     if (event.url === null) {
       return;
     }
@@ -39,18 +39,66 @@ class DeeplinkSchemaMatch {
 
     if (event.url.toLowerCase().startsWith('bluewallet:groestlcoin:') || event.url.toLowerCase().startsWith('bluewallet:lightning:')) {
       event.url = event.url.substring(11);
+    } else if (event.url.toLocaleLowerCase().startsWith('bluewallet://widget?action=')) {
+      event.url = event.url.substring('bluewallet://'.length);
     }
 
-    if (DeeplinkSchemaMatch.isPossiblyPSBTFile(event.url)) {
-      RNFS.readFile(event.url)
+    if (DeeplinkSchemaMatch.isWidgetAction(event.url)) {
+      if (context.wallets.length >= 0) {
+        const wallet = context.wallets[0];
+        const action = event.url.split('widget?action=')[1];
+        const secret = wallet.getSecret();
+        if (wallet.chain === Chain.ONCHAIN) {
+          if (action === 'openSend') {
+            completionHandler([
+              'SendDetailsRoot',
+              {
+                screen: 'SendDetails',
+                params: {
+                  secret,
+                },
+              },
+            ]);
+          } else if (action === 'openReceive') {
+            completionHandler([
+              'ReceiveDetailsRoot',
+              {
+                screen: 'ReceiveDetails',
+                params: {
+                  walletID: wallet.getID(),
+                },
+              },
+            ]);
+          }
+        } else if (wallet.chain === Chain.OFFCHAIN) {
+          if (action === 'openSend') {
+            completionHandler([
+              'ScanLndInvoiceRoot',
+              {
+                screen: 'ScanLndInvoice',
+                params: {
+                  secret,
+                },
+              },
+            ]);
+          } else if (action === 'openReceive') {
+            completionHandler(['LNDCreateInvoiceRoot', { screen: 'LNDCreateInvoice', params: { walletID: wallet.getID() } }]);
+          }
+        }
+      }
+    } else if (DeeplinkSchemaMatch.isPossiblySignedPSBTFile(event.url)) {
+      RNFS.readFile(decodeURI(event.url))
         .then(file => {
           if (file) {
-            completionHandler({
-              routeName: 'PsbtWithHardwareWallet',
-              params: {
-                deepLinkPSBT: file,
+            completionHandler([
+              'SendDetailsRoot',
+              {
+                screen: 'PsbtWithHardwareWallet',
+                params: {
+                  deepLinkPSBT: file,
+                },
               },
-            });
+            ]);
           }
         })
         .catch(e => console.warn(e));
@@ -63,57 +111,85 @@ class DeeplinkSchemaMatch {
       console.log(e);
     }
     if (isBothBitcoinAndLightning) {
-      completionHandler({
-        routeName: 'HandleOffchainAndOnChain',
-        params: {
-          onWalletSelect: wallet =>
-            completionHandler(DeeplinkSchemaMatch.isBothBitcoinAndLightningOnWalletSelect(wallet, isBothBitcoinAndLightning)),
+      completionHandler([
+        'SelectWallet',
+        {
+          onWalletSelect: (wallet, { navigation }) => {
+            navigation.pop(); // close select wallet screen
+            navigation.navigate(...DeeplinkSchemaMatch.isBothBitcoinAndLightningOnWalletSelect(wallet, isBothBitcoinAndLightning));
+          },
         },
-      });
-    } else if (DeeplinkSchemaMatch.isBitcoinAddress(event.url) || BitcoinBIP70TransactionDecode.matchesPaymentURL(event.url)) {
-      completionHandler({
-        routeName: 'SendDetails',
-        params: {
-          uri: event.url,
+      ]);
+    } else if (DeeplinkSchemaMatch.isBitcoinAddress(event.url)) {
+      completionHandler([
+        'SendDetailsRoot',
+        {
+          screen: 'SendDetails',
+          params: {
+            uri: event.url,
+          },
         },
-      });
+      ]);
     } else if (DeeplinkSchemaMatch.isLightningInvoice(event.url)) {
-      completionHandler({
-        routeName: 'ScanLndInvoice',
-        params: {
-          uri: event.url,
+      completionHandler([
+        'ScanLndInvoiceRoot',
+        {
+          screen: 'ScanLndInvoice',
+          params: {
+            uri: event.url,
+          },
         },
-      });
+      ]);
     } else if (DeeplinkSchemaMatch.isLnUrl(event.url)) {
-      completionHandler({
-        routeName: 'LNDCreateInvoice',
-        params: {
-          uri: event.url,
+      // at this point we can not tell if it is lnurl-pay or lnurl-withdraw since it needs additional async call
+      // to the server, which is undesirable here, so LNDCreateInvoice screen will handle it for us and will
+      // redirect user to LnurlPay screen if necessary
+      completionHandler([
+        'LNDCreateInvoiceRoot',
+        {
+          screen: 'LNDCreateInvoice',
+          params: {
+            uri: event.url.replace('lightning:', '').replace('LIGHTNING:', ''),
+          },
         },
-      });
+      ]);
     } else if (DeeplinkSchemaMatch.isSafelloRedirect(event)) {
-      let urlObject = url.parse(event.url, true) // eslint-disable-line
+      const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
 
       const safelloStateToken = urlObject.query['safello-state-token'];
+      let wallet;
+      for (const w of context.wallets) {
+        wallet = w;
+        break;
+      }
 
-      completionHandler({
-        routeName: 'BuyBitcoin',
-        params: {
+      completionHandler([
+        'BuyBitcoin',
+        {
           uri: event.url,
           safelloStateToken,
+          wallet,
         },
-      });
+      ]);
+    } else if (Azteco.isRedeemUrl(event.url)) {
+      completionHandler([
+        'AztecoRedeemRoot',
+        {
+          screen: 'AztecoRedeem',
+          params: Azteco.getParamsFromUrl(event.url),
+        },
+      ]);
     } else {
-      let urlObject = url.parse(event.url, true); // eslint-disable-line
-      console.log('parsed', urlObject);
+      const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
+      console.log('parsed', event.url, 'into', urlObject);
       (async () => {
         if (urlObject.protocol === 'bluewallet:' || urlObject.protocol === 'lapp:' || urlObject.protocol === 'blue:') {
           switch (urlObject.host) {
-            case 'openlappbrowser':
+            case 'openlappbrowser': {
               console.log('opening LAPP', urlObject.query.url);
               // searching for LN wallet:
               let haveLnWallet = false;
-              for (let w of BlueApp.getWallets()) {
+              for (const w of context.wallets) {
                 if (w.type === LightningCustodianWallet.type) {
                   haveLnWallet = true;
                 }
@@ -121,11 +197,11 @@ class DeeplinkSchemaMatch {
 
               if (!haveLnWallet) {
                 // need to create one
-                let w = new LightningCustodianWallet();
+                const w = new LightningCustodianWallet();
                 w.setLabel(w.typeReadable);
 
                 try {
-                  let lndhub = await AsyncStorage.getItem(AppStorage.LNDHUB);
+                  const lndhub = await AsyncStorage.getItem(AppStorage.LNDHUB);
                   if (lndhub) {
                     w.setBaseURI(lndhub);
                     w.init();
@@ -136,14 +212,14 @@ class DeeplinkSchemaMatch {
                   // giving up, not doing anything
                   return;
                 }
-                BlueApp.wallets.push(w);
-                await BlueApp.saveToDisk();
+                context.addWallet(w);
+                context.saveToDisk();
               }
 
               // now, opening lapp browser and navigating it to URL.
               // looking for a LN wallet:
               let lnWallet;
-              for (let w of BlueApp.getWallets()) {
+              for (const w of context.wallets) {
                 if (w.type === LightningCustodianWallet.type) {
                   lnWallet = w;
                   break;
@@ -155,15 +231,19 @@ class DeeplinkSchemaMatch {
                 return;
               }
 
-              completionHandler({
-                routeName: 'LappBrowser',
-                params: {
-                  fromSecret: lnWallet.getSecret(),
-                  fromWallet: lnWallet,
-                  url: urlObject.query.url,
+              completionHandler([
+                'LappBrowserRoot',
+                {
+                  screen: 'LappBrowser',
+                  params: {
+                    fromSecret: lnWallet.getSecret(),
+                    fromWallet: lnWallet,
+                    url: urlObject.query.url,
+                  },
                 },
-              });
+              ]);
               break;
+            }
           }
         }
       })();
@@ -171,39 +251,54 @@ class DeeplinkSchemaMatch {
   }
 
   static isTXNFile(filePath) {
-    return filePath.toLowerCase().startsWith('file:') && filePath.toLowerCase().endsWith('.txn');
+    return (
+      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
+      filePath.toLowerCase().endsWith('.txn')
+    );
+  }
+
+  static isPossiblySignedPSBTFile(filePath) {
+    return (
+      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
+      filePath.toLowerCase().endsWith('-signed.psbt')
+    );
   }
 
   static isPossiblyPSBTFile(filePath) {
-    return filePath.toLowerCase().startsWith('file:') && filePath.toLowerCase().endsWith('-signed.psbt');
+    return (
+      (filePath.toLowerCase().startsWith('file:') || filePath.toLowerCase().startsWith('content:')) &&
+      filePath.toLowerCase().endsWith('.psbt')
+    );
   }
 
   static isBothBitcoinAndLightningOnWalletSelect(wallet, uri) {
     if (wallet.chain === Chain.ONCHAIN) {
-      return {
-        routeName: 'SendDetails',
-        params: {
-          uri: uri.bitcoin,
-          fromWallet: wallet,
+      return [
+        'SendDetailsRoot',
+        {
+          screen: 'SendDetails',
+          params: {
+            uri: uri.bitcoin,
+            fromWallet: wallet,
+          },
         },
-      };
+      ];
     } else if (wallet.chain === Chain.OFFCHAIN) {
-      return {
-        routeName: 'ScanLndInvoice',
-        params: {
-          uri: uri.lndInvoice,
-          fromSecret: wallet.getSecret(),
+      return [
+        'ScanLndInvoiceRoot',
+        {
+          screen: 'ScanLndInvoice',
+          params: {
+            uri: uri.lndInvoice,
+            fromSecret: wallet.getSecret(),
+          },
         },
-      };
+      ];
     }
   }
 
   static isBitcoinAddress(address) {
-    address = address
-      .replace('groestlcoin:', '')
-      .replace('GROESTLCOIN:', '')
-      .replace('groestlcoin=', '')
-      .split('?')[0];
+    address = address.replace('groestlcoin:', '').replace('GROESTLCOIN:', '').replace('groestlcoin=', '').split('?')[0];
     let isValidBitcoinAddress = false;
     try {
       bitcoin.address.toOutputScript(address);
@@ -223,14 +318,15 @@ class DeeplinkSchemaMatch {
   }
 
   static isLnUrl(text) {
-    if (text.toLowerCase().startsWith('lightning:lnurl') || text.toLowerCase().startsWith('lnurl')) {
-      return true;
-    }
-    return false;
+    return Lnurl.isLnurl(text);
+  }
+
+  static isWidgetAction(text) {
+    return text.startsWith('widget?action=');
   }
 
   static isSafelloRedirect(event) {
-    let urlObject = url.parse(event.url, true) // eslint-disable-line
+    const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
 
     return !!urlObject.query['safello-state-token'];
   }
@@ -276,6 +372,31 @@ class DeeplinkSchemaMatch {
 
   static bip21encode() {
     return bip21.encode.apply(bip21, arguments);
+  }
+
+  static decodeBitcoinUri(uri) {
+    let amount = '';
+    let parsedBitcoinUri = null;
+    let address = uri || '';
+    let memo = '';
+    let payjoinUrl = '';
+    try {
+      parsedBitcoinUri = DeeplinkSchemaMatch.bip21decode(uri);
+      address = 'address' in parsedBitcoinUri ? parsedBitcoinUri.address : address;
+      if ('options' in parsedBitcoinUri) {
+        if ('amount' in parsedBitcoinUri.options) {
+          amount = parsedBitcoinUri.options.amount.toString();
+          amount = parsedBitcoinUri.options.amount;
+        }
+        if ('label' in parsedBitcoinUri.options) {
+          memo = parsedBitcoinUri.options.label || memo;
+        }
+        if ('pj' in parsedBitcoinUri.options) {
+          payjoinUrl = parsedBitcoinUri.options.pj;
+        }
+      }
+    } catch (_) {}
+    return { address, amount, memo, payjoinUrl };
   }
 }
 

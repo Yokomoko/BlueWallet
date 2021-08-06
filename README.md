@@ -20,7 +20,7 @@ Community: [telegram group](https://t.me/Groestlcoin)
 * Lightning Network supported
 * SegWit-first. Replace-By-Fee support
 * Encryption. Plausible deniability
-* And many more [features...](https://bluewallet.io/features.html)
+* And many more [features...](https://bluewallet.io/features)
 
 
 <img src="https://i.imgur.com/hHYJnMj.png" width="100%">
@@ -42,7 +42,7 @@ node --version && npm --version
 git clone https://github.com/Groestlcoin/BlueWallet.git
 cd BlueWallet
 npm install
-``` 
+```
 
 Please make sure that your console is running the most stable versions of npm and node (even-numbered versions).
 
@@ -53,7 +53,8 @@ You will now need to either connect an Android device to your computer or run an
 1. Download and run Android Studio
 2. Click on "Open an existing Android Studio Project"
 3. Open `build.gradle` file under `BlueWallet/android/` folder
-4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`
+4. Android Studio will take some time to set things up. Once everything is set up, go to `Tools` -> `AVD Manager`.
+    * 📝 This option [may take some time to appear in the menu](https://stackoverflow.com/questions/47173708/why-avd-manager-options-are-not-showing-in-android-studio) if you're opening the project in a freshly-installed version of Android Studio.
 5. Click on "Create Virtual Device..." and go through the steps to create a virtual device
 6. Launch your newly created virtual device by clicking the `Play` button under `Actions` column
 
@@ -68,11 +69,22 @@ The above command will build the app and install it. Once you launch the app it 
 * To run on iOS:
 
 ```
-cd ios
-pod install
-cd ..
-npm start ios
+npx pod-install
+npm start
 ```
+
+In another terminal window within the BlueWallet folder:
+```
+npx react-native run-ios
+```
+
+* To run on macOS using Mac Catalyst:
+
+```
+npm run maccatalystpatches
+```
+
+Once the patches are applied, open Xcode and select "My Mac" as destination. If you are running macOS Catalina, you may need to remove all iOS 14 Widget targets.
 
 
 ## TESTS
@@ -80,14 +92,6 @@ npm start ios
 ```bash
 npm run test
 ```
-
-## QA
-
-Builds automated and tested with BrowserStack
-
-<a href="https://www.browserstack.com/"><img src="https://i.imgur.com/syscHCN.png" width="160px"></a>
-
-
 
 
 ## MOTIVATION TO BUILD IT
@@ -103,7 +107,19 @@ MIT
 
 Grab an issue from [the backlog](https://github.com/Groestlcoin/BlueWallet/projects/1), try to start or submit a PR, any doubts we will try to guide you.
 
-Join us at our [telegram group](https://t.me/Groestlcoin) where we hangout :+1:
+## Translations
+
+We accepts translations via [Transifex](https://www.transifex.com/bluewallet/bluewallet/)
+
+To participate you need to:
+1. Sign up to Transifex
+2. Find BlueWallet project
+3. Send join request
+4. After we accept your request you will be able to start translating! That's it!
+
+Please note the values in curly braces should not be translated. These are the names of the variables that will be inserted into the translated string. For example, the original string `"{number} of {total}"` in Russian will be `"{number} из {total}"`.
+
+Transifex automatically creates Pull Request when language reaches 100% translation. We also trigger this by hand before each release, so don't worry if you can't translate everything, every word counts.
 
 ## RESPONSIBLE DISCLOSURE
 

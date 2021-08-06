@@ -1,35 +1,29 @@
-/**
- * @exports {AppStorage}
- */
 import { AppStorage } from './class';
-import DeviceQuickActions from './class/quickActions';
-let prompt = require('./prompt');
-let EV = require('./events');
-let currency = require('./currency');
-let loc = require('./loc');
-let BlueElectrum = require('./BlueElectrum'); // eslint-disable-line
+import Biometric from './class/biometrics';
+import { Platform } from 'react-native';
+import loc from './loc';
+const prompt = require('./blue_modules/prompt');
+const currency = require('./blue_modules/currency');
+const BlueElectrum = require('./blue_modules/BlueElectrum'); // eslint-disable-line no-unused-vars
+const BlueApp: AppStorage = new AppStorage();
+// If attempt reaches 10, a wipe keychain option will be provided to the user.
+let unlockAttempt = 0;
 
-/** @type {AppStorage} */
-const BlueApp = new AppStorage();
-
-async function startAndDecrypt(retry) {
+const startAndDecrypt = async retry => {
   console.log('startAndDecrypt');
   if (BlueApp.getWallets().length > 0) {
     console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
-    return;
+    return true;
   }
   let password = false;
   if (await BlueApp.storageIsEncrypted()) {
-    DeviceQuickActions.clearShortcutItems();
     do {
       password = await prompt((retry && loc._.bad_password) || loc._.enter_password, loc._.storage_is_encrypted, false);
     } while (!password);
   }
-  let success = await BlueApp.loadFromDisk(password);
+  const success = await BlueApp.loadFromDisk(password);
   if (success) {
     console.log('loaded from disk');
-    EV(EV.enum.WALLETS_COUNT_CHANGED);
-    EV(EV.enum.TRANSACTIONS_COUNT_CHANGED);
     // now, lets try to fetch balance and txs for first wallet if it is time for it
     /* let hadToRefresh = false;
     let noErr = true;
@@ -58,13 +52,27 @@ async function startAndDecrypt(retry) {
     if (hadToRefresh && noErr) {
       await BlueApp.saveToDisk(); // caching
     } */
+    // We want to return true to let the UnlockWith screen that its ok to proceed.
+    return true;
   }
 
   if (!success && password) {
     // we had password and yet could not load/decrypt
-    return startAndDecrypt(true);
+    unlockAttempt++;
+    if (unlockAttempt < 10 || Platform.OS !== 'ios') {
+      return startAndDecrypt(true);
+    } else {
+      unlockAttempt = 0;
+      Biometric.showKeychainWipeAlert();
+      // We want to return false to let the UnlockWith screen that it is NOT ok to proceed.
+      return false;
+    }
+  } else {
+    unlockAttempt = 0;
+    // Return true because there was no wallet data in keychain. Proceed.
+    return true;
   }
-}
+};
 
 BlueApp.startAndDecrypt = startAndDecrypt;
 currency.startUpdater();

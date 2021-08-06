@@ -8,7 +8,7 @@ it('Legacy HD (BIP44) works', async () => {
     console.error('process.env.HD_MNEMONIC not set, skipped');
     return;
   }
-  let hd = new HDLegacyP2PKHWallet();
+  const hd = new HDLegacyP2PKHWallet();
   hd.setSecret(process.env.HD_MNEMONIC);
   assert.ok(hd.validateMnemonic());
 
@@ -23,6 +23,9 @@ it('Legacy HD (BIP44) works', async () => {
   assert.strictEqual(hd._getInternalWIFByIndex(0), 'L4ojevRtK81A8Kof3qyLS2M7HvsVDbUDENNhJqU4vf79w9yGnQLb');
   assert.strictEqual(hd._getExternalWIFByIndex(0), 'Kz6kLhdyDfSbKuVH25XVqBRztjmFe8X22Xe1hnFzEv79gJNMkTAH');
 
+  assert.ok(hd.getAllExternalAddresses().includes('186FBQmCV5W1xY7ywaWtTZPAQNciVN8Por'));
+  assert.ok(!hd.getAllExternalAddresses().includes('1J9zoJz5LsAJ361SQHYnLTWg46Tc2AXUCj')); // not internal
+
   assert.strictEqual(
     hd._getPubkeyByAddress(hd._getExternalAddressByIndex(0)).toString('hex'),
     '0316e84a2556f30a199541633f5dda6787710ccab26771b7084f4c9e1104f47667',
@@ -32,8 +35,8 @@ it('Legacy HD (BIP44) works', async () => {
     '02ad7b2216f3a2b38d56db8a7ee5c540fd12c4bbb7013106eff78cc2ace65aa002',
   );
 
-  assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/0'/0'/0/0"); // wrong, FIXME
-  assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/0'/0'/1/0"); // wrong, FIXME
+  assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/17'/0'/0/0"); // wrong, FIXME
+  assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/17'/0'/1/0"); // wrong, FIXME
 });
 
 it.skip('Legacy HD (BIP44) can create TX', async () => {
@@ -41,7 +44,7 @@ it.skip('Legacy HD (BIP44) can create TX', async () => {
     console.error('process.env.HD_MNEMONIC not set, skipped');
     return;
   }
-  let hd = new HDLegacyP2PKHWallet();
+  const hd = new HDLegacyP2PKHWallet();
   hd.setSecret(process.env.HD_MNEMONIC);
   assert.ok(hd.validateMnemonic());
 
@@ -110,9 +113,9 @@ it.skip('Legacy HD (BIP44) can create TX', async () => {
   assert.strictEqual(tx.ins.length, 4);
   assert.strictEqual(tx.outs.length, 2);
   assert.strictEqual(tx.outs[0].value, 80000); // payee
-  assert.strictEqual(tx.outs[1].value, 19334); // change
+  assert.strictEqual(tx.outs[1].value, 19330); // change
   let toAddress = bitcoin.address.fromOutputScript(tx.outs[0].script);
-  let changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
+  const changeAddress = bitcoin.address.fromOutputScript(tx.outs[1].script);
   assert.strictEqual('3GcKN7q7gZuZ8eHygAhHrvPa5zZbGXa9bR', toAddress);
   assert.strictEqual(hd._getInternalAddressByIndex(hd.next_free_change_address_index), changeAddress);
 

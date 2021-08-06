@@ -5,12 +5,13 @@ const assert = require('assert');
 
 describe('Segwit P2SH wallet', () => {
   it('can create transaction', async () => {
-    let wallet = new SegwitBech32Wallet();
+    const wallet = new SegwitBech32Wallet();
     wallet.setSecret('L5UqjNxVgACUoDy2hf6gpJrmAyLwVVWvzchFHZ1dwePByBp3uQCt');
     assert.strictEqual(wallet.getAddress(), 'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja');
+    assert.deepStrictEqual(wallet.getAllExternalAddresses(), ['grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja']);
     assert.strictEqual(await wallet.getChangeAddressAsync(), wallet.getAddress());
 
-    let utxos = [
+    const utxos = [
       {
         txid: '57d18bc076b919583ff074cfba6201edd577f7fe35f69147ea512e970f95ffeb',
         vout: 0,

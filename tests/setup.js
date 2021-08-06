@@ -1,31 +1,50 @@
+/* global jest */
+
 jest.mock('react-native-watch-connectivity', () => {
   return {
-    getIsWatchAppInstalled: jest.fn(),
+    getIsWatchAppInstalled: jest.fn(() => Promise.resolve(false)),
     subscribeToMessages: jest.fn(),
     updateApplicationContext: jest.fn(),
-  }
-})
+  };
+});
 
 jest.mock('react-native-secure-key-store', () => {
   return {
     setResetOnAppUninstallTo: jest.fn(),
-  }
-})
+  };
+});
+
+jest.mock('@react-native-community/push-notification-ios', () => {
+  return {};
+});
+
+jest.mock('react-native-device-info', () => {
+  return {
+    getSystemName: jest.fn(),
+  };
+});
 
 jest.mock('react-native-quick-actions', () => {
   return {
     clearShortcutItems: jest.fn(),
     setQuickActions: jest.fn(),
     isSupported: jest.fn(),
-  }
-})
+  };
+});
+
+jest.mock('react-native-image-picker', () => {
+  return {
+    launchCamera: jest.fn(),
+    launchImageLibrary: jest.fn(),
+  };
+});
 
 jest.mock('react-native-default-preference', () => {
   return {
     setName: jest.fn(),
     set: jest.fn(),
-  }
-})
+  };
+});
 
 jest.mock('react-native-fs', () => {
   return {
@@ -70,5 +89,11 @@ jest.mock('react-native-fs', () => {
     TemporaryDirectoryPath: jest.fn(),
     LibraryDirectoryPath: jest.fn(),
     PicturesDirectoryPath: jest.fn(),
-  }
-})
+  };
+});
+
+jest.mock('react-native-gesture-handler', () => jest.requireActual('react-native-gesture-handler/__mocks__/RNGestureHandlerModule.js'));
+
+jest.mock('react-native-document-picker', () => ({}));
+
+jest.mock('react-native-haptic-feedback', () => ({}));

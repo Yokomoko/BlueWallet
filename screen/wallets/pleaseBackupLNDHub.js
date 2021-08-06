@@ -1,51 +1,92 @@
-import React, { useState } from 'react';
-import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
-import { View, Dimensions } from 'react-native';
-import { SafeBlueArea, BlueSpacing20, BlueCopyTextToClipboard, BlueButton, BlueCard, BlueTextCentered } from '../../BlueComponents';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { View, useWindowDimensions, StyleSheet, BackHandler, StatusBar } from 'react-native';
+import {
+  SafeBlueArea,
+  BlueNavigationStyle,
+  BlueSpacing20,
+  BlueCopyTextToClipboard,
+  BlueButton,
+  BlueTextCentered,
+} from '../../BlueComponents';
 import QRCode from 'react-native-qrcode-svg';
+import Privacy from '../../Privacy';
 import { ScrollView } from 'react-native-gesture-handler';
-const { height, width } = Dimensions.get('window');
-const BlueApp = require('../../BlueApp');
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 const PleaseBackupLNDHub = () => {
-  const wallet = useNavigationParam('wallet');
+  const { wallets } = useContext(BlueStorageContext);
+  const { walletID } = useRoute().params;
+  const wallet = wallets.find(w => w.getID() === walletID);
   const navigation = useNavigation();
-  const [qrCodeHeight, setQrCodeHeight] = useState(height > width ? width - 40 : width / 2);
+  const { colors } = useTheme();
+  const { height, width } = useWindowDimensions();
+  const handleBackButton = useCallback(() => {
+    navigation.dangerouslyGetParent().pop();
+    return true;
+  }, [navigation]);
+  const styles = StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.elevated,
+    },
+    scrollViewContent: {
+      flexGrow: 1,
+      backgroundColor: colors.elevated,
+      justifyContent: 'center',
 
-  const onLayout = () => {
-    const { height } = Dimensions.get('window');
-    setQrCodeHeight(height > width ? width - 40 : width / 2);
-  };
+      alignItems: 'center',
+      padding: 20,
+    },
+    qrCodeContainer: { borderWidth: 6, borderRadius: 8, borderColor: '#FFFFFF' },
+  });
+
+  useEffect(() => {
+    Privacy.enableBlur();
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      Privacy.disableBlur();
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   return (
-    <SafeBlueArea style={{ flex: 1 }}>
-      <ScrollView centerContent contentContainerStyle={{ flexGrow: 1 }} onLayout={onLayout}>
-        <BlueCard>
-          <View>
-            <BlueTextCentered>
-              Please take a moment to save this LNDHub authentication. It's your backup you can use to restore the wallet on other device.
-            </BlueTextCentered>
-          </View>
-          <BlueSpacing20 />
-
+    <SafeBlueArea style={styles.root}>
+      <StatusBar barStyle="default" />
+      <ScrollView centerContent contentContainerStyle={styles.scrollViewContent}>
+        <View>
+          <BlueTextCentered>{loc.pleasebackup.text_lnd}</BlueTextCentered>
+        </View>
+        <BlueSpacing20 />
+        <View style={styles.qrCodeContainer}>
           <QRCode
             value={wallet.secret}
             logo={require('../../img/qr-code.png')}
             logoSize={90}
-            size={qrCodeHeight}
-            color={BlueApp.settings.foregroundColor}
-            logoBackgroundColor={BlueApp.settings.brandingColor}
-            ecl={'H'}
+            size={height > width ? width - 40 : width / 2}
+            color="#000000"
+            logoBackgroundColor={colors.brandingColor}
+            backgroundColor="#FFFFFF"
+            ecl="H"
           />
-
-          <BlueSpacing20 />
-          <BlueCopyTextToClipboard text={wallet.secret} />
-          <BlueSpacing20 />
-          <BlueButton onPress={navigation.dismiss} title="OK, I have saved it." />
-        </BlueCard>
+        </View>
+        <BlueSpacing20 />
+        <BlueCopyTextToClipboard text={wallet.secret} />
+        <BlueSpacing20 />
+        <BlueButton onPress={() => navigation.dangerouslyGetParent().pop()} title={loc.pleasebackup.ok_lnd} />
       </ScrollView>
     </SafeBlueArea>
   );
 };
+
+PleaseBackupLNDHub.navigationOptions = ({ navigation }) => ({
+  ...BlueNavigationStyle(navigation, true),
+  title: loc.pleasebackup.title,
+  headerLeft: null,
+  headerRight: null,
+  gestureEnabled: false,
+  swipeEnabled: false,
+});
 
 export default PleaseBackupLNDHub;

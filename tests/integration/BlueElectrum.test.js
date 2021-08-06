@@ -1,8 +1,8 @@
 /* global it, describe, afterAll, beforeAll, jasmine */
 global.net = require('net');
 global.tls = require('tls');
-let BlueElectrum = require('../../BlueElectrum');
-let assert = require('assert');
+const BlueElectrum = require('../../blue_modules/BlueElectrum');
+const assert = require('assert');
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 150 * 1000;
 
 afterAll(() => {
@@ -23,6 +23,18 @@ beforeAll(async () => {
 
 describe('BlueElectrum', () => {
   it('ElectrumClient can test connection', async () => {
+    assert.ok(!(await BlueElectrum.testConnection('electrum1.groestlcoin.org', 444, false)));
+    assert.ok(!(await BlueElectrum.testConnection('electrum1.groestlcoin.org', false, 444)));
+    assert.ok(!(await BlueElectrum.testConnection('ya.ru', 444, false)));
+    assert.ok(!(await BlueElectrum.testConnection('google.com', false, 80)));
+    assert.ok(!(await BlueElectrum.testConnection('google.com', 80, false)));
+    assert.ok(!(await BlueElectrum.testConnection('google.com', false, 443)));
+    assert.ok(!(await BlueElectrum.testConnection('google.com', 443, false)));
+    assert.ok(!(await BlueElectrum.testConnection('joyreactor.cc', false, 443)));
+    assert.ok(!(await BlueElectrum.testConnection('joyreactor.cc', 443, false)));
+    assert.ok(!(await BlueElectrum.testConnection('joyreactor.cc', 80, false)));
+    assert.ok(!(await BlueElectrum.testConnection('joyreactor.cc', false, 80)));
+
     assert.ok(await BlueElectrum.testConnection('electrum1.groestlcoin.org', '50001'));
     // assert.ok(await BlueElectrum.testConnection('electrum1.groestlcoin.org', false, 443));
   });
@@ -39,24 +51,24 @@ describe('BlueElectrum', () => {
     assert.ok(features.protocol_max);
   });
 
-  it('BlueElectrum can do getBalanceByAddress()', async function() {
-    let address = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
-    let balance = await BlueElectrum.getBalanceByAddress(address);
+  it('BlueElectrum can do getBalanceByAddress()', async function () {
+    const address = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
+    const balance = await BlueElectrum.getBalanceByAddress(address);
     assert.strictEqual(balance.confirmed, 496360);
     assert.strictEqual(balance.unconfirmed, 0);
     assert.strictEqual(balance.addr, address);
   });
 
-  it('BlueElectrum can do getTransactionsByAddress()', async function() {
-    let txs = await BlueElectrum.getTransactionsByAddress('grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
+  it('BlueElectrum can do getTransactionsByAddress()', async function () {
+    const txs = await BlueElectrum.getTransactionsByAddress('grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
     assert.strictEqual(txs.length, 1);
     assert.strictEqual(txs[0].tx_hash, 'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043');
     assert.strictEqual(txs[0].height, 3048304);
   });
 
-  it('BlueElectrum can do getTransactionsFullByAddress()', async function() {
-    let txs = await BlueElectrum.getTransactionsFullByAddress('grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
-    for (let tx of txs) {
+  it('BlueElectrum can do getTransactionsFullByAddress()', async function () {
+    const txs = await BlueElectrum.getTransactionsFullByAddress('grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
+    for (const tx of txs) {
       assert.ok(tx.address === 'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
       assert.ok(tx.txid);
       assert.ok(tx.confirmations);
@@ -72,28 +84,28 @@ describe('BlueElectrum', () => {
     }
   });
 
-  it('BlueElectrum can do multiGetBalanceByAddress()', async function() {
-    let balances = await BlueElectrum.multiGetBalanceByAddress([
+  it('BlueElectrum can do multiGetBalanceByAddress()', async function () {
+    const balances = await BlueElectrum.multiGetBalanceByAddress([
       'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj',
       'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
       'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx',
-      'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3',
+      'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3'
     ]);
 
     assert.strictEqual(balances.balance, 664270);
     assert.strictEqual(balances.unconfirmed_balance, 0);
-    assert.strictEqual(balances.addresses['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'].confirmed, 496220);
-    assert.strictEqual(balances.addresses['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'].unconfirmed, 0);
-    assert.strictEqual(balances.addresses['grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq'].confirmed, 0);
-    assert.strictEqual(balances.addresses['grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq'].unconfirmed, 0);
-    assert.strictEqual(balances.addresses['grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx'].confirmed, 0);
-    assert.strictEqual(balances.addresses['grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx'].unconfirmed, 0);
-    assert.strictEqual(balances.addresses['grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3'].confirmed, 168050);
-    assert.strictEqual(balances.addresses['grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3'].unconfirmed, 0);
+    assert.strictEqual(balances.addresses.grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj.confirmed, 496220);
+    assert.strictEqual(balances.addresses.grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj.unconfirmed, 0);
+    assert.strictEqual(balances.addresses.grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq.confirmed, 0);
+    assert.strictEqual(balances.addresses.grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq.unconfirmed, 0);
+    assert.strictEqual(balances.addresses.grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx.confirmed, 0);
+    assert.strictEqual(balances.addresses.grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx.unconfirmed, 0);
+    assert.strictEqual(balances.addresses.grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3.confirmed, 168050);
+    assert.strictEqual(balances.addresses.grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3.unconfirmed, 0);
   });
 
   it('BlueElectrum can do multiGetUtxoByAddress()', async () => {
-    let utxos = await BlueElectrum.multiGetUtxoByAddress(
+    const utxos = await BlueElectrum.multiGetUtxoByAddress(
       [
         'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj',
         'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
@@ -105,16 +117,16 @@ describe('BlueElectrum', () => {
 
     assert.strictEqual(Object.keys(utxos).length, 4);
     assert.strictEqual(
-      utxos['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'][0].txId,
+      utxos.grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj[0].txId,
       'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
     );
-    assert.strictEqual(utxos['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'][0].vout, 0);
-    assert.strictEqual(utxos['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'][0].value, 496220);
-    assert.strictEqual(utxos['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'][0].address, 'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
+    assert.strictEqual(utxos.bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh[0].vout, 0);
+    assert.strictEqual(utxos.bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh[0].value, 496220);
+    assert.strictEqual(utxos.bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh[0].address, 'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
   });
 
   it('ElectrumClient can do multiGetHistoryByAddress()', async () => {
-    let histories = await BlueElectrum.multiGetHistoryByAddress(
+    const histories = await BlueElectrum.multiGetHistoryByAddress(
       [
         'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj',
         'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
@@ -126,18 +138,18 @@ describe('BlueElectrum', () => {
     );
 
     assert.ok(
-      histories['grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj'][0]['tx_hash'] ===
+      histories.grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj[0].tx_hash ===
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
     );
     assert.ok(
-      histories['grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3'][0]['tx_hash'] ===
+      histories.grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3[0].tx_hash ===
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
     );
     assert.ok(Object.keys(histories).length === 4);
   });
 
   it('ElectrumClient can do multiGetTransactionByTxid()', async () => {
-    let txdatas = await BlueElectrum.multiGetTransactionByTxid(
+    const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       [
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
         '042c9e276c2d06b0b84899771a7f218af90dd60436947c49a844a05d7c104b26',
@@ -149,7 +161,7 @@ describe('BlueElectrum', () => {
     );
 
     assert.ok(
-      txdatas['d02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043'].txid ===
+      txdatas.d02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043.txid ===
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
     );
     assert.ok(
@@ -205,7 +217,7 @@ describe('BlueElectrum', () => {
       'bb0138cba362207ab347a2a7e1adfd4e29c0f8d3adf8785da964a0f61b0fbe9d',
       'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
       'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',];
-    let vintxdatas = await BlueElectrum.multiGetTransactionByTxid(vinTxids);
+    const vintxdatas = await BlueElectrum.multiGetTransactionByTxid(vinTxids);
     assert.ok(vintxdatas['968c84b796a7533d551b665b1727c7b63452b554977b303377c48c4187b8b2e8']);
   });
 
@@ -218,12 +230,12 @@ describe('BlueElectrum', () => {
     // possible solution: fetch it without verbose and decode locally. unfortunatelly it omits such info as confirmations, time etc
     // so whoever uses it should be prepared for this.
     // tbh consumer wallets dont usually work with such big txs, so probably we dont need it
-    let txdatas = await BlueElectrum.multiGetTransactionByTxid(['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
+    const txdatas = await BlueElectrum.multiGetTransactionByTxid(['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
     assert.ok(txdatas['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
   });
 
   it('ElectrumClient can do multiGetHistoryByAddress() to obtain txhex', async () => {
-    let txdatas = await BlueElectrum.multiGetTransactionByTxid(
+    const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       ['7fc65dc0c1134d5e704947c2fd75c4a7df450153a1063f3e7846409fd053cdef'],
       3,
       false,

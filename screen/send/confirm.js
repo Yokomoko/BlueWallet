@@ -1,153 +1,152 @@
 /* global alert */
 import React, { Component } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, TouchableOpacity, StyleSheet, Switch, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { PayjoinClient } from 'payjoin-client';
+import PayjoinTransaction from '../../class/payjoin-transaction';
 import { BlueButton, BlueText, SafeBlueArea, BlueCard, BlueSpacing40, BlueNavigationStyle } from '../../BlueComponents';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import PropTypes from 'prop-types';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
-import {
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDLegacyP2PKHWallet,
-  HDSegwitBech32Wallet,
-  HDSegwitP2SHWallet,
-  HDLegacyBreadwalletWallet,
-  LegacyWallet,
-  SegwitP2SHWallet,
-  SegwitBech32Wallet,
-} from '../../class';
-let loc = require('../../loc');
-let EV = require('../../events');
-let currency = require('../../currency');
-let BlueElectrum = require('../../BlueElectrum');
-let Bignumber = require('bignumber.js');
-/** @type {AppStorage} */
-const BlueApp = require('../../BlueApp');
+import loc, { formatBalance, formatBalanceWithoutSuffix } from '../../loc';
+import { BlueCurrentTheme } from '../../components/themes';
+import Notifications from '../../blue_modules/notifications';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+const currency = require('../../blue_modules/currency');
+const BlueElectrum = require('../../blue_modules/BlueElectrum');
+const Bignumber = require('bignumber.js');
+const bitcoin = require('bitcoinjs-lib');
 
 export default class Confirm extends Component {
-  static navigationOptions = () => ({
-    ...BlueNavigationStyle(null, false),
-    title: loc.send.confirm.header,
-  });
-
+  static contextType = BlueStorageContext;
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: false,
-      fee: props.navigation.getParam('fee'),
-      feeSatoshi: new Bignumber(props.navigation.getParam('fee')).multipliedBy(100000000).toNumber(),
-      memo: props.navigation.getParam('memo'),
-      recipients: props.navigation.getParam('recipients'),
-      size: Math.round(props.navigation.getParam('tx').length / 2),
-      tx: props.navigation.getParam('tx'),
-      satoshiPerByte: props.navigation.getParam('satoshiPerByte'),
-      fromWallet: props.navigation.getParam('fromWallet'),
+      isPayjoinEnabled: false,
+      payjoinUrl: props.route.params.fromWallet.allowPayJoin() ? props.route.params?.payjoinUrl : false,
+      psbt: props.route.params?.psbt,
+      fee: props.route.params?.fee,
+      feeSatoshi: new Bignumber(props.route.params.fee).multipliedBy(100000000).toNumber(),
+      memo: props.route.params.memo,
+      recipients: props.route.params.recipients,
+      size: Math.round(props.route.params.tx.length / 2),
+      tx: props.route.params.tx,
+      satoshiPerByte: props.route.params.satoshiPerByte,
+      fromWallet: props.route.params.fromWallet,
     };
   }
 
   async componentDidMount() {
     console.log('send/confirm - componentDidMount');
     console.log('address = ', this.state.recipients);
+    if (!this.state.recipients || !this.state.recipients.length) alert('Internal error: recipients list empty (this should never happen)');
     this.isBiometricUseCapableAndEnabled = await Biometric.isBiometricUseCapableAndEnabled();
   }
 
-  broadcast() {
+  /**
+   * we need to look into `recipients`, find destination address and return its outputScript
+   * (needed for payjoin)
+   *
+   * @return {string}
+   */
+  getPaymentScript() {
+    for (const recipient of this.state.recipients) {
+      return bitcoin.address.toOutputScript(recipient.address);
+    }
+  }
+
+  send() {
     this.setState({ isLoading: true }, async () => {
       try {
-        await BlueElectrum.ping();
-        await BlueElectrum.waitTillConnected();
-
-        if (this.isBiometricUseCapableAndEnabled) {
-          if (!(await Biometric.unlockWithBiometrics())) {
-            this.setState({ isLoading: false });
-            return;
-          }
-        }
-
-        let result = await this.state.fromWallet.broadcastTx(this.state.tx);
-        if (!result) {
-          throw new Error(`Broadcast failed`);
+        const txids2watch = [];
+        if (!this.state.isPayjoinEnabled) {
+          await this.broadcast(this.state.tx);
         } else {
-          EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
-          let amount = 0;
-          const recipients = this.state.recipients;
-          if (recipients[0].amount === BitcoinUnit.MAX || !recipients[0].amount) {
-            amount = this.state.fromWallet.getBalance() - this.state.feeSatoshi;
-          } else {
-            for (const recipient of recipients) {
-              amount += recipient.amount ? +recipient.amount : recipient.value;
-            }
-          }
-
-          // wallets that support new createTransaction() instead of deprecated createTx()
-          if (
-            [
-              HDSegwitBech32Wallet.type,
-              HDSegwitP2SHWallet.type,
-              HDLegacyP2PKHWallet.type,
-              HDLegacyBreadwalletWallet.type,
-              HDLegacyElectrumSeedP2PKHWallet.type,
-              LegacyWallet.type,
-              SegwitP2SHWallet.type,
-              SegwitBech32Wallet.type,
-            ].includes(this.state.fromWallet.type)
-          ) {
-            amount = loc.formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
-          }
-
-          this.props.navigation.navigate('Success', {
-            fee: Number(this.state.fee),
-            amount,
-            dismissModal: () => this.props.navigation.dismiss(),
+          const wallet = new PayjoinTransaction(this.state.psbt, txHex => this.broadcast(txHex), this.state.fromWallet);
+          const paymentScript = this.getPaymentScript();
+          const payjoinClient = new PayjoinClient({
+            paymentScript,
+            wallet,
+            payjoinUrl: this.state.payjoinUrl,
           });
-          this.setState({ isLoading: false });
+          await payjoinClient.run();
+          const payjoinPsbt = wallet.getPayjoinPsbt();
+          if (payjoinPsbt) {
+            const tx = payjoinPsbt.extractTransaction();
+            txids2watch.push(tx.getId());
+          }
         }
+
+        const txid = bitcoin.Transaction.fromHex(this.state.tx).getId();
+        txids2watch.push(txid);
+        Notifications.majorTomToGroundControl([], [], txids2watch);
+        let amount = 0;
+        const recipients = this.state.recipients;
+        for (const recipient of recipients) {
+          amount += recipient.value;
+        }
+
+        amount = formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
+
+        this.props.navigation.navigate('Success', {
+          fee: Number(this.state.fee),
+          amount,
+        });
+
+        this.setState({ isLoading: false });
+
+        await new Promise(resolve => setTimeout(resolve, 3000)); // sleep to make sure network propagates
+        this.context.fetchAndSaveWalletTransactions(this.state.fromWallet.getID());
       } catch (error) {
-        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
+        ReactNativeHapticFeedback.trigger('notificationError', {
+          ignoreAndroidSystemSettings: false,
+        });
         this.setState({ isLoading: false });
         alert(error.message);
       }
     });
   }
 
+  async broadcast(tx) {
+    await BlueElectrum.ping();
+    await BlueElectrum.waitTillConnected();
+
+    if (this.isBiometricUseCapableAndEnabled) {
+      if (!(await Biometric.unlockWithBiometrics())) {
+        return;
+      }
+    }
+
+    const result = await this.state.fromWallet.broadcastTx(tx);
+    if (!result) {
+      throw new Error(loc.errors.broadcast);
+    }
+
+    return result;
+  }
+
   _renderItem = ({ index, item }) => {
     return (
       <>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Text
-            testID={'TransactionValue'}
-            style={{
-              color: '#0f5cc0',
-              fontSize: 36,
-              fontWeight: '600',
-            }}
-          >
-            {!item.value || item.value === BitcoinUnit.MAX
-              ? currency.satoshiToBTC(this.state.fromWallet.getBalance() - this.state.feeSatoshi)
-              : item.amount || currency.satoshiToBTC(item.value)}
+        <View style={styles.valueWrap}>
+          <Text testID="TransactionValue" style={styles.valueValue}>
+            {currency.satoshiToBTC(item.value)}
           </Text>
-          <Text
-            style={{
-              color: '#0f5cc0',
-              fontSize: 16,
-              marginHorizontal: 4,
-              paddingBottom: 6,
-              fontWeight: '600',
-              alignSelf: 'flex-end',
-            }}
-          >
-            {' ' + BitcoinUnit.BTC}
-          </Text>
+          <Text style={styles.valueUnit}>{' ' + BitcoinUnit.BTC}</Text>
         </View>
+        <Text style={styles.transactionAmountFiat}>{currency.satoshiToLocalCurrency(item.value)}</Text>
         <BlueCard>
-          <Text style={styles.transactionDetailsTitle}>{loc.send.create.to}</Text>
-          <Text style={styles.transactionDetailsSubtitle}>{item.address}</Text>
+          <Text style={styles.transactionDetailsTitle}>{loc.send.create_to}</Text>
+          <Text testID="TransactionAddress" style={styles.transactionDetailsSubtitle}>
+            {item.address}
+          </Text>
         </BlueCard>
         {this.state.recipients.length > 1 && (
-          <BlueText style={{ alignSelf: 'flex-end', marginRight: 18, marginVertical: 8 }}>
-            {index + 1} of {this.state.recipients.length}
+          <BlueText style={styles.valueOf}>
+            {loc.formatString(loc._.of, { number: index + 1, total: this.state.recipients.length })}
           </BlueText>
         )}
       </>
@@ -155,13 +154,13 @@ export default class Confirm extends Component {
   };
 
   renderSeparator = () => {
-    return <View style={{ backgroundColor: BlueApp.settings.inputBorderColor, height: 0.5, margin: 16 }} />;
+    return <View style={styles.separator} />;
   };
 
   render() {
     return (
-      <SafeBlueArea style={{ flex: 1, paddingTop: 19 }}>
-        <View style={{ marginTop: 16, alignItems: 'center', justifyContent: 'space-between' }}>
+      <SafeBlueArea style={styles.root}>
+        <View style={styles.rootWrap}>
           <FlatList
             scrollEnabled={this.state.recipients.length > 1}
             extraData={this.state.recipients}
@@ -169,33 +168,30 @@ export default class Confirm extends Component {
             renderItem={this._renderItem}
             keyExtractor={(_item, index) => `${index}`}
             ItemSeparatorComponent={this.renderSeparator}
-            style={{ maxHeight: '55%' }}
+            style={styles.flat}
           />
-          <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 16, paddingBottom: 16 }}>
+          <View style={styles.cardContainer}>
             <BlueCard>
-              <Text
-                style={{
-                  color: '#37c0a1',
-                  fontSize: 14,
-                  marginHorizontal: 4,
-                  paddingBottom: 6,
-                  fontWeight: '500',
-                  alignSelf: 'center',
-                }}
-              >
-                {loc.send.create.fee}: {loc.formatBalance(this.state.feeSatoshi, BitcoinUnit.BTC)} (
+              <Text style={styles.cardText}>
+                {loc.send.create_fee}: {formatBalance(this.state.feeSatoshi, BitcoinUnit.BTC)} (
                 {currency.satoshiToLocalCurrency(this.state.feeSatoshi)})
               </Text>
               <BlueSpacing40 />
-              {this.state.isLoading ? (
-                <ActivityIndicator />
-              ) : (
-                <BlueButton onPress={() => this.broadcast()} title={loc.send.confirm.sendNow} />
+              {!!this.state.payjoinUrl && (
+                <View style={styles.payjoinWrapper}>
+                  <Text style={styles.payjoinText}>Payjoin</Text>
+                  <Switch
+                    testID="PayjoinSwitch"
+                    value={this.state.isPayjoinEnabled}
+                    onValueChange={isPayjoinEnabled => this.setState({ isPayjoinEnabled })}
+                  />
+                </View>
               )}
+              {this.state.isLoading ? <ActivityIndicator /> : <BlueButton onPress={() => this.send()} title={loc.send.confirm_sendNow} />}
 
               <TouchableOpacity
-                testID={'TransactionDetailsButton'}
-                style={{ marginVertical: 24 }}
+                testID="TransactionDetailsButton"
+                style={styles.txDetails}
                 onPress={async () => {
                   if (this.isBiometricUseCapableAndEnabled) {
                     if (!(await Biometric.unlockWithBiometrics())) {
@@ -214,9 +210,7 @@ export default class Confirm extends Component {
                   });
                 }}
               >
-                <Text style={{ color: '#0c2550', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>
-                  {loc.transactions.details.transaction_details}
-                </Text>
+                <Text style={styles.txText}>{loc.transactions.details_transaction_details}</Text>
               </TouchableOpacity>
             </BlueCard>
           </View>
@@ -228,36 +222,109 @@ export default class Confirm extends Component {
 
 const styles = StyleSheet.create({
   transactionDetailsTitle: {
-    color: '#0c2550',
+    color: BlueCurrentTheme.colors.foregroundColor,
     fontWeight: '500',
     fontSize: 17,
     marginBottom: 2,
   },
   transactionDetailsSubtitle: {
-    color: '#9aa0aa',
+    color: BlueCurrentTheme.colors.feeText,
     fontWeight: '500',
     fontSize: 15,
     marginBottom: 20,
   },
+  transactionAmountFiat: {
+    color: BlueCurrentTheme.colors.feeText,
+    fontWeight: '500',
+    fontSize: 15,
+    marginVertical: 20,
+    textAlign: 'center',
+  },
+  valueWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  valueValue: {
+    color: BlueCurrentTheme.colors.alternativeTextColor2,
+    fontSize: 36,
+    fontWeight: '600',
+  },
+  valueUnit: {
+    color: BlueCurrentTheme.colors.alternativeTextColor2,
+    fontSize: 16,
+    marginHorizontal: 4,
+    paddingBottom: 6,
+    fontWeight: '600',
+    alignSelf: 'flex-end',
+  },
+  valueOf: {
+    alignSelf: 'flex-end',
+    marginRight: 18,
+    marginVertical: 8,
+  },
+  separator: {
+    height: 0.5,
+    margin: 16,
+  },
+  root: {
+    flex: 1,
+    paddingTop: 19,
+    backgroundColor: BlueCurrentTheme.colors.elevated,
+  },
+  rootWrap: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  flat: {
+    maxHeight: '55%',
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
+  },
+  cardText: {
+    color: '#37c0a1',
+    fontSize: 14,
+    marginHorizontal: 4,
+    paddingBottom: 6,
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  txDetails: {
+    marginVertical: 24,
+  },
+  txText: {
+    color: BlueCurrentTheme.colors.buttonTextColor,
+    fontSize: 15,
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  payjoinWrapper: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginBottom: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  payjoinText: { color: '#81868e', fontSize: 14 },
 });
 
 Confirm.propTypes = {
   navigation: PropTypes.shape({
     goBack: PropTypes.func,
-    getParam: PropTypes.func,
-    navigate: PropTypes.func,
     dismiss: PropTypes.func,
-    state: PropTypes.shape({
-      params: PropTypes.shape({
-        amount: PropTypes.string,
-        fee: PropTypes.number,
-        address: PropTypes.string,
-        memo: PropTypes.string,
-        fromWallet: PropTypes.shape({
-          fromAddress: PropTypes.string,
-          fromSecret: PropTypes.string,
-        }),
-      }),
-    }),
+    navigate: PropTypes.func,
+    dangerouslyGetParent: PropTypes.func,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.object,
   }),
 };
+
+Confirm.navigationOptions = () => ({
+  ...BlueNavigationStyle(null, false),
+  title: loc.send.confirm_header,
+});

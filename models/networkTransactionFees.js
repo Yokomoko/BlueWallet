@@ -1,4 +1,4 @@
-const BlueElectrum = require('../BlueElectrum');
+const BlueElectrum = require('../blue_modules/BlueElectrum');
 
 export const NetworkTransactionFeeType = Object.freeze({
   FAST: 'Fast',
@@ -19,20 +19,21 @@ export class NetworkTransactionFee {
 
 export default class NetworkTransactionFees {
   static recommendedFees() {
-    return new Promise(async (resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async resolve => {
       try {
-        let response = await BlueElectrum.estimateFees();
+        const response = await BlueElectrum.estimateFees();
         if (typeof response === 'object') {
           const networkFee = new NetworkTransactionFee(response.fast, response.medium, response.slow);
           resolve(networkFee);
         } else {
           const networkFee = new NetworkTransactionFee(1, 1, 1);
-          reject(networkFee);
+          resolve(networkFee);
         }
       } catch (err) {
         console.warn(err);
         const networkFee = new NetworkTransactionFee(1, 1, 1);
-        reject(networkFee);
+        resolve(networkFee);
       }
     });
   }

@@ -1,122 +1,139 @@
-import React, { Component } from 'react';
-import { Dimensions, ScrollView, ActivityIndicator, View } from 'react-native';
+import React, { useState, useCallback, useContext, useRef } from 'react';
+import { useWindowDimensions, InteractionManager, ScrollView, ActivityIndicator, StatusBar, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { BlueSpacing20, SafeBlueArea, BlueNavigationStyle, BlueText, BlueCopyTextToClipboard, BlueCard } from '../../BlueComponents';
-import PropTypes from 'prop-types';
 import Privacy from '../../Privacy';
 import Biometric from '../../class/biometrics';
 import { LegacyWallet, LightningCustodianWallet, SegwitBech32Wallet, SegwitP2SHWallet, WatchOnlyWallet } from '../../class';
-/** @type {AppStorage} */
-let BlueApp = require('../../BlueApp');
-let loc = require('../../loc');
-const { height, width } = Dimensions.get('window');
+import loc from '../../loc';
+import { useTheme, useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
-export default class WalletExport extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    ...BlueNavigationStyle(navigation, true),
-    title: loc.wallets.export.title,
-    headerLeft: null,
-  });
+const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    paddingTop: 20,
+  },
+  root: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  activeQrcode: { borderWidth: 6, borderRadius: 8, borderColor: '#FFFFFF' },
+  type: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  secret: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+});
 
-  constructor(props) {
-    super(props);
-    let wallet = props.navigation.state.params.wallet;
-    this.state = {
-      isLoading: true,
-      qrCodeHeight: height > width ? width - 40 : width / 2,
-      wallet,
-    };
-  }
-
-  async componentDidMount() {
-    Privacy.enableBlur();
-    const isBiometricsEnabled = await Biometric.isBiometricUseCapableAndEnabled();
-
-    if (isBiometricsEnabled) {
-      if (!(await Biometric.unlockWithBiometrics())) {
-        return this.props.navigation.goBack();
-      }
-    }
-
-    this.setState(
-      {
-        isLoading: false,
-      },
-      () => {
-        this.state.wallet.setUserHasSavedExport(true);
-        BlueApp.saveToDisk();
-      },
-    );
-  }
-
-  async componentWillUnmount() {
-    Privacy.disableBlur();
-  }
-
-  onLayout = () => {
-    const { height } = Dimensions.get('window');
-    this.setState({ qrCodeHeight: height > width ? width - 40 : width / 2 });
+const WalletExport = () => {
+  const { wallets, saveToDisk } = useContext(BlueStorageContext);
+  const { walletID } = useRoute().params;
+  const wallet = useRef(wallets.find(w => w.getID() === walletID));
+  const [isLoading, setIsLoading] = useState(true);
+  const { goBack } = useNavigation();
+  const { colors } = useTheme();
+  const { width, height } = useWindowDimensions();
+  const stylesHook = {
+    ...styles,
+    loading: {
+      ...styles.loading,
+      backgroundColor: colors.elevated,
+    },
+    root: {
+      ...styles.root,
+      backgroundColor: colors.elevated,
+    },
+    type: { ...styles.type, color: colors.foregroundColor },
+    secret: { ...styles.secret, color: colors.foregroundColor },
+    warning: { ...styles.secret, color: colors.failedColor },
   };
 
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={{ flex: 1, paddingTop: 20 }} onLayout={this.onLayout}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
+  useFocusEffect(
+    useCallback(() => {
+      Privacy.enableBlur();
+      const task = InteractionManager.runAfterInteractions(async () => {
+        if (wallet) {
+          const isBiometricsEnabled = await Biometric.isBiometricUseCapableAndEnabled();
 
-    return (
-      <SafeBlueArea style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flexGrow: 1 }} onLayout={this.onLayout}>
-          <View>
-            <BlueText style={{ fontSize: 17, fontWeight: '700', color: '#0c2550' }}>{this.state.wallet.typeReadable}</BlueText>
-          </View>
-
-          {(() => {
-            if ([LegacyWallet.type, SegwitBech32Wallet.type, SegwitP2SHWallet.type].includes(this.state.wallet.type)) {
-              return (
-                <BlueCard>
-                  <BlueText>{this.state.wallet.getAddress()}</BlueText>
-                </BlueCard>
-              );
+          if (isBiometricsEnabled) {
+            if (!(await Biometric.unlockWithBiometrics())) {
+              return goBack();
             }
-          })()}
-          <BlueSpacing20 />
+          }
 
+          setIsLoading(false);
+        }
+      });
+      return () => {
+        task.cancel();
+        Privacy.disableBlur();
+        wallet.current.setUserHasSavedExport(true);
+        saveToDisk();
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [goBack, walletID]),
+  );
+
+  return isLoading && wallet ? (
+    <View style={stylesHook.loading}>
+      <ActivityIndicator />
+    </View>
+  ) : (
+    <SafeBlueArea style={stylesHook.root}>
+      <StatusBar barStyle="light-content" />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View>
+          <BlueText style={stylesHook.type}>{wallet.current.typeReadable}</BlueText>
+        </View>
+
+        {(() => {
+          if ([LegacyWallet.type, SegwitBech32Wallet.type, SegwitP2SHWallet.type].includes(wallet.current.type)) {
+            return (
+              <BlueCard>
+                <BlueText>{wallet.current.getAddress()}</BlueText>
+              </BlueCard>
+            );
+          }
+        })()}
+        <BlueSpacing20 />
+        <View style={styles.activeQrcode}>
           <QRCode
-            value={this.state.wallet.getSecret()}
+            value={wallet.current.getSecret()}
             logo={require('../../img/qr-code.png')}
-            size={this.state.qrCodeHeight}
+            size={height > width ? width - 40 : width / 2}
             logoSize={70}
-            color={BlueApp.settings.foregroundColor}
-            logoBackgroundColor={BlueApp.settings.brandingColor}
-            ecl={'H'}
+            color="#000000"
+            logoBackgroundColor={colors.brandingColor}
+            backgroundColor="#FFFFFF"
+            ecl="H"
           />
-
-          <BlueSpacing20 />
-          {this.state.wallet.type === LightningCustodianWallet.type || this.state.wallet.type === WatchOnlyWallet.type ? (
-            <BlueCopyTextToClipboard text={this.state.wallet.getSecret()} />
-          ) : (
-            <BlueText style={{ alignItems: 'center', paddingHorizontal: 16, fontSize: 16, color: '#0C2550', lineHeight: 24 }}>
-              {this.state.wallet.getSecret()}
-            </BlueText>
-          )}
-        </ScrollView>
-      </SafeBlueArea>
-    );
-  }
-}
-
-WalletExport.propTypes = {
-  navigation: PropTypes.shape({
-    state: PropTypes.shape({
-      params: PropTypes.shape({
-        wallet: PropTypes.object.isRequired,
-      }),
-    }),
-    navigate: PropTypes.func,
-    goBack: PropTypes.func,
-  }),
+        </View>
+        {wallet.type !== WatchOnlyWallet.type && <BlueText style={stylesHook.warning}>{loc.wallets.warning_do_not_disclose}</BlueText>}
+        <BlueSpacing20 />
+        {wallet.current.type === LightningCustodianWallet.type || wallet.current.type === WatchOnlyWallet.type ? (
+          <BlueCopyTextToClipboard text={wallet.current.getSecret()} />
+        ) : (
+          <BlueText style={stylesHook.secret}>{wallet.current.getSecret()}</BlueText>
+        )}
+      </ScrollView>
+    </SafeBlueArea>
+  );
 };
+
+WalletExport.navigationOptions = ({ navigation }) => ({
+  ...BlueNavigationStyle(navigation, true),
+  title: loc.wallets.export_title,
+  headerLeft: null,
+});
+
+export default WalletExport;
