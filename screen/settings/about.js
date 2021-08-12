@@ -142,7 +142,7 @@ const About = () => {
             <BlueTextCentered>React Native</BlueTextCentered>
             <BlueTextCentered>groestlcoinjs-lib</BlueTextCentered>
             <BlueTextCentered>Nodejs</BlueTextCentered>
-            <BlueTextCentered>Electrum server</BlueTextCentered>
+            <BlueTextCentered>Electrum-GRS server</BlueTextCentered>
           </View>
         </BlueCard>
         <BlueListItem
