@@ -1,1 +1,1 @@
-BlueWallet - Bitcoin wallet
+GRS BlueWallet - Groestlcoin wallet

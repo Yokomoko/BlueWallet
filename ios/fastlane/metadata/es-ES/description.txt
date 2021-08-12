@@ -23,7 +23,7 @@ Encriptación total
 Además de la encriptación multicapa de iOS, encriptamos todo con contraseñas adicionales
 
 Nodo completo
-Conecta a tu nodo de Groestlcoin a través de Electrum
+Conecta a tu nodo de Groestlcoin a través de Electrum-grs
 
 Almacenamiento frío
 Conecta tu cartera de hardware y guarda tus fondos en cold storage

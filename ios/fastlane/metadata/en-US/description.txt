@@ -23,7 +23,7 @@ Full encryption
 On top of the iOS multi-layer encryption, we encrypt everything with added passwords
 
 Full node
-Connect to your Groestlcoin full node through Electrum-GRS
+Connect to your Groestlcoin full node through Electrum-grs-GRS
 
 Cold Storage
 Connect to your hardware wallet and keep your coins in Cold storage

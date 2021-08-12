@@ -1,1 +1,1 @@
-bitcoin,cartera,blockchain,btc,criptomoneda,comprar,samourai,electrum,ethereum,moneda
+groestlcoin,cartera,blockchain,grs,criptomoneda,comprar,groestlcoin samourai,electrum-grs,ethereum,moneda

@@ -1,1 +1,1 @@
-bitcoin,wallet,bitcoin wallet,blockchain,btc,cryptocurrency,acquista bitcoin,electrum,crypto-valuta
+groestlcoin,wallet,groestlcoin wallet,blockchain,grs,cryptocurrency,acquista groestlcoin,electrum-grs,crypto-valuta

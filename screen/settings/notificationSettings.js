@@ -119,9 +119,9 @@ const NotificationSettings = () => {
           type: 'font-awesome',
           color: colors.foregroundColor,
         }}
-        onPress={() => Linking.openURL('https://github.com/BlueWallet/GroundControl')}
+        onPress={() => Linking.openURL('https://github.com/Groestlcoin/GroundControl')}
         titleStyle={{ color: colors.buttonAlternativeTextColor }}
-        title="github.com/BlueWallet/GroundControl"
+        title="github.com/Groestlcoin/GroundControl"
         color={colors.buttonTextColor}
         buttonStyle={styles.buttonStyle}
       />

@@ -66,19 +66,19 @@ const About = () => {
   const handleOnLicensingPress = () => {
     navigate('Licensing');
   };
-/*
+
   const handleOnTwitterPress = () => {
     Linking.openURL('https://twitter.com/GroestlcoinTeam');
   };
-*/
+
   const handleOnGithubPress = () => {
     Linking.openURL('https://github.com/Groestlcoin/BlueWallet');
   };
-/*
+
   const handleOnTelegramPress = () => {
-    Linking.openURL('https://t.me/groestlcoin');
+    Linking.openURL('https://t.me/groestl');
   };
-*/
+
   const handleOnRatePress = () => {
     const options = {
       AppleAppID: '1518766083',

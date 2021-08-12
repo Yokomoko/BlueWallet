@@ -1,17 +1,17 @@
-Egy Bitcoin tárca, amiben biztonságosan és egyszerűen tárolhatod-, utalhatod a Bitcoinodat, fogadhatsz Bitcoin utalást és vásárolhatsz Bitcoint.
+Egy Groestlcoin tárca, amiben biztonságosan és egyszerűen tárolhatod-, utalhatod a Groestlcoinodat, fogadhatsz Groestlcoin utalást és vásárolhatsz Groestlcoint.
 
-A BlueWallet egy Bitcoin tárca, ahol te irányítod a privát kulcsokat. Egy Bitcoin tárca, amit Bitcoin felhasználok készítettek a közösségnek. 
+A GRS BlueWallet egy Groestlcoin tárca, ahol te irányítod a privát kulcsokat. Egy Groestlcoin tárca, amit Groestlcoin felhasználok készítettek a közösségnek. 
 
-Azonnal indíthatsz közvetlen tranzakciókat bárkinek a világon, egy gombnyomással megváltoztatva a pénzügyi rendszert. 
+Azonnal indíthatsz közvetlen tranzakciókat bárkinek a világon, egy gombnyomással megváltoztatva a pénzügyi rendszert.
 
-Hozz létre korlátlan számú, ingyenes Bitcoin tárcát vagy importáld a már meglévő tárcáidat. Egyszerűen és gyorsan.
+Hozz létre korlátlan számú, ingyenes Groestlcoin tárcát vagy importáld a már meglévő tárcáidat. Egyszerűen és gyorsan.
 
 _____
 
 Amit kínálunk:
 
 
-1 - Tervezett biztonság 
+1 - Tervezett biztonság
 
 Nyílt forráskód
 MIT szabadalom alapján, fejlesztheted és futtasd: a sajátod!  Készült a ReactNative támogatásával.
@@ -20,13 +20,13 @@ Feltételes elutasítás
 Jelszó, ami hamis tárca adatokat old fel, ha kényszerítenek a belépésre.
 
 Teljes titkosítás
-Az iOS többszintű titkosításán felül, mi jelszóval titkosítunk mindent 
+Az iOS többszintű titkosításán felül, mi jelszóval titkosítunk mindent
 
 Teljes node
-Csatlakozz a saját Bitcoin teljes node-hoz, Electrum tárcán keresztül.
+Csatlakozz a saját Groestlcoin teljes node-hoz, Electrum-grs tárcán keresztül.
 
-Offline háttértár 
-Csatlakozz a hardver tárcádhoz és tartsd a Bitcoint offline.
+Offline háttértár
+Csatlakozz a hardver tárcádhoz és tartsd a Groestlcoint offline.
 
 2 - Fókuszban a felhasználói élmény
 
@@ -44,10 +44,10 @@ Tárca - csak megtekintésre
 "Tárca - csak megtekintésre" lehetővé teszi, hogy szemmel tartsd az offline tárcád a hardver érintése nélkül.
 
 Lightning hálózat
-Lightning tárca, konfigurálás nélkül. Rendkívül olcsó és gyors tranzakció a legjobb Bitcoin felhasználói élménnyel.
+Lightning tárca, konfigurálás nélkül. Rendkívül olcsó és gyors tranzakció a legjobb Groestlcoin felhasználói élménnyel.
 
-Bitcoin vétel
-Kapcsolódj be a nyílt pénzügyi forradalomba és vegyél Bitcoint közvetlenül a tárcádba.
+Groestlcoin vétel
+Kapcsolódj be a nyílt pénzügyi forradalomba és vegyél Groestlcoint közvetlenül a tárcádba.
 
 Közeli elfogadóhelyek
-A peer-to-peer Bitcoin kereskedési platform lehetővé teszi, hogy közvetlenül vegyél- és eladj Bitcoint más felhasználóknak, közvetítő nélkül.
+A peer-to-peer Groestlcoin kereskedési platform lehetővé teszi, hogy közvetlenül vegyél- és eladj Groestlcoint más felhasználóknak, közvetítő nélkül.

@@ -7,10 +7,10 @@ v5.6.7
 * ADD: UYU currency
 * FIX: PayJoin is now BIP compliant
 * FIX: better support for BRD (aka bread) wallet with segwit
-* FIX: Disregarding curent denomination on send screen, scanning address always resets it to BTC
+* FIX: Disregarding curent denomination on send screen, scanning address always resets it to GRS
 * FIX: import *.txn file with txhex - extra newline characted prevented it from being recognized (closes #2161)
 * FIX: locale pt_BR, cs_CZ, sl_SI, es_ES, nl_NL, fi_FI, ru
-* FIX: translate message if Bitcoin address or LN invoice is in clipboard
+* FIX: translate message if Groestlcoin address or LN invoice is in clipboard
 * FIX: Styling for large screens
 * FIX: exclude change address from recipients for Confirm screen
 * FIX: Dont show loading indicator on launch and onsnapitem
@@ -68,7 +68,7 @@ v5.6.2
 * ADD: Clipboard read opt-out
 * ADD: support lnurl fallback scheme
 * ADD: import LNDHub from QR
-* ADD: Electrum server import from QR
+* ADD: Electrum-grs server import from QR
 * ADD: Philippines Peso currency
 * FIX: copy balance on wallet/transactions screen crash
 * FIX: remove padding to prevent text concealment
@@ -80,9 +80,9 @@ v5.6.1
 ======
 
 * ADD: payjoin support
-* FIX: rare crash on startup (electrum server malformed response)
+* FIX: rare crash on startup (electrum-grs server malformed response)
 * FIX: rare freezes on send screen
-* FIX: bitcoin price widget content overlap
+* FIX: groestlcoin price widget content overlap
 * FIX: biometrics listener release for some devices
 * FIX: locales pt_BR, pt_PT, ru, sl_SI, ja_JP
 * FIX: add margin for RTL languages
