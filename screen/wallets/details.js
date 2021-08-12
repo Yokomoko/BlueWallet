@@ -210,7 +210,7 @@ const WalletDetails = () => {
       },
     });
 
-  const renderMarketplaceButton = () => {
+  /*const renderMarketplaceButton = () => {
     return Platform.select({
       android: (
         <SecondButton
@@ -231,7 +231,7 @@ const WalletDetails = () => {
         />
       ),
     });
-  };
+  };*/
 
   const exportInternals = async () => {
     if (backdoorPressed < 10) return setBackdoorPressed(backdoorPressed + 1);
