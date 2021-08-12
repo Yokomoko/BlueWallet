@@ -1,5 +1,5 @@
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 const createHash = require('create-hash');
 
 export class AbstractWallet {
