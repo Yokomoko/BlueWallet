@@ -224,7 +224,7 @@
     "about_sm_twitter": "ติดตามเราในทวิตเตอร์",
     "advanced_options": "ตัวเลือกขั้นสูง",
     "currency": "สกุลเงิน",
-    "currency_source": "ราคาได้มาจาก CoinDesk",
+    "currency_source": "ราคาได้มาจาก CoinGecko",
     "default_desc": "เมื่อปิดการใช้งาน บูลวอลเล็ทจะเปิดกระเป๋าสตางค์ที่เลือกเมื่อท่านเปิดแอ๊พ",
     "default_info": "Default info",
     "default_title": "เมื่อเปิดตัว",
