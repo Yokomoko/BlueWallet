@@ -9,10 +9,10 @@
 Thin Groestlcoin Wallet.
 Built with React Native and Electrum.
 
-[![Appstore](https://bluewallet.io/img/app-store-badge.svg)](https://itunes.apple.com/us/app/bluewallet-bitcoin-wallet/id1376878040?l=ru&ls=1&mt=8)
-[![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=org.groestlcoin.bluewallet123)
+[![Appstore](https://bluewallet.io/uploads/app-store-badge-blue.svg)](https://apps.apple.com/us/app/grs-bluewallet/id15187660838)
+[![Playstore](https://bluewallet.io/uploads/play-store-badge-blue.svg)](https://play.google.com/store/apps/details?id=org.groestlcoin.bluewallet123)
 
-Website: [bluewallet.io](https://groestlcoin.org)
+Website: [GRS bluewallet](https://www.groestlcoin.org/grs-bluewallet/)
 
 Community: [telegram group](https://t.me/Groestlcoin)
 
@@ -20,10 +20,7 @@ Community: [telegram group](https://t.me/Groestlcoin)
 * Lightning Network supported
 * SegWit-first. Replace-By-Fee support
 * Encryption. Plausible deniability
-* And many more [features...](https://bluewallet.io/features)
-
-
-<img src="https://i.imgur.com/hHYJnMj.png" width="100%">
+* And many more [features...](https://www.groestlcoin.org/grs-bluewallet/)
 
 
 ## BUILD & RUN IT
@@ -103,10 +100,6 @@ This is a fork of https://github.com/BlueWallet/BlueWallet
 
 MIT
 
-## WANT TO CONTRIBUTE?
-
-Grab an issue from [the backlog](https://github.com/Groestlcoin/BlueWallet/projects/1), try to start or submit a PR, any doubts we will try to guide you.
-
 ## Translations
 
 We accepts translations via [Transifex](https://www.transifex.com/bluewallet/bluewallet/)
@@ -123,5 +116,5 @@ Transifex automatically creates Pull Request when language reaches 100% translat
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please email them bluewallet@bluewallet.io
+Found critical bugs/vulnerabilities? Please email them groestlcoin@gmail.com
 Thanks!
