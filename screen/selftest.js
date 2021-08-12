@@ -177,6 +177,7 @@ export default class Selftest extends Component {
 
         //
 
+        /*
         const hd4 = new HDSegwitBech32Wallet();
         hd4._xpub = 'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP';
         await hd4.fetchBalance();
