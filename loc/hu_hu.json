@@ -411,7 +411,7 @@
     "vault_key": "Trezor kulcs {number}",
     "required_keys_out_of_total": "Required keys out of the total",
     "fee": "Tranzakciós díj: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Megerősítés",
     "header": "Küldés",
     "share": "Megosztás",

@@ -9,7 +9,7 @@ const reverse = require('buffer-reverse');
 const BigNumber = require('bignumber.js');
 
 const storageKey = 'ELECTRUM_PEERS';
-const defaultPeer = { host: 'electrum1.groestlcoin.org', ssl: '443' };
+const defaultPeer = { host: 'electrum1.groestlcoin.org', ssl: '50002' };
 const hardcodedPeers = [
   // { host: 'noveltybobble.coinjoined.com', tcp: '50001' }, // down
   // { host: 'electrum.be', tcp: '50001' },

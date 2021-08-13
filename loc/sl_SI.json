@@ -413,7 +413,7 @@
     "vault_key": "Ključ trezorja {number}",
     "required_keys_out_of_total": "Zahtevani ključi od vseh",
     "fee": "Omrežnina: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Potrditev",
     "header": "Pošlji",
     "share": "Deli",

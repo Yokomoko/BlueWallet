@@ -59,7 +59,7 @@ const writeFileAndExport = async function (filename, contents) {
 const openSignedTransaction = async function () {
   try {
     const res = await DocumentPicker.pick({
-      type: Platform.OS === 'ios' ? ['io.bluewallet.psbt', 'io.bluewallt.psbt.txn'] : [DocumentPicker.types.allFiles],
+      type: Platform.OS === 'ios' ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn'] : [DocumentPicker.types.allFiles],
     });
 
     return await _readPsbtFileIntoBase64(res.uri);
@@ -93,9 +93,9 @@ const showFilePickerAndReadFile = async function () {
       type:
         Platform.OS === 'ios'
           ? [
-              'io.bluewallet.psbt',
-              'io.bluewallet.psbt.txn',
-              'io.bluewallet.backup',
+              'org.groestlcoin.psbt',
+              'org.groestlcoin.psbt.txn',
+              'org.groestlcoin.backup',
               DocumentPicker.types.plainText,
               'public.json',
               DocumentPicker.types.images,

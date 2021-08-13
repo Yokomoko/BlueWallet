@@ -36,7 +36,7 @@ describe('BlueElectrum', () => {
     assert.ok(!(await BlueElectrum.testConnection('joyreactor.cc', false, 80)));
 
     assert.ok(await BlueElectrum.testConnection('electrum1.groestlcoin.org', '50001'));
-    // assert.ok(await BlueElectrum.testConnection('electrum1.groestlcoin.org', false, 443));
+    // assert.ok(await BlueElectrum.testConnection('electrum1.groestlcoin.org', false, 50002));
   });
 
   it('ElectrumClient can estimate fees', async () => {

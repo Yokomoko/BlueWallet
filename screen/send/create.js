@@ -137,7 +137,7 @@ export default class SendCreate extends Component {
               <TouchableOpacity style={styles.actionTouch} onPress={() => Clipboard.setString(this.state.tx)}>
                 <Text style={styles.actionText}>{loc.send.create_copy}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionTouch} onPress={() => Linking.openURL('hhttps://groestlcoin.org/webwallet/?verify=' + this.state.tx)}>
+              <TouchableOpacity style={styles.actionTouch} onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + this.state.tx)}>
                 <Text style={styles.actionText}>{loc.send.create_verify}</Text>
               </TouchableOpacity>
             </BlueCard>

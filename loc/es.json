@@ -409,7 +409,7 @@
     "vault_key": "Clave de la bóveda {number}",
     "required_keys_out_of_total": "Las llaves que se necesitarán del total de llaves creadas",
     "fee": "Tarifa: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Confirmar",
     "header": "Enviar",
     "share": "Compartir",

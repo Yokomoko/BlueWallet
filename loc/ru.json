@@ -411,7 +411,7 @@
     "vault_key": "Ключ хранилища {number}",
     "required_keys_out_of_total": "Требуемое количество ключей",
     "fee": "Коммисия: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Поддтвердить",
     "header": "Отправить",
     "share": "Отправить",

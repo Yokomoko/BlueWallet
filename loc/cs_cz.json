@@ -411,7 +411,7 @@
     "vault_key": "Klíč úložiště {number}",
     "required_keys_out_of_total": "Požadované klíče z celkového počtu",
     "fee": "Poplatek: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Potvrdit",
     "header": "Odeslat",
     "share": "Sdílet",

@@ -411,7 +411,7 @@
     "vault_key": "מפתח כספת {number}",
     "required_keys_out_of_total": " מפתחות נדרשים מתוך הסך הכולל",
     "fee": "עמלה: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "אישור",
     "header": "שליחה",
     "share": "שיתוף",

@@ -383,7 +383,7 @@
     "provide_signature": "Proporcionar firma",
     "vault_key": "Clave de la bóveda {number}",
     "fee": "Tarifa: {number}",
-    "fee_btc": "{number} BTC",
+    "fee_btc": "{number} GRS",
     "confirm": "Confirmar",
     "header": "Enviar",
     "share": "Compartir",
