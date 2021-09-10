@@ -503,7 +503,7 @@ const WalletDetails = () => {
                   <SecondButton onPress={navigateToXPub} title={loc.wallets.details_show_xpub} />
 
                   <BlueSpacing20 />
-                  {renderMarketplaceButton()}
+                  {/*renderMarketplaceButton()*/}
                 </>
               )}
               {wallet.type !== LightningCustodianWallet.type && (
