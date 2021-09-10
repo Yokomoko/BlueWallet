@@ -54,7 +54,7 @@ async function updateExchangeRate() {
       preferredFiatCurrency = FiatUnit.USD;
     }
   }
-
+  
   let response;
   const fiatServerResponse = new FiatServerResponse(preferredFiatCurrency);
   try {

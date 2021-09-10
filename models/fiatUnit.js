@@ -64,7 +64,7 @@ export class FiatServerResponse {
     if (this.fiatUnit.dataSource) {
       return this.fiatUnit.dataSource;
     } else {
-      return 'https://api.coindesk.com';
+      return 'https://api.coingecko.com';
     }
   };
 
@@ -72,7 +72,7 @@ export class FiatServerResponse {
     if (this.fiatUnit.dataSource) {
       return `/${this.fiatUnit.endPointKey}`;
     } else {
-      return '/v1/bpi/currentprice/' + this.fiatUnit.endPointKey + '.json';
+      return '/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false';
     }
   };
 
@@ -81,7 +81,7 @@ export class FiatServerResponse {
     if (this.fiatUnit.dataSource) {
       return json[this.fiatUnit.rateKey].price * 1;
     } else {
-      return json.bpi[this.fiatUnit.endPointKey].rate_float * 1;
+      return json.market_data.current_price[this.fiatUnit.endPointKey.toLowerCase()] * 1;
     }
   };
 
@@ -92,7 +92,7 @@ export class FiatServerResponse {
         throw new Error('Could not update currency rate: ' + response.err);
       }
     } else {
-      if (!json || !json.bpi || !json.bpi[this.fiatUnit.endPointKey] || !json.bpi[this.fiatUnit.endPointKey].rate_float) {
+      if (!json || !json.market_data || !json.market_data.current_price || !json.market_data.current_price[this.fiatUnit.endPointKey.toLowerCase()]) {
         throw new Error('Could not update currency rate: ' + response.err);
       }
     }
