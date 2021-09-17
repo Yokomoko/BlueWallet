@@ -354,7 +354,7 @@ describe('BlueWallet UI Tests', () => {
       return;
     }
 
-    await helperImportWallet(process.env.HD_MNEMONIC_BIP84, 'Imported HD SegWit (BIP84 Bech32 Native)', '0.00105526 BTC');
+    await helperImportWallet(process.env.HD_MNEMONIC_BIP84, 'Imported HD SegWit (BIP84 Bech32 Native)', '0.00105526 GRS');
 
     // lets create real transaction:
     await element(by.id('SendButton')).tap();
@@ -489,7 +489,7 @@ describe('BlueWallet UI Tests', () => {
     await helperImportWallet(
       'zpub6rDWXE4wbwefeCrHWehXJheXnti5F9PbpamDUeB5eFbqaY89x3jq86JADBuXpnJnSvRVwqkaTnyMaZERUg4BpxD9V4tSZfKeYh1ozPdL1xK',
       'Imported Watch-only',
-      '0.00030666 BTC',
+      '0.00030666 GRS',
     );
 
     await element(by.id('SendButton')).tap();
@@ -692,7 +692,7 @@ describe('BlueWallet UI Tests', () => {
     await helperImportWallet(
       'zpub6qoWjSiZRHzSYPGYJ6EzxEXJXP1b2Rj9syWwJZFNCmupMwkbSAWSBk3UvSkJyQLEhQpaBAwvhmNj3HPKpwCJiTBB9Tutt46FtEmjL2DoU3J',
       'Imported Watch-only',
-      '0.00105526 BTC',
+      '0.00105526 GRS',
     );
 
     // refresh transactions

@@ -89,7 +89,7 @@ describe('BlueElectrum', () => {
       'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj',
       'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
       'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx',
-      'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3'
+      'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3',
     ]);
 
     assert.strictEqual(balances.balance, 664270);
@@ -165,13 +165,13 @@ describe('BlueElectrum', () => {
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
     );
     assert.ok(
-      txdatas['c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9'].txid ===
+      txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.txid ===
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
     );
-    assert.ok(txdatas['c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9'].size);
-    assert.ok(txdatas['c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9'].vin);
-    assert.ok(txdatas['c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9'].vout);
-    assert.ok(txdatas['c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9'].blocktime);
+    assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.size);
+    assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.vin);
+    assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.vout);
+    assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.blocktime);
     assert.ok(Object.keys(txdatas).length === 4);
   });
 
@@ -216,7 +216,8 @@ describe('BlueElectrum', () => {
       '968c84b796a7533d551b665b1727c7b63452b554977b303377c48c4187b8b2e8',
       'bb0138cba362207ab347a2a7e1adfd4e29c0f8d3adf8785da964a0f61b0fbe9d',
       'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
-      'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',];
+      'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
+    ];
     const vintxdatas = await BlueElectrum.multiGetTransactionByTxid(vinTxids);
     assert.ok(vintxdatas['968c84b796a7533d551b665b1727c7b63452b554977b303377c48c4187b8b2e8']);
   });

@@ -107,7 +107,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
             screen: 'ScanLndInvoice',
             params: {
               uri:
-                'lightning:lngrs10u1pwjqwkkpp5vlc3tttdzhpk9fwzkkue0sf2pumtza7qyw9vucxyyeh0yaqq66yqdq5f38z6mmwd3ujqar9wd6qcqzpgxq97zvuqrzjqvgptfurj3528snx6e3dtwepafxw5fpzdymw9pj20jj09sunnqmwqz9hx5qqtmgqqqqqqqlgqqqqqqgqjq5duu3fs9xq9vn89qk3ezwpygecu4p3n69wm3tnl28rpgn2gmk5hjaznemw0gy32wrslpn3g24khcgnpua9q04fttm2y8pnhmhhc2gncplz0zde',
+                'lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
             },
           },
         ],
@@ -123,11 +123,12 @@ describe('unit - DeepLinkSchemaMatch', function () {
             screen: 'ScanLndInvoice',
             params: {
               uri:
-                'lightning:lngrs10u1pwjqwkkpp5vlc3tttdzhpk9fwzkkue0sf2pumtza7qyw9vucxyyeh0yaqq66yqdq5f38z6mmwd3ujqar9wd6qcqzpgxq97zvuqrzjqvgptfurj3528snx6e3dtwepafxw5fpzdymw9pj20jj09sunnqmwqz9hx5qqtmgqqqqqqqlgqqqqqqgqjq5duu3fs9xq9vn89qk3ezwpygecu4p3n69wm3tnl28rpgn2gmk5hjaznemw0gy32wrslpn3g24khcgnpua9q04fttm2y8pnhmhhc2gncplz0zde',
+                'lightning:lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
             },
           },
         ],
       },
+      /*
       {
         argument: {
           url: 'https://azte.co/?c1=3062&c2=2586&c3=5053&c4=5261',
@@ -165,6 +166,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
           },
         ],
       },
+      */
     ];
 
     const asyncNavigationRouteFor = async function (event) {
@@ -240,12 +242,15 @@ describe('unit - DeepLinkSchemaMatch', function () {
       },
     );
 
-    assert.deepStrictEqual(DeeplinkSchemaMatch.decodeBitcoinUri('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar'), {
-      address: 'Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR',
-      amount: 20.3,
-      memo: 'Foobar',
-      payjoinUrl: '',
-    });
+    assert.deepStrictEqual(
+      DeeplinkSchemaMatch.decodeBitcoinUri('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar'), 
+      {
+        address: 'Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR',
+        amount: 20.3,
+        memo: 'Foobar',
+        payjoinUrl: '',
+      },
+    );
   });
 
   it('recognizes files', () => {

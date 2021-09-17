@@ -1,7 +1,6 @@
 /* global it, jasmine */
 const assert = require('assert');
 
-
 it.skip('bip38 decodes', async () => {
   const bip38 = require('../../blue_modules/bip38grs');
   const wif = require('wifgrs');
@@ -19,7 +18,6 @@ it.skip('bip38 decodes', async () => {
     '5JEu13zVLWvRLGt7rxrHXSEFJHh2htpXuB7X1ZLRKKqd1QwFuEC',
   );
 });
-
 
 it('bip38 decodes slow', async () => {
   if (!(process.env.CI || process.env.TRAVIS)) {

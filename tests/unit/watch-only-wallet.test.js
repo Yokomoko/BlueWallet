@@ -11,7 +11,7 @@ describe('Watch only wallet', () => {
       'grs1qzqcdyjcsnplrlayy47llkx0s46uyytrmc28apt',
       'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs',
       '3BDsBDxDimYgNZzsqszNZobqQq3yd5Afco',
-      'GRS1QZQCDYJCSNPLRLAYY47LLKX0S46UYYTRMC28APT
+      'GRS1QZQCDYJCSNPLRLAYY47LLKX0S46UYYTRMC28APT',
     ]) {
       w.setSecret(secret);
       assert.ok(w.valid());
@@ -41,9 +41,9 @@ describe('Watch only wallet', () => {
 
   it('can validate xpub', () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('xpub6CQdfC3v9gU86eaSn7AhUFcBVxiGhdtYxdC5Cw2vLmFkfth2KXCMmYcPpvZviA89X6DXDs4PJDk5QVL2G2xaVjv7SM4roWHr1gR4xB3Z7Ps');
+    w.setSecret('xpub6CQdfC3v9gU86eaSn7AhUFcBVxiGhdtYxdC5Cw2vLmFkfth2KXCMmYcPpvZviA89X6DXDs4PJDk5QVL2G2xaVjv7SM4roWHr1gR4xFYyyu6');
     assert.ok(w.isXpubValid());
-    w.setSecret('ypub6XRzrn3HB1tjhhvrHbk1vnXCecZEdXohGzCk3GXwwbDoJ3VBzZ34jNGWbC6WrS7idXrYjjXEzcPDX5VqnHEnuNf5VAXgLfSaytMkJ2rwVqy');
+    w.setSecret('ypub6XRzrn3HB1tjhhvrHbk1vnXCecZEdXohGzCk3GXwwbDoJ3VBzZ34jNGWbC6WrS7idXrYjjXEzcPDX5VqnHEnuNf5VAXgLfSaytMkJ4kGxdE');
     assert.ok(w.isXpubValid());
     w.setSecret('zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXiWvk3Q');
     assert.ok(w.isXpubValid());
@@ -85,7 +85,6 @@ describe('Watch only wallet', () => {
       'cHNidP8BAHECAAAAAYBbjCRXw4r66Ly1aI/SCvis+CDQsCdQej1BhCoDnjt/AAAAAAAAAACAAogTAAAAAAAAFgAUwM681sPTyox13F7GLr5VMw75EOK2OQAAAAAAABYAFOc6kh7rlKStRwwMvbaeu+oFvB4MAAAAAAABAR8gTgAAAAAAABYAFL8PIBBJ6JHVhwsE61MPwWtjtptAIgYDWOHbOE3D4KiuoR7kHtmTtFZ7KXQB+8zb51QALLJxTx8YAAAAAFQAAIAAAACAAAAAgAAAAAAAAAAAAAAiAgM005BVD8MgH5kiSGnwXSfzaxLeDSl3y17Vhrx3F/9XxBgAAAAAVAAAgAAAAIAAAACAAQAAAAAAAAAA',
     );
   });
-
 
   it.skip('can import coldcard/electrum compatible JSON skeleton wallet, and create a tx with master fingerprint', async () => {
     const skeleton =
@@ -145,14 +144,14 @@ describe('Watch only wallet', () => {
 
   it('can import zpub with master fingerprint', async () => {
     const zpub =
-      '[8cce63f8/84h/17h/0h]zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2c5otkk';
+      '[8cce63f8/84h/17h/0h]zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2WFJmSa';
     const w = new WatchOnlyWallet();
     w.setSecret(zpub);
     w.init();
     assert.ok(w.valid());
     assert.strictEqual(
       w.getSecret(),
-      'zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2c5otkk',
+      'zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2WFJmSa',
     );
     assert.strictEqual(w.getMasterFingerprint(), 4167290508);
     assert.strictEqual(w.getMasterFingerprintHex(), '8cce63f8');
@@ -192,13 +191,13 @@ describe('Watch only wallet', () => {
     const w = new WatchOnlyWallet();
     w.setSecret('xpub6F4QjZMh8tkYgSiJSp1rJQfPTTpfij3dK23J62athWBtvksBMrdRo2Dec9AuGBDMm2Ai8hJVb2MrXcdZxrE4UC9wZ4JZkBshzH4mW8gn1NX');
     w.init();
-    assert.ok((await w._getExternalAddressByIndex(0)).startsWith('1'));
+    assert.ok((await w._getExternalAddressByIndex(0)).startsWith('F'));
     assert.ok(w.getAllExternalAddresses().includes(await w._getExternalAddressByIndex(0)));
   });
 
   it('can determine change address for HD wallet', async () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('ypub6Y9u3QCRC1HkZv3stNxcQVwmw7vC7KX5Ldz38En5P88RQbesP2oy16hNyQocVCfYRQPxdHcd3pmu9AFhLv7NdChWmw5iNLryZ2U6EEHdnfo');
+    w.setSecret('ypub6Y9u3QCRC1HkZv3stNxcQVwmw7vC7KX5Ldz38En5P88RQbesP2oy16hNyQocVCfYRQPxdHcd3pmu9AFhLv7NdChWmw5iNLryZ2U6EHHW8wz');
     w.init();
     assert.ok(!w.addressIsChange(await w._getExternalAddressByIndex(0)));
     assert.ok(w.addressIsChange(await w._getInternalAddressByIndex(0)));
@@ -218,7 +217,7 @@ describe('BC-UR', () => {
     const sPsbtB64 = Buffer.from(payloadSignedButNotFinalized, 'hex').toString('base64');
 
     const w = new WatchOnlyWallet();
-    w.setSecret('zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2c5otkk');
+    w.setSecret('zpub6s2RJ9qAEBW8Abhojs6LyDzF7gttcDr6EsR3Umu2aptZBb45e734rGtt4KqsCMmNyR1EEzUU2ugdVYez2VywQvAbBjUSKn8ho4Zk2WFJmSa');
     w.init();
 
     const tx = w.combinePsbt(uPsbtB64, sPsbtB64);

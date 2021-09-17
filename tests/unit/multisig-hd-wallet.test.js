@@ -1573,7 +1573,7 @@ describe('multisig-wallet (native segwit)', () => {
 describe('multisig-cosigner', () => {
   it('can parse cobo json', () => {
     const cosigner = new MultisigCosigner(
-      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ","path":"m\\/48\'\\/0\'\\/0\'\\/2\'"}',
+      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ","path":"m\\/48\'\\/17\'\\/0\'\\/2\'"}',
     );
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), fp1cobo);
@@ -1644,7 +1644,7 @@ describe('multisig-cosigner', () => {
       const w = new MultisigHDWallet();
       w.setSecret(s);
 
-      assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qtysquqsjqjfqvhd6l2h470hdgwhcahs4nq2ca49cyxftwjnjt9ssh8emel');
+      assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qtysquqsjqjfqvhd6l2h470hdgwhcahs4nq2ca49cyxftwjnjt9sscuxhkm');
     }
   });
 });
