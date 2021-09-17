@@ -8,7 +8,7 @@ import {
   InteractionManager,
   Keyboard,
   KeyboardAvoidingView,
-  Linking,
+  // Linking,
   PixelRatio,
   Platform,
   ScrollView,
@@ -26,14 +26,13 @@ import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-naviga
 import { Chain } from '../../models/bitcoinUnits';
 import { BlueTransactionListItem, BlueWalletNavigationHeader, BlueAlertWalletExportReminder, BlueListItem } from '../../BlueComponents';
 import WalletGradient from '../../class/wallet-gradient';
-import { LightningCustodianWallet, WatchOnlyWallet } from '../../class';
+import { WatchOnlyWallet } from '../../class';
 import HandoffSettings from '../../class/handoff';
 import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
 import { FContainer, FButton } from '../../components/FloatButtons';
 import isCatalyst from 'react-native-is-catalyst';
 import BottomModal from '../../components/BottomModal';
-import BuyBitcoin from './buyBitcoin';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
@@ -306,6 +305,8 @@ const WalletTransactions = () => {
     );
   };
 
+  /*  These functions are not used
+
   const navigateToBuyBitcoin = () => {
     BuyBitcoin.navigate(wallet.current);
   };
@@ -371,6 +372,8 @@ const WalletTransactions = () => {
       </TouchableOpacity>
     );
   };
+
+  */
 
   const onWalletSelect = async selectedWallet => {
     if (selectedWallet) {

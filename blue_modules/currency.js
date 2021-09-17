@@ -54,7 +54,7 @@ async function updateExchangeRate() {
       preferredFiatCurrency = FiatUnit.USD;
     }
   }
-  
+
   let response;
   const fiatServerResponse = new FiatServerResponse(preferredFiatCurrency);
   try {
@@ -66,7 +66,8 @@ async function updateExchangeRate() {
   } catch (Err) {
     console.warn(Err);
     const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
-    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] = lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
+    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] =
+      lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
     return;
   }
 

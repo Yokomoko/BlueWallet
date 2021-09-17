@@ -210,7 +210,9 @@ const WalletDetails = () => {
       },
     });
 
-  /*const renderMarketplaceButton = () => {
+  /*
+  
+  const renderMarketplaceButton = () => {
     return Platform.select({
       android: (
         <SecondButton
@@ -231,7 +233,9 @@ const WalletDetails = () => {
         />
       ),
     });
-  };*/
+  };
+  
+  */
 
   const exportInternals = async () => {
     if (backdoorPressed < 10) return setBackdoorPressed(backdoorPressed + 1);
@@ -503,7 +507,6 @@ const WalletDetails = () => {
                   <SecondButton onPress={navigateToXPub} title={loc.wallets.details_show_xpub} />
 
                   <BlueSpacing20 />
-                  {/*renderMarketplaceButton()*/}
                 </>
               )}
               {wallet.type !== LightningCustodianWallet.type && (

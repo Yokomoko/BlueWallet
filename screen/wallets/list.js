@@ -497,7 +497,7 @@ const WalletsList = () => {
           renderSectionFooter={renderSectionFooter}
           sections={[
             { key: WalletsListSections.CAROUSEL, data: [WalletsListSections.CAROUSEL] },
-      //      { key: WalletsListSections.LOCALTRADER, data: [WalletsListSections.LOCALTRADER] },
+            // { key: WalletsListSections.LOCALTRADER, data: [WalletsListSections.LOCALTRADER] },
             { key: WalletsListSections.TRANSACTIONS, data: dataSource },
           ]}
         />
