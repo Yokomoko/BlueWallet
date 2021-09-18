@@ -14,7 +14,7 @@ describe('Localization', () => {
   });
 
   it('formatBalancePlain() && formatBalancePlain()', () => {
-    currency._setExchangeRate('BTC_RUB', 660180.143);
+    currency._setExchangeRate('GRS_RUB', 660180.143);
     currency._setPreferredFiatCurrency(FiatUnit.RUB);
     let newInputValue = formatBalanceWithoutSuffix(152, BitcoinUnit.LOCAL_CURRENCY, false);
     assert.ok(newInputValue === 'RUB 1.00' || newInputValue === '1,00 ₽', 'Unexpected: ' + newInputValue);
@@ -34,7 +34,7 @@ describe('Localization', () => {
     newInputValue = formatBalancePlain(76, BitcoinUnit.LOCAL_CURRENCY, false);
     assert.strictEqual(newInputValue, '0.50');
 
-    currency._setExchangeRate('BTC_USD', 10000);
+    currency._setExchangeRate('GRS_USD', 10000);
     currency._setPreferredFiatCurrency(FiatUnit.USD);
     newInputValue = formatBalanceWithoutSuffix(16793829, BitcoinUnit.LOCAL_CURRENCY, false);
     assert.strictEqual(newInputValue, '$1,679.38');
@@ -57,10 +57,10 @@ describe('Localization', () => {
   ])(
     'can formatBalanceWithoutSuffix',
     async (balance, toUnit, withFormatting, expectedResult, shouldResetRate) => {
-      currency._setExchangeRate('BTC_USD', 1);
+      currency._setExchangeRate('GRS_USD', 1);
       currency._setPreferredFiatCurrency(FiatUnit.USD);
       if (shouldResetRate) {
-        currency._setExchangeRate('BTC_USD', false);
+        currency._setExchangeRate('GRS_USD', false);
       }
       const actualResult = formatBalanceWithoutSuffix(balance, toUnit, withFormatting);
       assert.strictEqual(actualResult, expectedResult);
@@ -75,7 +75,7 @@ describe('Localization', () => {
   ])(
     'can formatBalance',
     async (balance, toUnit, withFormatting, expectedResult) => {
-      currency._setExchangeRate('BTC_USD', 1);
+      currency._setExchangeRate('GRS_USD', 1);
       currency._setPreferredFiatCurrency(FiatUnit.USD);
       const actualResult = formatBalance(balance, toUnit, withFormatting);
       assert.strictEqual(actualResult, expectedResult);

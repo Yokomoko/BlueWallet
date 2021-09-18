@@ -5,7 +5,7 @@ const assert = require('assert');
 describe('currency', () => {
   it('formats everything correctly', async () => {
     const currency = require('../../blue_modules/currency');
-    currency._setExchangeRate('BTC_USD', 10000);
+    currency._setExchangeRate('GRS_USD', 10000);
 
     assert.strictEqual(currency.satoshiToLocalCurrency(1), '$0.0001');
     assert.strictEqual(currency.satoshiToLocalCurrency(-1), '-$0.0001');
@@ -27,7 +27,7 @@ describe('currency', () => {
     assert.strictEqual(currency.satoshiToBTC(123456789123456789), '1234567891.2345678');
 
     currency._setPreferredFiatCurrency(FiatUnit.JPY);
-    currency._setExchangeRate('BTC_JPY', 1043740.8614);
+    currency._setExchangeRate('GRS_JPY', 1043740.8614);
 
     assert.ok(
       currency.satoshiToLocalCurrency(1) === '¥0.01' || currency.satoshiToLocalCurrency(1) === '￥0.01',
