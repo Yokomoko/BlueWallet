@@ -1644,7 +1644,7 @@ describe('multisig-cosigner', () => {
       const w = new MultisigHDWallet();
       w.setSecret(s);
 
-      assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qtysquqsjqjfqvhd6l2h470hdgwhcahs4nq2ca49cyxftwjnjt9sscuxhkm');
+      assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qtysquqsjqjfqvhd6l2h470hdgwhcahs4nq2ca49cyxftwjnjt9sscuxhkm', s);
     }
   });
 });
