@@ -429,12 +429,12 @@ describe('BlueWallet UI Tests', () => {
 
     await device.pressBack();
     await device.pressBack();
-    await element(by.id('changeAmountUnitButton')).tap(); // switched to sats
+    await element(by.id('changeAmountUnitButton')).tap(); // switched to gros
     assert.strictEqual(await extractTextFromElementById('BitcoinAmountInput'), '15000');
     await element(by.id('changeAmountUnitButton')).tap(); // switched to FIAT
     await element(by.id('changeAmountUnitButton')).tap(); // switched to BTC
     assert.strictEqual(await extractTextFromElementById('BitcoinAmountInput'), '0.00015');
-    await element(by.id('changeAmountUnitButton')).tap(); // switched to sats
+    await element(by.id('changeAmountUnitButton')).tap(); // switched to gros
     await element(by.id('BitcoinAmountInput')).replaceText('50000');
 
     if (process.env.TRAVIS) await sleep(5000);

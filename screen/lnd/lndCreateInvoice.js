@@ -242,7 +242,7 @@ const LNDCreateInvoice = () => {
         throw new Error('Unsupported lnurl');
       }
 
-      // amount that comes from lnurl is always in sats
+      // amount that comes from lnurl is always in gros
       let amount = (reply.maxWithdrawable / 1000).toString();
       const sats = amount;
       switch (unit) {

@@ -118,7 +118,7 @@ describe('LightningCustodianWallet', () => {
     assert.ok(error);
   });
 
-  it('decode can handle zero sats but present msats', async () => {
+  it('decode can handle zero gros but present msats', async () => {
     const l = new LightningCustodianWallet();
     const decoded = l.decodeInvoice(
       'lngrs1m1p0t09zhpp5qsljqlwzp4k402uaeduful4l84xvk83jxtfun8yk33usq0u3mnfsdq5w3jhxapdwfjhzat9wd6qcqzpgxqy9gcqe25gnt4srxxtjfm65cj6eczsnn589m4szu4rtk0s5s2cmpwq5ax9dfrw67u0kqtlx4k283yqefd0x9lmnaxfsy8apqrj2esa36z99rgqf55pdm',
