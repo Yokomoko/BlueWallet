@@ -204,8 +204,8 @@ const ReceiveDetails = () => {
         }
       }
       setAddressBIP21Encoded(address);
-      await Notifications.tryToObtainPermissions();
-      Notifications.majorTomToGroundControl([address], [], []);
+      // await Notifications.tryToObtainPermissions();
+      // Notifications.majorTomToGroundControl([address], [], []);
     } else if (wallet.getAddress) {
       setAddressBIP21Encoded(wallet.getAddress());
       await Notifications.tryToObtainPermissions();
