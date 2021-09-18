@@ -108,7 +108,7 @@
     "open_direct_channel": "Ouvrir un canal direct avec ce noeud :",
     "please_pay": "Veuillez payer",
     "preimage": "Préimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Cette requête n'a pas été réglée et a expiré"
   },
   "plausibledeniability": {
@@ -192,8 +192,8 @@
     "fee_custom": "Custom",
     "fee_fast": "Fast",
     "fee_medium": "Medium",
-    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} sat/byte",
-    "fee_satbyte": "in sat/byte",
+    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} gro/byte",
+    "fee_satbyte": "in gro/byte",
     "fee_slow": "Slow",
     "header": "Envoyer",
     "input_clear": "Tout effacer",

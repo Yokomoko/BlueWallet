@@ -108,7 +108,7 @@
     "open_direct_channel": "Otvoriť priamy kanál s týmto uzlom:",
     "please_pay": "Prosím zaplaťte",
     "preimage": "Preimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Táto faktúra nebola uhradená a expirovala"
   },
   "plausibledeniability": {
@@ -192,8 +192,8 @@
     "fee_custom": "Custom",
     "fee_fast": "Fast",
     "fee_medium": "Medium",
-    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} sat/byte",
-    "fee_satbyte": "v sat/byte",
+    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} gro/byte",
+    "fee_satbyte": "v gro/byte",
     "fee_slow": "Slow",
     "header": "Poslať",
     "input_clear": "Clear",

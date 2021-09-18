@@ -111,7 +111,7 @@
     "open_direct_channel": "Abrir un canal directo con este nodo:",
     "please_pay": "Por favor, pague",
     "preimage": "Preimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Esta factura no se pagó y ha caducado"
   },
   "plausibledeniability": {
@@ -195,7 +195,7 @@
     "fee_custom": "Personalizada",
     "fee_fast": "Rápida",
     "fee_medium": "Media",
-    "fee_replace_min": "La comisión (en satoshis por byte) tiene que ser mayor que {min} sat/byte",
+    "fee_replace_min": "La comisión (en satoshis por byte) tiene que ser mayor que {min} gro/byte",
     "fee_satbyte": "en sat/bye",
     "fee_slow": "Lenta",
     "header": "Enviar",

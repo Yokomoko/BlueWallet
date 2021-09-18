@@ -792,7 +792,7 @@ export default class SendDetails extends Component {
                 </View>
                 <View style={styles.feeModalRow}>
                   <Text style={styles.feeModalValue}>{fee && this.formatFee(fee)}</Text>
-                  <Text style={styles.feeModalValue}>{rate} sat/byte</Text>
+                  <Text style={styles.feeModalValue}>{rate} gro/byte</Text>
                 </View>
               </TouchableOpacity>
             ))}

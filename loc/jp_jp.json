@@ -111,7 +111,7 @@
     "open_direct_channel": "このノードの直接チャネルを作成:",
     "please_pay": "支払う額",
     "preimage": "プリイメージ",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "この請求書は支払いが行われなかったため無効になりました"
   },
   "plausibledeniability": {

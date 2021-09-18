@@ -108,7 +108,7 @@
     "open_direct_channel": "Open direct channel with this node:",
     "please_pay": "請支付",
     "preimage": "Preimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "該收據未付款且已過期"
   },
   "plausibledeniability": {
@@ -192,8 +192,8 @@
     "fee_custom": "Custom",
     "fee_fast": "快",
     "fee_medium": "中",
-    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} sat/byte",
-    "fee_satbyte": "in sat/byte",
+    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} gro/byte",
+    "fee_satbyte": "in gro/byte",
     "fee_slow": "Slow",
     "header": "傳送",
     "input_clear": "Clear",

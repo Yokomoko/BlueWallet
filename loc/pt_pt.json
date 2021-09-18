@@ -103,7 +103,7 @@
     "open_direct_channel": "Abrir canal directo com este node:",
     "please_pay": "Por favor pague",
     "preimage": "Preimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Esta factura não foi paga e expirou"
   },
   "plausibledeniability": {
@@ -187,8 +187,8 @@
     "fee_custom": "Escolher",
     "fee_fast": "Rápido",
     "fee_medium": "Médio",
-    "fee_replace_min": "A taxa total (satoshi/byte) que deseja pagar deve ser superior a {min} sat/byte",
-    "fee_satbyte": "em sat/byte",
+    "fee_replace_min": "A taxa total (satoshi/byte) que deseja pagar deve ser superior a {min} gro/byte",
+    "fee_satbyte": "em gro/byte",
     "fee_slow": "Lento",
     "header": "Enviar",
     "input_clear": "Limpar",

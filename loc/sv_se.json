@@ -111,7 +111,7 @@
     "open_direct_channel": "Öppna en direkt kanal med denna nod:",
     "please_pay": "Var god betala",
     "preimage": "Preimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Denna faktura har ej betalats och är nu utgången"
   },
   "plausibledeniability": {
@@ -195,8 +195,8 @@
     "fee_custom": "Custom",
     "fee_fast": "Fast",
     "fee_medium": "Medium",
-    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} sat/byte",
-    "fee_satbyte": "i sat/byte",
+    "fee_replace_min": "The total fee rate (satoshi per byte) you want to pay should be higher than {min} gro/byte",
+    "fee_satbyte": "i gro/byte",
     "fee_slow": "Långsamt",
     "header": "Skicka",
     "input_clear": "Töm",

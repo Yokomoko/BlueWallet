@@ -111,7 +111,7 @@
     "open_direct_channel": "Direkten Kanal zu diesem Knoten eröffnen:",
     "please_pay": "Bitte zahle",
     "preimage": "Urbild",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Diese Rechnung ist unbezahlt und abgelaufen."
   },
   "plausibledeniability": {
@@ -195,8 +195,8 @@
     "fee_custom": "Benutzerdefiniert",
     "fee_fast": "Schnell",
     "fee_medium": "Durchschnitt",
-    "fee_replace_min": "Der komplette Gebührensatz (Satoshi pro Byte) sollte höher als {min} sat/byte sein. ",
-    "fee_satbyte": "in sat/byte",
+    "fee_replace_min": "Der komplette Gebührensatz (Satoshi pro Byte) sollte höher als {min} gro/byte sein. ",
+    "fee_satbyte": "in gro/byte",
     "fee_slow": "Langsam",
     "header": "Senden",
     "input_clear": "Löschen",

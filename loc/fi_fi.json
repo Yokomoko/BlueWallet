@@ -112,7 +112,7 @@
     "open_direct_channel": "Avaa suora kanava tällä solmulla:",
     "please_pay": "Ole hyvä ja maksa",
     "preimage": "Alkukuva",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Tätä laskua ei maksettu, ja se on vanhentunut."
   },
   "plausibledeniability": {

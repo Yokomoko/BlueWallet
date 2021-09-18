@@ -111,7 +111,7 @@
     "open_direct_channel": "Otevřít přímý kanál s tímto uzlem:",
     "please_pay": "Prosím zaplaťte",
     "preimage": "Předobraz",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Tato faktura nebyla uhrazena a její platnost vypršela"
   },
   "plausibledeniability": {

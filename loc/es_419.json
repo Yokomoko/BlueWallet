@@ -105,7 +105,7 @@
     "open_direct_channel": "Abrir un canal directo con este Nodo:",
     "please_pay": "Pagar Por favor",
     "preimage": "Preimagen",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Esta factura no se pagó y ha caducado"
   },
   "plausibledeniability": {
@@ -190,7 +190,7 @@
     "fee_fast": "Rapido",
     "fee_medium": "Estandar",
     "fee_replace_min": "La tarifa total (satoshi por byte) que desea pagar debe ser superior a {min} sat / byte",
-    "fee_satbyte": "en sat/byte",
+    "fee_satbyte": "en gro/byte",
     "fee_slow": "Lento",
     "header": "enviar",
     "input_clear": "Limpiar",

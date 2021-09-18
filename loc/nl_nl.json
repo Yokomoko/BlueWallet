@@ -111,7 +111,7 @@
     "open_direct_channel": "Open een rechtstreeks kanaal met deze node:",
     "please_pay": "Betaal alstublieft",
     "preimage": "Préimage",
-    "sats": "sats",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Deze factuur is niet betaald en is verlopen"
   },
   "plausibledeniability": {
@@ -195,8 +195,8 @@
     "fee_custom": "Custom",
     "fee_fast": "Snel",
     "fee_medium": "Medium",
-    "fee_replace_min": "De totale fee rate (satoshi per byte) die u wilt betalen moet hoger zijn dan {min} sat/byte",
-    "fee_satbyte": "In sat/byte",
+    "fee_replace_min": "De totale fee rate (satoshi per byte) die u wilt betalen moet hoger zijn dan {min} gro/byte",
+    "fee_satbyte": "In gro/byte",
     "fee_slow": "Langzaam",
     "header": "Verstuur",
     "input_clear": "Leegmaken",
