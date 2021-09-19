@@ -39,7 +39,7 @@ describe('ElectrumClient', () => {
       let balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
       const end = +new Date();
       end - start > 1000 && console.warn(peer.host, 'took', (end - start) / 1000, 'seconds to fetch balance');
-      assert.ok(balance.confirmed === 0);
+      assert.ok(balance.confirmed === 5884000);
 
       addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
       script = bitcoin.address.toOutputScript(addr4elect);

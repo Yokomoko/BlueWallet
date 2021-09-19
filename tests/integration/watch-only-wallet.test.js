@@ -68,13 +68,13 @@ describe('Watch only wallet', () => {
 
       for (const tx of w.getTransactions()) {
         assert.ok(tx.hash);
-        assert.ok(tx.value);
+        assert.ok(tx.value !== undefined);
         assert.ok(tx.received);
         assert.ok(tx.confirmations > 1);
       }
 
       assert.strictEqual(w.getTransactions()[0].value, -100000);
-      assert.strictEqual(w.getTransactions()[1].value, 100000);
+      assert.strictEqual(w.getTransactions()[1].outputs[0].value, 0.00100000);
     }
   });
 

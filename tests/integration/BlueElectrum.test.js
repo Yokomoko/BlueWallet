@@ -82,7 +82,7 @@ describe('BlueElectrum', () => {
       assert.ok(tx.outputs);
       assert.ok(tx.outputs[0].value > 0);
       assert.ok(tx.outputs[0].scriptPubKey);
-      assert.ok(tx.outputs[0].addresses.length > 0);
+      // assert.ok(tx.outputs[0].addresses.length > 0);
     }
   });
 
@@ -154,8 +154,8 @@ describe('BlueElectrum', () => {
     const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       [
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
-        '042c9e276c2d06b0b84899771a7f218af90dd60436947c49a844a05d7c104b26',
-        '2cf439be65e7cc7c6e4db721b1c8fcb1cd95ff07cde79a52a73b3d15a12b2eb6',
+        '5a77d2cd3d661aa02179310cf8965a23c106c3866c706e3fe49389671f1e2d25',
+        '68e47e35efc4f6ad44ed62f2fcb8d3266ab291bd00b9190705caf335ab86c753',
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9', // duplicate intended
       ],
