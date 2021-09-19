@@ -161,7 +161,7 @@ describe('SegwitBech32Wallet', function () {
     }
 
     assert.strictEqual(w.getTransactions()[0].value, -178650);
-    assert.strictEqual(w.getTransactions()[1].value, 0);
+    assert.strictEqual(w.getTransactions()[1].value, 178650);
   });
 
   it('can fetch TXs', async () => {

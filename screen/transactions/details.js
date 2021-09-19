@@ -92,7 +92,7 @@ const TransactionsDetails = () => {
         }
         for (const output of foundTx.outputs) {
           if (output.addresses) to = to.concat(output.addresses);
-          if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
+          if (output.scriptPubKey && output.scriptPubKey.address) to = to.concat(output.scriptPubKey.address);
         }
       }
     }
