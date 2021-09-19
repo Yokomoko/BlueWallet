@@ -2,6 +2,7 @@ export const FiatUnitSource = Object.freeze({ CoinDesk: 'CoinDesk', Yadio: 'Yadi
 
 export const FiatUnit = Object.freeze({
   USD: { endPointKey: 'USD', symbol: '$', locale: 'en-US', source: FiatUnitSource.CoinDesk },
+  /*
   ARS: {
     endPointKey: 'ARS',
     symbol: '$',
@@ -10,6 +11,7 @@ export const FiatUnit = Object.freeze({
     rateKey: 'ARS',
     source: FiatUnitSource.Yadio,
   },
+  */
   AUD: { endPointKey: 'AUD', symbol: '$', locale: 'en-AU', source: FiatUnitSource.CoinDesk },
   BRL: { endPointKey: 'BRL', symbol: 'R$', locale: 'pt-BR', source: FiatUnitSource.CoinDesk },
   CAD: { endPointKey: 'CAD', symbol: '$', locale: 'en-CA', source: FiatUnitSource.CoinDesk },
@@ -44,6 +46,7 @@ export const FiatUnit = Object.freeze({
   UAH: { endPointKey: 'UAH', symbol: '₴', locale: 'uk-UA', source: FiatUnitSource.CoinDesk },
   UYU: { endPointKey: 'UYU', symbol: '$', locale: 'es-UY', source: FiatUnitSource.CoinDesk },
   VEF: { endPointKey: 'VEF', symbol: 'Bs.', locale: 'es-VE', source: FiatUnitSource.CoinDesk },
+  /*
   VES: {
     endPointKey: 'VES',
     symbol: 'Bs.',
@@ -52,6 +55,7 @@ export const FiatUnit = Object.freeze({
     rateKey: 'VES',
     source: FiatUnitSource.Yadio,
   },
+  */
   ZAR: { endPointKey: 'ZAR', symbol: 'R', locale: 'en-ZA', source: FiatUnitSource.CoinDesk },
 });
 
