@@ -353,7 +353,7 @@ export default class ScanLndInvoice extends React.Component {
   getFees() {
     const min = Math.floor(this.state.decoded.num_satoshis * 0.003);
     const max = Math.floor(this.state.decoded.num_satoshis * 0.01) + 1;
-    return `${min} sat - ${max} sat`;
+    return `${min} gro - ${max} gro`;
   }
 
   onWalletSelect = wallet => {
