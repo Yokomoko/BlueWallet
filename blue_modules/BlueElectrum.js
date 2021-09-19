@@ -11,25 +11,17 @@ const BigNumber = require('bignumber.js');
 const storageKey = 'ELECTRUM_PEERS';
 const defaultPeer = { host: 'electrum1.groestlcoin.org', ssl: '50002' };
 const hardcodedPeers = [
-  // { host: 'noveltybobble.coinjoined.com', tcp: '50001' }, // down
-  // { host: 'electrum.be', tcp: '50001' },
-  // { host: 'node.ispol.sk', tcp: '50001' }, // down
-  // { host: '139.162.14.142', tcp: '50001' },
-  // { host: 'electrum.coinucopia.io', tcp: '50001' }, // SLOW
-  // { host: 'Bitkoins.nl', tcp: '50001' }, // down
-  // { host: 'fullnode.coinkite.com', tcp: '50001' },
-  // { host: 'preperfect.eleCTruMioUS.com', tcp: '50001' }, // down
-  { host: 'electrum1.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum2.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum3.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum4.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum5.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum6.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum7.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum8.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum9.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum10.groestlcoin.org', tcp: '50001' },
-  { host: 'electrum11.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum1.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum2.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum3.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum4.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum5.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum6.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum7.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum8.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum9.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum10.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum11.groestlcoin.org', ssl: '50002' },
 ];
 
 let mainClient: ElectrumClient = false;
