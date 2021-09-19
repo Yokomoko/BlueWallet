@@ -563,7 +563,7 @@ export default class SendDetails extends Component {
           bitcoin.address.toOutputScript(t.address);
           return t;
         } catch (e) {
-          return { ...t, address: '36JxaUrpDzkEerkTf1FzwHNE1Hb7cCjgJV' };
+          return { ...t, address: '36JxaUrpDzkEerkTf1FzwHNE1Hb7c3ZQdh' };
         }
       });
 
