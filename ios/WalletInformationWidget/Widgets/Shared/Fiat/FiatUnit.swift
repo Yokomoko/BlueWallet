@@ -19,17 +19,23 @@ struct FiatUnit: Codable {
     if let dataSource = dataSource {
          return URL(string: "\(dataSource)/\(endPointKey)")
        } else {
-        return URL(string:"https://api.coindesk.com/v1/bpi/currentprice/\(endPointKey).json");
+        return URL(string:"https://api.coingecko.com//api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false");
        }
   }
   func currentRate(json: Dictionary<String, Any>) -> WidgetDataStore? {
     if dataSource == nil {
-      guard let bpi = json["bpi"] as? Dictionary<String, Any>, let preferredCurrency = bpi[endPointKey] as? Dictionary<String, Any>, let rateString = preferredCurrency["rate"] as? String, let rateDouble = preferredCurrency["rate_float"] as? Double, let time = json["time"] as? Dictionary<String, Any>, let lastUpdatedString = time["updatedISO"] as? String else {
+      guard let market_data = json["market_data"] as? Dictionary<String, Any>, 
+        let current_price = market_data["current_price"] as? Dictionary<String, Any>, 
+        let rateString = preferredCurrency[endPointKey.toLowerCase()] as? String, 
+        let rateDouble = rateString as? Double else { 
         return nil
       }
       return WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
   } else {
-    guard let rateKey = rateKey, let rateDict = json[rateKey] as? [String: Any], let rateDouble = rateDict["price"] as? Double, let lastUpdated = json["timestamp"] as? Int else {
+    guard let rateKey = rateKey, 
+      let rateDict = json[rateKey] as? [String: Any], 
+      let rateDouble = rateDict["price"] as? Double, 
+      let lastUpdated = json["timestamp"] as? Int else {
       return nil
     }
     return WidgetDataStore(rate: String(rateDouble), lastUpdate: String(lastUpdated), rateDouble: rateDouble)
