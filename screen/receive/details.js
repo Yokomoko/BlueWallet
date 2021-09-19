@@ -208,8 +208,8 @@ const ReceiveDetails = () => {
       // Notifications.majorTomToGroundControl([address], [], []);
     } else if (wallet.getAddress) {
       setAddressBIP21Encoded(wallet.getAddress());
-      await Notifications.tryToObtainPermissions();
-      Notifications.majorTomToGroundControl([wallet.getAddress()], [], []);
+      // await Notifications.tryToObtainPermissions();
+      // Notifications.majorTomToGroundControl([wallet.getAddress()], [], []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
