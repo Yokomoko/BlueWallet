@@ -79,7 +79,6 @@ export default class Selftest extends Component {
 
       let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
       const txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-      console.log(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
         '0200000001ddd0967859e29901501b177549b0b929677a2432426bcdf53229c8cb1871b983000000006b483045022100aa45ad57d62c58a871ff22b7151c5ab80a246dec3a088d71b15040070d2a176e022044e2c255b79fd61a995aa40d3f071c90cad4bedb8b3b1defceb81d3ba28d5f73012103a371ab521dfdefefb6bce17ef9d066cbadd33cfb061e2482ac496c065ecddb45ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac2e260000000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac00000000',
@@ -113,7 +112,6 @@ export default class Selftest extends Component {
 
       txNew = wallet.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, wallet.getAddress());
       const tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
-      console.log(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
         '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6e3303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e8702473044022022808715d4b6bd94a7a87fbdcf756703d640eabb5a114794f5373b46d84050fb02201a3450f42f00702c47bcf0b55cce0bf1c54144166d419eb6e39350dbc24b4479012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
