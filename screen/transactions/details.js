@@ -88,10 +88,10 @@ const TransactionsDetails = () => {
       if (tx.hash === hash) {
         foundTx = tx;
         for (const input of foundTx.inputs) {
-          from = from.concat(input.addresses);
+          from = from.concat(input.address);
         }
         for (const output of foundTx.outputs) {
-          if (output.addresses) to = to.concat(output.addresses);
+          if (output.address) to = to.concat(output.address);
           if (output.scriptPubKey && output.scriptPubKey.address) to = to.concat(output.scriptPubKey.address);
         }
       }
