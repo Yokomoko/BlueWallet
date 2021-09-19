@@ -28,7 +28,7 @@ import { Icon } from 'react-native-elements';
 import loc, { formatBalanceWithoutSuffix, formatBalancePlain } from '../../loc';
 import Lnurl from '../../class/lnurl';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
 const currency = require('../../blue_modules/currency');
 
@@ -166,7 +166,7 @@ const LNDCreateInvoice = () => {
 
       // lets decode payreq and subscribe groundcontrol so we can receive push notification when our invoice is paid
       /** @type LightningCustodianWallet */
-      const decoded = await wallet.current.decodeInvoice(invoiceRequest);
+      // const decoded = await wallet.current.decodeInvoice(invoiceRequest);
       // await Notifications.tryToObtainPermissions();
       // Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
 

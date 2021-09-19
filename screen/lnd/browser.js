@@ -15,7 +15,7 @@ import { WebView } from 'react-native-webview';
 import { BlueNavigationStyle, SafeBlueArea } from '../../BlueComponents';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 
 let processedInvoices = {};
 let lastTimeTriedToPay = 0;
@@ -395,7 +395,7 @@ export default class Browser extends Component {
                     this.webview.injectJavaScript("document.dispatchEvent( new CustomEvent('message', { detail: '" + jsonstr + "' }) );");
 
                     // lets decode payreq and subscribe groundcontrol so we can receive push notification when our invoice is paid
-                    const decoded = await fromWallet.decodeInvoice(payreq);
+                    // const decoded = await fromWallet.decodeInvoice(payreq);
                     // await Notifications.tryToObtainPermissions();
                     // Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
                   },
