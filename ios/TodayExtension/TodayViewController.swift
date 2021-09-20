@@ -116,6 +116,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
 
         guard let market_data = result["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>,
+
         let rateString = current_price[userPreferredCurrency.lowercased()] as? Double,//, let rateString = preferredCurrency["rate"] as? String,
           /*let time = result["time"] as? String,*/ let lastUpdatedString = self.dateFormatTime(date: Date()) as? String/*time["updatedISO"] as? String*/
           else {
@@ -126,7 +127,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let latestRateDataStore = TodayDataStore(rate: String(rateString), lastUpdate: lastUpdatedString)
 
-        if let lastStoredTodayStore = TodayData.getPriceRateAndLastUpdate(), lastStoredTodayStore.lastUpdate == latestRateDataStore.lastUpdate, rateString == lastStoredTodayStore.rate, TodayAPI.getLastSelectedCurrency() == userPreferredCurrency {
+        if let lastStoredTodayStore = TodayData.getPriceRateAndLastUpdate(), lastStoredTodayStore.lastUpdate == latestRateDataStore.lastUpdate, String(rateString) == lastStoredTodayStore.rate, TodayAPI.getLastSelectedCurrency() == userPreferredCurrency {
           if let cached = TodayData.getCachedPriceRateAndLastUpdate() {
             self.processCachedStoredRateAndLastUpdate(new: lastStoredTodayStore, cached: cached)
           } else {
