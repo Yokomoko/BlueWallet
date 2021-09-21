@@ -176,15 +176,14 @@ export default class Selftest extends Component {
         }
 
         //
-
-        /*
         const hd4 = new HDSegwitBech32Wallet();
-        hd4._xpub = 'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP';
+        hd4._xpub = 'zpub6rkSL2KXiwrQePLhUkf7gNi4XBKuNP4nXA31jxULPsjYaD4EzYHcMFP3SpEwmz4ya5xtuCWXsRVxYHd4XU2YmZe5i6ovvmwbfuSEqRkig23';
         await hd4.fetchBalance();
+        // console.log("selftest balance = " + hd4.getBalance());
         if (hd4.getBalance() !== 0) throw new Error('Could not fetch HD Bech32 balance');
         await hd4.fetchTransactions();
+        // console.log("selftest tx count = " + hd4.getTransactions().length);
         if (hd4.getTransactions().length !== 0) throw new Error('Could not fetch HD Bech32 transactions');
-        */
       } else {
         // skipping RN-specific test
       }
