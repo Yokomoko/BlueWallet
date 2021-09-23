@@ -22,14 +22,17 @@ struct FiatUnit: Codable {
         return URL(string:"https://api.coingecko.com//api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false");
        }
   }
+  func dateFormatTime(date: Date) -> String {
+    let dateFormatter = ISO8601DateFormatter()
+    //dateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss+00:00"
+    //dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    return dateFormatter.string(from: date)
+  }
   func currentRate(json: Dictionary<String, Any>) -> WidgetDataStore? {
     if dataSource == nil {
-      guard let market_data = json["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>, let rateString = current_price[endPointKey.lowercased()] as? String, let rateDouble = rateString as? Double else {
+      guard let market_data = json["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>, let rateString = current_price[endPointKey.lowercased()] as? String, let rateDouble = rateString as? Double, let lastUpdatedString = self.dateFormatTime(date: Date()) as? String else {
         return nil
       }
-      let date = Date()
-      let dateFormatter = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd HH:mm:ss", options: 0, locale: Locale.current)
-      let lastUpdatedString = dateFormatter.string(from: date)
       return WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
   } else {
     guard let rateKey = rateKey, let rateDict = json[rateKey] as? [String: Any], let rateDouble = rateDict["price"] as? Double, let lastUpdated = json["timestamp"] as? Int else {
