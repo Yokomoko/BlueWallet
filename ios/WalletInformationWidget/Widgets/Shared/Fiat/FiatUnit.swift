@@ -14,7 +14,7 @@ struct FiatUnit: Codable {
   let locale: String
   let dataSource: String?
   let rateKey: String?
-  
+
   var rateURL: URL? {
     if let dataSource = dataSource {
          return URL(string: "\(dataSource)/\(endPointKey)")
@@ -24,21 +24,15 @@ struct FiatUnit: Codable {
   }
   func currentRate(json: Dictionary<String, Any>) -> WidgetDataStore? {
     if dataSource == nil {
-      guard let market_data = json["market_data"] as? Dictionary<String, Any>, 
-        let current_price = market_data["current_price"] as? Dictionary<String, Any>, 
-        let rateString = current_price[endPointKey.toLowerCase()] as? String, 
-        let rateDouble = rateString as? Double else { 
+      guard let market_data = json["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>, let rateString = current_price[endPointKey.lowercased()] as? String, let rateDouble = rateString as? Double else {
         return nil
       }
       let date = Date()
       let dateFormatter = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd HH:mm:ss", options: 0, locale: Locale.current)
-      let lastUpdateString = dateFormatter.string(from: date)
-      return WidgetDataStore(rate: rateString, lastUpdate: lastUpdateString, rateDouble: rateDouble)
+      let lastUpdatedString = dateFormatter.string(from: date)
+      return WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
   } else {
-    guard let rateKey = rateKey, 
-      let rateDict = json[rateKey] as? [String: Any], 
-      let rateDouble = rateDict["price"] as? Double, 
-      let lastUpdated = json["timestamp"] as? Int else {
+    guard let rateKey = rateKey, let rateDict = json[rateKey] as? [String: Any], let rateDouble = rateDict["price"] as? Double, let lastUpdated = json["timestamp"] as? Int else {
       return nil
     }
     return WidgetDataStore(rate: String(rateDouble), lastUpdate: String(lastUpdated), rateDouble: rateDouble)
