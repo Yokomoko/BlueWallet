@@ -68,3 +68,8 @@ artifacts/
 *.mx
 *.realm
 *.realm.lock
+
+# GRS
+*.apk
+output-metadata.json
+sing.sh
