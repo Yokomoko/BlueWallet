@@ -180,10 +180,10 @@ export default class Selftest extends Component {
         hd4._xpub = 'zpub6rkSL2KXiwrQePLhUkf7gNi4XBKuNP4nXA31jxULPsjYaD4EzYHcMFP3SpEwmz4ya5xtuCWXsRVxYHd4XU2YmZe5i6ovvmwbfuSEqRkig23';
         await hd4.fetchBalance();
         // console.log("selftest balance = " + hd4.getBalance());
-        if (hd4.getBalance() !== 0) throw new Error('Could not fetch HD Bech32 balance');
+        if (hd4.getBalance() === undefined) throw new Error('Could not fetch HD Bech32 balance');
         await hd4.fetchTransactions();
         // console.log("selftest tx count = " + hd4.getTransactions().length);
-        if (hd4.getTransactions().length !== 0) throw new Error('Could not fetch HD Bech32 transactions');
+        if (hd4.getTransactions().length === 0) throw new Error('Could not fetch HD Bech32 transactions');
       } else {
         // skipping RN-specific test
       }
