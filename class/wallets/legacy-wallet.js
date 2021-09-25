@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import bitcoinMessage from 'bitcoinjs-message';
+import bitcoinMessage from 'groestlcoinjs-message';
 import { randomBytes } from '../rng';
 import { AbstractWallet } from './abstract-wallet';
 import { HDSegwitBech32Wallet } from '..';
