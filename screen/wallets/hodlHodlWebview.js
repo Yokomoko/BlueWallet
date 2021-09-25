@@ -1,38 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { WebView } from 'react-native-webview';
-import { BlueNavigationStyle, SafeBlueArea } from '../../BlueComponents';
-import PropTypes from 'prop-types';
+import { useRoute } from '@react-navigation/native';
 
-export default class HodlHodlWebview extends Component {
-  constructor(props) {
-    super(props);
+import { SafeBlueArea } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
 
-    const uri = props.route.params.uri;
+const HodlHodlWebview = () => {
+  const { uri } = useRoute().params;
 
-    this.state = {
-      uri,
-    };
-  }
-
-  render() {
-    return (
-      <SafeBlueArea>
-        <WebView source={{ uri: this.state.uri }} incognito />
-      </SafeBlueArea>
-    );
-  }
-}
-
-HodlHodlWebview.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({
-      uri: PropTypes.string.isRequired,
-    }),
-  }),
+  return (
+    <SafeBlueArea>
+      <WebView source={{ uri }} incognito />
+    </SafeBlueArea>
+  );
 };
 
-HodlHodlWebview.navigationOptions = ({ navigation }) => ({
-  ...BlueNavigationStyle(navigation, true),
+HodlHodlWebview.navigationOptions = navigationStyle({
+  closeButton: true,
   title: '',
   headerLeft: null,
 });
+
+export default HodlHodlWebview;

@@ -1,4 +1,3 @@
-/* global it, describe, jasmine, afterAll, beforeAll */
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitBech32Transaction, SegwitBech32Wallet } from '../../class';
 const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');
@@ -19,6 +18,11 @@ beforeAll(async () => {
 });
 
 let _cachedHdWallet = false;
+
+/**
+ * @returns {Promise<HDSegwitBech32Wallet>}
+ * @private
+ */
 async function _getHdWallet() {
   if (_cachedHdWallet) return _cachedHdWallet;
   _cachedHdWallet = new HDSegwitBech32Wallet();

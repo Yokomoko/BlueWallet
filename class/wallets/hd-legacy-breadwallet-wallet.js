@@ -1,4 +1,3 @@
-import bip39 from 'bip39';
 import * as bip32 from 'bip32grs';
 import * as bitcoinjs from 'groestlcoinjs-lib';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
@@ -12,14 +11,11 @@ const BlueElectrum = require('../../blue_modules/BlueElectrum');
 export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
   static type = 'HDLegacyBreadwallet';
   static typeReadable = 'HD Legacy Breadwallet (P2PKH)';
+  static derivationPath = "m/0'";
 
   // track address index at which wallet switched to segwit
   _external_segwit_index = null; // eslint-disable-line camelcase
   _internal_segwit_index = null; // eslint-disable-line camelcase
-
-  allowSendMax() {
-    return true;
-  }
 
   /**
    * @see https://github.com/bitcoinjs/bitcoinjs-lib/issues/584
@@ -30,8 +26,7 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
     const root = bip32.fromSeed(seed);
 
     const path = "m/0'";
@@ -112,8 +107,7 @@ export class HDLegacyBreadwalletWallet extends HDLegacyP2PKHWallet {
    */
   _getWIFByIndex(internal, index) {
     if (!this.secret) return false;
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
     const root = bitcoinjs.bip32.fromSeed(seed);
     const path = `m/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);

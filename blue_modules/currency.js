@@ -1,11 +1,14 @@
-import Frisbee from 'frisbee';
-import AsyncStorage from '@react-native-community/async-storage';
-import { AppStorage } from '../class';
-import { FiatServerResponse, FiatUnit } from '../models/fiatUnit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DefaultPreference from 'react-native-default-preference';
 import RNWidgetCenter from 'react-native-widget-center';
 import * as RNLocalize from 'react-native-localize';
-const BigNumber = require('bignumber.js');
+import BigNumber from 'bignumber.js';
+
+import { FiatUnit, getFiatRate } from '../models/fiatUnit';
+
+const PREFERRED_CURRENCY = 'preferredCurrency';
+const EXCHANGE_RATES = 'currency';
+
 let preferredFiatCurrency = FiatUnit.USD;
 const exchangeRates = {};
 
@@ -21,7 +24,7 @@ const STRUCT = {
  * @returns {Promise<void>}
  */
 async function setPrefferedCurrency(item) {
-  await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(item));
+  await AsyncStorage.setItem(PREFERRED_CURRENCY, JSON.stringify(item));
   await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
   await DefaultPreference.set('preferredCurrency', item.endPointKey);
   await DefaultPreference.set('preferredCurrencyLocale', item.locale.replace('-', '_'));
@@ -29,7 +32,8 @@ async function setPrefferedCurrency(item) {
 }
 
 async function getPreferredCurrency() {
-  const preferredCurrency = await JSON.parse(await AsyncStorage.getItem(AppStorage.PREFERRED_CURRENCY));
+  const preferredCurrency = await JSON.parse(await AsyncStorage.getItem(PREFERRED_CURRENCY));
+  await DefaultPreference.setName('group.io.bluewallet.bluewallet');
   await DefaultPreference.set('preferredCurrency', preferredCurrency.endPointKey);
   await DefaultPreference.set('preferredCurrencyLocale', preferredCurrency.locale.replace('-', '_'));
   return preferredCurrency;
@@ -42,7 +46,7 @@ async function updateExchangeRate() {
   }
 
   try {
-    preferredFiatCurrency = JSON.parse(await AsyncStorage.getItem(AppStorage.PREFERRED_CURRENCY));
+    preferredFiatCurrency = JSON.parse(await AsyncStorage.getItem(PREFERRED_CURRENCY));
     if (preferredFiatCurrency === null) {
       throw Error('No Preferred Fiat selected');
     }
@@ -55,26 +59,21 @@ async function updateExchangeRate() {
     }
   }
 
-  let response;
-  const fiatServerResponse = new FiatServerResponse(preferredFiatCurrency);
+  let rate;
   try {
-    const api = new Frisbee({
-      baseURI: fiatServerResponse.baseURI(),
-    });
-    response = await api.get(fiatServerResponse.endPoint());
-    fiatServerResponse.isErrorFound(response);
+    rate = await getFiatRate(preferredFiatCurrency.endPointKey);
   } catch (Err) {
     console.warn(Err);
-    const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(AppStorage.EXCHANGE_RATES));
+    const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(EXCHANGE_RATES));
     exchangeRates['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] =
       lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
     return;
   }
 
   exchangeRates[STRUCT.LAST_UPDATED] = +new Date();
-  exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = fiatServerResponse.rate(response);
-  await AsyncStorage.setItem(AppStorage.EXCHANGE_RATES, JSON.stringify(exchangeRates));
-  await AsyncStorage.setItem(AppStorage.PREFERRED_CURRENCY, JSON.stringify(preferredFiatCurrency));
+  exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] = rate;
+  await AsyncStorage.setItem(EXCHANGE_RATES, JSON.stringify(exchangeRates));
+  await AsyncStorage.setItem(PREFERRED_CURRENCY, JSON.stringify(preferredFiatCurrency));
   await setPrefferedCurrency(preferredFiatCurrency);
 }
 
@@ -184,3 +183,5 @@ module.exports.btcToSatoshi = btcToSatoshi;
 module.exports.getCurrencySymbol = getCurrencySymbol;
 module.exports._setPreferredFiatCurrency = _setPreferredFiatCurrency; // export it to mock data in tests
 module.exports._setExchangeRate = _setExchangeRate; // export it to mock data in tests
+module.exports.PREFERRED_CURRENCY = PREFERRED_CURRENCY;
+module.exports.EXCHANGE_RATES = EXCHANGE_RATES;

@@ -1,4 +1,3 @@
-/* global it, jasmine, describe */
 import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../../class';
 import { HodlHodlApi } from '../../class/hodl-hodl-api';
 
@@ -85,8 +84,14 @@ it('can create escrow address', () => {
   // console.log(tx.toHex());
 });
 
-describe('HodlHodl API', function () {
-  it.skip('can fetch countries & and own country code', async () => {
+/**
+ * Use only for development.
+ * Run via `NODE_OPTIONS=--insecure-http-parser=true ./node_modules/.bin/jest  tests/integration/hodlhodl.test.js`
+ * Also, process.env.HODLHODL_USERAGENT might be needed.
+ * All those a part of HodlHodl DDOS protection.
+ */
+describe.skip('HodlHodl API', function () {
+  it('can fetch countries & and own country code', async () => {
     if (process.env.GITHUB_ACTIONS) {
       // dont run here as it always fails
       return;
@@ -100,9 +105,6 @@ describe('HodlHodl API', function () {
     assert.ok(countries[0].native_name);
     assert.ok(countries[0].currency_code);
     assert.ok(countries[0].currency_name);
-
-    const countryCode = await Hodl.getMyCountryCode();
-    assert.strictEqual(countryCode.length, 2);
   });
 
   it.skip('can get offers', async () => {

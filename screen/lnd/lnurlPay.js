@@ -1,26 +1,27 @@
 /* global alert */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { I18nManager, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
+
 import {
-  BlueBitcoinAmount,
   BlueButton,
   BlueCard,
   BlueDismissKeyboardInputAccessory,
   BlueLoading,
-  BlueNavigationStyle,
   BlueSpacing20,
   BlueText,
   SafeBlueArea,
 } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import AmountInput from '../../components/AmountInput';
 import { BlueCurrentTheme } from '../../components/themes';
 import Lnurl from '../../class/lnurl';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import loc, { formatBalanceWithoutSuffix } from '../../loc';
-import { Icon } from 'react-native-elements';
 import Biometric from '../../class/biometrics';
-import PropTypes from 'prop-types';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 const currency = require('../../blue_modules/currency');
 
@@ -40,6 +41,7 @@ export default class LnurlPay extends Component {
       fromWallet,
       lnurl,
       payButtonDisabled: false,
+      unit: fromWallet.getPreferredBalanceUnit(),
     };
   }
 
@@ -51,7 +53,6 @@ export default class LnurlPay extends Component {
       payload,
       amount: payload.min,
       isLoading: false,
-      unit: BitcoinUnit.SATS,
       LN,
     });
   }
@@ -127,17 +128,19 @@ export default class LnurlPay extends Component {
       <View style={styles.walletSelectRoot}>
         {!this.state.isLoading && (
           <TouchableOpacity
+            accessibilityRole="button"
             style={styles.walletSelectTouch}
             onPress={() =>
               this.props.navigation.navigate('SelectWallet', { onWalletSelect: this.onWalletSelect, chainType: Chain.OFFCHAIN })
             }
           >
             <Text style={styles.walletSelectText}>{loc.wallets.select_wallet.toLowerCase()}</Text>
-            <Icon name="angle-right" size={18} type="font-awesome" color="#9aa0aa" />
+            <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color="#9aa0aa" />
           </TouchableOpacity>
         )}
         <View style={styles.walletWrap}>
           <TouchableOpacity
+            accessibilityRole="button"
             style={styles.walletWrapTouch}
             onPress={() =>
               this.props.navigation.navigate('SelectWallet', { onWalletSelect: this.onWalletSelect, chainType: Chain.OFFCHAIN })
@@ -159,7 +162,7 @@ export default class LnurlPay extends Component {
       <SafeBlueArea>
         <ScrollView>
           <BlueCard>
-            <BlueBitcoinAmount
+            <AmountInput
               isLoading={this.state.isLoading}
               amount={this.state.amount.toString()}
               onAmountUnitChange={unit => {
@@ -191,7 +194,11 @@ export default class LnurlPay extends Component {
 
   render() {
     if (this.state.isLoading) {
-      return <BlueLoading />;
+      return (
+        <View style={styles.root}>
+          <BlueLoading />
+        </View>
+      );
     }
 
     return this.renderGotPayload();
@@ -216,6 +223,10 @@ const styles = StyleSheet.create({
   img: { width: 200, height: 200, alignSelf: 'center' },
   alignSelfCenter: {
     alignSelf: 'center',
+  },
+  root: {
+    flex: 1,
+    backgroundColor: BlueCurrentTheme.colors.background,
   },
   walletSelectRoot: {
     marginBottom: 16,
@@ -260,10 +271,9 @@ const styles = StyleSheet.create({
   },
 });
 
-LnurlPay.navigationOptions = ({ navigation, route }) => {
-  return {
-    ...BlueNavigationStyle(navigation, true, () => navigation.dangerouslyGetParent().popToTop()),
-    title: '',
-    headerLeft: null,
-  };
-};
+LnurlPay.navigationOptions = navigationStyle({
+  title: '',
+  closeButton: true,
+  closeButtonFunc: ({ navigation }) => navigation.dangerouslyGetParent().popToTop(),
+  headerLeft: null,
+});

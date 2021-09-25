@@ -1,4 +1,3 @@
-/* global it, describe */
 import { SegwitP2SHWallet } from '../../class';
 const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');
@@ -10,6 +9,7 @@ describe('Segwit P2SH wallet', () => {
     assert.strictEqual(wallet.getAddress(), '36CZdzjnFDvdsTvHLqu3Fq64DgTKYqaf4x');
     assert.deepStrictEqual(wallet.getAllExternalAddresses(), ['36CZdzjnFDvdsTvHLqu3Fq64DgTKYqaf4x']);
     assert.strictEqual(await wallet.getChangeAddressAsync(), wallet.getAddress());
+    assert.strictEqual(await wallet.getAddressAsync(), wallet.getAddress());
 
     const utxos = [
       {
@@ -36,5 +36,14 @@ describe('Segwit P2SH wallet', () => {
     assert.strictEqual(tx.ins.length, 1);
     assert.strictEqual(tx.outs.length, 1);
     assert.strictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+  });
+
+  it('can sign and verify messages', async () => {
+    const l = new SegwitP2SHWallet();
+    l.setSecret('L4rK1yDtCWekvXuE6oXD9jCYfFNV2cWRpVuPLBcCU2z8TrisoyY1'); // from bitcoinjs-message examples
+
+    const signature = l.signMessage('This is an example of a signed message.', l.getAddress());
+    assert.strictEqual(signature, 'I9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk=');
+    assert.strictEqual(l.verifyMessage('This is an example of a signed message.', l.getAddress(), signature), true);
   });
 });

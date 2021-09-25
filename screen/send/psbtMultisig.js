@@ -1,15 +1,17 @@
 /* global alert */
 import React, { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BlueButton, BlueCard, BlueNavigationStyle, BlueText, SafeBlueArea } from '../../BlueComponents';
-import loc from '../../loc';
 import { Icon } from 'react-native-elements';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
+import { BlueButton, BlueCard, BlueText, SafeBlueArea } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import loc from '../../loc';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 const bitcoin = require('groestlcoinjs-lib');
-const currency = require('../../blue_modules/currency');
 const BigNumber = require('bignumber.js');
+const currency = require('../../blue_modules/currency');
 
 const shortenAddress = addr => {
   return addr.substr(0, Math.floor(addr.length / 2) - 1) + '\n' + addr.substr(Math.floor(addr.length / 2) - 1, addr.length);
@@ -115,6 +117,7 @@ const PsbtMultisig = () => {
         {renderProvideSignature && (
           <View>
             <TouchableOpacity
+              accessibilityRole="button"
               testID="ProvideSignature"
               style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]}
               onPress={navigateToPSBTMultisigQRCode}
@@ -242,15 +245,19 @@ const PsbtMultisig = () => {
     </View>
   );
   const footer = (
-    <View style={styles.bottomWrapper}>
-      <View style={styles.bottomFeesWrapper}>
-        <BlueText style={[styles.feeFiatText, stylesHook.feeFiatText]}>
-          {loc.formatString(loc.multisig.fee, { number: currency.satoshiToLocalCurrency(getFee()) })} -{' '}
-        </BlueText>
-        <BlueText>{loc.formatString(loc.multisig.fee_btc, { number: currency.satoshiToBTC(getFee()) })}</BlueText>
+    <>
+      <View style={styles.bottomWrapper}>
+        <View style={styles.bottomFeesWrapper}>
+          <BlueText style={[styles.feeFiatText, stylesHook.feeFiatText]}>
+            {loc.formatString(loc.multisig.fee, { number: currency.satoshiToLocalCurrency(getFee()) })} -{' '}
+          </BlueText>
+          <BlueText>{loc.formatString(loc.multisig.fee_btc, { number: currency.satoshiToBTC(getFee()) })}</BlueText>
+        </View>
       </View>
-      <BlueButton disabled={!isConfirmEnabled()} title={loc.multisig.confirm} onPress={onConfirm} testID="PsbtMultisigConfirmButton" />
-    </View>
+      <View style={styles.marginConfirmButton}>
+        <BlueButton disabled={!isConfirmEnabled()} title={loc.multisig.confirm} onPress={onConfirm} testID="PsbtMultisigConfirmButton" />
+      </View>
+    </>
   );
 
   const onLayout = e => {
@@ -258,11 +265,11 @@ const PsbtMultisig = () => {
   };
 
   return (
-    <SafeBlueArea style={[styles.root, stylesHook.root]}>
+    <SafeBlueArea style={stylesHook.root}>
       <View style={styles.container}>
         <View style={styles.mstopcontainer}>
           <View style={styles.mscontainer}>
-            <View style={[styles.msleft, { height: flatListHeight - 200 }]} />
+            <View style={[styles.msleft, { height: flatListHeight - 130 }]} />
           </View>
           <View style={styles.msright}>
             <BlueCard>
@@ -277,6 +284,7 @@ const PsbtMultisig = () => {
               {isConfirmEnabled() && (
                 <View style={styles.height80}>
                   <TouchableOpacity
+                    accessibilityRole="button"
                     testID="ExportSignedPsbt"
                     style={[styles.provideSignatureButton, stylesHook.provideSignatureButton]}
                     onPress={navigateToPSBTMultisigQRCode}
@@ -297,9 +305,6 @@ const PsbtMultisig = () => {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   mstopcontainer: {
     flex: 1,
     flexDirection: 'row',
@@ -313,7 +318,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: '#c4c4c4',
     marginLeft: 40,
-    marginTop: 185,
+    marginTop: 130,
   },
   msright: {
     flex: 90,
@@ -393,17 +398,15 @@ const styles = StyleSheet.create({
   vaultKeyTextSigned: { fontSize: 18, fontWeight: 'bold' },
   vaultKeyTextSignedWrapper: { justifyContent: 'center', alignItems: 'center', paddingLeft: 16 },
   flexDirectionRow: { flexDirection: 'row', paddingVertical: 12 },
-  textBtcUnit: { justifyContent: 'flex-end', bottom: 8 },
-  bottomFeesWrapper: { flexDirection: 'row', paddingBottom: 20 },
-  bottomWrapper: { justifyContent: 'center', alignItems: 'center', paddingVertical: 20 },
+  textBtcUnit: { justifyContent: 'flex-end' },
+  bottomFeesWrapper: { justifyContent: 'center', alignItems: 'center', flexDirection: 'row' },
+  bottomWrapper: { marginTop: 16 },
+  marginConfirmButton: { marginTop: 16, marginHorizontal: 32, marginBottom: 48 },
   height80: {
     height: 80,
   },
 });
 
-PsbtMultisig.navigationOptions = () => ({
-  ...BlueNavigationStyle(null, false),
-  title: loc.multisig.header,
-});
+PsbtMultisig.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.multisig.header }));
 
 export default PsbtMultisig;

@@ -1,20 +1,22 @@
 /* global alert */
 import React, { useState } from 'react';
-import { Image, View, TouchableOpacity, StatusBar, Platform, StyleSheet, TextInput } from 'react-native';
+import { Image, View, TouchableOpacity, StatusBar, Platform, StyleSheet, TextInput, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { Icon } from 'react-native-elements';
-import ImagePicker from 'react-native-image-picker';
-import { decodeUR, extractSingleWorkload } from 'bc-ur';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { decodeUR, extractSingleWorkload, BlueURDecoder } from '../../blue_modules/ur';
 import { useNavigation, useRoute, useIsFocused, useTheme } from '@react-navigation/native';
 import loc from '../../loc';
 import { BlueLoading, BlueText, BlueButton, BlueSpacing40 } from '../../BlueComponents';
 import { BlueCurrentTheme } from '../../components/themes';
 import { openPrivacyDesktopSettings } from '../../class/camera';
+
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 const createHash = require('create-hash');
 const fs = require('../../blue_modules/fs');
 const Base43 = require('../../blue_modules/base43');
 const bitcoin = require('groestlcoinjs-lib');
+let decoder = false;
 
 const styles = StyleSheet.create({
   root: {
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   backdoorInputWrapper: { position: 'absolute', left: '5%', top: '0%', width: '90%', height: '70%', backgroundColor: 'white' },
-  progressWrapper: { position: 'absolute', right: '50%', top: '50%', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+  progressWrapper: { position: 'absolute', alignSelf: 'center', alignItems: 'center', top: '50%', padding: 8, borderRadius: 8 },
   backdoorInput: {
     height: '50%',
     marginTop: 5,
@@ -90,7 +92,7 @@ const ScanQRCode = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const showFileImportButton = route.params.showFileImportButton || false;
-  const { launchedBy, onBarScanned } = route.params;
+  const { launchedBy, onBarScanned, onDismiss } = route.params;
   const scannedCache = {};
   const { colors } = useTheme();
   const isFocused = useIsFocused();
@@ -105,11 +107,47 @@ const ScanQRCode = () => {
     openSettingsContainer: {
       backgroundColor: colors.brandingColor,
     },
+    progressWrapper: { backgroundColor: colors.brandingColor, borderColor: colors.foregroundColor, borderWidth: 4 },
   });
   const HashIt = function (s) {
     return createHash('sha256').update(s).digest().toString('hex');
   };
 
+  const _onReadUniformResourceV2 = part => {
+    if (!decoder) decoder = new BlueURDecoder();
+    try {
+      decoder.receivePart(part);
+      if (decoder.isComplete()) {
+        const data = decoder.toString();
+        decoder = false; // nullify for future use (?)
+        if (launchedBy) {
+          navigation.navigate(launchedBy);
+        }
+        onBarScanned({ data });
+      } else {
+        setUrTotal(100);
+        setUrHave(Math.floor(decoder.estimatedPercentComplete() * 100));
+      }
+    } catch (error) {
+      console.warn(error);
+      setIsLoading(true);
+      Alert.alert(loc.send.scan_error, loc._.invalid_animated_qr_code_fragment, [
+        {
+          text: loc._.ok,
+          onPress: () => {
+            setIsLoading(false);
+          },
+          style: 'default',
+        },
+        { cancelabe: false },
+      ]);
+    }
+  };
+
+  /**
+   *
+   * @deprecated remove when we get rid of URv1 support
+   */
   const _onReadUniformResource = ur => {
     try {
       const [index, total] = extractSingleWorkload(ur);
@@ -136,7 +174,17 @@ const ScanQRCode = () => {
       }
     } catch (error) {
       console.warn(error);
-      alert(loc._.invalid_animated_qr_code_fragment);
+      setIsLoading(true);
+      Alert.alert(loc.send.scan_error, loc._.invalid_animated_qr_code_fragment, [
+        {
+          text: loc._.ok,
+          onPress: () => {
+            setIsLoading(false);
+          },
+          style: 'default',
+        },
+        { cancelabe: false },
+      ]);
     }
   };
 
@@ -147,6 +195,17 @@ const ScanQRCode = () => {
       return;
     }
     scannedCache[h] = +new Date();
+
+    if (ret.data.toUpperCase().startsWith('UR:CRYPTO-PSBT')) {
+      return _onReadUniformResourceV2(ret.data);
+    }
+
+    if (ret.data.toUpperCase().startsWith('UR:BYTES')) {
+      const splitted = ret.data.split('/');
+      if (splitted.length === 3 && splitted[1].includes('-')) {
+        return _onReadUniformResourceV2(ret.data);
+      }
+    }
 
     if (ret.data.toUpperCase().startsWith('UR')) {
       return _onReadUniformResource(ret.data);
@@ -192,25 +251,29 @@ const ScanQRCode = () => {
   const showImagePicker = () => {
     if (!isLoading) {
       setIsLoading(true);
-      ImagePicker.launchImageLibrary(
+      launchImageLibrary(
         {
           title: null,
           mediaType: 'photo',
           takePhotoButtonTitle: null,
         },
         response => {
-          if (response.uri) {
-            const uri = Platform.OS === 'ios' ? response.uri.toString().replace('file://', '') : response.path.toString();
-            LocalQRCode.decode(uri, (error, result) => {
-              if (!error) {
-                onBarCodeRead({ data: result });
-              } else {
-                alert(loc.send.qr_error_no_qrcode);
-                setIsLoading(false);
-              }
-            });
-          } else {
+          if (response.didCancel) {
             setIsLoading(false);
+          } else {
+            if (response.uri) {
+              const uri = response.uri.toString().replace('file://', '');
+              LocalQRCode.decode(uri, (error, result) => {
+                if (!error) {
+                  onBarCodeRead({ data: result });
+                } else {
+                  alert(loc.send.qr_error_no_qrcode);
+                  setIsLoading(false);
+                }
+              });
+            } else {
+              setIsLoading(false);
+            }
           }
         },
       );
@@ -223,6 +286,7 @@ const ScanQRCode = () => {
     } else {
       navigation.goBack();
     }
+    if (onDismiss) onDismiss();
   };
 
   const handleCameraStatusChange = event => {
@@ -266,17 +330,17 @@ const ScanQRCode = () => {
       </TouchableOpacity>
       {showFileImportButton && (
         <TouchableOpacity style={styles.filePickerTouch} onPress={showFilePicker}>
-          <Icon name="file-import" type="material-community" color="#ffffff" />
+          <Icon name="file-import" type="font-awesome-5" color="#ffffff" />
         </TouchableOpacity>
       )}
       {urTotal > 0 && (
-        <View style={styles.progressWrapper} testID="UrProgressBar">
+        <View style={[styles.progressWrapper, stylesHook.progressWrapper]} testID="UrProgressBar">
+          <BlueText>{loc.wallets.please_continue_scanning}</BlueText>
           <BlueText>
             {urHave} / {urTotal}
           </BlueText>
         </View>
       )}
-
       {backdoorVisible && (
         <View style={styles.backdoorInputWrapper}>
           <BlueText>Provide QR code contents manually:</BlueText>
@@ -298,17 +362,9 @@ const ScanQRCode = () => {
             testID="scanQrBackdoorOkButton"
             onPress={() => {
               setBackdoorVisible(false);
-              let data;
-              try {
-                data = JSON.parse(backdoorText);
-                // this might be a json string (for convenience - in case there are "\n" in there)
-              } catch (_) {
-                data = backdoorText;
-              } finally {
-                setBackdoorText('');
-              }
+              setBackdoorText('');
 
-              if (data) onBarCodeRead({ data });
+              if (backdoorText) onBarCodeRead({ data: backdoorText });
             }}
           />
         </View>
@@ -328,10 +384,6 @@ const ScanQRCode = () => {
       />
     </View>
   );
-};
-
-ScanQRCode.navigationOptions = {
-  headerShown: false,
 };
 
 export default ScanQRCode;

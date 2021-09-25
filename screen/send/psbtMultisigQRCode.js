@@ -1,22 +1,23 @@
 /* global alert */
-import React, { useState } from 'react';
-import { ActivityIndicator, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { BlueNavigationStyle, BlueSpacing20, SafeBlueArea } from '../../BlueComponents';
+import React, { useRef, useState } from 'react';
+import { ActivityIndicator, findNodeHandle, ScrollView, StyleSheet, View } from 'react-native';
+import { getSystemName } from 'react-native-device-info';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
+import { BlueSpacing20, SafeBlueArea } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
 import { DynamicQRCode } from '../../components/DynamicQRCode';
 import { SquareButton } from '../../components/SquareButton';
-import { getSystemName } from 'react-native-device-info';
 import loc from '../../loc';
-import ImagePicker from 'react-native-image-picker';
-import ScanQRCode from './ScanQRCode';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 const bitcoin = require('groestlcoinjs-lib');
 const fs = require('../../blue_modules/fs');
-const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
+
 const isDesktop = getSystemName() === 'Mac OS X';
 
 const PsbtMultisigQRCode = () => {
   const { navigate } = useNavigation();
   const { colors } = useTheme();
+  const openScannerButton = useRef();
   const { psbtBase64, isShowOpenScanner } = useRoute().params;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,6 +42,7 @@ const PsbtMultisigQRCode = () => {
     } else if (ret.data.indexOf('+') === -1 && ret.data.indexOf('=') === -1 && ret.data.indexOf('=') === -1) {
       // this looks like NOT base64, so maybe its transaction's hex
       // we dont support it in this flow
+      alert(loc.wallets.import_error);
     } else {
       // psbt base64?
       navigate('PsbtMultisig', { receivedPSBTBase64: ret.data });
@@ -49,27 +51,7 @@ const PsbtMultisigQRCode = () => {
 
   const openScanner = () => {
     if (isDesktop) {
-      ImagePicker.launchCamera(
-        {
-          title: null,
-          mediaType: 'photo',
-          takePhotoButtonTitle: null,
-        },
-        response => {
-          if (response.uri) {
-            const uri = Platform.OS === 'ios' ? response.uri.toString().replace('file://', '') : response.path.toString();
-            LocalQRCode.decode(uri, (error, result) => {
-              if (!error) {
-                onBarScanned(result);
-              } else {
-                alert(loc.send.qr_error_no_qrcode);
-              }
-            });
-          } else if (response.error) {
-            ScanQRCode.presentCameraNotAuthorizedAlert(response.error);
-          }
-        },
-      );
+      fs.showActionSheet({ anchor: findNodeHandle(openScannerButton.current) }).then(data => onBarScanned({ data }));
     } else {
       navigate('ScanQRCodeRoot', {
         screen: 'ScanQRCode',
@@ -87,10 +69,10 @@ const PsbtMultisigQRCode = () => {
   };
 
   return (
-    <SafeBlueArea style={[styles.root, stylesHook.root]}>
+    <SafeBlueArea style={stylesHook.root}>
       <ScrollView centerContent contentContainerStyle={styles.scrollViewContent}>
         <View style={[styles.modalContentShort, stylesHook.modalContentShort]}>
-          <DynamicQRCode value={psbt.toHex()} capacity={666} />
+          <DynamicQRCode value={psbt.toHex()} />
           {!isShowOpenScanner && (
             <>
               <BlueSpacing20 />
@@ -98,6 +80,7 @@ const PsbtMultisigQRCode = () => {
                 testID="CosignedScanOrImportFile"
                 style={[styles.exportButton, stylesHook.exportButton]}
                 onPress={openScanner}
+                ref={openScannerButton}
                 title={loc.multisig.scan_or_import_file}
               />
             </>
@@ -115,9 +98,6 @@ const PsbtMultisigQRCode = () => {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'space-between',
@@ -139,9 +119,6 @@ const styles = StyleSheet.create({
   },
 });
 
-PsbtMultisigQRCode.navigationOptions = () => ({
-  ...BlueNavigationStyle(null, false),
-  title: loc.multisig.header,
-});
+PsbtMultisigQRCode.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.multisig.header }));
 
 export default PsbtMultisigQRCode;

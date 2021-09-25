@@ -1,4 +1,3 @@
-import bip39 from 'bip39';
 import b58 from 'bs58grscheck';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 const bitcoin = require('groestlcoinjs-lib');
@@ -12,12 +11,30 @@ const HDNode = require('bip32grs');
 export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
   static type = 'HDsegwitP2SH';
   static typeReadable = 'HD SegWit (BIP49 P2SH)';
+  static segwitType = 'p2sh(p2wpkh)';
+  static derivationPath = "m/49'/0'/0'";
 
   allowSend() {
     return true;
   }
 
-  allowSendMax(): boolean {
+  allowCosignPsbt() {
+    return true;
+  }
+
+  allowSignVerifyMessage() {
+    return true;
+  }
+
+  allowHodlHodlTrading() {
+    return true;
+  }
+
+  allowMasterFingerprint() {
+    return true;
+  }
+
+  allowXpub() {
     return true;
   }
 
@@ -30,8 +47,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
    */
   _getWIFByIndex(internal, index) {
     if (!this.secret) return false;
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
     const root = bitcoin.bip32.fromSeed(seed);
     const path = `m/49'/17'/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
@@ -78,8 +94,7 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
       return this._xpub; // cache hit
     }
     // first, getting xpub
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
     const root = HDNode.fromSeed(seed);
 
     const path = "m/49'/17'/0'";
@@ -134,7 +149,8 @@ export class HDSegwitP2SHWallet extends AbstractHDElectrumWallet {
     return address;
   }
 
-  allowHodlHodlTrading() {
-    return true;
+  _getDerivationPathByAddress(address, BIP = 49) {
+    // only changing defaults for function arguments
+    return super._getDerivationPathByAddress(address, BIP);
   }
 }

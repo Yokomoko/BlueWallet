@@ -1,4 +1,3 @@
-/* global it, describe, afterAll, beforeAll, jasmine */
 global.net = require('net');
 global.tls = require('tls');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
@@ -22,6 +21,75 @@ beforeAll(async () => {
 });
 
 describe('BlueElectrum', () => {
+  it('ElectrumClient can estimate fees from histogram', async () => {
+    assert.strictEqual(
+      BlueElectrum.calcEstimateFeeFromFeeHistorgam(1, [
+        [96, 105086],
+        [83, 124591],
+        [64, 108207],
+        [50, 131141],
+        [22, 148800],
+        [17, 156916],
+        [11, 413222],
+        [10, 361384],
+        [9, 294146],
+        [8, 121778],
+        [7, 1153727],
+        [6, 283925],
+        [5, 880946],
+        [4, 825703],
+        [3, 2179023],
+        [2, 590559],
+        [1, 1648473],
+      ]),
+      22,
+    );
+    assert.strictEqual(
+      BlueElectrum.calcEstimateFeeFromFeeHistorgam(18, [
+        [96, 105086],
+        [83, 124591],
+        [64, 108207],
+        [50, 131141],
+        [22, 148800],
+        [17, 156916],
+        [11, 413222],
+        [10, 361384],
+        [9, 294146],
+        [8, 121778],
+        [7, 1153727],
+        [6, 283925],
+        [5, 880946],
+        [4, 825703],
+        [3, 2179023],
+        [2, 590559],
+        [1, 1648473],
+      ]),
+      4,
+    );
+    assert.strictEqual(
+      BlueElectrum.calcEstimateFeeFromFeeHistorgam(144, [
+        [96, 105086],
+        [83, 124591],
+        [64, 108207],
+        [50, 131141],
+        [22, 148800],
+        [17, 156916],
+        [11, 413222],
+        [10, 361384],
+        [9, 294146],
+        [8, 121778],
+        [7, 1153727],
+        [6, 283925],
+        [5, 880946],
+        [4, 825703],
+        [3, 2179023],
+        [2, 590559],
+        [1, 1648473],
+      ]),
+      4,
+    );
+  });
+
   it('ElectrumClient can test connection', async () => {
     assert.ok(!(await BlueElectrum.testConnection('electrum1.groestlcoin.org', 444, false)));
     assert.ok(!(await BlueElectrum.testConnection('electrum1.groestlcoin.org', false, 444)));
@@ -41,6 +109,10 @@ describe('BlueElectrum', () => {
 
   it('ElectrumClient can estimate fees', async () => {
     assert.ok((await BlueElectrum.estimateFee(1)) > 1);
+    const fees = await BlueElectrum.estimateFees();
+    assert.ok(fees.fast > 0);
+    assert.ok(fees.medium > 0);
+    assert.ok(fees.slow > 0);
   });
 
   it('ElectrumClient can request server features', async () => {
@@ -86,11 +158,13 @@ describe('BlueElectrum', () => {
     }
   });
 
-  it('BlueElectrum can do multiGetBalanceByAddress()', async function () {
+  it.each([false, true])('BlueElectrum can do multiGetBalanceByAddress(), disableBatching=%p', async function (diableBatching) {
+    if (diableBatching) BlueElectrum.setBatchingDisabled();
     const balances = await BlueElectrum.multiGetBalanceByAddress([
       'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80',
       'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
       'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx',
+      // TODO: get a 3 address and put it here and in the [] below
       'grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf',
     ]);
 
@@ -104,6 +178,8 @@ describe('BlueElectrum', () => {
     assert.strictEqual(balances.addresses.grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx.unconfirmed, 0);
     assert.strictEqual(balances.addresses.grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf.confirmed, 60950);
     assert.strictEqual(balances.addresses.grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf.unconfirmed, 0);
+    // assert.strictEqual(balances.addresses['grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf'].confirmed, 60950);
+    // assert.strictEqual(balances.addresses['grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf'].unconfirmed, 0);
   });
 
   it('BlueElectrum can do multiGetUtxoByAddress()', async () => {
@@ -127,7 +203,8 @@ describe('BlueElectrum', () => {
     assert.strictEqual(utxos.grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80[0].address, 'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80');
   });
 
-  it('ElectrumClient can do multiGetHistoryByAddress()', async () => {
+  it.each([false, true])('ElectrumClient can do multiGetHistoryByAddress(), disableBatching=%p', async disableBatching => {
+    if (disableBatching) BlueElectrum.setBatchingDisabled();
     const histories = await BlueElectrum.multiGetHistoryByAddress(
       [
         'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj',
@@ -148,9 +225,11 @@ describe('BlueElectrum', () => {
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
     );
     assert.ok(Object.keys(histories).length === 4);
+    if (disableBatching) BlueElectrum.setBatchingEnabled();
   });
 
-  it('ElectrumClient can do multiGetTransactionByTxid()', async () => {
+  it.each([false, true])('ElectrumClient can do multiGetTransactionByTxid(), disableBatching=%p', async disableBatching => {
+    if (disableBatching) BlueElectrum.setBatchingDisabled();
     const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       [
         'd02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',
@@ -175,6 +254,7 @@ describe('BlueElectrum', () => {
     assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.vout);
     assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.blocktime);
     assert.ok(Object.keys(txdatas).length === 4);
+    if (disableBatching) BlueElectrum.setBatchingEnabled();
   });
 
   it('multiGetTransactionByTxid() can work with big batches', async () => {
@@ -237,7 +317,8 @@ describe('BlueElectrum', () => {
     assert.ok(txdatas['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
   });
 
-  it('ElectrumClient can do multiGetHistoryByAddress() to obtain txhex', async () => {
+  it.each([false, true])('ElectrumClient can do multiGetHistoryByAddress() to obtain txhex, disableBatching=%p', async disableBatching => {
+    if (disableBatching) BlueElectrum.setBatchingDisabled();
     const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       ['7fc65dc0c1134d5e704947c2fd75c4a7df450153a1063f3e7846409fd053cdef'],
       3,
@@ -248,5 +329,6 @@ describe('BlueElectrum', () => {
       txdatas['7fc65dc0c1134d5e704947c2fd75c4a7df450153a1063f3e7846409fd053cdef'],
       '020000000001016f3d295f9f7b34a60daed79b328b787619f0057e10641830afb89f22890da7bc0000000000feffffff0226fa25010000000016001468dbccf9102b9bc1fa11855dbfc40bf9d616bfbba08601000000000022002076330e00e9d04d7708cae57d01f818e6ff4e068b4873c474defaaac705be23060247304402203e5599d40b564bb57db60d3997f6f797167eb05d69a1cf702d8e0be7eb243b7a022061c6c13a1266b55efcd2b09ce445333852a247ce6127ec4ad25d93aa8b1a18070121039f9616e13a10d7d9de4d6fb0ee41d08e39c56695c473dbb86dfff1388a3d441a00000000',
     );
+    if (disableBatching) BlueElectrum.setBatchingEnabled();
   });
 });

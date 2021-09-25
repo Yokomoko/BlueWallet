@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import LottieView from 'lottie-react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
+import BigNumber from 'bignumber.js';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
 import { BlueButton, BlueCard } from '../../BlueComponents';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
-import PropTypes from 'prop-types';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
 const Success = () => {
   const pop = () => {
@@ -79,13 +81,13 @@ export const SuccessView = ({ amount, amountUnit, fee, invoiceDescription, shoul
           {amount && (
             <>
               <Text style={[styles.amountValue, stylesHook.amountValue]}>{amount}</Text>
-              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' ' + amountUnit}</Text>
+              <Text style={[styles.amountUnit, stylesHook.amountUnit]}>{' ' + loc.units[amountUnit]}</Text>
             </>
           )}
         </View>
         {fee > 0 && (
           <Text style={styles.feeText}>
-            {loc.send.create_fee}: {fee} {BitcoinUnit.BTC}
+            {loc.send.create_fee}: {new BigNumber(fee).toFixed()} {loc.units[BitcoinUnit.BTC]}
           </Text>
         )}
         <Text numberOfLines={0} style={styles.feeText}>

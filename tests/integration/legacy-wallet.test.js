@@ -1,4 +1,3 @@
-/* global describe, it, jasmine, afterAll, beforeAll */
 import { LegacyWallet, SegwitP2SHWallet, SegwitBech32Wallet } from '../../class';
 const assert = require('assert');
 global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
@@ -45,6 +44,7 @@ describe('LegacyWallet', function () {
     w._address = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD'; // hack internals
     assert.ok(w.weOwnAddress('3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD'));
     assert.ok(!w.weOwnAddress('aaa'));
+    assert.ok(!w.weOwnAddress(false));
     assert.ok(w.getBalance() === 0);
     assert.ok(w.getUnconfirmedBalance() === 0);
     assert.ok(w._lastBalanceFetch === 0);
@@ -54,11 +54,11 @@ describe('LegacyWallet', function () {
     assert.ok(w._lastBalanceFetch > 0);
   });
 
-  it('can fetch TXs', async () => {
+  it('can fetch TXs and derive UTXO from them', async () => {
     const w = new LegacyWallet();
     w._address = 'FZi9qkpK2KdxUQ1x6T1vbn8jjSgsZazgo8';
     await w.fetchTransactions();
-    assert.strictEqual(w.getTransactions().length, 2);
+    assert.strictEqual(w.getTransactions().length, 1);
 
     for (const tx of w.getTransactions()) {
       assert.ok(tx.hash);
@@ -68,8 +68,18 @@ describe('LegacyWallet', function () {
     }
 
     assert.ok(w.weOwnTransaction('0eb0797556aad47f955d00fa93b677fd82fc2c5c511378f0420c2898e18057e5'));
-    // assert.ok(w.weOwnTransaction('d0432027a86119c63a0be8fa453275c2333b59067f1e559389cd3e0e377c8b96'));
     assert.ok(!w.weOwnTransaction('825c12f277d1f84911ac15ad1f41a3de28e9d906868a930b0a7bca61b17c8881'));
+
+    assert.strictEqual(w.getUtxo().length, 1);
+
+    for (const tx of w.getUtxo()) {
+      assert.strictEqual(tx.txid, 'b2ac59bc282083498d1e87805d89bef9d3f3bc216c1d2c4dfaa2e2911b547100');
+      assert.strictEqual(tx.vout, 0);
+      assert.strictEqual(tx.address, '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK');
+      assert.strictEqual(tx.value, 51432);
+      assert.strictEqual(tx.value, tx.amount);
+      assert.ok(tx.confirmations > 0);
+    }
   });
 /*
   it.each([
@@ -118,6 +128,8 @@ describe('SegwitP2SHWallet', function () {
     assert.ok(l.getAddress() === '34AgLJhwXrvmkZS1o5TrcdeevMt1ywshkh', 'expected ' + l.getAddress());
     assert.ok(l.getAddress() === (await l.getAddressAsync()));
     assert.ok(l.weOwnAddress('34AgLJhwXrvmkZS1o5TrcdeevMt1ywshkh'));
+    assert.ok(!l.weOwnAddress('garbage'));
+    assert.ok(!l.weOwnAddress(false));
   });
 });
 
@@ -126,6 +138,9 @@ describe('SegwitBech32Wallet', function () {
     const w = new SegwitBech32Wallet();
     w._address = 'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx';
     assert.ok(w.weOwnAddress('grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx'));
+    assert.ok(w.weOwnAddress('GRS1QPHJSJ69A65Q9UV6EHP65HR84ZJTFFVW9630PCX'));
+    assert.ok(!w.weOwnAddress('garbage'));
+    assert.ok(!w.weOwnAddress(false));
     await w.fetchBalance();
     assert.strictEqual(w.getBalance(), 0);
   });
@@ -165,9 +180,12 @@ describe('SegwitBech32Wallet', function () {
   });
 
   it('can fetch TXs', async () => {
-    const w = new LegacyWallet();
+    const w = new SegwitBech32Wallet();
     w._address = 'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80';
     assert.ok(w.weOwnAddress('grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80'));
+    assert.ok(w.weOwnAddress('GRS1Q0H03F6HW65YLL5A7LNMU6ATPDPLW7Y34752G80'));
+    assert.ok(!w.weOwnAddress('garbage'));
+    assert.ok(!w.weOwnAddress(false));
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 1);
 

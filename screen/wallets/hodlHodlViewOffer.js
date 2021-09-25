@@ -1,10 +1,12 @@
 /* global alert */
 import React, { Component } from 'react';
 import { Alert, FlatList, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { BlueButton, BlueLoading, BlueNavigationStyle, BlueSpacing10, SafeBlueArea } from '../../BlueComponents';
 import PropTypes from 'prop-types';
-import { HodlHodlApi } from '../../class/hodl-hodl-api';
 import { Icon } from 'react-native-elements';
+
+import navigationStyle from '../../components/navigationStyle';
+import { BlueButton, BlueLoading, BlueSpacing10, SafeBlueArea } from '../../BlueComponents';
+import { HodlHodlApi } from '../../class/hodl-hodl-api';
 import * as NavigationService from '../../NavigationService';
 import { BlueCurrentTheme } from '../../components/themes';
 import loc from '../../loc';
@@ -174,7 +176,7 @@ export default class HodlHodlViewOffer extends Component {
     ) : (
       <SafeBlueArea>
         <ScrollView>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : null}>
+          <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
             <View style={styles.modalContent}>
               <Text style={styles.Title}>{this.state.offerToDisplay.title}</Text>
 
@@ -380,11 +382,15 @@ const styles = StyleSheet.create({
   acceptOfferButtonWrapperWrapper: { marginTop: 24, alignItems: 'center' },
 });
 
-HodlHodlViewOffer.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: '',
-  headerStyle: {
-    ...BlueNavigationStyle().headerStyle,
-    backgroundColor: BlueCurrentTheme.colors.customHeader,
+HodlHodlViewOffer.navigationOptions = navigationStyle(
+  {
+    title: '',
   },
-});
+  (options, { theme }) => ({
+    ...options,
+    headerStyle: {
+      ...options.headerStyle,
+      backgroundColor: theme.colors.customHeader,
+    },
+  }),
+);

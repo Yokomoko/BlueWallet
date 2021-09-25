@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueNavigationStyle, BlueLoading } from '../BlueComponents';
 import PropTypes from 'prop-types';
-import { SegwitP2SHWallet, LegacyWallet, HDSegwitP2SHWallet, HDSegwitBech32Wallet } from '../class';
-import { BlueCurrentTheme } from '../components/themes';
+import { ScrollView, View, StyleSheet } from 'react-native';
+
+import loc from '../loc';
+import { BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
+import navigationStyle from '../components/navigationStyle';
+import {
+  SegwitP2SHWallet,
+  LegacyWallet,
+  HDSegwitP2SHWallet,
+  HDSegwitBech32Wallet,
+  HDAezeedWallet,
+  SLIP39LegacyP2PKHWallet,
+} from '../class';
 const bitcoin = require('groestlcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
 const encryption = require('../blue_modules/encryption');
 const BlueElectrum = require('../blue_modules/BlueElectrum');
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: BlueCurrentTheme.colors.background,
-  },
   center: {
     alignItems: 'center',
   },
@@ -62,7 +67,16 @@ export default class Selftest extends Component {
         // skipping RN-specific test'
       }
 
-      //
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        const aezeed = new HDAezeedWallet();
+        aezeed.setSecret(
+          'abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern',
+        );
+        assertStrictEqual(await aezeed.validateMnemonicAsync(), true, 'Aezeed failed');
+        assertStrictEqual(aezeed._getExternalAddressByIndex(0), 'bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn', 'Aezeed failed');
+      } else {
+        // skipping RN-specific test
+      }
 
       let l = new LegacyWallet();
       l.setSecret('L1NwUPQZKwGuPMS9R36rjezZpxKFYLmugFvDQBZCwYFukJ3pzWdb');
@@ -136,7 +150,7 @@ export default class Selftest extends Component {
       const bip39 = require('bip39');
       const mnemonic =
         'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
-      const seed = bip39.mnemonicToSeed(mnemonic);
+      const seed = bip39.mnemonicToSeedSync(mnemonic);
       const root = bitcoin.bip32.fromSeed(seed);
 
       const path = "m/49'/17'/0'/0/0";
@@ -196,6 +210,16 @@ export default class Selftest extends Component {
           throw new Error('react-native-blue-crypto is not ok');
       }
 
+      // slip39 test
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        const w = new SLIP39LegacyP2PKHWallet();
+        w.setSecret(
+          'shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed\n' +
+            'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking',
+        );
+        assertStrictEqual(w._getExternalAddressByIndex(0), '18pvMjy7AJbCDtv4TLYbGPbR7SzGzjqUpj');
+      }
+
       //
     } catch (Err) {
       errorMessage += Err;
@@ -215,7 +239,7 @@ export default class Selftest extends Component {
     }
 
     return (
-      <SafeBlueArea forceInset={{ horizontal: 'always' }} style={styles.root}>
+      <SafeBlueArea>
         <BlueCard>
           <ScrollView>
             <BlueSpacing20 />
@@ -227,6 +251,8 @@ export default class Selftest extends Component {
                     <BlueText testID="SelfTestOk" h4>
                       OK
                     </BlueText>
+                    <BlueSpacing20 />
+                    <BlueText>{loc.settings.about_selftest_ok}</BlueText>
                   </View>
                 );
               } else {
@@ -260,7 +286,6 @@ Selftest.propTypes = {
   }),
 };
 
-Selftest.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: 'Self test',
+Selftest.navigationOptions = navigationStyle({
+  title: loc.settings.selfTest,
 });

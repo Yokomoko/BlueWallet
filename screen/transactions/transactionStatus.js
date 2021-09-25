@@ -1,26 +1,27 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, ActivityIndicator, Text, TouchableOpacity, StyleSheet, StatusBar, I18nManager } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
 import {
   BlueButton,
-  SafeBlueArea,
+  BlueCard,
+  BlueLoading,
+  BlueSpacing10,
+  BlueSpacing20,
+  BlueText,
+  BlueTransactionIncomingIcon,
   BlueTransactionOutgoingIcon,
   BlueTransactionPendingIcon,
-  BlueTransactionIncomingIcon,
-  BlueCard,
-  BlueText,
-  BlueLoading,
-  BlueSpacing20,
-  BlueNavigationStyle,
-  BlueSpacing10,
+  SafeBlueArea,
 } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
-import { Icon } from 'react-native-elements';
-import Handoff from 'react-native-handoff';
-import HandoffSettings from '../../class/handoff';
+import HandoffComponent from '../../components/handoff';
 import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
 const buttonStatus = Object.freeze({
   possible: 1,
   unknown: 2,
@@ -29,7 +30,6 @@ const buttonStatus = Object.freeze({
 
 const TransactionsStatus = () => {
   const { setSelectedWallet, wallets, txMetadata, getTransactions } = useContext(BlueStorageContext);
-  const [isHandOffUseEnabled, setIsHandOffUseEnabled] = useState(false);
   const { hash } = useRoute().params;
   const { navigate, setOptions } = useNavigation();
   const { colors } = useTheme();
@@ -40,9 +40,6 @@ const TransactionsStatus = () => {
   const [tx, setTX] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const stylesHook = StyleSheet.create({
-    root: {
-      backgroundColor: colors.background,
-    },
     value: {
       color: colors.alternativeTextColor2,
     },
@@ -87,7 +84,7 @@ const TransactionsStatus = () => {
       }
     }
 
-    for (const tx of getTransactions()) {
+    for (const tx of getTransactions(null, Infinity, true)) {
       if (tx.hash === hash) {
         setTX(tx);
         break;
@@ -114,18 +111,18 @@ const TransactionsStatus = () => {
     initialState();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tx]);
+  }, [tx, wallets]);
 
   useEffect(() => {
-    if (wallet) {
-      setSelectedWallet(wallet.current.getID());
+    const walletID = wallet.current?.getID();
+    if (walletID) {
+      setSelectedWallet(wallet.current?.getID());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet]);
+  }, [wallet.current]);
 
   useEffect(() => {
     console.log('transactions/details - useEffect');
-    HandoffSettings.isHandoffUseEnabled().then(setIsHandOffUseEnabled);
   }, []);
 
   const checkPossibilityOfCPFP = async () => {
@@ -229,7 +226,7 @@ const TransactionsStatus = () => {
     } else if (isRBFCancelPossible === buttonStatus.possible) {
       return (
         <>
-          <TouchableOpacity style={styles.cancel}>
+          <TouchableOpacity accessibilityRole="button" style={styles.cancel}>
             <Text onPress={navigateToRBFCancel} style={styles.cancelText}>
               {loc.transactions.status_cancel}
             </Text>
@@ -273,16 +270,19 @@ const TransactionsStatus = () => {
 
   if (isLoading || !tx) {
     return (
-      <SafeBlueArea forceInset={{ horizontal: 'always' }} style={[styles.root, stylesHook.root]}>
+      <SafeBlueArea>
         <BlueLoading />
       </SafeBlueArea>
     );
   }
   return (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={[styles.root, stylesHook.root]}>
-      {isHandOffUseEnabled && (
-        <Handoff title={`Groestlcoin Transaction ${tx.hash}`} type="org.groestlcoin.bluewallet123" url={`https://esplora.groestlcoin.org/tx/${tx.hash}`} />
-      )}
+    <SafeBlueArea>
+      <HandoffComponent
+        title={`Groestlcoin Transaction ${tx.hash}`}
+        type="org.groestlcoin.bluewallet123"
+        url={`https://esplora.groestlcoin.org/tx/${tx.hash}`}
+      />
+
       <StatusBar barStyle="default" />
       <View style={styles.container}>
         <BlueCard>
@@ -290,7 +290,7 @@ const TransactionsStatus = () => {
             <Text style={[styles.value, stylesHook.value]}>
               {formatBalanceWithoutSuffix(tx.value, wallet.current.preferredBalanceUnit, true)}{' '}
               {wallet.current.preferredBalanceUnit !== BitcoinUnit.LOCAL_CURRENCY && (
-                <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{wallet.current.preferredBalanceUnit}</Text>
+                <Text style={[styles.valueUnit, stylesHook.valueUnit]}>{loc.units[wallet.current.preferredBalanceUnit]}</Text>
               )}
             </Text>
           </View>
@@ -336,7 +336,11 @@ const TransactionsStatus = () => {
           )}
 
           <View style={[styles.confirmations, stylesHook.confirmations]}>
-            <Text style={styles.confirmationsText}>{tx.confirmations > 6 ? '6+' : tx.confirmations} confirmations</Text>
+            <Text style={styles.confirmationsText}>
+              {loc.formatString(loc.transactions.confirmations_lowercase, {
+                confirmations: tx.confirmations > 6 ? '6+' : tx.confirmations,
+              })}
+            </Text>
           </View>
         </BlueCard>
 
@@ -344,9 +348,9 @@ const TransactionsStatus = () => {
           {renderCPFP()}
           {renderRBFBumpFee()}
           {renderRBFCancel()}
-          <TouchableOpacity style={styles.details} onPress={navigateToTransactionDetials}>
+          <TouchableOpacity accessibilityRole="button" style={styles.details} onPress={navigateToTransactionDetials}>
             <Text style={styles.detailsText}>{loc.send.create_details.toLowerCase()}</Text>
-            <Icon name="angle-right" size={18} type="font-awesome" color="#9aa0aa" />
+            <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color="#9aa0aa" />
           </TouchableOpacity>
         </View>
       </View>
@@ -356,9 +360,6 @@ const TransactionsStatus = () => {
 
 export default TransactionsStatus;
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   container: {
     flex: 1,
     justifyContent: 'space-between',
@@ -454,7 +455,6 @@ const styles = StyleSheet.create({
   },
 });
 
-TransactionsStatus.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
+TransactionsStatus.navigationOptions = navigationStyle({
   title: '',
 });

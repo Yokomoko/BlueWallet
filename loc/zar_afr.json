@@ -20,7 +20,7 @@
     "create_fake_storage": "Skep fantasie berging wagwoord",
     "create_password": "Skep ‘n wagwoord",
     "create_password_explanation": "Die wagwoord vir fantasie berging moet verskil van die wagwoord vir hoof berging",
-    "help": "Onder sekere omstandighede mag u dalk geforseer word om u wagwoord te deel teen u wil. Om u te beskerm kan Bluewallet ‘n tweede “fantasie” beursie skep wat as skerm kan dien. Indien u hierdie wagwoord deel sal die 3de party nie toegang tot u hoof fondse kry nie.",
+    "help": "Onder sekere omstandighede mag u dalk geforseer word om u wagwoord te deel teen u wil. Om u te beskerm kan GRS BlueWallet ‘n tweede “fantasie” beursie skep wat as skerm kan dien. Indien u hierdie wagwoord deel sal die 3de party nie toegang tot u hoof fondse kry nie.",
     "help2": "Fantasie berging is heeltemal funksioneel",
     "password_should_not_match": "Die wagwoord vir fantasie berging moet verskil van die wagwoord vir hoof berging.",
     "passwords_do_not_match": "Wagwoorde vergelyk nie, probeer weer",
@@ -81,7 +81,6 @@
     "list_title": "transaksies"
   },
   "wallets": {
-    "add_bitcoin_explain": "Simple and powerful Groestlcoin wallet",
     "add_bitcoin": "Groestlcoin",
     "add_create": "Skep",
     "add_import_wallet": "Beursie Invoer",
@@ -108,8 +107,6 @@
     "import_success": "Suksesvol",
     "import_title": "Invoer",
     "list_create_a_wallet": "Skep ‘n beursie",
-    "list_create_a_wallet1": "Dit is gratis so skep",
-    "list_create_a_wallet2": "soveel as wat u benodig",
     "list_empty_txs1": "U transaksies is hier beskikbaar,",
     "list_empty_txs2": "huidiglik geen transaksies",
     "list_latest_transaction": "laaste transaksie",

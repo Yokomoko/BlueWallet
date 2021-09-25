@@ -1,48 +1,53 @@
-Uma carteira de Groestlcoin que permite guardar, enviar Groestlcoin, receber Groestlcoin e comprar Groestlcoin, com foco na segurança e simplicidade.
+Uma carteira Groestlcoin que permite armazenar, enviar groestlcoin, receber groestlcoin e comprar groestlcoin com foco em segurança e simplicidade.
 
-Na GRS BlueWallet, uma Carteira de Groestlcoin em que você controla as chaves privadas. Uma Carteira de Groestlcoin criada por utilizadores de Groestlcoin para a comunidade.
+BlueWallet é uma carteira de groestlcoin onde você tem posse das chaves privadas. Uma carteira Groestlcoin criada para a comunidade por usuários do Groestlcoin.
 
-Você pode fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro diretamente do seu bolso.
+Você pode fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro direto do seu bolso.
 
-Pode criar gratuitamente uma quantidade ilimitada de carteiras de Groestlcoin ou importar as carteiras que já tem para o seu aplicativo GRS BlueWallet. É fácil e rápido!
+Crie um número ilimitado de carteiras de groestlcoin gratuitamente ou importe sua carteira existente. É simples e fácil.
 
----
+_____
 
-O que você vai encontrar:
+Entenda o que oferecemos:
 
-1 - Segurança em primeiro lugar
 
-Código aberto/Open Source
-Com licença MIT, você pode construí-lo e executá-lo por conta própria. Feito em React Native.
+1 - Criada com segurança em mente
+
+Open Source
+Licença MIT, você pode compilar e rodar a sua própria versão! Feita com ReactNative
 
 Negação plausível
-Senha falsa que decripta wallets falsas. Para casos especias onde possa ser obrigado a revelar a sua senha, pode revelar a senha falsa, mantenha as suas groestlcoin protegidas.
+Senha que descriptografa carteiras de groestlcoin falsas para utilizar em situações de estresse
 
-Encriptação completa
-Construída em cima da multi-camada de criptografia do iOS, A GRS BlueWallet criptografa tudo com uma adicional senha de usuário.
+Totalmente criptografada
+Além da criptografia multicamadas do iOS, criptografamos tudo com senhas adicionais
 
-Carteiras SegWit e HD
-SegWit suportado (Ajuda a diminuir as taxas ainda mais) e carteiras HD ativadas.
+Nó completo
+Conecte com seu full node Groestlcoin usando Electrum
 
-2 - Focada na sua experiência
+Armazenamento frio (Cold)
+Conecte com sua hardwallet e mantenha suas moedas em armazenamento frio
 
-Esteja em control
-As chaves privadas nunca deixam o celular, você controla as suas chaves privadas.
+2 - Foco na sua experiência
+
+Fique no controle
+As chaves privadas nunca saem do dispositivo.
+Você controla suas chaves privadas
 
 Taxas flexíveis
-A começar em 1 Satoshi. Não page a mais por transações.
+A partir de 1 satoshi. Você decide
 
-Substituição de Taxa (RBF)
-Acelere as suas transações aumentando a taxa (BIP125). Pode também alterar o endereço de destinatário em transações não confirmadas.
+Replace-By-Fee
+(RBF) Acelere suas transações aumentando a taxa depois de enviar (BIP125)
 
-Carteira de Watch-only
-Carteira de Watch-only/assistir apenas, observe o seu armazenamento externo de Groestlcoin sem ter de lhe tocar.
+Carteiras Watch-only
+Carteiras somente leitura para você observar seu armazenamento frio sem tocar a hardwallet.
 
 Lightning Network
-Carteira de Lightning sem configurações. Transações baratas e ultra rápidas com a melhor experiência do Groestlcoin.
+Carteira Lightning sem precisar configurar nada. Transações muito baratas e rápidas para ter a melhor experiência com o Groestlcoin.
 
-Comprar Groestlcoin
-Agora já pode comprar Groestlcoin diretamente sem sair da sua carteira e com as suas chaves privadas.
+Compre Groestlcoin
+Faça parte da revolução financeira aberta com a habilidade de comprar Groestlcoin direto na sua carteira.
 
-Local Trader
-Plataforma p2p Groestlcoin de trading, que permite comprar e vender groestlcoin diretamente para outros usuários sem terceiros.
+Trader local
+Uma plataforma de negociação de Groestlcoin p2p que permite comprar e vender groestlcoin de outros usuários diretamente, sem terceiros.
