@@ -1,5 +1,5 @@
 import { bech32 } from 'bech32';
-import bolt11 from 'bolt11grs';
+import bolt11 from 'bolt11';
 const CryptoJS = require('crypto-js');
 const createHash = require('create-hash');
 

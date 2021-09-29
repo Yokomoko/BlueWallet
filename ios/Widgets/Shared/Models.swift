@@ -22,7 +22,7 @@ struct MarketData:Codable  {
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale.current
     dateFormatter.timeStyle = .short
-    
+
     if let date = isoDateFormatter.date(from: dateString) {
       return dateFormatter.string(from: date)
     }
@@ -63,7 +63,7 @@ enum MarketDataTimeline: String {
 }
 
 enum UserDefaultsGroupKey: String {
-  case GroupName = "group.io.bluewallet.bluewallet"
+  case GroupName = "group.org.groestlcoin.bluewallet123"
   case PreferredCurrency = "preferredCurrency"
   case ElectrumSettingsHost = "electrum_host"
   case ElectrumSettingsTCPPort = "electrum_tcp_port"

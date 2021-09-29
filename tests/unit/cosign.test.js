@@ -1,6 +1,6 @@
 /* global it, describe */
 import assert from 'assert';
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitP2SHWallet } from '../../class';
 
 describe('AbstractHDElectrumWallet.cosign', () => {
@@ -34,7 +34,7 @@ describe('AbstractHDElectrumWallet.cosign', () => {
       {
         height: 563077,
         value: 50000,
-        address: 'bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh',
+        address: 'grs1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh',
         vout: 1,
         txid: 'ad00a92409d8982a1d7f877056dbed0c4337d2ebab70b30463e2802279fb936d',
         amount: 50000,

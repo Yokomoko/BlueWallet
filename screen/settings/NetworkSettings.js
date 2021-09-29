@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem } from '../../BlueComponents';
 import loc from '../../loc';

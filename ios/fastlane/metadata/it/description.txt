@@ -35,7 +35,7 @@ Le chiavi private non lasciano mai il tuo dispositivo.
 Tu controlli le chiavi private.
 
 Commissioni flessibili
-A partire da 1 Satoshi. Deciso da te, l'utente
+A partire da 1 Gro. Deciso da te, l'utente
 
 Replace-By-Fee
 (RBF) Velocizza le tue transazioni aumentando le commissioni (BIP125)

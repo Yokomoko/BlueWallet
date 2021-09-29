@@ -22,7 +22,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import loc from '../loc';
 import { useContext } from 'react';
 import { BlueStorageContext } from '../blue_modules/storage-context';
-import Notifications from '../blue_modules/notifications';
+// import Notifications from '../blue_modules/notifications';
 import IdleTimerManager from 'react-native-idle-timer';
 const A = require('../blue_modules/analytics');
 const bip38 = require('../blue_modules/bip38grs');

@@ -119,13 +119,13 @@ describe('Watch only wallet', () => {
     w.setSecret('zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXiWvk3Q');
     // zpub provided by Stepan @ CryptoAdvance
     w.init();
-    const changeAddress = 'bc1quuafy8htjjj263cvpj7md84magzmc8svmh8lrm';
+    const changeAddress = 'grs1quuafy8htjjj263cvpj7md84magzmc8svmh8lrm';
     // hardcoding so we wont have to call w.getChangeAddressAsync()
     const utxos = [
       {
         height: 596736,
         value: 20000,
-        address: 'bc1qhu8jqyzfazgatpctqn44xr7pdd3mdx6qy2r6xa',
+        address: 'grs1qhu8jqyzfazgatpctqn44xr7pdd3mdx6qy2r6xa',
         txId: '7f3b9e032a84413d7a5027b0d020f8acf80ad28f68b5bce8fa8ac357248c5b80',
         vout: 0,
       },
@@ -134,7 +134,7 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
+      [{ address: 'grs1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
       1,
       changeAddress,
     );
@@ -162,7 +162,7 @@ describe('Watch only wallet', () => {
       {
         height: 618811,
         value: 66600,
-        address: 'bc1qzqjwye4musmz56cg44ttnchj49zueh9yr0qsxt',
+        address: 'grs1qzqjwye4musmz56cg44ttnchj49zueh9yr0qsxt',
         txId: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
         vout: 0,
         txid: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
@@ -174,9 +174,9 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qdamevhw3zwm0ajsmyh39x8ygf0jr0syadmzepn', value: 5000 }],
+      [{ address: 'grs1qdamevhw3zwm0ajsmyh39x8ygf0jr0syadmzepn', value: 5000 }],
       22,
-      'bc1qtutssamysdkgd87df0afjct0mztx56qpze7wqe',
+      'grs1qtutssamysdkgd87df0afjct0mztx56qpze7wqe',
     );
     assert.strictEqual(
       psbt.toBase64(),
@@ -201,7 +201,7 @@ describe('Watch only wallet', () => {
       {
         height: 618811,
         value: 66600,
-        address: 'bc1qzqjwye4musmz56cg44ttnchj49zueh9yr0qsxt',
+        address: 'grs1qzqjwye4musmz56cg44ttnchj49zueh9yr0qsxt',
         txId: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
         vout: 0,
         txid: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
@@ -213,9 +213,9 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qdamevhw3zwm0ajsmyh39x8ygf0jr0syadmzepn', value: 5000 }],
+      [{ address: 'grs1qdamevhw3zwm0ajsmyh39x8ygf0jr0syadmzepn', value: 5000 }],
       22,
-      'bc1qtutssamysdkgd87df0afjct0mztx56qpze7wqe',
+      'grs1qtutssamysdkgd87df0afjct0mztx56qpze7wqe',
     );
     assert.strictEqual(
       psbt.toBase64(),
@@ -325,7 +325,7 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
+      [{ address: 'grs1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
       1,
       changeAddress,
     );
@@ -334,7 +334,7 @@ describe('Watch only wallet', () => {
       psbt.data.outputs[1].bip32Derivation[0].pubkey.toString('hex'),
       '03e060c9b5bb85476caa53e3b8cd3d40c9dc2c36a8a5e8ed87e48bfc9bbe1760ad',
     );
-    assert.strictEqual(psbt.data.outputs[1].bip32Derivation[0].path, "m/49'/0'/0'/1/46");
+    assert.strictEqual(psbt.data.outputs[1].bip32Derivation[0].path, "m/49'/17'/0'/1/46");
   });
 });
 

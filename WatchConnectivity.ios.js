@@ -9,7 +9,7 @@ import {
 import { Chain } from './models/bitcoinUnits';
 import loc, { formatBalance, transactionTimeToReadable } from './loc';
 import { BlueStorageContext } from './blue_modules/storage-context';
-import Notifications from './blue_modules/notifications';
+// import Notifications from './blue_modules/notifications';
 import { FiatUnit } from './models/fiatUnit';
 import { MultisigHDWallet } from './class';
 
@@ -99,7 +99,7 @@ function WatchConnectivity() {
           // Let's verify if notifications are already configured. Otherwise the watch app will freeze waiting for user approval in iOS app
           if (await Notifications.isNotificationsEnabled()) {
             const decoded = await wallet.decodeInvoice(invoiceRequest);
-            Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
+            // Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
           }
         } catch (e) {
           console.log('WatchConnectivity - Running in Simulator');

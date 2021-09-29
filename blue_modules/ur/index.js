@@ -1,5 +1,5 @@
 import { URDecoder } from '@ngraveio/bc-ur';
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 import {
   CryptoHDKey,
   CryptoKeypath,
@@ -12,7 +12,7 @@ import {
 } from '@keystonehq/bc-ur-registry';
 import { decodeUR as origDecodeUr, encodeUR as origEncodeUR, extractSingleWorkload as origExtractSingleWorkload } from '../bc-ur/dist';
 import { MultisigCosigner, MultisigHDWallet } from '../../class';
-import { Psbt } from 'bitcoinjs-lib';
+import { Psbt } from 'groestlcoinjs-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const USE_UR_V1 = 'USE_UR_V1';

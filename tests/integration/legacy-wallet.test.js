@@ -137,8 +137,8 @@ describe('SegwitBech32Wallet', function () {
   it('can fetch balance', async () => {
     const w = new SegwitBech32Wallet();
     w._address = 'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx';
-    assert.ok(w.weOwnAddress('bc1qn887fmetaytw4vj68vsh529ft408q8j9x3dndc'));
-    assert.ok(w.weOwnAddress('BC1QN887FMETAYTW4VJ68VSH529FT408Q8J9X3DNDC'));
+    assert.ok(w.weOwnAddress('grs1qn887fmetaytw4vj68vsh529ft408q8j9x3dndc'));
+    assert.ok(w.weOwnAddress('GRS1QN887FMETAYTW4VJ68VSH529FT408Q8J9X3DNDC'));
     assert.ok(!w.weOwnAddress('garbage'));
     assert.ok(!w.weOwnAddress(false));
     await w.fetchBalance();
@@ -182,8 +182,8 @@ describe('SegwitBech32Wallet', function () {
   it('can fetch TXs', async () => {
     const w = new SegwitBech32Wallet();
     w._address = 'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80';
-    assert.ok(w.weOwnAddress('bc1qn887fmetaytw4vj68vsh529ft408q8j9x3dndc'));
-    assert.ok(w.weOwnAddress('BC1QN887FMETAYTW4VJ68VSH529FT408Q8J9X3DNDC'));
+    assert.ok(w.weOwnAddress('grs1qn887fmetaytw4vj68vsh529ft408q8j9x3dndc'));
+    assert.ok(w.weOwnAddress('GRS1QN887FMETAYTW4VJ68VSH529FT408Q8J9X3DNDC'));
     assert.ok(!w.weOwnAddress('garbage'));
     assert.ok(!w.weOwnAddress(false));
     await w.fetchTransactions();

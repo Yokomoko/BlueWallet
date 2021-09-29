@@ -8,7 +8,7 @@ import navigationStyle from '../../components/navigationStyle';
 import { BlueButton, BlueCard, BlueCopyToClipboardButton, BlueListItem, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
 import loc from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 
 const NotificationSettings = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +29,7 @@ const NotificationSettings = () => {
         await Notifications.setLevels(true);
       } else {
         // ok, we dont have a token. we need to try to obtain permissions, configure callbacks and save token locally:
-        await Notifications.tryToObtainPermissions();
+        // await Notifications.tryToObtainPermissions();
       }
     } else {
       // user is DISABLING notifications

@@ -20,7 +20,7 @@
     "create_fake_storage": "Skep fantasie berging wagwoord",
     "create_password": "Skep ‘n wagwoord",
     "create_password_explanation": "Die wagwoord vir fantasie berging moet verskil van die wagwoord vir hoof berging",
-    "help": "Onder sekere omstandighede mag u dalk geforseer word om u wagwoord te deel teen u wil. Om u te beskerm kan Bluewallet ‘n tweede “fantasie” beursie skep wat as skerm kan dien. Indien u hierdie wagwoord deel sal die 3de party nie toegang tot u hoof fondse kry nie.",
+    "help": "Onder sekere omstandighede mag u dalk geforseer word om u wagwoord te deel teen u wil. Om u te beskerm kan GRS BlueWallet ‘n tweede “fantasie” beursie skep wat as skerm kan dien. Indien u hierdie wagwoord deel sal die 3de party nie toegang tot u hoof fondse kry nie.",
     "help2": "Fantasie berging is heeltemal funksioneel",
     "password_should_not_match": "Die wagwoord vir fantasie berging moet verskil van die wagwoord vir hoof berging.",
     "passwords_do_not_match": "Wagwoorde vergelyk nie, probeer weer",

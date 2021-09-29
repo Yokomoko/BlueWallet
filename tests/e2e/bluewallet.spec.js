@@ -148,7 +148,7 @@ describe('BlueWallet UI Tests', () => {
 
     // IsItMyAddress
     await element(by.id('IsItMyAddress')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('CheckAddress')).tap();
     await expect(element(by.id('Result'))).toHaveText('None of the available wallets own the provided address.');
     await device.pressBack();
@@ -188,7 +188,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.id('BitcoinAmountInput')).replaceText('1');
     await element(by.id('CustomAmountDescription')).typeText('test');
     await element(by.id('CustomAmountSaveButton')).tap();
-    await sup('1 BTC');
+    await sup('1 GRS');
     await sup('test');
     await yo('BitcoinAddressQRCodeContainer');
     await yo('BlueCopyTextToClipboard');
@@ -508,7 +508,7 @@ describe('BlueWallet UI Tests', () => {
 
     // lets create real transaction:
     await element(by.id('SendButton')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('BitcoinAmountInput')).typeText('0.0001\n');
 
     // setting fee rate:
@@ -535,7 +535,7 @@ describe('BlueWallet UI Tests', () => {
     let transaction = bitcoin.Transaction.fromHex(txhex);
     assert.ok(transaction.ins.length === 1 || transaction.ins.length === 2); // depending on current fees gona use either 1 or 2 inputs
     assert.strictEqual(transaction.outs.length, 2);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl'); // to address
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl'); // to address
     assert.strictEqual(transaction.outs[0].value, 10000);
 
     // checking fee rate:
@@ -594,7 +594,7 @@ describe('BlueWallet UI Tests', () => {
       await sleep(1000);
     }
 
-    await element(by.id('scanQrBackdoorInput')).replaceText('bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    await element(by.id('scanQrBackdoorInput')).replaceText('grs1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
     await element(by.id('scanQrBackdoorOkButton')).tap();
 
     if (process.env.TRAVIS) await sleep(5000);
@@ -607,7 +607,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.id('TransactionDetailsButton')).tap();
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
     assert.notEqual(transaction.outs[0].value, 110000000); // check that it is 1.1 USD, not 1 BTC
     assert.ok(transaction.outs[0].value < 10000); // 1.1 USD ~ 0,00001964 sats in march 2021
 
@@ -645,7 +645,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction1'); // adding a recipient autoscrolls it to the last one
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction1'))).typeText('0.0002\n');
 
     await element(by.id('advancedOptionsMenuButton')).tap();
@@ -661,7 +661,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction2'); // adding a recipient autoscrolls it to the last one
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction2'))).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction2'))).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction2'))).typeText('0.0003\n');
 
     // remove second output
@@ -678,9 +678,9 @@ describe('BlueWallet UI Tests', () => {
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(transaction.outs.length, 3);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
     assert.strictEqual(transaction.outs[0].value, 50000);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     assert.strictEqual(transaction.outs[1].value, 30000);
 
     // now, testing sendMAX feature:
@@ -697,7 +697,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.text('OK')).tap();
 
     // first send MAX output
-    await element(by.id('AddressInput')).replaceText('bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    await element(by.id('AddressInput')).replaceText('grs1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
     await element(by.id('BitcoinAmountInput')).typeText('0.0001\n');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
@@ -721,7 +721,7 @@ describe('BlueWallet UI Tests', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction1');
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction1'))).typeText('0.0001\n');
 
     if (process.env.TRAVIS) await sleep(5000);
@@ -734,9 +734,9 @@ describe('BlueWallet UI Tests', () => {
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(transaction.outs.length, 2, 'should be single output, no change');
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
     assert.ok(transaction.outs[0].value > 50000);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     assert.strictEqual(transaction.outs[1].value, 10000);
 
     // now, testing cosign psbt:
@@ -833,7 +833,7 @@ describe('BlueWallet UI Tests', () => {
       await element(by.text(`No, and don’t ask me again`)).tap();
     } catch (_) {}
     await expect(element(by.id('BitcoinAddressQRCodeContainer'))).toBeVisible();
-    await expect(element(by.text('bc1qtc9zquvq7lgq87kzsgltvv4etwm9uxphfkvkay'))).toBeVisible();
+    await expect(element(by.text('grs1qtc9zquvq7lgq87kzsgltvv4etwm9uxphfkvkay'))).toBeVisible();
     await element(by.id('SetCustomAmountButton')).tap();
     await element(by.id('BitcoinAmountInput')).replaceText('1');
     await element(by.id('CustomAmountDescription')).typeText('Test');
@@ -842,7 +842,7 @@ describe('BlueWallet UI Tests', () => {
     await sup('Test');
     await expect(element(by.id('BitcoinAddressQRCodeContainer'))).toBeVisible();
 
-    await expect(element(by.text('bitcoin:bc1qtc9zquvq7lgq87kzsgltvv4etwm9uxphfkvkay?amount=1&label=Test'))).toBeVisible();
+    await expect(element(by.text('groestlcoin:grs1qtc9zquvq7lgq87kzsgltvv4etwm9uxphfkvkay?amount=1&label=Test'))).toBeVisible();
     await device.pressBack();
 
     await element(by.id('SendButton')).tap();
@@ -916,7 +916,7 @@ describe('BlueWallet UI Tests', () => {
     // created. verifying:
     await yo('TransactionValue');
     expect(element(by.id('TransactionValue'))).toHaveText('0.0001');
-    expect(element(by.id('TransactionAddress'))).toHaveText('BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7');
+    expect(element(by.id('TransactionAddress'))).toHaveText('GRS1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7');
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
   });
@@ -965,7 +965,7 @@ describe('BlueWallet UI Tests', () => {
 
     await element(by.id('SendButton')).tap();
 
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('BitcoinAmountInput')).typeText('0.0005\n');
 
     // setting fee rate:
@@ -1037,7 +1037,7 @@ describe('BlueWallet UI Tests', () => {
     const transaction = bitcoin.Transaction.fromHex(txhex);
     assert.ok(transaction.ins.length === 1 || transaction.ins.length === 2); // depending on current fees gona use either 1 or 2 inputs
     assert.strictEqual(transaction.outs.length, 2);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl'); // to address
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl'); // to address
     assert.strictEqual(transaction.outs[0].value, 50000);
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
@@ -1095,7 +1095,7 @@ describe('BlueWallet UI Tests', () => {
     // use frozen output to create tx using "Use coin" feature
     await element(by.text('test2')).atIndex(0).tap();
     await element(by.id('UseCoin')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
     await element(by.text('OK')).tap();
@@ -1111,7 +1111,7 @@ describe('BlueWallet UI Tests', () => {
     const psbthex1 = await extractTextFromElementById('PSBTHex');
     const psbt1 = bitcoin.Psbt.fromHex(psbthex1);
     assert.strictEqual(psbt1.txOutputs.length, 1);
-    assert.strictEqual(psbt1.txOutputs[0].address, 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    assert.strictEqual(psbt1.txOutputs[0].address, 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     assert.strictEqual(psbt1.txOutputs[0].value, 99808);
     assert.strictEqual(psbt1.data.inputs.length, 1);
     assert.strictEqual(psbt1.data.inputs[0].witnessUtxo.value, 100000);
@@ -1122,7 +1122,7 @@ describe('BlueWallet UI Tests', () => {
 
     // create tx with unfrozen input
     await element(by.id('SendButton')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
     await element(by.text('OK')).tap();
@@ -1138,7 +1138,7 @@ describe('BlueWallet UI Tests', () => {
     const psbthex2 = await extractTextFromElementById('PSBTHex');
     const psbt2 = bitcoin.Psbt.fromHex(psbthex2);
     assert.strictEqual(psbt2.txOutputs.length, 1);
-    assert.strictEqual(psbt2.txOutputs[0].address, 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    assert.strictEqual(psbt2.txOutputs[0].address, 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     assert.strictEqual(psbt2.txOutputs[0].value, 5334);
     assert.strictEqual(psbt2.data.inputs.length, 1);
     assert.strictEqual(psbt2.data.inputs[0].witnessUtxo.value, 5526);

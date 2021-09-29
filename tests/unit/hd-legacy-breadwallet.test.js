@@ -16,11 +16,11 @@ it('Legacy HD Breadwallet works', async () => {
   hdBread._external_segwit_index = 2;
   assert.ok(hdBread._getExternalAddressByIndex(0).startsWith('1'));
   assert.ok(hdBread._getInternalAddressByIndex(0).startsWith('1'));
-  assert.strictEqual(hdBread._getExternalAddressByIndex(2), 'bc1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn');
-  assert.strictEqual(hdBread._getInternalAddressByIndex(2), 'bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0');
+  assert.strictEqual(hdBread._getExternalAddressByIndex(2), 'grs1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn');
+  assert.strictEqual(hdBread._getInternalAddressByIndex(2), 'grs1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0');
 
   assert.strictEqual(hdBread._getDerivationPathByAddress('1M1UphJDb1mpXV3FVEg6b2qqaBieNuaNrt'), "m/0'/0/0");
-  assert.strictEqual(hdBread._getDerivationPathByAddress('bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0'), "m/0'/1/2");
+  assert.strictEqual(hdBread._getDerivationPathByAddress('grs1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0'), "m/0'/1/2");
 
   assert.strictEqual(
     hdBread._getPubkeyByAddress(hdBread._getExternalAddressByIndex(0)).toString('hex'),
@@ -37,5 +37,5 @@ it('Legacy HD Breadwallet works', async () => {
   );
 
   assert.ok(hdBread.getAllExternalAddresses().includes('1M1UphJDb1mpXV3FVEg6b2qqaBieNuaNrt'));
-  assert.ok(hdBread.getAllExternalAddresses().includes('bc1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn'));
+  assert.ok(hdBread.getAllExternalAddresses().includes('grs1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn'));
 });

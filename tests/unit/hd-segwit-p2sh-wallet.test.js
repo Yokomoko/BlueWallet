@@ -24,8 +24,8 @@ describe('P2SH Segwit HD (BIP49)', () => {
       '03c107e6976d59e17490513fbed3fb321736b7231d24f3d09306c72714acf1859d',
     );
 
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/0'/0'/0/0");
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/0'/0'/1/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/17'/0'/0/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/17'/0'/1/0");
 
     assert.strictEqual('L4MqtwJm6hkbACLG4ho5DF8GhcXdLEbbvpJnbzA9abfD6RDpbr2m', hd._getExternalWIFByIndex(0));
     assert.strictEqual(
@@ -50,14 +50,14 @@ describe('P2SH Segwit HD (BIP49)', () => {
     assert.strictEqual(address, false);
 
     address = SegwitBech32Wallet.witnessToAddress('035c618df829af694cb99e664ce1b34f80ad2c3b49bcd0d9c0b1836c66b2d25fd8');
-    assert.strictEqual(address, 'bc1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv');
+    assert.strictEqual(address, 'grs1quhnve8q4tk3unhmjts7ymxv8cd6w9xv8wy29uv');
     address = SegwitBech32Wallet.witnessToAddress();
     assert.strictEqual(address, false);
     address = SegwitBech32Wallet.witnessToAddress('trololo');
     assert.strictEqual(address, false);
 
     address = SegwitBech32Wallet.scriptPubKeyToAddress('00144d757460da5fcaf84cc22f3847faaa1078e84f6a');
-    assert.strictEqual(address, 'bc1qf46hgcx6tl90snxz9uuy0742zpuwsnm27ysdh7');
+    assert.strictEqual(address, 'grs1qf46hgcx6tl90snxz9uuy0742zpuwsnm27ysdh7');
     address = SegwitBech32Wallet.scriptPubKeyToAddress();
     assert.strictEqual(address, false);
     address = SegwitBech32Wallet.scriptPubKeyToAddress('trololo');

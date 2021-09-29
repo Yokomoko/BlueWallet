@@ -13,7 +13,7 @@ import { BitcoinUnit } from '../../models/bitcoinUnits';
 import Biometric from '../../class/biometrics';
 import loc, { formatBalance, formatBalanceWithoutSuffix } from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { Psbt } from 'groestlcoinjs-lib';
 const currency = require('../../blue_modules/currency');
@@ -111,7 +111,7 @@ export default class Confirm extends Component {
 
         const txid = bitcoin.Transaction.fromHex(this.state.tx).getId();
         txids2watch.push(txid);
-        Notifications.majorTomToGroundControl([], [], txids2watch);
+        // Notifications.majorTomToGroundControl([], [], txids2watch);
         let amount = 0;
         const recipients = this.state.recipients;
         for (const recipient of recipients) {

@@ -70,9 +70,9 @@ describe('SLIP39 wallets tests', () => {
     );
 
     assert.ok(w.validateMnemonic());
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qkchjws74hkuhamxk0qa280xc68643nu32pde20');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qrslzpjwl7ksdxvealdq0qulgspey62vr3acwnp');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qgx35amln8aryyr0lw6j2729l3gemzjftp5xrne');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1q48v0hcuz2jjsls628wj8jtn7rqp8wsyz2gxdxm');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qkchjws74hkuhamxk0qa280xc68643nu32pde20');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qrslzpjwl7ksdxvealdq0qulgspey62vr3acwnp');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qgx35amln8aryyr0lw6j2729l3gemzjftp5xrne');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1q48v0hcuz2jjsls628wj8jtn7rqp8wsyz2gxdxm');
   });
 });

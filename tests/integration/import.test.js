@@ -14,7 +14,7 @@ import {
 } from '../../class';
 import WalletImport from '../../class/wallet-import';
 import React from 'react';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 const assert = require('assert');
 global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
 global.tls = require('tls'); // needed by Electrum client. For RN it is proviced in shim.js
@@ -68,7 +68,7 @@ describe('import procedure', function () {
       'always direct find escape liar turn differ shy tool gap elder galaxy lawn wild movie fog moon spread casual inner box diagram outdoor tell',
     );
     assert.strictEqual(lastImportedWallet.type, HDSegwitBech32Wallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'bc1qth9qxvwvdthqmkl6x586ukkq8zvumd38nxr08l');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'grs1qth9qxvwvdthqmkl6x586ukkq8zvumd38nxr08l');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD SegWit (BIP84 Bech32 Native)');
   });
 
@@ -89,7 +89,7 @@ describe('import procedure', function () {
   it('can import Legacy Bech32 Segwit', async () => {
     await WalletImport.processImportText('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSvsDfxZ');
     assert.strictEqual(lastImportedWallet.type, SegwitBech32Wallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), 'bc1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'grs1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported P2 WPKH');
   });
 
@@ -130,7 +130,7 @@ describe('import procedure', function () {
   it('can import HD Electrum (BIP32 P2WPKH)', async () => {
     await WalletImport.processImportText('noble mimic pipe merry knife screen enter dune crop bonus slice card');
     assert.strictEqual(lastImportedWallet.type, HDSegwitElectrumSeedP2WPKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'bc1qzzanxnr3xv9a5ha264kpzpfq260qvuameslddu');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'grs1qzzanxnr3xv9a5ha264kpzpfq260qvuameslddu');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Electrum (BIP32 P2WPKH)');
   });
 
@@ -169,7 +169,7 @@ describe('import procedure', function () {
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
     await WalletImport.processImportText('3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu');
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
-    await WalletImport.processImportText('bc1q8j4lk4qlhun0n7h5ahfslfldc8zhlxgynfpdj2');
+    await WalletImport.processImportText('grs1q8j4lk4qlhun0n7h5ahfslfldc8zhlxgynfpdj2');
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
     await WalletImport.processImportText(
       'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
