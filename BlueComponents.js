@@ -1,6 +1,5 @@
 /* eslint react/prop-types: "off", react-native/no-inline-styles: "off" */
-/* global alert */
-import React, { Component, useState, useMemo, useCallback, useContext } from 'react';
+import React, { Component, useState, useMemo, useCallback, useContext, useRef, useEffect, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Input, Text, Header, ListItem, Avatar } from 'react-native-elements';
 import {
@@ -12,6 +11,7 @@ import {
   InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
+  Linking,
   PixelRatio,
   Platform,
   PlatformColor,
@@ -21,38 +21,31 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  UIManager,
   View,
+  InteractionManager,
+  I18nManager,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
-import ActionSheet from './screen/ActionSheet';
 import { LightningCustodianWallet, MultisigHDWallet } from './class';
 import { BitcoinUnit } from './models/bitcoinUnits';
 import * as NavigationService from './NavigationService';
 import WalletGradient from './class/wallet-gradient';
-import ToolTip from 'react-native-tooltip';
 import { BlurView } from '@react-native-community/blur';
-import ImagePicker from 'react-native-image-picker';
-import showPopupMenu from 'react-native-popup-menu-android';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
 import Biometric from './class/biometrics';
-import { getSystemName } from 'react-native-device-info';
-import { encodeUR } from 'bc-ur/dist';
+import { encodeUR } from './blue_modules/ur';
 import QRCode from 'react-native-qrcode-svg';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { BlueCurrentTheme } from './components/themes';
-import loc, { formatBalance, formatBalanceWithoutSuffix, formatBalancePlain, removeTrailingZeros, transactionTimeToReadable } from './loc';
+import loc, { formatBalance, formatBalanceWithoutSuffix, transactionTimeToReadable } from './loc';
 import Lnurl from './class/lnurl';
 import { BlueStorageContext } from './blue_modules/storage-context';
-import { presentCameraNotAuthorizedAlert } from './class/camera';
-/** @type {AppStorage} */
+import ToolTipMenu from './components/TooltipMenu';
+
 const { height, width } = Dimensions.get('window');
 const aspectRatio = height / width;
-const BigNumber = require('bignumber.js');
-const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
-const currency = require('./blue_modules/currency');
 let isIpad;
 if (aspectRatio > 1.6) {
   isIpad = false;
@@ -87,6 +80,7 @@ export const BlueButton = props => {
         alignItems: 'center',
         paddingHorizontal: 16,
       }}
+      accessibilityRole="button"
       {...props}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -97,7 +91,7 @@ export const BlueButton = props => {
   );
 };
 
-export const SecondButton = props => {
+export const SecondButton = forwardRef((props, ref) => {
   const { colors } = useTheme();
   let backgroundColor = props.backgroundColor ? props.backgroundColor : colors.buttonBlueBackgroundColor;
   let fontColor = colors.buttonTextColor;
@@ -108,6 +102,7 @@ export const SecondButton = props => {
 
   return (
     <TouchableOpacity
+      accessibilityRole="button"
       style={{
         flex: 1,
         borderWidth: 0.7,
@@ -121,6 +116,7 @@ export const SecondButton = props => {
         alignItems: 'center',
       }}
       {...props}
+      ref={ref}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         {props.icon && <Icon name={props.icon.name} type={props.icon.type} color={props.icon.color} />}
@@ -128,12 +124,12 @@ export const SecondButton = props => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export const BitcoinButton = props => {
   const { colors } = useTheme();
   return (
-    <TouchableOpacity testID={props.testID} onPress={props.onPress}>
+    <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
       <View
         style={{
           borderColor: (props.active && colors.newBlue) || colors.buttonDisabledBackgroundColor,
@@ -152,8 +148,19 @@ export const BitcoinButton = props => {
             <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/bitcoin.png')} />
           </View>
           <View>
-            <Text style={{ color: colors.newBlue, fontWeight: 'bold', fontSize: 18 }}>{loc.wallets.add_bitcoin}</Text>
-            <Text style={{ color: colors.alternativeTextColor, fontSize: 13, fontWeight: '500' }}>{loc.wallets.add_bitcoin_explain}</Text>
+            <Text style={{ color: colors.newBlue, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
+              {loc.wallets.add_bitcoin}
+            </Text>
+            <Text
+              style={{
+                color: colors.alternativeTextColor,
+                fontSize: 13,
+                fontWeight: '500',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
+              {loc.wallets.add_bitcoin_explain}
+            </Text>
           </View>
         </View>
       </View>
@@ -164,7 +171,7 @@ export const BitcoinButton = props => {
 export const VaultButton = props => {
   const { colors } = useTheme();
   return (
-    <TouchableOpacity testID={props.testID} onPress={props.onPress}>
+    <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
       <View
         style={{
           borderColor: (props.active && colors.foregroundColor) || colors.buttonDisabledBackgroundColor,
@@ -182,8 +189,24 @@ export const VaultButton = props => {
             <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/vault.png')} />
           </View>
           <View>
-            <Text style={{ color: colors.foregroundColor, fontWeight: 'bold', fontSize: 18 }}>{loc.multisig.multisig_vault}</Text>
-            <Text style={{ color: colors.alternativeTextColor, fontSize: 13, fontWeight: '500' }}>
+            <Text
+              style={{
+                color: colors.foregroundColor,
+                fontWeight: 'bold',
+                fontSize: 18,
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
+              {loc.multisig.multisig_vault}
+            </Text>
+            <Text
+              style={{
+                color: colors.alternativeTextColor,
+                fontSize: 13,
+                fontWeight: '500',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
               {loc.multisig.multisig_vault_explain}
             </Text>
           </View>
@@ -196,7 +219,7 @@ export const VaultButton = props => {
 export const LightningButton = props => {
   const { colors } = useTheme();
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity accessibilityRole="button" onPress={props.onPress}>
       <View
         style={{
           borderColor: (props.active && colors.lnborderColor) || colors.buttonDisabledBackgroundColor,
@@ -215,8 +238,21 @@ export const LightningButton = props => {
             <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/lightning.png')} />
           </View>
           <View>
-            <Text style={{ color: colors.lnborderColor, fontWeight: 'bold', fontSize: 18 }}>{loc.wallets.add_lightning}</Text>
-            <Text style={{ color: colors.alternativeTextColor, fontSize: 13, fontWeight: '500' }}>{loc.wallets.add_lightning_explain}</Text>
+            <Text
+              style={{ color: colors.lnborderColor, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
+            >
+              {loc.wallets.add_lightning}
+            </Text>
+            <Text
+              style={{
+                color: colors.alternativeTextColor,
+                fontSize: 13,
+                fontWeight: '500',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+              }}
+            >
+              {loc.wallets.add_lightning_explain}
+            </Text>
           </View>
         </View>
       </View>
@@ -230,19 +266,19 @@ export class BlueWalletNavigationHeader extends Component {
     onWalletUnitChange: PropTypes.func,
   };
 
-  static getDerivedStateFromProps(props, state) {
-    return { wallet: props.wallet, onWalletUnitChange: props.onWalletUnitChange, allowOnchainAddress: state.allowOnchainAddress };
+  static getDerivedStateFromProps(props) {
+    return { wallet: props.wallet, onWalletUnitChange: props.onWalletUnitChange };
   }
 
   static contextType = BlueStorageContext;
   walletBalanceText = React.createRef();
-
+  tooltip = React.createRef();
   constructor(props) {
     super(props);
     this.state = {
       wallet: props.wallet,
       walletPreviousPreferredUnit: props.wallet.getPreferredBalanceUnit(),
-      showManageFundsButton: false,
+      allowOnchainAddress: false,
     };
   }
 
@@ -250,13 +286,28 @@ export class BlueWalletNavigationHeader extends Component {
     Clipboard.setString(formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit()).toString());
   };
 
-  componentDidMount() {
+  componentDidUpdate(prevState) {
+    InteractionManager.runAfterInteractions(() => {
+      if (prevState.wallet.getID() !== this.state.wallet.getID() && this.state.wallet.type === LightningCustodianWallet.type) {
+        this.verifyIfWalletAllowsOnchainAddress();
+      }
+    });
+  }
+
+  verifyIfWalletAllowsOnchainAddress = () => {
     if (this.state.wallet.type === LightningCustodianWallet.type) {
       this.state.wallet
         .allowOnchainAddress()
         .then(value => this.setState({ allowOnchainAddress: value }))
-        .catch(e => console.log('This Lndhub wallet does not have an onchain address API.'));
+        .catch(e => {
+          console.log('This Lndhub wallet does not have an onchain address API.');
+          this.setState({ allowOnchainAddress: false });
+        });
     }
+  };
+
+  componentDidMount() {
+    this.verifyIfWalletAllowsOnchainAddress();
   }
 
   handleBalanceVisibility = async _item => {
@@ -274,45 +325,6 @@ export class BlueWalletNavigationHeader extends Component {
     this.setState({ wallet });
     await this.context.saveToDisk();
   };
-
-  showAndroidTooltip = () => {
-    showPopupMenu(this.toolTipMenuOptions(), this.handleToolTipSelection, this.walletBalanceText.current);
-  };
-
-  handleToolTipSelection = item => {
-    if (item === 'balanceCopy' || item.id === 'balanceCopy') {
-      this.handleCopyPress();
-    } else if (item === 'balancePrivacy' || item.id === 'balancePrivacy') {
-      this.handleBalanceVisibility();
-    }
-  };
-
-  toolTipMenuOptions() {
-    return Platform.select({
-      // NOT WORKING ATM.
-      // ios: [
-      //   { text: this.state.wallet.hideBalance ? loc.transactions.details_balance_show : loc.transactions.details_balance_hide, onPress: this.handleBalanceVisibility },
-      //   { text: loc.transactions.details_copy, onPress: this.handleCopyPress },
-      // ],
-      android: this.state.wallet.hideBalance
-        ? [
-            {
-              id: 'balancePrivacy',
-              label: this.state.wallet.hideBalance ? loc.transactions.details_balance_show : loc.transactions.details_balance_hide,
-            },
-          ]
-        : [
-            {
-              id: 'balancePrivacy',
-              label: this.state.wallet.hideBalance ? loc.transactions.details_balance_show : loc.transactions.details_balance_hide,
-            },
-            {
-              id: 'balanceCopy',
-              label: loc.transactions.details_copy,
-            },
-          ],
-    });
-  }
 
   changeWalletBalanceUnit = () => {
     let walletPreviousPreferredUnit = this.state.wallet.getPreferredBalanceUnit();
@@ -340,21 +352,30 @@ export class BlueWalletNavigationHeader extends Component {
     this.props.onManageFundsPressed();
   };
 
+  showToolTipMenu = () => {
+    this.tooltip.current.showMenu();
+  };
+
   render() {
+    const balance =
+      !this.state.wallet.hideBalance &&
+      formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString();
+
     return (
       <LinearGradient
         colors={WalletGradient.gradientsFor(this.state.wallet.type)}
         style={{ padding: 15, minHeight: 140, justifyContent: 'center' }}
+        {...WalletGradient.linearGradientProps(this.state.wallet.type)}
       >
         <Image
           source={(() => {
             switch (this.state.wallet.type) {
               case LightningCustodianWallet.type:
-                return require('./img/lnd-shape.png');
+                return I18nManager.isRTL ? require('./img/lnd-shape-rtl.png') : require('./img/lnd-shape.png');
               case MultisigHDWallet.type:
-                return require('./img/vault-shape.png');
+                return I18nManager.isRTL ? require('./img/vault-shape-rtl.png') : require('./img/vault-shape.png');
               default:
-                return require('./img/btc-shape.png');
+                return I18nManager.isRTL ? require('./img/btc-shape-rtl.png') : require('./img/btc-shape.png');
             }
           })()}
           style={{
@@ -365,52 +386,57 @@ export class BlueWalletNavigationHeader extends Component {
             right: 0,
           }}
         />
-
         <Text
+          testID="WalletLabel"
           numberOfLines={1}
           style={{
             backgroundColor: 'transparent',
             fontSize: 19,
             color: '#fff',
+            writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
           }}
         >
           {this.state.wallet.getLabel()}
         </Text>
-        {Platform.OS === 'ios' && (
-          <ToolTip
-            ref={tooltip => (this.tooltip = tooltip)}
-            actions={
-              this.state.wallet.hideBalance
-                ? [
-                    {
-                      text: this.state.wallet.hideBalance ? loc.transactions.details_balance_show : loc.transactions.details_balance_hide,
-                      onPress: this.handleBalanceVisibility,
-                    },
-                  ]
-                : [
-                    {
-                      text: this.state.wallet.hideBalance ? loc.transactions.details_balance_show : loc.transactions.details_balance_hide,
-                      onPress: this.handleBalanceVisibility,
-                    },
-                    {
-                      text: loc.transactions.details_copy,
-                      onPress: this.handleCopyPress,
-                    },
-                  ]
-            }
-          />
-        )}
+        <ToolTipMenu
+          ref={this.tooltip}
+          anchorRef={this.walletBalanceText}
+          actions={
+            this.state.wallet.hideBalance
+              ? [
+                  {
+                    id: 'walletBalanceVisibility',
+                    text: loc.transactions.details_balance_show,
+                    onPress: this.handleBalanceVisibility,
+                  },
+                ]
+              : [
+                  {
+                    id: 'walletBalanceVisibility',
+                    text: loc.transactions.details_balance_hide,
+                    onPress: this.handleBalanceVisibility,
+                  },
+                  {
+                    id: 'copyToClipboard',
+                    text: loc.transactions.details_copy,
+                    onPress: this.handleCopyPress,
+                  },
+                ]
+          }
+        />
         <TouchableOpacity
+          accessibilityRole="button"
           style={styles.balance}
           onPress={this.changeWalletBalanceUnit}
           ref={this.walletBalanceText}
-          onLongPress={() => (Platform.OS === 'ios' ? this.tooltip.showMenu() : this.showAndroidTooltip())}
+          onLongPress={this.showToolTipMenu}
         >
           {this.state.wallet.hideBalance ? (
             <BluePrivateBalance />
           ) : (
             <Text
               testID="WalletBalance"
+              key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
               numberOfLines={1}
               adjustsFontSizeToFit
               style={{
@@ -418,14 +444,15 @@ export class BlueWalletNavigationHeader extends Component {
                 fontWeight: 'bold',
                 fontSize: 36,
                 color: '#fff',
+                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
               }}
             >
-              {formatBalance(this.state.wallet.getBalance(), this.state.wallet.getPreferredBalanceUnit(), true).toString()}
+              {balance}
             </Text>
           )}
         </TouchableOpacity>
         {this.state.wallet.type === LightningCustodianWallet.type && this.state.allowOnchainAddress && (
-          <TouchableOpacity onPress={this.manageFundsPressed}>
+          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
             <View
               style={{
                 marginTop: 14,
@@ -452,26 +479,56 @@ export class BlueWalletNavigationHeader extends Component {
             </View>
           </TouchableOpacity>
         )}
+        {this.state.wallet.type === MultisigHDWallet.type && (
+          <TouchableOpacity accessibilityRole="button" onPress={this.manageFundsPressed}>
+            <View
+              style={{
+                marginTop: 14,
+                marginBottom: 10,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: 9,
+                minHeight: 39,
+                alignSelf: 'flex-start',
+                paddingHorizontal: 12,
+                height: 39,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: '500',
+                  fontSize: 14,
+                  color: '#FFFFFF',
+                }}
+              >
+                {loc.multisig.manage_keys}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </LinearGradient>
     );
   }
 }
 
-export const BlueButtonLink = props => {
+export const BlueButtonLink = forwardRef((props, ref) => {
   const { colors } = useTheme();
   return (
     <TouchableOpacity
+      accessibilityRole="button"
       style={{
         minHeight: 60,
         minWidth: 100,
         justifyContent: 'center',
       }}
       {...props}
+      ref={ref}
     >
       <Text style={{ color: colors.foregroundColor, textAlign: 'center', fontSize: 16 }}>{props.title}</Text>
     </TouchableOpacity>
   );
-};
+});
 
 export const BlueAlertWalletExportReminder = ({ onSuccess = () => {}, onFailure }) => {
   Alert.alert(
@@ -483,90 +540,6 @@ export const BlueAlertWalletExportReminder = ({ onSuccess = () => {}, onFailure 
     ],
     { cancelable: false },
   );
-};
-
-export const BlueNavigationStyle = (navigation, withNavigationCloseButton = false, customCloseButtonFunction = undefined) => {
-  let headerRight;
-  const { colors, closeImage } = useTheme();
-  if (withNavigationCloseButton) {
-    headerRight = () => (
-      <TouchableOpacity
-        style={{ width: 40, height: 40, padding: 14 }}
-        onPress={
-          customCloseButtonFunction === undefined
-            ? () => {
-                Keyboard.dismiss();
-                navigation.goBack(null);
-              }
-            : customCloseButtonFunction
-        }
-      >
-        <Image style={{ alignSelf: 'center' }} source={closeImage} />
-      </TouchableOpacity>
-    );
-  } else {
-    headerRight = null;
-  }
-
-  return {
-    headerStyle: {
-      borderBottomWidth: 0,
-      elevation: 0,
-      shadowOpacity: 0,
-      shadowOffset: { height: 0, width: 0 },
-    },
-    headerTitleStyle: {
-      fontWeight: '600',
-      color: colors.foregroundColor,
-    },
-    headerRight,
-    headerBackTitleVisible: false,
-    headerTintColor: colors.foregroundColor,
-  };
-};
-
-export const BlueCreateTxNavigationStyle = (navigation, withAdvancedOptionsMenuButton = false, advancedOptionsMenuButtonAction) => {
-  const { colors, closeImage } = useTheme();
-
-  let headerRight;
-  if (withAdvancedOptionsMenuButton) {
-    headerRight = () => (
-      <TouchableOpacity
-        style={{ minWidth: 40, height: 40, justifyContent: 'center' }}
-        onPress={advancedOptionsMenuButtonAction}
-        testID="advancedOptionsMenuButton"
-      >
-        <Icon size={22} name="kebab-horizontal" type="octicon" color={colors.foregroundColor} />
-      </TouchableOpacity>
-    );
-  } else {
-    headerRight = null;
-  }
-  return {
-    headerStyle: {
-      borderBottomWidth: 0,
-      elevation: 0,
-      shadowOffset: { height: 0, width: 0 },
-    },
-    headerTitleStyle: {
-      fontWeight: '600',
-      color: colors.foregroundColor,
-    },
-    headerTintColor: colors.foregroundColor,
-    headerLeft: () => (
-      <TouchableOpacity
-        style={{ minWidth: 40, height: 40, justifyContent: 'center', paddingHorizontal: 14 }}
-        onPress={() => {
-          Keyboard.dismiss();
-          navigation.goBack(null);
-        }}
-      >
-        <Image style={{}} source={closeImage} />
-      </TouchableOpacity>
-    ),
-    headerRight,
-    headerBackTitle: null,
-  };
 };
 
 export const BluePrivateBalance = () => {
@@ -588,7 +561,7 @@ export const BluePrivateBalance = () => {
 
 export const BlueCopyToClipboardButton = ({ stringToCopy, displayText = false }) => {
   return (
-    <TouchableOpacity onPress={() => Clipboard.setString(stringToCopy)}>
+    <TouchableOpacity accessibilityRole="button" onPress={() => Clipboard.setString(stringToCopy)}>
       <Text style={{ fontSize: 13, fontWeight: '400', color: '#68bbe1' }}>{displayText || loc.transactions.details_copy}</Text>
     </TouchableOpacity>
   );
@@ -605,9 +578,6 @@ export class BlueCopyTextToClipboard extends Component {
 
   constructor(props) {
     super(props);
-    if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
     this.state = { hasTappedText: false, address: props.text };
   }
 
@@ -633,7 +603,12 @@ export class BlueCopyTextToClipboard extends Component {
   render() {
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16 }}>
-        <TouchableOpacity onPress={this.copyToClipboard} disabled={this.state.hasTappedText}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          onPress={this.copyToClipboard}
+          disabled={this.state.hasTappedText}
+          testID="BlueCopyTextToClipboard"
+        >
           <Animated.Text style={styleCopyTextToClipboard.address} numberOfLines={0}>
             {this.state.address}
           </Animated.Text>
@@ -653,8 +628,10 @@ const styleCopyTextToClipboard = StyleSheet.create({
 });
 
 export const SafeBlueArea = props => {
+  const { style, ...nonStyleProps } = props;
   const { colors } = useTheme();
-  return <SafeAreaView forceInset={{ horizontal: 'always' }} style={{ flex: 1, backgroundColor: colors.background }} {...props} />;
+  const baseStyle = { flex: 1, backgroundColor: colors.background };
+  return <SafeAreaView forceInset={{ horizontal: 'always' }} style={[baseStyle, style]} {...nonStyleProps} />;
 };
 
 export const BlueCard = props => {
@@ -665,11 +642,13 @@ export const BlueText = props => {
   const { colors } = useTheme();
   return (
     <Text
+      {...props}
       style={{
         color: colors.foregroundColor,
+
         ...props.style,
+        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
       }}
-      {...props}
     />
   );
 };
@@ -681,6 +660,7 @@ export const BlueTextCentered = props => {
 
 export const BlueListItem = React.memo(props => {
   const { colors } = useTheme();
+
   return (
     <ListItem
       containerStyle={props.containerStyle ?? { backgroundColor: 'transparent' }}
@@ -689,7 +669,9 @@ export const BlueListItem = React.memo(props => {
       topDivider={props.topDivider !== undefined ? props.topDivider : false}
       testID={props.testID}
       onPress={props.onPress}
+      onLongPress={props.onLongPress}
       disabled={props.disabled}
+      accessible={props.switch === undefined}
     >
       {props.leftAvatar && <Avatar>{props.leftAvatar}</Avatar>}
       {props.leftIcon && <Avatar icon={props.leftIcon} />}
@@ -701,12 +683,14 @@ export const BlueListItem = React.memo(props => {
             fontWeight: '500',
           }}
           numberOfLines={0}
+          accessible={props.switch === undefined}
         >
           {props.title}
         </ListItem.Title>
         {props.subtitle && (
           <ListItem.Subtitle
-            numberOfLines={1}
+            numberOfLines={props.subtitleNumberOfLines ?? 1}
+            accessible={props.switch === undefined}
             style={{ flexWrap: 'wrap', color: colors.alternativeTextColor, fontWeight: '400', fontSize: 14 }}
           >
             {props.subtitle}
@@ -724,9 +708,9 @@ export const BlueListItem = React.memo(props => {
         <ActivityIndicator />
       ) : (
         <>
-          {props.chevron && <ListItem.Chevron />}
+          {props.chevron && <ListItem.Chevron iconStyle={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} />}
           {props.rightIcon && <Avatar icon={props.rightIcon} />}
-          {props.switch && <Switch {...props.switch} />}
+          {props.switch && <Switch {...props.switch} accessibilityLabel={props.title} accessible accessibilityRole="switch" />}
           {props.checkmark && <ListItem.CheckBox iconType="octaicon" checkedColor="#0070FF" checkedIcon="check" checked />}
         </>
       )}
@@ -737,7 +721,17 @@ export const BlueListItem = React.memo(props => {
 export const BlueFormLabel = props => {
   const { colors } = useTheme();
 
-  return <Text {...props} style={{ color: colors.foregroundColor, fontWeight: '400', marginHorizontal: 20 }} />;
+  return (
+    <Text
+      {...props}
+      style={{
+        color: colors.foregroundColor,
+        fontWeight: '400',
+        marginHorizontal: 20,
+        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+      }}
+    />
+  );
 };
 
 export const BlueFormInput = props => {
@@ -806,48 +800,6 @@ export const BlueHeader = props => {
 
 export const BlueHeaderDefaultSub = props => {
   const { colors } = useTheme();
-  return (
-    <SafeAreaView style={{ backgroundColor: colors.brandingColor }}>
-      <Header
-        backgroundColor={colors.background}
-        leftContainerStyle={{ minWidth: '100%' }}
-        outerContainerStyles={{
-          borderBottomColor: 'transparent',
-          borderBottomWidth: 0,
-        }}
-        leftComponent={
-          <Text
-            adjustsFontSizeToFit
-            style={{
-              fontWeight: 'bold',
-              fontSize: 30,
-              color: colors.foregroundColor,
-            }}
-          >
-            {props.leftText}
-          </Text>
-        }
-        rightComponent={
-          <TouchableOpacity
-            onPress={() => {
-              if (props.onClose) props.onClose();
-            }}
-          >
-            <View style={stylesBlueIcon.box}>
-              <View style={stylesBlueIcon.ballTransparrent}>
-                <Image source={require('./img/close.png')} />
-              </View>
-            </View>
-          </TouchableOpacity>
-        }
-        {...props}
-      />
-    </SafeAreaView>
-  );
-};
-
-export const BlueHeaderDefaultSubHooks = props => {
-  const { colors } = useTheme();
 
   return (
     <SafeAreaView>
@@ -915,15 +867,13 @@ export const BlueSpacing40 = props => {
   return <View {...props} style={{ height: 50 }} />;
 };
 
-export class BlueSpacingVariable extends Component {
-  render() {
-    if (isIpad) {
-      return <BlueSpacing40 {...this.props} />;
-    } else {
-      return <BlueSpacing {...this.props} />;
-    }
+export const BlueSpacingVariable = props => {
+  if (isIpad) {
+    return <BlueSpacing40 {...props} />;
+  } else {
+    return <BlueSpacing {...props} />;
   }
-}
+};
 
 export class is {
   static ipad() {
@@ -939,141 +889,63 @@ export const BlueSpacing10 = props => {
   return <View {...props} style={{ height: 10, opacity: 0 }} />;
 };
 
-export class BlueUseAllFundsButton extends Component {
-  static InputAccessoryViewID = 'useMaxInputAccessoryViewID';
-  static propTypes = {
-    balance: PropTypes.string.isRequired,
-    canUseAll: PropTypes.bool.isRequired,
-    onUseAllPressed: PropTypes.func.isRequired,
-  };
+export const BlueDismissKeyboardInputAccessory = () => {
+  const { colors } = useTheme();
+  BlueDismissKeyboardInputAccessory.InputAccessoryViewID = 'BlueDismissKeyboardInputAccessory';
 
-  render() {
-    const inputView = (
+  return Platform.OS !== 'ios' ? null : (
+    <InputAccessoryView nativeID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}>
       <View
         style={{
+          backgroundColor: colors.inputBackgroundColor,
+          height: 44,
           flex: 1,
-          flexDirection: 'row',
-          maxHeight: 44,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: BlueCurrentTheme.colors.inputBackgroundColor,
-        }}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-          <Text
-            style={{
-              color: BlueCurrentTheme.colors.alternativeTextColor,
-              fontSize: 16,
-              marginLeft: 8,
-              marginRight: 0,
-              paddingRight: 0,
-              paddingLeft: 0,
-              paddingTop: 12,
-              paddingBottom: 12,
-            }}
-          >
-            {loc.send.input_total}
-          </Text>
-          {this.props.canUseAll ? (
-            <BlueButtonLink
-              onPress={this.props.onUseAllPressed}
-              style={{ marginLeft: 8, paddingRight: 0, paddingLeft: 0, paddingTop: 12, paddingBottom: 12 }}
-              title={`${this.props.balance} ${BitcoinUnit.BTC}`}
-            />
-          ) : (
-            <Text
-              style={{
-                color: BlueCurrentTheme.colors.alternativeTextColor,
-                fontSize: 16,
-                marginLeft: 8,
-                marginRight: 0,
-                paddingRight: 0,
-                paddingLeft: 0,
-                paddingTop: 12,
-                paddingBottom: 12,
-              }}
-            >
-              {this.props.balance} {BitcoinUnit.BTC}
-            </Text>
-          )}
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-          <BlueButtonLink
-            style={{ paddingRight: 8, paddingLeft: 0, paddingTop: 12, paddingBottom: 12 }}
-            title={loc.send.input_done}
-            onPress={() => Keyboard.dismiss()}
-          />
-        </View>
-      </View>
-    );
-
-    if (Platform.OS === 'ios') {
-      return <InputAccessoryView nativeID={BlueUseAllFundsButton.InputAccessoryViewID}>{inputView}</InputAccessoryView>;
-    } else {
-      return <KeyboardAvoidingView style={{ height: 44 }}>{inputView}</KeyboardAvoidingView>;
-    }
-  }
-}
-
-export class BlueDismissKeyboardInputAccessory extends Component {
-  static InputAccessoryViewID = 'BlueDismissKeyboardInputAccessory';
-
-  render() {
-    return Platform.OS !== 'ios' ? null : (
-      <InputAccessoryView nativeID={BlueDismissKeyboardInputAccessory.InputAccessoryViewID}>
-        <View
-          style={{
-            backgroundColor: BlueCurrentTheme.colors.inputBackgroundColor,
-            height: 44,
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <BlueButtonLink title={loc.send.input_done} onPress={() => Keyboard.dismiss()} />
-        </View>
-      </InputAccessoryView>
-    );
-  }
-}
-
-export class BlueDoneAndDismissKeyboardInputAccessory extends Component {
-  static InputAccessoryViewID = 'BlueDoneAndDismissKeyboardInputAccessory';
-
-  onPasteTapped = async () => {
-    const clipboard = await Clipboard.getString();
-    this.props.onPasteTapped(clipboard);
-  };
-
-  render() {
-    const inputView = (
-      <View
-        style={{
-          backgroundColor: BlueCurrentTheme.colors.inputBackgroundColor,
           flexDirection: 'row',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          maxHeight: 44,
         }}
       >
-        <BlueButtonLink title={loc.send.input_clear} onPress={this.props.onClearTapped} />
-        <BlueButtonLink title={loc.send.input_paste} onPress={this.onPasteTapped} />
-        <BlueButtonLink title={loc.send.input_done} onPress={() => Keyboard.dismiss()} />
+        <BlueButtonLink title={loc.send.input_done} onPress={Keyboard.dismiss} />
       </View>
-    );
+    </InputAccessoryView>
+  );
+};
 
-    if (Platform.OS === 'ios') {
-      return <InputAccessoryView nativeID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID}>{inputView}</InputAccessoryView>;
-    } else {
-      return <KeyboardAvoidingView>{inputView}</KeyboardAvoidingView>;
-    }
+export const BlueDoneAndDismissKeyboardInputAccessory = props => {
+  const { colors } = useTheme();
+  BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID = 'BlueDoneAndDismissKeyboardInputAccessory';
+
+  const onPasteTapped = async () => {
+    const clipboard = await Clipboard.getString();
+    props.onPasteTapped(clipboard);
+  };
+
+  const inputView = (
+    <View
+      style={{
+        backgroundColor: colors.inputBackgroundColor,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        maxHeight: 44,
+      }}
+    >
+      <BlueButtonLink title={loc.send.input_clear} onPress={props.onClearTapped} />
+      <BlueButtonLink title={loc.send.input_paste} onPress={onPasteTapped} />
+      <BlueButtonLink title={loc.send.input_done} onPress={Keyboard.dismiss} />
+    </View>
+  );
+
+  if (Platform.OS === 'ios') {
+    return <InputAccessoryView nativeID={BlueDoneAndDismissKeyboardInputAccessory.InputAccessoryViewID}>{inputView}</InputAccessoryView>;
+  } else {
+    return <KeyboardAvoidingView>{inputView}</KeyboardAvoidingView>;
   }
-}
+};
 
 export const BlueLoading = props => {
   return (
-    <View style={{ flex: 1, paddingTop: 200 }} {...props}>
+    <View style={{ flex: 1, justifyContent: 'center' }} {...props}>
       <ActivityIndicator />
     </View>
   );
@@ -1330,7 +1202,7 @@ export const BlueReceiveButtonIcon = props => {
   const { colors } = useTheme();
 
   return (
-    <TouchableOpacity {...props} style={{ flex: 1 }}>
+    <TouchableOpacity accessibilityRole="button" {...props} style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -1376,7 +1248,7 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
   const [subtitleNumberOfLines, setSubtitleNumberOfLines] = useState(1);
   const { colors } = useTheme();
   const { navigate } = useNavigation();
-  const { txMetadata, wallets } = useContext(BlueStorageContext);
+  const { txMetadata, wallets, preferredFiatCurrency, language } = useContext(BlueStorageContext);
   const containerStyle = useMemo(
     () => ({
       backgroundColor: 'transparent',
@@ -1387,6 +1259,9 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
     }),
     [colors.lightBorder],
   );
+  const toolTip = useRef();
+  const copyToolTip = useRef();
+  const listItemRef = useRef();
 
   const title = useMemo(() => {
     if (item.confirmations === 0) {
@@ -1394,7 +1269,8 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
     } else {
       return transactionTimeToReadable(item.received);
     }
-  }, [item.confirmations, item.received]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.confirmations, item.received, language]);
   const txMemo = txMetadata[item.hash]?.memo ?? '';
   const subtitle = useMemo(() => {
     let sub = item.confirmations < 7 ? loc.formatString(loc.transactions.list_conf, { number: item.confirmations }) : '';
@@ -1425,7 +1301,8 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
     } else {
       return formatBalanceWithoutSuffix(item.value && item.value, itemPriceUnit, true).toString();
     }
-  }, [item, itemPriceUnit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item, itemPriceUnit, preferredFiatCurrency]);
 
   const rowTitleStyle = useMemo(() => {
     let color = colors.successColor;
@@ -1525,17 +1402,15 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
     }
   }, [item]);
 
+  useEffect(() => {
+    setSubtitleNumberOfLines(1);
+  }, [subtitle]);
+
   const onPress = useCallback(async () => {
     if (item.hash) {
       navigate('TransactionStatus', { hash: item.hash });
     } else if (item.type === 'user_invoice' || item.type === 'payment_request' || item.type === 'paid_invoice') {
-      const lightningWallet = wallets.filter(wallet => {
-        if (typeof wallet === 'object') {
-          if ('secret' in wallet) {
-            return wallet.getSecret() === item.fromWallet;
-          }
-        }
-      });
+      const lightningWallet = wallets.filter(wallet => wallet?.getID() === item.walletID);
       if (lightningWallet.length === 1) {
         try {
           // is it a successful lnurl-pay?
@@ -1571,190 +1446,117 @@ export const BlueTransactionListItem = React.memo(({ item, itemPriceUnit = Bitco
   }, [item, wallets]);
 
   const onLongPress = useCallback(() => {
-    if (subtitleNumberOfLines === 1) {
-      setSubtitleNumberOfLines(0);
-    }
-  }, [subtitleNumberOfLines]);
+    toolTip.current.showMenu();
+  }, []);
+
+  const handleOnExpandNote = useCallback(() => {
+    setSubtitleNumberOfLines(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtitle]);
 
   const subtitleProps = useMemo(() => ({ numberOfLines: subtitleNumberOfLines }), [subtitleNumberOfLines]);
-
-  return (
-    <View style={{ marginHorizontal: 4 }}>
-      <BlueListItem
-        leftAvatar={avatar}
-        title={title}
-        titleNumberOfLines={subtitleNumberOfLines}
-        subtitle={subtitle}
-        subtitleProps={subtitleProps}
-        onPress={onPress}
-        onLongPress={onLongPress}
-        chevron={false}
-        Component={TouchableOpacity}
-        rightTitle={rowTitle}
-        rightTitleStyle={rowTitleStyle}
-        containerStyle={containerStyle}
-      />
-    </View>
-  );
-});
-
-const isDesktop = getSystemName() === 'Mac OS X';
-export class BlueAddressInput extends Component {
-  static propTypes = {
-    isLoading: PropTypes.bool,
-    onChangeText: PropTypes.func,
-    onBarScanned: PropTypes.func.isRequired,
-    launchedBy: PropTypes.string.isRequired,
-    address: PropTypes.string,
-    placeholder: PropTypes.string,
-  };
-
-  static defaultProps = {
-    isLoading: false,
-    address: '',
-    placeholder: loc.send.details_address,
-  };
-
-  choosePhoto = () => {
-    ImagePicker.launchImageLibrary(
-      {
-        title: null,
-        mediaType: 'photo',
-        takePhotoButtonTitle: null,
-      },
-      response => {
-        if (response.uri) {
-          const uri = Platform.OS === 'ios' ? response.uri.toString().replace('file://', '') : response.path.toString();
-          LocalQRCode.decode(uri, (error, result) => {
-            if (!error) {
-              this.props.onBarScanned(result);
-            } else {
-              alert(loc.send.qr_error_no_qrcode);
-            }
-          });
-        }
-      },
-    );
-  };
-
-  takePhoto = () => {
-    ImagePicker.launchCamera(
-      {
-        title: null,
-        mediaType: 'photo',
-        takePhotoButtonTitle: null,
-      },
-      response => {
-        if (response.uri) {
-          const uri = Platform.OS === 'ios' ? response.uri.toString().replace('file://', '') : response.path.toString();
-          LocalQRCode.decode(uri, (error, result) => {
-            if (!error) {
-              this.props.onBarScanned(result);
-            } else {
-              alert(loc.send.qr_error_no_qrcode);
-            }
-          });
-        } else if (response.error) {
-          presentCameraNotAuthorizedAlert(response.error);
-        }
-      },
-    );
-  };
-
-  copyFromClipbard = async () => {
-    this.props.onBarScanned(await Clipboard.getString());
-  };
-
-  showActionSheet = async () => {
-    const isClipboardEmpty = (await Clipboard.getString()).trim().length === 0;
-    let copyFromClipboardIndex;
-    if (Platform.OS === 'ios') {
-      const options = [loc._.cancel, loc.wallets.list_long_choose, isDesktop ? loc.wallets.take_photo : loc.wallets.list_long_scan];
-      if (!isClipboardEmpty) {
-        options.push(loc.wallets.list_long_clipboard);
-        copyFromClipboardIndex = options.length - 1;
+  const handleOnCopyTap = useCallback(() => {
+    toolTip.current.hideMenu();
+    setTimeout(copyToolTip.current.showMenu, 205);
+  }, []);
+  const handleOnCopyAmountTap = useCallback(() => Clipboard.setString(rowTitle.replace(/[\s\\-]/g, '')), [rowTitle]);
+  const handleOnCopyTransactionID = useCallback(() => Clipboard.setString(item.hash), [item.hash]);
+  const handleOnCopyNote = useCallback(() => Clipboard.setString(subtitle), [subtitle]);
+  const handleOnViewOnBlockExplorer = useCallback(() => {
+    const url = `https://mempool.space/tx/${item.hash}`;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
       }
-
-      ActionSheet.showActionSheetWithOptions({ options, cancelButtonIndex: 0 }, buttonIndex => {
-        if (buttonIndex === 1) {
-          this.choosePhoto();
-        } else if (buttonIndex === 2) {
-          this.takePhoto();
-        } else if (buttonIndex === copyFromClipboardIndex) {
-          this.copyFromClipbard();
-        }
+    });
+  }, [item.hash]);
+  const handleCopyOpenInBlockExplorerPress = useCallback(() => {
+    Clipboard.setString(`https://mempool.space/tx/${item.hash}`);
+  }, [item.hash]);
+  const toolTipActions = useMemo(() => {
+    const actions = [
+      {
+        id: 'copy',
+        text: loc.transactions.details_copy,
+        onPress: handleOnCopyTap,
+      },
+    ];
+    if (item.hash) {
+      actions.push({
+        id: 'open_in_blockExplorer',
+        text: loc.transactions.details_show_in_block_explorer,
+        onPress: handleOnViewOnBlockExplorer,
       });
     }
-  };
+    if (subtitle && subtitleNumberOfLines === 1) {
+      actions.push({
+        id: 'expandNote',
+        text: loc.transactions.expand_note,
+        onPress: handleOnExpandNote,
+      });
+    }
+    return actions;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.hash, subtitle, rowTitle, subtitleNumberOfLines, txMetadata]);
 
-  render() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          borderColor: BlueCurrentTheme.colors.formBorder,
-          borderBottomColor: BlueCurrentTheme.colors.formBorder,
-          borderWidth: 1.0,
-          borderBottomWidth: 0.5,
-          backgroundColor: BlueCurrentTheme.colors.inputBackgroundColor,
-          minHeight: 44,
-          height: 44,
-          marginHorizontal: 20,
-          alignItems: 'center',
-          marginVertical: 8,
-          borderRadius: 4,
-        }}
-      >
-        <TextInput
-          testID="AddressInput"
-          onChangeText={text => {
-            this.props.onChangeText(text);
-          }}
-          placeholder={this.props.placeholder}
-          numberOfLines={1}
-          placeholderTextColor="#81868e"
-          value={this.props.address}
-          style={{ flex: 1, marginHorizontal: 8, minHeight: 33, color: '#81868e' }}
-          editable={!this.props.isLoading}
-          onSubmitEditing={Keyboard.dismiss}
-          {...this.props}
+  const copyToolTipActions = useMemo(() => {
+    const actions = [];
+    if (rowTitle !== loc.lnd.expired) {
+      actions.push({
+        id: 'copyAmount',
+        text: loc.send.create_amount,
+        onPress: handleOnCopyAmountTap,
+      });
+    }
+
+    if (item.hash) {
+      actions.push(
+        {
+          id: 'copyTX_ID',
+          text: loc.transactions.txid,
+          onPress: handleOnCopyTransactionID,
+        },
+        {
+          id: 'copy_blockExplorer',
+          text: loc.transactions.block_explorer_link,
+          onPress: handleCopyOpenInBlockExplorerPress,
+        },
+      );
+    }
+    if (subtitle) {
+      actions.push({
+        id: 'copyNote',
+        text: loc.transactions.note,
+        onPress: handleOnCopyNote,
+      });
+    }
+    return actions;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toolTipActions]);
+
+  return (
+    <TouchableWithoutFeedback ref={listItemRef}>
+      <View style={{ marginHorizontal: 4 }}>
+        <ToolTipMenu ref={toolTip} anchorRef={listItemRef} actions={toolTipActions} />
+        <ToolTipMenu ref={copyToolTip} anchorRef={listItemRef} actions={copyToolTipActions} />
+        <BlueListItem
+          leftAvatar={avatar}
+          title={title}
+          subtitleNumberOfLines={subtitleNumberOfLines}
+          subtitle={subtitle}
+          subtitleProps={subtitleProps}
+          onPress={onPress}
+          chevron={false}
+          Component={TouchableOpacity}
+          rightTitle={rowTitle}
+          rightTitleStyle={rowTitleStyle}
+          containerStyle={containerStyle}
+          onLongPress={onLongPress}
         />
-        <TouchableOpacity
-          testID="BlueAddressInputScanQrButton"
-          disabled={this.props.isLoading}
-          onPress={() => {
-            Keyboard.dismiss();
-            if (isDesktop) {
-              this.showActionSheet();
-            } else {
-              NavigationService.navigate('ScanQRCodeRoot', {
-                screen: 'ScanQRCode',
-                params: {
-                  launchedBy: this.props.launchedBy,
-                  onBarScanned: this.props.onBarScanned,
-                },
-              });
-            }
-          }}
-          style={{
-            height: 36,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            backgroundColor: BlueCurrentTheme.colors.scanLabel,
-            borderRadius: 4,
-            paddingVertical: 4,
-            paddingHorizontal: 8,
-            marginHorizontal: 4,
-          }}
-        >
-          <Image style={{}} source={require('./img/scan-white.png')} />
-          <Text style={{ marginLeft: 4, color: BlueCurrentTheme.colors.inverseForegroundColor }}>{loc.send.details_scan}</Text>
-        </TouchableOpacity>
       </View>
-    );
-  }
-}
+    </TouchableWithoutFeedback>
+  );
+});
 
 export class BlueReplaceFeeSuggestions extends Component {
   static propTypes = {
@@ -1835,6 +1637,7 @@ export class BlueReplaceFeeSuggestions extends Component {
             },
           ].map(({ label, type, time, rate, active }, index) => (
             <TouchableOpacity
+              accessibilityRole="button"
               key={label}
               onPress={() => this.onFeeSelected(type)}
               style={[
@@ -1861,6 +1664,7 @@ export class BlueReplaceFeeSuggestions extends Component {
             </TouchableOpacity>
           ))}
         <TouchableOpacity
+          accessibilityRole="button"
           onPress={() => this.customTextInput.focus()}
           style={[
             { paddingHorizontal: 16, paddingVertical: 8, marginBottom: 10 },
@@ -1911,272 +1715,6 @@ export class BlueReplaceFeeSuggestions extends Component {
   }
 }
 
-export class BlueBitcoinAmount extends Component {
-  static propTypes = {
-    isLoading: PropTypes.bool,
-    /**
-     * amount is a sting thats always in current unit denomination, e.g. '0.001' or '9.43' or '10000'
-     */
-    amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    /**
-     * callback that returns currently typed amount, in current denomination, e.g. 0.001 or 10000 or $9.34
-     * (btc, sat, fiat)
-     */
-    onChangeText: PropTypes.func,
-    /**
-     * callback thats fired to notify of currently selected denomination, returns <BitcoinUnit.*>
-     */
-    onAmountUnitChange: PropTypes.func,
-    disabled: PropTypes.bool,
-  };
-
-  /**
-   * cache of conversions  fiat amount => satoshi
-   * @type {{}}
-   */
-  static conversionCache = {};
-
-  static getCachedSatoshis(amount) {
-    return BlueBitcoinAmount.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] || false;
-  }
-
-  static setCachedSatoshis(amount, sats) {
-    BlueBitcoinAmount.conversionCache[amount + BitcoinUnit.LOCAL_CURRENCY] = sats;
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = { unit: props.unit || BitcoinUnit.BTC, previousUnit: BitcoinUnit.SATS };
-  }
-
-  /**
-   * here we must recalculate old amont value (which was denominated in `previousUnit`) to new denomination `newUnit`
-   * and fill this value in input box, so user can switch between, for example, 0.001 BTC <=> 100000 sats
-   *
-   * @param previousUnit {string} one of {BitcoinUnit.*}
-   * @param newUnit {string} one of {BitcoinUnit.*}
-   */
-  onAmountUnitChange(previousUnit, newUnit) {
-    const amount = this.props.amount || 0;
-    console.log('was:', amount, previousUnit, '; converting to', newUnit);
-    let sats = 0;
-    switch (previousUnit) {
-      case BitcoinUnit.BTC:
-        sats = new BigNumber(amount).multipliedBy(100000000).toString();
-        break;
-      case BitcoinUnit.SATS:
-        sats = amount;
-        break;
-      case BitcoinUnit.LOCAL_CURRENCY:
-        sats = new BigNumber(currency.fiatToBTC(amount)).multipliedBy(100000000).toString();
-        break;
-    }
-    if (previousUnit === BitcoinUnit.LOCAL_CURRENCY && BlueBitcoinAmount.conversionCache[amount + previousUnit]) {
-      // cache hit! we reuse old value that supposedly doesnt have rounding errors
-      sats = BlueBitcoinAmount.conversionCache[amount + previousUnit];
-    }
-    console.log('so, in gro its', sats);
-
-    const newInputValue = formatBalancePlain(sats, newUnit, false);
-    console.log('and in', newUnit, 'its', newInputValue);
-
-    if (newUnit === BitcoinUnit.LOCAL_CURRENCY && previousUnit === BitcoinUnit.SATS) {
-      // we cache conversion, so when we will need reverse conversion there wont be a rounding error
-      BlueBitcoinAmount.conversionCache[newInputValue + newUnit] = amount;
-    }
-    this.props.onChangeText(newInputValue);
-    if (this.props.onAmountUnitChange) this.props.onAmountUnitChange(newUnit);
-  }
-
-  /**
-   * responsible for cycling currently selected denomination, BTC->SAT->LOCAL_CURRENCY->BTC
-   */
-  changeAmountUnit = () => {
-    let previousUnit = this.state.unit;
-    let newUnit;
-    if (previousUnit === BitcoinUnit.BTC) {
-      newUnit = BitcoinUnit.SATS;
-    } else if (previousUnit === BitcoinUnit.SATS) {
-      newUnit = BitcoinUnit.LOCAL_CURRENCY;
-    } else if (previousUnit === BitcoinUnit.LOCAL_CURRENCY) {
-      newUnit = BitcoinUnit.BTC;
-    } else {
-      newUnit = BitcoinUnit.BTC;
-      previousUnit = BitcoinUnit.SATS;
-    }
-    this.setState({ unit: newUnit, previousUnit }, () => this.onAmountUnitChange(previousUnit, newUnit));
-  };
-
-  maxLength = () => {
-    switch (this.state.unit) {
-      case BitcoinUnit.BTC:
-        return 10;
-      case BitcoinUnit.SATS:
-        return 15;
-      default:
-        return 15;
-    }
-  };
-
-  textInput = React.createRef();
-
-  handleTextInputOnPress = () => {
-    this.textInput.current.focus();
-  };
-
-  render() {
-    const amount = this.props.amount || 0;
-    let secondaryDisplayCurrency = formatBalanceWithoutSuffix(amount, BitcoinUnit.LOCAL_CURRENCY, false);
-
-    // if main display is sat or btc - secondary display is fiat
-    // if main display is fiat - secondary dislay is btc
-    let sat;
-    switch (this.state.unit) {
-      case BitcoinUnit.BTC:
-        sat = new BigNumber(amount).multipliedBy(100000000).toString();
-        secondaryDisplayCurrency = formatBalanceWithoutSuffix(sat, BitcoinUnit.LOCAL_CURRENCY, false);
-        break;
-      case BitcoinUnit.SATS:
-        secondaryDisplayCurrency = formatBalanceWithoutSuffix((isNaN(amount) ? 0 : amount).toString(), BitcoinUnit.LOCAL_CURRENCY, false);
-        break;
-      case BitcoinUnit.LOCAL_CURRENCY:
-        secondaryDisplayCurrency = currency.fiatToBTC(parseFloat(isNaN(amount) ? 0 : amount));
-        if (BlueBitcoinAmount.conversionCache[isNaN(amount) ? 0 : amount + BitcoinUnit.LOCAL_CURRENCY]) {
-          // cache hit! we reuse old value that supposedly doesn't have rounding errors
-          const sats = BlueBitcoinAmount.conversionCache[isNaN(amount) ? 0 : amount + BitcoinUnit.LOCAL_CURRENCY];
-          secondaryDisplayCurrency = currency.satoshiToBTC(sats);
-        }
-        break;
-    }
-
-    if (amount === BitcoinUnit.MAX) secondaryDisplayCurrency = ''; // we don't want to display NaN
-    return (
-      <TouchableWithoutFeedback disabled={this.props.pointerEvents === 'none'} onPress={() => this.textInput.focus()}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          {!this.props.disabled && <View style={{ alignSelf: 'center', padding: amount === BitcoinUnit.MAX ? 0 : 15 }} />}
-          <View style={{ flex: 1 }}>
-            <View
-              style={{ flexDirection: 'row', alignContent: 'space-between', justifyContent: 'center', paddingTop: 16, paddingBottom: 2 }}
-            >
-              {this.state.unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                <Text
-                  style={{
-                    color: this.props.disabled
-                      ? BlueCurrentTheme.colors.buttonDisabledTextColor
-                      : BlueCurrentTheme.colors.alternativeTextColor2,
-                    fontSize: 18,
-                    marginHorizontal: 4,
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {currency.getCurrencySymbol() + ' '}
-                </Text>
-              )}
-              <TextInput
-                {...this.props}
-                testID="BitcoinAmountInput"
-                keyboardType="numeric"
-                adjustsFontSizeToFit
-                onChangeText={text => {
-                  text = text.trim();
-                  if (this.state.unit !== BitcoinUnit.LOCAL_CURRENCY) {
-                    text = text.replace(',', '.');
-                    const split = text.split('.');
-                    if (split.length >= 2) {
-                      text = `${parseInt(split[0], 10)}.${split[1]}`;
-                    } else {
-                      text = `${parseInt(split[0], 10)}`;
-                    }
-
-                    text = this.state.unit === BitcoinUnit.BTC ? text.replace(/[^0-9.]/g, '') : text.replace(/[^0-9]/g, '');
-
-                    if (text.startsWith('.')) {
-                      text = '0.';
-                    }
-                  } else if (this.state.unit === BitcoinUnit.LOCAL_CURRENCY) {
-                    text = text.replace(/,/gi, '');
-                    if (text.split('.').length > 2) {
-                      // too many dots. stupid code to remove all but first dot:
-                      let rez = '';
-                      let first = true;
-                      for (const part of text.split('.')) {
-                        rez += part;
-                        if (first) {
-                          rez += '.';
-                          first = false;
-                        }
-                      }
-                      text = rez;
-                    }
-                    text = text.replace(/[^\d.,-]/g, ''); // remove all but numbers, dots & commas
-                    text = text.replace(/(\..*)\./g, '$1');
-                  }
-                  this.props.onChangeText(text);
-                }}
-                onBlur={() => {
-                  if (this.props.onBlur) this.props.onBlur();
-                }}
-                onFocus={() => {
-                  if (this.props.onFocus) this.props.onFocus();
-                }}
-                placeholder="0"
-                maxLength={this.maxLength()}
-                ref={textInput => (this.textInput = textInput)}
-                editable={!this.props.isLoading && !this.props.disabled}
-                value={parseFloat(amount) >= 0 || amount === BitcoinUnit.MAX ? amount : undefined}
-                placeholderTextColor={
-                  this.props.disabled ? BlueCurrentTheme.colors.buttonDisabledTextColor : BlueCurrentTheme.colors.alternativeTextColor2
-                }
-                style={{
-                  color: this.props.disabled
-                    ? BlueCurrentTheme.colors.buttonDisabledTextColor
-                    : BlueCurrentTheme.colors.alternativeTextColor2,
-                  fontWeight: 'bold',
-                  fontSize: amount.length > 10 ? 20 : 36,
-                }}
-              />
-              {this.state.unit !== BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX && (
-                <Text
-                  style={{
-                    color: this.props.disabled
-                      ? BlueCurrentTheme.colors.buttonDisabledTextColor
-                      : BlueCurrentTheme.colors.alternativeTextColor2,
-                    fontSize: 15,
-                    marginHorizontal: 4,
-                    fontWeight: '600',
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {' ' + this.state.unit}
-                </Text>
-              )}
-            </View>
-            <View style={{ alignItems: 'center', marginBottom: 22 }}>
-              <Text style={{ fontSize: 16, color: '#9BA0A9', fontWeight: '600' }}>
-                {this.state.unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX
-                  ? removeTrailingZeros(secondaryDisplayCurrency)
-                  : secondaryDisplayCurrency}
-                {this.state.unit === BitcoinUnit.LOCAL_CURRENCY && amount !== BitcoinUnit.MAX ? ` ${BitcoinUnit.BTC}` : null}
-              </Text>
-            </View>
-          </View>
-          {!this.props.disabled && amount !== BitcoinUnit.MAX && (
-            <TouchableOpacity
-              testID="changeAmountUnitButton"
-              style={{ alignSelf: 'center', marginRight: 16, paddingLeft: 16, paddingVertical: 16 }}
-              onPress={this.changeAmountUnit}
-            >
-              <Image source={require('./img/round-compare-arrows-24-px.png')} />
-            </TouchableOpacity>
-          )}
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  }
-}
 const styles = StyleSheet.create({
   balanceBlur: {
     height: 30,
@@ -2225,6 +1763,7 @@ export const BlueTabs = ({ active, onSwitch, tabs }) => (
     {tabs.map((Tab, i) => (
       <TouchableOpacity
         key={i}
+        accessibilityRole="button"
         onPress={() => onSwitch(i)}
         style={[
           tabsStyles.tabRoot,
@@ -2256,7 +1795,7 @@ export class DynamicQRCode extends Component {
   fragments = [];
 
   componentDidMount() {
-    const { value, capacity = 800 } = this.props;
+    const { value, capacity = 200 } = this.props;
     this.fragments = encodeUR(value, capacity);
     this.setState(
       {
@@ -2332,18 +1871,21 @@ export class DynamicQRCode extends Component {
         <BlueSpacing20 />
         <View style={animatedQRCodeStyle.controller}>
           <TouchableOpacity
+            accessibilityRole="button"
             style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-start' }]}
             onPress={this.moveToPreviousFragment}
           >
             <Text style={animatedQRCodeStyle.text}>{loc.send.dynamic_prev}</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityRole="button"
             style={[animatedQRCodeStyle.button, { width: '50%' }]}
             onPress={this.state.intervalHandler ? this.stopAutoMove : this.startAutoMove}
           >
             <Text style={animatedQRCodeStyle.text}>{this.state.intervalHandler ? loc.send.dynamic_stop : loc.send.dynamic_start}</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityRole="button"
             style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-end' }]}
             onPress={this.moveToNextFragment}
           >

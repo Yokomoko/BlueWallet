@@ -1,27 +1,26 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { StatusBar, View, TouchableOpacity, StyleSheet, Alert, useWindowDimensions } from 'react-native';
+import { StatusBar, View, StyleSheet, Alert } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { BlueNavigationStyle, BlueHeaderDefaultMain } from '../../BlueComponents';
-import WalletsCarousel from '../../components/WalletsCarousel';
-import { Icon } from 'react-native-elements';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import PropTypes from 'prop-types';
+import { useIsFocused, useTheme } from '@react-navigation/native';
+
+import { BlueHeaderDefaultMain, BlueSpacing20 } from '../../BlueComponents';
+import WalletsCarousel from '../../components/WalletsCarousel';
 import { PlaceholderWallet } from '../../class';
 import WalletImport from '../../class/wallet-import';
-import * as NavigationService from '../../NavigationService';
 import loc from '../../loc';
-import { BlueCurrentTheme } from '../../components/themes';
-import { useTheme } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { BlurView } from '@react-native-community/blur';
 
 const DrawerList = props => {
   console.log('drawerList rendering...');
   const walletsCarousel = useRef();
-  const { wallets, selectedWallet, pendingWallets, newWalletAdded, setNewWalletAdded } = useContext(BlueStorageContext);
+  const { wallets, selectedWallet, pendingWallets, isDrawerListBlurred } = useContext(BlueStorageContext);
   const [carouselData, setCarouselData] = useState([]);
-  const height = useWindowDimensions().height;
   const { colors } = useTheme();
+  const walletsCount = useRef(wallets.length);
+  const isFocused = useIsFocused();
   const stylesHook = StyleSheet.create({
     root: {
       backgroundColor: colors.brandingColor,
@@ -37,12 +36,18 @@ const DrawerList = props => {
   }, [wallets, pendingWallets]);
 
   useEffect(() => {
-    if (newWalletAdded) {
-      walletsCarousel.current?.snapToItem(carouselData.length - pendingWallets.length - 2);
-      setNewWalletAdded(false);
+    if (walletsCount.current < wallets.length) {
+      walletsCarousel.current?.scrollToItem({ item: wallets[walletsCount.current] });
+    }
+    walletsCount.current = wallets.length;
+  }, [wallets]);
+
+  useEffect(() => {
+    if (pendingWallets.length > 0) {
+      walletsCarousel.current?.scrollToItem(carouselData.length - pendingWallets.length);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newWalletAdded]);
+  }, [pendingWallets]);
 
   const handleClick = index => {
     console.log('click', index);
@@ -94,56 +99,60 @@ const DrawerList = props => {
     }
   };
 
-  const renderWalletsCarousel = () => {
-    return (
-      <WalletsCarousel
-        removeClippedSubviews={false}
-        data={carouselData}
-        onPress={handleClick}
-        handleLongPress={handleLongPress}
-        ref={walletsCarousel}
-        testID="WalletsList"
-        vertical
-        itemHeight={190}
-        sliderHeight={height}
-        contentContainerCustomStyle={styles.contentContainerCustomStyle}
-        inactiveSlideOpacity={1.0}
-        selectedWallet={selectedWallet}
-      />
-    );
-  };
-
   const onNewWalletPress = () => {
     return !carouselData.some(wallet => wallet.type === PlaceholderWallet.type) ? props.navigation.navigate('AddWalletRoot') : null;
   };
 
+  const ListHeaderComponent = () => {
+    return (
+      <>
+        <BlueHeaderDefaultMain leftText={loc.wallets.list_title} onNewWalletPress={onNewWalletPress} isDrawerList />
+        <BlueSpacing20 />
+      </>
+    );
+  };
+
+  const renderWalletsCarousel = (
+    <WalletsCarousel
+      data={carouselData}
+      extraData={carouselData}
+      onPress={handleClick}
+      handleLongPress={handleLongPress}
+      ref={walletsCarousel}
+      testID="WalletsList"
+      vertical
+      selectedWallet={selectedWallet}
+      ListHeaderComponent={ListHeaderComponent}
+      scrollEnabled={isFocused}
+    />
+  );
+
   return (
-    <DrawerContentScrollView {...props} scrollEnabled={false}>
+    <DrawerContentScrollView {...props}>
       <View styles={[styles.root, stylesHook.root]}>
         <StatusBar barStyle="default" />
-        <SafeAreaView style={styles.root}>
-          <BlueHeaderDefaultMain leftText={loc.wallets.list_title} onNewWalletPress={onNewWalletPress} isDrawerList />
-        </SafeAreaView>
-        {renderWalletsCarousel()}
+        {renderWalletsCarousel}
       </View>
+      {isDrawerListBlurred && (
+        <BlurView style={styles.absolute} blurType="light" blurAmount={10} reducedTransparencyFallbackColor="white" />
+      )}
     </DrawerContentScrollView>
   );
 };
 
 export default DrawerList;
+
 const styles = StyleSheet.create({
-  contentContainerCustomStyle: {
-    paddingRight: 10,
-    paddingLeft: 20,
-  },
   root: {
     flex: 1,
   },
-  headerTouch: {
-    height: 48,
-    paddingRight: 16,
-    paddingLeft: 32,
-    paddingVertical: 10,
+
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 });
 
@@ -156,23 +165,4 @@ DrawerList.propTypes = {
     name: PropTypes.string,
     params: PropTypes.object,
   }),
-};
-
-DrawerList.navigationOptions = ({ navigation }) => {
-  return {
-    ...BlueNavigationStyle(navigation, true),
-    title: '',
-    headerStyle: {
-      backgroundColor: BlueCurrentTheme.colors.customHeader,
-      borderBottomWidth: 0,
-      elevation: 0,
-      shadowOpacity: 0,
-      shadowOffset: { height: 0, width: 0 },
-    },
-    headerRight: () => (
-      <TouchableOpacity testID="SettingsButton" style={styles.headerTouch} onPress={() => NavigationService.navigate('Settings')}>
-        <Icon size={22} name="kebab-horizontal" type="octicon" color={BlueCurrentTheme.colors.foregroundColor} />
-      </TouchableOpacity>
-    ),
-  };
 };

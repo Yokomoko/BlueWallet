@@ -1,134 +1,168 @@
 import Localization from 'react-localization';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import * as RNLocalize from 'react-native-localize';
 import BigNumber from 'bignumber.js';
 
-import { AppStorage } from '../class';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import { AvailableLanguages } from './languages';
+import { I18nManager } from 'react-native';
 const currency = require('../blue_modules/currency');
 
+const LANG = 'lang';
+
 dayjs.extend(relativeTime);
+dayjs.extend(localizedFormat);
 
 // first-time loading sequence
-(async () => {
-  // finding out whether lang preference was saved
-  // For some reason using the AppStorage.LANG constant is not working. Hard coding string for now.
+
+const setDateTimeLocale = async () => {
   let lang = await AsyncStorage.getItem('lang');
+  let localeForDayJSAvailable = true;
+  switch (lang) {
+    case 'ar':
+      require('dayjs/locale/ar');
+      break;
+    case 'bg_bg':
+      lang = 'bg';
+      require('dayjs/locale/bg');
+      break;
+    case 'ca':
+      require('dayjs/locale/ca');
+      break;
+    case 'cy':
+      require('dayjs/locale/cy');
+      break;
+    case 'da_dk':
+      require('dayjs/locale/da');
+      break;
+    case 'de_de':
+      require('dayjs/locale/de');
+      break;
+    case 'el':
+      require('dayjs/locale/el');
+      break;
+    case 'es':
+      require('dayjs/locale/es');
+      break;
+    case 'es_419':
+      // es-do it is the closes one to es_419
+      lang = 'es-do';
+      require('dayjs/locale/es-do');
+      break;
+    case 'fi_fi':
+      require('dayjs/locale/fi');
+      break;
+    case 'fa':
+      require('dayjs/locale/fa');
+      break;
+    case 'fr_fr':
+      require('dayjs/locale/fr');
+      break;
+    case 'he':
+      require('dayjs/locale/he');
+      break;
+    case 'hr_hr':
+      require('dayjs/locale/hr');
+      break;
+    case 'hu_hu':
+      require('dayjs/locale/hu');
+      break;
+    case 'id_id':
+      require('dayjs/locale/id');
+      break;
+    case 'it':
+      require('dayjs/locale/it');
+      break;
+    case 'jp_jp':
+      lang = 'ja';
+      require('dayjs/locale/ja');
+      break;
+    case 'nb_no':
+      require('dayjs/locale/nb');
+      break;
+    case 'nl_nl':
+      require('dayjs/locale/nl');
+      break;
+    case 'pt_br':
+      lang = 'pt-br';
+      require('dayjs/locale/pt-br');
+      break;
+    case 'pt_pt':
+      lang = 'pt';
+      require('dayjs/locale/pt');
+      break;
+    case 'pl':
+      require('dayjs/locale/pl');
+      break;
+    case 'ro':
+      require('dayjs/locale/ro');
+      break;
+    case 'ru':
+      require('dayjs/locale/ru');
+      break;
+    case 'sk_sk':
+      require('dayjs/locale/sk');
+      break;
+    case 'sl_si':
+      require('dayjs/locale/sl');
+      break;
+    case 'sv_se':
+      require('dayjs/locale/sv');
+      break;
+    case 'th_th':
+      require('dayjs/locale/th');
+      break;
+    case 'tr_tr':
+      require('dayjs/locale/tr');
+      break;
+    case 'vi_vn':
+      require('dayjs/locale/vi');
+      break;
+    case 'zh_cn':
+      lang = 'zh-cn';
+      require('dayjs/locale/zh-cn');
+      break;
+    case 'zh_tw':
+      lang = 'zh-tw';
+      require('dayjs/locale/zh-tw');
+      break;
+    default:
+      localeForDayJSAvailable = false;
+      break;
+  }
+  if (localeForDayJSAvailable) {
+    dayjs.locale(lang.split('_')[0]);
+    const language = AvailableLanguages.find(language => language.value === lang.replace('_', '-'));
+    /* I18n Manager breaks testing. Mocking built-in RN modules is not so straightforward. 
+        Only run this conditional if its outside a testing environment.
+    */
+    if (process.env.JEST_WORKER_ID === undefined) {
+      if (language?.isRTL) {
+        I18nManager.allowRTL(true);
+        I18nManager.forceRTL(true);
+      } else {
+        I18nManager.allowRTL(false);
+        I18nManager.forceRTL(false);
+      }
+    }
+  } else {
+    dayjs.locale('en');
+    if (process.env.JEST_WORKER_ID === undefined) {
+      I18nManager.allowRTL(false);
+      I18nManager.forceRTL(false);
+    }
+  }
+};
+
+const setLanguageLocale = async () => {
+  // finding out whether lang preference was saved
+  const lang = await AsyncStorage.getItem(LANG);
   if (lang) {
     strings.setLanguage(lang);
-    let localeForDayJSAvailable = true;
-    switch (lang) {
-      case 'ar':
-        require('dayjs/locale/ar');
-        break;
-      case 'bg_bg':
-        lang = 'bg';
-        require('dayjs/locale/bg');
-        break;
-      case 'ca':
-        require('dayjs/locale/ca');
-        break;
-      case 'cy':
-        require('dayjs/locale/cy');
-        break;
-      case 'da_dk':
-        require('dayjs/locale/da');
-        break;
-      case 'de_de':
-        require('dayjs/locale/de');
-        break;
-      case 'el':
-        require('dayjs/locale/el');
-        break;
-      case 'es':
-        require('dayjs/locale/es');
-        break;
-      case 'es_419':
-        // es-do it is the closes one to es_419
-        lang = 'es-do';
-        require('dayjs/locale/es-do');
-        break;
-      case 'fi_fi':
-        require('dayjs/locale/fi');
-        break;
-      case 'fr_fr':
-        require('dayjs/locale/fr');
-        break;
-      case 'he':
-        require('dayjs/locale/he');
-        break;
-      case 'hr_hr':
-        require('dayjs/locale/hr');
-        break;
-      case 'hu_hu':
-        require('dayjs/locale/hu');
-        break;
-      case 'id_id':
-        require('dayjs/locale/id');
-        break;
-      case 'it':
-        require('dayjs/locale/it');
-        break;
-      case 'jp_jp':
-        lang = 'ja';
-        require('dayjs/locale/ja');
-        break;
-      case 'nb_no':
-        require('dayjs/locale/nb');
-        break;
-      case 'nl_nl':
-        require('dayjs/locale/nl');
-        break;
-      case 'pt_br':
-        lang = 'pt-br';
-        require('dayjs/locale/pt-br');
-        break;
-      case 'pt_pt':
-        lang = 'pt';
-        require('dayjs/locale/pt');
-        break;
-      case 'pl':
-        require('dayjs/locale/pl');
-        break;
-      case 'ru':
-        require('dayjs/locale/ru');
-        break;
-      case 'sk_sk':
-        require('dayjs/locale/sk');
-        break;
-      case 'sl_si':
-        require('dayjs/locale/sl');
-        break;
-      case 'sv_se':
-        require('dayjs/locale/sv');
-        break;
-      case 'th_th':
-        require('dayjs/locale/th');
-        break;
-      case 'tr_tr':
-        require('dayjs/locale/tr');
-        break;
-      case 'vi_vn':
-        require('dayjs/locale/vi');
-        break;
-      case 'zh_cn':
-        lang = 'zh-cn';
-        require('dayjs/locale/zh-cn');
-        break;
-      case 'zh_tw':
-        lang = 'zh-tw';
-        require('dayjs/locale/zh-tw');
-        break;
-      default:
-        localeForDayJSAvailable = false;
-        break;
-    }
-    if (localeForDayJSAvailable) {
-      dayjs.locale(lang.split('_')[0]);
-    }
+    await setDateTimeLocale();
   } else {
     const locales = RNLocalize.getLocales();
     if (Object.keys(AvailableLanguages).some(language => language === locales[0])) {
@@ -137,9 +171,14 @@ dayjs.extend(relativeTime);
     } else {
       strings.saveLanguage('en');
       strings.setLanguage('en');
+      if (process.env.JEST_WORKER_ID === undefined) {
+        I18nManager.allowRTL(false);
+        I18nManager.forceRTL(false);
+      }
     }
   }
-})();
+};
+setLanguageLocale();
 
 const strings = new Localization({
   en: require('./en.json'),
@@ -153,6 +192,7 @@ const strings = new Localization({
   el: require('./el.json'),
   es: require('./es.json'),
   es_419: require('./es_419.json'),
+  fa: require('./fa.json'),
   fi_fi: require('./fi_fi.json'),
   fr_fr: require('./fr_fr.json'),
   he: require('./he.json'),
@@ -166,6 +206,7 @@ const strings = new Localization({
   pt_br: require('./pt_br.json'),
   pt_pt: require('./pt_pt.json'),
   pl: require('./pl.json'),
+  ro: require('./ro.json'),
   ru: require('./ru.json'),
   sk_sk: require('./sk_sk.json'),
   sl_si: require('./sl_SI.json'),
@@ -180,7 +221,11 @@ const strings = new Localization({
   zh_tw: require('./zh_tw.json'),
 });
 
-strings.saveLanguage = lang => AsyncStorage.setItem(AppStorage.LANG, lang);
+strings.saveLanguage = async lang => {
+  await AsyncStorage.setItem(LANG, lang);
+  strings.setLanguage(lang);
+  await setDateTimeLocale();
+};
 
 export const transactionTimeToReadable = time => {
   if (time === 0) {
@@ -217,18 +262,13 @@ export const removeTrailingZeros = value => {
  */
 export function formatBalance(balance, toUnit, withFormatting = false) {
   if (toUnit === undefined) {
-    return balance + ' ' + BitcoinUnit.BTC;
+    return balance + ' ' + strings.units[BitcoinUnit.BTC];
   }
   if (toUnit === BitcoinUnit.BTC) {
     const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
-    return removeTrailingZeros(value) + ' ' + BitcoinUnit.BTC;
+    return removeTrailingZeros(value) + ' ' + strings.units[BitcoinUnit.BTC];
   } else if (toUnit === BitcoinUnit.SATS) {
-    return (
-      (balance < 0 ? '-' : '') +
-      (withFormatting ? new Intl.NumberFormat().format(balance.toString()).replace(/[^0-9]/g, ' ') : balance) +
-      ' ' +
-      BitcoinUnit.SATS
-    );
+    return (withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance)) + ' ' + strings.units[BitcoinUnit.SATS];
   } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
     return currency.satoshiToLocalCurrency(balance);
   }
@@ -250,7 +290,7 @@ export function formatBalanceWithoutSuffix(balance = 0, toUnit, withFormatting =
       const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
       return removeTrailingZeros(value);
     } else if (toUnit === BitcoinUnit.SATS) {
-      return (balance < 0 ? '-' : '') + (withFormatting ? new Intl.NumberFormat().format(balance).replace(/[^0-9]/g, ' ') : balance);
+      return withFormatting ? new Intl.NumberFormat().format(balance).toString() : String(balance);
     } else if (toUnit === BitcoinUnit.LOCAL_CURRENCY) {
       return currency.satoshiToLocalCurrency(balance);
     }
@@ -284,4 +324,5 @@ export function _leaveNumbersAndDots(newInputValue) {
   return newInputValue;
 }
 
+strings.LANG = LANG;
 export default strings;

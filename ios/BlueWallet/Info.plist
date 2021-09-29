@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>io.bluewallet.bluewallet.fetchTxsForWallet</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -105,6 +109,7 @@
 				<string>bluewallet</string>
 				<string>lapp</string>
 				<string>blue</string>
+				<string>aopp</string>
 			</array>
 		</dict>
 	</array>
@@ -116,6 +121,8 @@
 	<string>public.app-category.finance</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>https</string>
+		<string>http</string>
 		<string>bankid</string>
 		<string>swish</string>
 	</array>
@@ -143,27 +150,23 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSCameraUsageDescription</key>
-	<string>In order to quickly scan the recipient's address, we need your permission to use the camera to scan their QR Code.</string>
+	<string>In order to quickly scan the recipient&apos;s address, we need your permission to use the camera to scan their QR Code.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>In order to use FaceID please confirm your permission.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your authorization is required in order to provide you local offers.</string>
+	<string>This alert should not show up as we do not require this data</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSMotionUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This alert should not show up as we do not require this data</string>
+	<string>Your authorization is required to save this image.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>In order to import an image for scanning, we need your permission to access your photo library.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This alert should not show up as we do not require this data</string>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>ConfigurationIntent</string>
-	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -184,6 +187,8 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native-elements';
 import { Dimensions, LayoutAnimation, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { encodeUR } from 'bc-ur/dist';
+import { encodeUR } from '../blue_modules/ur';
 import QRCode from 'react-native-qrcode-svg';
 import { BlueCurrentTheme } from '../components/themes';
 import { BlueSpacing20 } from '../BlueComponents';
@@ -27,7 +27,7 @@ export class DynamicQRCode extends Component {
   fragments = [];
 
   componentDidMount() {
-    const { value, capacity = 800, hideControls = true } = this.props;
+    const { value, capacity = 200, hideControls = true } = this.props;
     try {
       this.fragments = encodeUR(value, capacity);
       this.setState(
@@ -105,6 +105,8 @@ export class DynamicQRCode extends Component {
     return (
       <View style={animatedQRCodeStyle.container}>
         <TouchableOpacity
+          accessibilityRole="button"
+          testID="DynamicCode"
           style={animatedQRCodeStyle.qrcodeContainer}
           onPress={() => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -135,18 +137,21 @@ export class DynamicQRCode extends Component {
             <BlueSpacing20 />
             <View style={animatedQRCodeStyle.controller}>
               <TouchableOpacity
+                accessibilityRole="button"
                 style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-start' }]}
                 onPress={this.moveToPreviousFragment}
               >
                 <Text style={animatedQRCodeStyle.text}>{loc.send.dynamic_prev}</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityRole="button"
                 style={[animatedQRCodeStyle.button, { width: '50%' }]}
                 onPress={this.state.intervalHandler ? this.stopAutoMove : this.startAutoMove}
               >
                 <Text style={animatedQRCodeStyle.text}>{this.state.intervalHandler ? loc.send.dynamic_stop : loc.send.dynamic_start}</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityRole="button"
                 style={[animatedQRCodeStyle.button, { width: '25%', alignItems: 'flex-end' }]}
                 onPress={this.moveToNextFragment}
               >

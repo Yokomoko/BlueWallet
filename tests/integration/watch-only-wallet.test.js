@@ -1,4 +1,3 @@
-/* global it, describe, jasmine, afterAll, beforeAll  */
 import { WatchOnlyWallet } from '../../class';
 const assert = require('assert');
 global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
@@ -63,7 +62,10 @@ describe('Watch only wallet', () => {
       w.setSecret(sec);
       assert.strictEqual(w.getAddress(), 'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja');
       assert.strictEqual(await w.getAddressAsync(), 'grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja');
-      assert.ok(w.weOwnAddress('grs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja'));
+      assert.ok(w.weOwnAddress('bgrs1qcvsk723ktcp3h7s4wscfdnq46xa30a4npjc8ja'));
+      assert.ok(w.weOwnAddress('BC1QUHNVE8Q4TK3UNHMJTS7YMXV8CD6W9XV8WY29UV'));
+      assert.ok(!w.weOwnAddress('garbage'));
+      assert.ok(!w.weOwnAddress(false));
       await w.fetchTransactions();
 
       for (const tx of w.getTransactions()) {

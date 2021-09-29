@@ -1,4 +1,3 @@
-/* global it, jasmine */
 const assert = require('assert');
 
 it.skip('bip38 decodes', async () => {

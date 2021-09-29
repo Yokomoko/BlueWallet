@@ -1,5 +1,5 @@
-import { useAsyncStorage } from '@react-native-community/async-storage';
-import Clipboard from '@react-native-community/clipboard';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 function BlueClipboard() {
   BlueClipboard.STORAGE_KEY = 'ClipboardReadAllowed';

@@ -16,17 +16,19 @@ import {
   PermissionsAndroid,
   Alert,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { Icon } from 'react-native-elements';
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
-
-import { BlueNavigationStyle, SafeBlueArea, BlueCard, BlueText } from '../../BlueComponents';
-import Privacy from '../../Privacy';
+import BigNumber from 'bignumber.js';
+import { SafeBlueArea, BlueCard, BlueText } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import Privacy from '../../blue_modules/Privacy';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
-import isCatalyst from 'react-native-is-catalyst';
+import { DynamicQRCode } from '../../components/DynamicQRCode';
+import { isDesktop } from '../../blue_modules/environment';
 const currency = require('../../blue_modules/currency');
 
 export default class SendCreate extends Component {
@@ -44,6 +46,8 @@ export default class SendCreate extends Component {
       satoshiPerByte: props.route.params.satoshiPerByte,
       wallet: props.route.params.wallet,
       feeSatoshi: props.route.params.feeSatoshi,
+      showAnimatedQr: props.route.params.showAnimatedQr ?? false,
+      psbt: props.route.params.psbt,
     };
   }
 
@@ -59,7 +63,7 @@ export default class SendCreate extends Component {
       await RNFS.writeFile(filePath, this.state.tx);
       Share.open({
         url: 'file://' + filePath,
-        saveToFiles: isCatalyst,
+        saveToFiles: isDesktop,
       })
         .catch(error => {
           console.log(error);
@@ -78,9 +82,14 @@ export default class SendCreate extends Component {
 
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Storage Permission: Granted');
-        const filePath = RNFS.DownloadDirectoryPath + `/${this.fileName}`;
-        await RNFS.writeFile(filePath, this.state.tx);
-        alert(loc.formatString(loc.send.txSaved, { filePath }));
+        const filePath = RNFS.DownloadDirectoryPath + `/${fileName}`;
+        try {
+          await RNFS.writeFile(filePath, this.state.tx);
+          alert(loc.formatString(loc.send.txSaved, { filePath }));
+        } catch (e) {
+          console.log(e);
+          alert(e.message);
+        }
       } else {
         console.log('Storage Permission: Denied');
         Alert.alert(loc.send.permission_storage_title, loc.send.permission_storage_denied_message, [
@@ -131,13 +140,18 @@ export default class SendCreate extends Component {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <ScrollView>
             <BlueCard style={styles.card}>
+              {this.state.showAnimatedQr && this.state.psbt ? <DynamicQRCode value={this.state.psbt.toHex()} /> : null}
               <BlueText style={styles.cardText}>{loc.send.create_this_is_hex}</BlueText>
               <TextInput testID="TxhexInput" style={styles.cardTx} height={72} multiline editable value={this.state.tx} />
 
-              <TouchableOpacity style={styles.actionTouch} onPress={() => Clipboard.setString(this.state.tx)}>
+              <TouchableOpacity accessibilityRole="button" style={styles.actionTouch} onPress={() => Clipboard.setString(this.state.tx)}>
                 <Text style={styles.actionText}>{loc.send.create_copy}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionTouch} onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + this.state.tx)}>
+              <TouchableOpacity
+                accessibilityRole="button"
+                style={styles.actionTouch}
+                onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + this.state.tx)}
+              >
                 <Text style={styles.actionText}>{loc.send.create_verify}</Text>
               </TouchableOpacity>
             </BlueCard>
@@ -152,7 +166,7 @@ export default class SendCreate extends Component {
               />
               <Text style={styles.transactionDetailsTitle}>{loc.send.create_fee}</Text>
               <Text style={styles.transactionDetailsSubtitle}>
-                {this.state.fee} {BitcoinUnit.BTC}
+                {new BigNumber(this.state.fee).toFixed()} {BitcoinUnit.BTC}
               </Text>
 
               <Text style={styles.transactionDetailsTitle}>{loc.send.create_tx_size}</Text>
@@ -199,8 +213,6 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   root: {
-    flex: 1,
-    paddingTop: 19,
     backgroundColor: BlueCurrentTheme.colors.elevated,
   },
   card: {
@@ -246,11 +258,11 @@ SendCreate.propTypes = {
   }),
 };
 
-SendCreate.navigationOptions = ({ navigation, route }) => {
+SendCreate.navigationOptions = navigationStyle({}, (options, { theme, navigation, route }) => {
   let headerRight;
   if (route.params.exportTXN) {
     headerRight = () => (
-      <TouchableOpacity style={styles.export} onPress={route.params.exportTXN}>
+      <TouchableOpacity accessibilityRole="button" style={styles.export} onPress={route.params.exportTXN}>
         <Icon size={22} name="share-alternative" type="entypo" color={BlueCurrentTheme.colors.foregroundColor} />
       </TouchableOpacity>
     );
@@ -259,8 +271,8 @@ SendCreate.navigationOptions = ({ navigation, route }) => {
   }
 
   return {
-    ...BlueNavigationStyle(),
-    title: loc.send.create_details,
+    ...options,
     headerRight,
+    title: loc.send.create_details,
   };
-};
+});

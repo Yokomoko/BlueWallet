@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { BlueCopyTextToClipboard, SafeBlueArea, BlueNavigationStyle, BlueSpacing20, BlueTextCentered } from '../../BlueComponents';
 import QRCode from 'react-native-qrcode-svg';
-import loc from '../../loc';
 import { useRoute, useTheme } from '@react-navigation/native';
+
+import { BlueCopyTextToClipboard, SafeBlueArea, BlueSpacing20, BlueTextCentered } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import loc from '../../loc';
 
 const LNDViewAdditionalInvoicePreImage = () => {
   // state = { walletInfo: undefined };
@@ -16,7 +18,7 @@ const LNDViewAdditionalInvoicePreImage = () => {
   });
 
   return (
-    <SafeBlueArea style={[styles.root, stylesHook.root]}>
+    <SafeBlueArea style={stylesHook.root}>
       <View style={styles.wrapper}>
         <BlueTextCentered>{loc.lndViewInvoice.preimage}:</BlueTextCentered>
         <BlueSpacing20 />
@@ -39,9 +41,6 @@ const LNDViewAdditionalInvoicePreImage = () => {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   wrapper: {
     flex: 1,
     justifyContent: 'center',
@@ -59,7 +58,4 @@ const styles = StyleSheet.create({
 
 export default LNDViewAdditionalInvoicePreImage;
 
-LNDViewAdditionalInvoicePreImage.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: loc.lndViewInvoice.additional_info,
-});
+LNDViewAdditionalInvoicePreImage.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.lndViewInvoice.additional_info }));

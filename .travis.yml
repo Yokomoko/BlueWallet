@@ -25,6 +25,9 @@ env:
   matrix:
     - API=28
 
+before_script:
+  - echo "MAVEN_OPTS='-Dmaven.wagon.httpconnectionManager.ttlSeconds=25 -Dmaven.wagon.http.retryHandler.count=3'" > ~/.mavenrc
+
 before_install:
   # Set up JDK 8 for Android SDK
   - curl "${GRAVIS}.install-jdk-travis.sh" --output ~/.install-jdk-travis.sh
@@ -87,5 +90,3 @@ script:
   - npm i -g detox-cli
   - npm run e2e:release-build
   - npm run e2e:release-test || npm run e2e:release-test || npm run e2e:release-test
-
-after_failure: ./tests/e2e/upload-artifacts.sh

@@ -2,34 +2,33 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
-  View,
-  TextInput,
-  KeyboardAvoidingView,
-  Keyboard,
-  StatusBar,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  Platform,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+  I18nManager,
 } from 'react-native';
-import {
-  BlueNavigationStyle,
-  BlueButton,
-  BlueBitcoinAmount,
-  BlueDismissKeyboardInputAccessory,
-  BlueAlertWalletExportReminder,
-} from '../../BlueComponents';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { Icon } from 'react-native-elements';
+import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
+
+import { BlueAlertWalletExportReminder, BlueButton, BlueDismissKeyboardInputAccessory, BlueLoading } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import AmountInput from '../../components/AmountInput';
 import * as NavigationService from '../../NavigationService';
 import { LightningCustodianWallet } from '../../class/wallets/lightning-custodian-wallet';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Icon } from 'react-native-elements';
 import loc, { formatBalanceWithoutSuffix, formatBalancePlain } from '../../loc';
 import Lnurl from '../../class/lnurl';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 // import Notifications from '../../blue_modules/notifications';
-import { useFocusEffect, useNavigation, useRoute, useTheme } from '@react-navigation/native';
 const currency = require('../../blue_modules/currency');
 
 const LNDCreateInvoice = () => {
@@ -41,7 +40,7 @@ const LNDCreateInvoice = () => {
   const { name } = useRoute();
   const { colors } = useTheme();
   const { navigate, dangerouslyGetParent, goBack, pop, setParams } = useNavigation();
-  const [unit, setUnit] = useState(wallet.current.getPreferredBalanceUnit());
+  const [unit, setUnit] = useState(wallet.current?.getPreferredBalanceUnit() || BitcoinUnit.BTC);
   const [amount, setAmount] = useState();
   const [renderWalletSelectionButtonHidden, setRenderWalletSelectionButtonHidden] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -130,10 +129,13 @@ const LNDCreateInvoice = () => {
             },
           });
         }
+      } else {
+        ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
+        alert(loc.wallets.add_ln_wallet_first);
+        goBack();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet]),
-    [],
   );
 
   const _keyboardDidShow = () => {
@@ -157,7 +159,7 @@ const LNDCreateInvoice = () => {
           break;
         case BitcoinUnit.LOCAL_CURRENCY:
           // trying to fetch cached sat equivalent for this fiat amount
-          invoiceAmount = BlueBitcoinAmount.getCachedSatoshis(invoiceAmount) || currency.btcToSatoshi(currency.fiatToBTC(invoiceAmount));
+          invoiceAmount = AmountInput.getCachedSatoshis(invoiceAmount) || currency.btcToSatoshi(currency.fiatToBTC(invoiceAmount));
           break;
       }
 
@@ -193,7 +195,7 @@ const LNDCreateInvoice = () => {
 
       navigate('LNDViewInvoice', {
         invoice: invoiceRequest,
-        walletID,
+        walletID: wallet.current.getID(),
         isModal: true,
       });
     } catch (Err) {
@@ -205,9 +207,9 @@ const LNDCreateInvoice = () => {
 
   const processLnurl = async data => {
     setIsLoading(true);
-    if (!wallet) {
+    if (!wallet.current) {
       ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-      alert('Before paying a Lightning invoice, you must first add a Lightning wallet.');
+      alert(loc.wallets.no_ln_wallet_error);
       return goBack();
     }
 
@@ -232,7 +234,7 @@ const LNDCreateInvoice = () => {
           screen: 'LnurlPay',
           params: {
             lnurl: data,
-            fromWalletID: walletID,
+            fromWalletID: wallet.current.getID(),
           },
         });
         return;
@@ -254,7 +256,7 @@ const LNDCreateInvoice = () => {
           break;
         case BitcoinUnit.LOCAL_CURRENCY:
           amount = formatBalancePlain(amount, BitcoinUnit.LOCAL_CURRENCY);
-          BlueBitcoinAmount.setCachedSatoshis(amount, sats);
+          AmountInput.setCachedSatoshis(amount, sats);
           break;
       }
 
@@ -302,7 +304,14 @@ const LNDCreateInvoice = () => {
 
   const renderScanClickable = () => {
     return (
-      <TouchableOpacity disabled={isLoading} onPress={navigateToScanQRCode} style={[styles.scanRoot, styleHooks.scanRoot]}>
+      <TouchableOpacity
+        disabled={isLoading}
+        onPress={navigateToScanQRCode}
+        style={[styles.scanRoot, styleHooks.scanRoot]}
+        accessibilityRole="button"
+        accessibilityLabel={loc.send.details_scan}
+        accessibilityHint={loc.send.details_scan_hint}
+      >
         <Image style={{}} source={require('../../img/scan-white.png')} />
         <Text style={[styles.scanClick, styleHooks.scanClick]}>{loc.send.details_scan}</Text>
       </TouchableOpacity>
@@ -318,13 +327,13 @@ const LNDCreateInvoice = () => {
     return (
       <View style={styles.walletRoot}>
         {!isLoading && (
-          <TouchableOpacity style={styles.walletChooseWrap} onPress={navigateToSelectWallet}>
+          <TouchableOpacity accessibilityRole="button" style={styles.walletChooseWrap} onPress={navigateToSelectWallet}>
             <Text style={styles.walletChooseText}>{loc.wallets.select_wallet.toLowerCase()}</Text>
-            <Icon name="angle-right" size={18} type="font-awesome" color="#9aa0aa" />
+            <Icon name={I18nManager.isRTL ? 'angle-left' : 'angle-right'} size={18} type="font-awesome" color="#9aa0aa" />
           </TouchableOpacity>
         )}
         <View style={styles.walletNameWrap}>
-          <TouchableOpacity style={styles.walletNameTouch} onPress={navigateToSelectWallet}>
+          <TouchableOpacity accessibilityRole="button" style={styles.walletNameTouch} onPress={navigateToSelectWallet}>
             <Text style={[styles.walletNameText, styleHooks.walletNameText]}>{wallet.current.getLabel()}</Text>
             <Text style={[styles.walletNameBalance, styleHooks.walletNameBalance]}>
               {formatBalanceWithoutSuffix(wallet.current.getBalance(), BitcoinUnit.SATS, false)}
@@ -341,10 +350,11 @@ const LNDCreateInvoice = () => {
     pop();
   };
 
-  if (wallet.current === undefined || !walletID) {
+  if (!wallet.current) {
     return (
-      <View style={styles.error}>
-        <Text>System error: Source wallet not found (this should never happen)</Text>
+      <View style={[styles.root, styleHooks.root]}>
+        <StatusBar barStyle="light-content" />
+        <BlueLoading />
       </View>
     );
   }
@@ -354,8 +364,8 @@ const LNDCreateInvoice = () => {
       <View style={[styles.root, styleHooks.root]}>
         <StatusBar barStyle="light-content" />
         <View style={[styles.amount, styleHooks.amount]}>
-          <KeyboardAvoidingView behavior="position">
-            <BlueBitcoinAmount
+          <KeyboardAvoidingView enabled={!Platform.isPad} behavior="position">
+            <AmountInput
               isLoading={isLoading}
               amount={amount}
               onAmountUnitChange={setUnit}
@@ -490,8 +500,10 @@ const styles = StyleSheet.create({
 
 export default LNDCreateInvoice;
 
-LNDCreateInvoice.navigationOptions = ({ navigation }) => ({
-  ...BlueNavigationStyle(navigation, true),
-  headerTitle: loc.receive.header,
-  headerLeft: null,
-});
+LNDCreateInvoice.navigationOptions = navigationStyle(
+  {
+    closeButton: true,
+    headerLeft: null,
+  },
+  opts => ({ ...opts, title: loc.receive.header }),
+);

@@ -1,4 +1,3 @@
-import bip39 from 'bip39';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 const bitcoin = require('groestlcoinjs-lib');
 const HDNode = require('bip32grs');
@@ -12,12 +11,25 @@ const BlueElectrum = require('../../blue_modules/BlueElectrum');
 export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
   static type = 'HDlegacyP2PKH';
   static typeReadable = 'HD Legacy (BIP44 P2PKH)';
+  static derivationPath = "m/44'/0'/0'";
 
   allowSend() {
     return true;
   }
 
-  allowSendMax() {
+  allowCosignPsbt() {
+    return true;
+  }
+
+  allowSignVerifyMessage() {
+    return true;
+  }
+
+  allowMasterFingerprint() {
+    return true;
+  }
+
+  allowXpub() {
     return true;
   }
 
@@ -25,8 +37,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
     const root = bitcoin.bip32.fromSeed(seed);
 
     const path = "m/44'/17'/0'";
@@ -53,8 +64,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
    */
   _getWIFByIndex(internal, index) {
     if (!this.secret) return false;
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = this._getSeed();
 
     const root = HDNode.fromSeed(seed);
     const path = `m/44'/17'/0'/${internal ? 1 : 0}/${index}`;
@@ -151,5 +161,10 @@ export class HDLegacyP2PKHWallet extends AbstractHDElectrumWallet {
     });
 
     return psbt;
+  }
+
+  _getDerivationPathByAddress(address, BIP = 44) {
+    // only changing defaults for function arguments
+    return super._getDerivationPathByAddress(address, BIP);
   }
 }

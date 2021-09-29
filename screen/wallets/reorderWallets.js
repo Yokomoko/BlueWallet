@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { View, ActivityIndicator, Image, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
-import { BlueNavigationStyle } from '../../BlueComponents';
+import { View, ActivityIndicator, Image, Text, StyleSheet, StatusBar, ScrollView, I18nManager } from 'react-native';
+import { BluePrivateBalance } from '../../BlueComponents';
 import SortableList from 'react-native-sortable-list';
 import LinearGradient from 'react-native-linear-gradient';
-import { PlaceholderWallet, LightningCustodianWallet, MultisigHDWallet } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { useNavigation, useTheme } from '@react-navigation/native';
+
+import navigationStyle from '../../components/navigationStyle';
+import { PlaceholderWallet, LightningCustodianWallet, MultisigHDWallet } from '../../class';
 import WalletGradient from '../../class/wallet-gradient';
 import loc, { formatBalance, transactionTimeToReadable } from '../../loc';
-import { useNavigation, useTheme } from '@react-navigation/native';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 const styles = StyleSheet.create({
@@ -43,23 +45,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     fontSize: 19,
     color: '#fff',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
   balance: {
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     fontSize: 36,
     color: '#fff',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
   latestTxLabel: {
     backgroundColor: 'transparent',
     fontSize: 13,
     color: '#fff',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
   latestTxValue: {
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     fontSize: 16,
     color: '#fff',
+    writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
 });
 
@@ -69,9 +75,9 @@ const ReorderWallets = () => {
   const [hasMovedARow, setHasMovedARow] = useState(false);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sortableList = useRef();
-  const { setParams, goBack } = useNavigation();
   const { colors } = useTheme();
   const { wallets, setWalletsWithNewOrder } = useContext(BlueStorageContext);
+  const navigation = useNavigation();
   const stylesHook = {
     root: {
       backgroundColor: colors.elevated,
@@ -82,25 +88,19 @@ const ReorderWallets = () => {
   };
 
   useEffect(() => {
-    setParams(
-      {
-        customCloseButtonFunction: async () => {
-          if (sortableList.current.state.data.length === data.length && hasMovedARow) {
-            const newWalletsOrderArray = [];
-            sortableList.current.state.order.forEach(element => {
-              newWalletsOrderArray.push(data[element]);
-            });
-            setWalletsWithNewOrder(newWalletsOrderArray);
-            goBack();
-          } else {
-            goBack();
-          }
-        },
-      },
-      [],
-    );
+    const unsubscribe = navigation.addListener('blur', () => {
+      if (sortableList.current?.state.data.length === data.length && hasMovedARow) {
+        const newWalletsOrderArray = [];
+        sortableList.current.state.order.forEach(element => {
+          newWalletsOrderArray.push(data[element]);
+        });
+        setWalletsWithNewOrder(newWalletsOrderArray);
+      }
+    });
+
+    return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goBack, hasMovedARow, setParams]);
+  }, [navigation, hasMovedARow]);
 
   useEffect(() => {
     const loadWallets = wallets.filter(wallet => wallet.type !== PlaceholderWallet.type);
@@ -121,11 +121,11 @@ const ReorderWallets = () => {
             source={(() => {
               switch (item.type) {
                 case LightningCustodianWallet.type:
-                  return require('../../img/lnd-shape.png');
+                  return I18nManager.isRTL ? require('../../img/lnd-shape-rtl.png') : require('../../img/lnd-shape.png');
                 case MultisigHDWallet.type:
-                  return require('../../img/vault-shape.png');
+                  return I18nManager.isRTL ? require('../../img/vault-shape-rtl.png') : require('../../img/vault-shape.png');
                 default:
-                  return require('../../img/btc-shape.png');
+                  return I18nManager.isRTL ? require('../../img/btc-shape-rtl.png') : require('../../img/btc-shape.png');
               }
             })()}
             style={styles.image}
@@ -135,15 +135,21 @@ const ReorderWallets = () => {
           <Text numberOfLines={1} style={styles.label}>
             {item.getLabel()}
           </Text>
-          <Text numberOfLines={1} adjustsFontSizeToFit style={styles.balance}>
-            {formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true)}
-          </Text>
+          {item.hideBalance ? (
+            <BluePrivateBalance />
+          ) : (
+            <Text numberOfLines={1} adjustsFontSizeToFit style={styles.balance}>
+              {formatBalance(Number(item.getBalance()), item.getPreferredBalanceUnit(), true)}
+            </Text>
+          )}
           <Text style={styles.transparentText} />
           <Text numberOfLines={1} style={styles.latestTxLabel}>
             {loc.wallets.list_latest_transaction}
           </Text>
           <Text numberOfLines={1} style={styles.latestTxValue}>
-            {transactionTimeToReadable(item.getLatestTransactionTime())}
+            {item.getTransactions().find(tx => tx.confirmations === 0)
+              ? loc.transactions.pending.toLowerCase()
+              : transactionTimeToReadable(item.getLatestTransactionTime())}
           </Text>
         </LinearGradient>
       </View>
@@ -187,14 +193,12 @@ const ReorderWallets = () => {
   );
 };
 
-ReorderWallets.navigationOptions = ({ navigation, route }) => ({
-  ...BlueNavigationStyle(
-    navigation,
-    true,
-    route.params && route.params.customCloseButtonFunction ? route.params.customCloseButtonFunction : undefined,
-  ),
-  headerTitle: loc.wallets.reorder_title,
-  headerLeft: null,
-});
+ReorderWallets.navigationOptions = navigationStyle(
+  {
+    closeButton: true,
+    headerLeft: null,
+  },
+  opts => ({ ...opts, title: loc.wallets.reorder_title }),
+);
 
 export default ReorderWallets;

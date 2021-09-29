@@ -1,20 +1,14 @@
 /* global alert */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StatusBar, StyleSheet, Keyboard } from 'react-native';
-import {
-  SafeBlueArea,
-  BlueCard,
-  BlueText,
-  BlueLoading,
-  BlueSpacing20,
-  BlueCopyToClipboardButton,
-  BlueNavigationStyle,
-} from '../../BlueComponents';
-import HandoffSettings from '../../class/handoff';
-import Handoff from 'react-native-handoff';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import HandoffComponent from '../../components/handoff';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import ToolTipMenu from '../../components/TooltipMenu';
 const dayjs = require('dayjs');
 
 function onlyUnique(value, index, self) {
@@ -35,13 +29,14 @@ const TransactionsDetails = () => {
   const { setOptions } = useNavigation();
   const { hash } = useRoute().params;
   const { saveToDisk, txMetadata, wallets, getTransactions } = useContext(BlueStorageContext);
-  const [isHandOffUseEnabled, setIsHandOffUseEnabled] = useState(false);
   const [from, setFrom] = useState();
   const [to, setTo] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [tx, setTX] = useState();
   const [memo, setMemo] = useState();
   const { colors } = useTheme();
+  const openTransactionOnBlockExplorerRef = useRef();
+  const toolTip = useRef();
   const stylesHooks = StyleSheet.create({
     rowCaption: {
       color: colors.foregroundColor,
@@ -60,12 +55,18 @@ const TransactionsDetails = () => {
       borderBottomColor: colors.formBorder,
       backgroundColor: colors.inputBackgroundColor,
     },
+    greyButton: {
+      backgroundColor: colors.lightButton,
+    },
+    Link: {
+      color: colors.buttonTextColor,
+    },
   });
 
   useEffect(() => {
     setOptions({
       headerRight: () => (
-        <TouchableOpacity disabled={isLoading} style={styles.save} onPress={handleOnSaveButtonTapped}>
+        <TouchableOpacity accessibilityRole="button" disabled={isLoading} style={styles.save} onPress={handleOnSaveButtonTapped}>
           <Text style={stylesHooks.saveText}>{loc.wallets.details_save}</Text>
         </TouchableOpacity>
       ),
@@ -84,7 +85,7 @@ const TransactionsDetails = () => {
     let foundTx = {};
     let from = [];
     let to = [];
-    for (const tx of getTransactions()) {
+    for (const tx of getTransactions(null, Infinity, true)) {
       if (tx.hash === hash) {
         foundTx = tx;
         for (const input of foundTx.inputs) {
@@ -115,12 +116,7 @@ const TransactionsDetails = () => {
     setTo(to);
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hash]);
-
-  useEffect(() => {
-    HandoffSettings.isHandoffUseEnabled().then(setIsHandOffUseEnabled);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hash, wallets]);
 
   const handleOnSaveButtonTapped = () => {
     Keyboard.dismiss();
@@ -137,15 +133,25 @@ const TransactionsDetails = () => {
     });
   };
 
+  const handleCopyPress = () => {
+    Clipboard.setString(`https://mempool.space/tx/${tx.hash}`);
+  };
+
+  const showToolTipMenu = () => {
+    toolTip.current.showMenu();
+  };
+
   if (isLoading || !tx) {
     return <BlueLoading />;
   }
 
   return (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={styles.root}>
-      {isHandOffUseEnabled && (
-        <Handoff title={`Groestlcoin Transaction ${tx.hash}`} type="org.groestlcoin.bluewallet123" url={`https://esplora.groestlcoin.org/tx/${tx.hash}`} />
-      )}
+    <SafeBlueArea>
+      <HandoffComponent
+        title={`Groestlcoin Transaction ${tx.hash}`}
+        type="org.groestlcoin.bluewallet123"
+        url={`https://esplora.groestlcoin.org/tx/${tx.hash}`}
+      />
       <StatusBar barStyle="default" />
       <ScrollView style={styles.scroll}>
         <BlueCard>
@@ -190,20 +196,17 @@ const TransactionsDetails = () => {
           {tx.hash && (
             <>
               <View style={styles.rowHeader}>
-                <BlueText style={[styles.txId, stylesHooks.txId]}>Txid</BlueText>
+                <BlueText style={[styles.txId, stylesHooks.txId]}>{loc.transactions.txid}</BlueText>
                 <BlueCopyToClipboardButton stringToCopy={tx.hash} />
               </View>
-              <BlueText style={styles.txHash}>{tx.hash}</BlueText>
-              <TouchableOpacity onPress={handleOnOpenTransactionOnBlockExporerTapped}>
-                <BlueText style={[styles.txLink, stylesHooks.txLink]}>{loc.transactions.details_show_in_block_explorer}</BlueText>
-              </TouchableOpacity>
+              <BlueText style={styles.rowValue}>{tx.hash}</BlueText>
             </>
           )}
 
           {tx.received && (
             <>
               <BlueText style={[styles.rowCaption, stylesHooks.rowCaption]}>{loc.transactions.details_received}</BlueText>
-              <BlueText style={styles.rowValue}>{dayjs(tx.received).format('MM/DD/YYYY h:mm A')}</BlueText>
+              <BlueText style={styles.rowValue}>{dayjs(tx.received).format('LLL')}</BlueText>
             </>
           )}
 
@@ -221,12 +224,32 @@ const TransactionsDetails = () => {
             </>
           )}
 
-          {tx.outputs.length > 0 && (
+          {tx.outputs?.length > 0 && (
             <>
               <BlueText style={[styles.rowCaption, stylesHooks.rowCaption]}>{loc.transactions.details_outputs}</BlueText>
               <BlueText style={styles.rowValue}>{tx.outputs.length}</BlueText>
             </>
           )}
+          <ToolTipMenu
+            ref={toolTip}
+            anchorRef={openTransactionOnBlockExplorerRef}
+            actions={[
+              {
+                id: 'copyToClipboard',
+                text: loc.transactions.details_copy,
+                onPress: handleCopyPress,
+              },
+            ]}
+          />
+          <TouchableOpacity
+            accessibilityRole="button"
+            ref={openTransactionOnBlockExplorerRef}
+            onPress={handleOnOpenTransactionOnBlockExporerTapped}
+            onLongPress={showToolTipMenu}
+            style={[styles.greyButton, stylesHooks.greyButton]}
+          >
+            <Text style={[styles.Link, stylesHooks.Link]}>{loc.transactions.details_show_in_block_explorer}</Text>
+          </TouchableOpacity>
         </BlueCard>
       </ScrollView>
     </SafeBlueArea>
@@ -234,9 +257,6 @@ const TransactionsDetails = () => {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   scroll: {
     flex: 1,
   },
@@ -263,8 +283,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: 'grey',
   },
-  txLink: {
-    marginBottom: 26,
+  Link: {
+    fontWeight: '600',
+    fontSize: 15,
   },
   save: {
     marginHorizontal: 16,
@@ -283,11 +304,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     color: '#81868e',
   },
+  greyButton: {
+    borderRadius: 9,
+    minHeight: 49,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'auto',
+    flexGrow: 1,
+    marginHorizontal: 4,
+  },
 });
 
 export default TransactionsDetails;
 
-TransactionsDetails.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: loc.transactions.details_title,
-});
+TransactionsDetails.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.transactions.details_title }));

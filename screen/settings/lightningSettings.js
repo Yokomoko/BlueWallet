@@ -1,28 +1,20 @@
 /* global alert */
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, TextInput, Linking, StyleSheet } from 'react-native';
+import { View, TextInput, Linking, StyleSheet, Alert, I18nManager } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useTheme, useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import navigationStyle from '../../components/navigationStyle';
+import { BlueButton, BlueButtonLink, BlueCard, BlueLoading, BlueSpacing20, BlueText, SafeBlueArea } from '../../BlueComponents';
 import { AppStorage } from '../../class';
-import AsyncStorage from '@react-native-community/async-storage';
-import {
-  BlueSpacing20,
-  BlueButton,
-  SafeBlueArea,
-  BlueCard,
-  BlueNavigationStyle,
-  BlueLoading,
-  BlueText,
-  BlueButtonLink,
-} from '../../BlueComponents';
 import { LightningCustodianWallet } from '../../class/wallets/lightning-custodian-wallet';
 import loc from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
+import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
+import { isDesktop } from '../../blue_modules/environment';
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   uri: {
     flexDirection: 'row',
     borderColor: BlueCurrentTheme.colors.formBorder,
@@ -44,10 +36,15 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: 'transparent',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+  },
+  torSupported: {
+    color: '#81868e',
   },
 });
 
 const LightningSettings = () => {
+  const params = useRoute().params;
   const [isLoading, setIsLoading] = useState(true);
   const [URI, setURI] = useState();
   const { colors } = useTheme();
@@ -59,9 +56,31 @@ const LightningSettings = () => {
       .then(setURI)
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }, []);
+
+    if (params?.url) {
+      Alert.alert(
+        loc.formatString(loc.settings.set_lndhub_as_default, { url: params?.url }),
+        '',
+        [
+          {
+            text: loc._.ok,
+            onPress: () => {
+              setLndhubURI(params?.url);
+            },
+            style: 'default',
+          },
+          { text: loc._.cancel, onPress: () => {}, style: 'cancel' },
+        ],
+        { cancelable: false },
+      );
+    }
+  }, [params?.url]);
 
   const setLndhubURI = value => {
+    if (DeeplinkSchemaMatch.getUrlFromSetLndhubUrlAction(value)) {
+      // in case user scans a QR with a deeplink like `bluewallet:setlndhuburl?url=https%3A%2F%2Flndhub.herokuapp.com`
+      value = DeeplinkSchemaMatch.getUrlFromSetLndhubUrlAction(value);
+    }
     setURI(value.trim());
   };
 
@@ -93,7 +112,7 @@ const LightningSettings = () => {
   };
 
   return (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={styles.root}>
+    <SafeBlueArea>
       <BlueCard>
         <BlueText>{loc.settings.lightning_settings_explain}</BlueText>
       </BlueCard>
@@ -125,19 +144,20 @@ const LightningSettings = () => {
             autoCapitalize="none"
             autoCorrect={false}
             underlineColorAndroid="transparent"
+            testID="URIInput"
           />
         </View>
-
-        <BlueButtonLink title={loc.wallets.import_scan_qr} onPress={importScan} />
         <BlueSpacing20 />
-        {isLoading ? <BlueLoading /> : <BlueButton onPress={save} title={loc.settings.save} />}
+        {!isDesktop && <BlueText style={[styles.torSupported]}>{loc.settings.tor_supported}</BlueText>}
+        <BlueSpacing20 />
+        <BlueButtonLink title={loc.wallets.import_scan_qr} testID="ImportScan" onPress={importScan} />
+        <BlueSpacing20 />
+        {isLoading ? <BlueLoading /> : <BlueButton testID="Save" onPress={save} title={loc.settings.save} />}
       </BlueCard>
     </SafeBlueArea>
   );
 };
 
-LightningSettings.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: loc.settings.lightning_settings,
-});
+LightningSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.lightning_settings }));
+
 export default LightningSettings;

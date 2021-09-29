@@ -1,5 +1,5 @@
-import { AppStorage, LightningCustodianWallet } from './';
-import AsyncStorage from '@react-native-community/async-storage';
+import { AppStorage, LightningCustodianWallet, WatchOnlyWallet } from './';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
 import url from 'url';
 import { Chain } from '../models/bitcoinUnits';
@@ -17,7 +17,8 @@ class DeeplinkSchemaMatch {
       lowercaseString.startsWith('lightning:') ||
       lowercaseString.startsWith('blue:') ||
       lowercaseString.startsWith('bluewallet:') ||
-      lowercaseString.startsWith('lapp:')
+      lowercaseString.startsWith('lapp:') ||
+      lowercaseString.startsWith('aopp:')
     );
   }
 
@@ -47,7 +48,6 @@ class DeeplinkSchemaMatch {
       if (context.wallets.length >= 0) {
         const wallet = context.wallets[0];
         const action = event.url.split('widget?action=')[1];
-        const secret = wallet.getSecret();
         if (wallet.chain === Chain.ONCHAIN) {
           if (action === 'openSend') {
             completionHandler([
@@ -55,7 +55,7 @@ class DeeplinkSchemaMatch {
               {
                 screen: 'SendDetails',
                 params: {
-                  secret,
+                  walletID: wallet.getID(),
                 },
               },
             ]);
@@ -77,7 +77,7 @@ class DeeplinkSchemaMatch {
               {
                 screen: 'ScanLndInvoice',
                 params: {
-                  secret,
+                  walletID: wallet.getID(),
                 },
               },
             ]);
@@ -179,11 +179,29 @@ class DeeplinkSchemaMatch {
           params: Azteco.getParamsFromUrl(event.url),
         },
       ]);
+    } else if (new WatchOnlyWallet().setSecret(event.url).init().valid()) {
+      completionHandler([
+        'AddWalletRoot',
+        {
+          screen: 'ImportWallet',
+          params: {
+            triggerImport: true,
+            label: event.url,
+          },
+        },
+      ]);
     } else {
       const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
-      console.log('parsed', event.url, 'into', urlObject);
       (async () => {
-        if (urlObject.protocol === 'bluewallet:' || urlObject.protocol === 'lapp:' || urlObject.protocol === 'blue:') {
+        if (urlObject.protocol === 'aopp:') {
+          completionHandler([
+            'AOPPRoot',
+            {
+              screen: 'AOPP',
+              params: { uri: event.url },
+            },
+          ]);
+        } else if (urlObject.protocol === 'bluewallet:' || urlObject.protocol === 'lapp:' || urlObject.protocol === 'blue:') {
           switch (urlObject.host) {
             case 'openlappbrowser': {
               console.log('opening LAPP', urlObject.query.url);
@@ -236,18 +254,61 @@ class DeeplinkSchemaMatch {
                 {
                   screen: 'LappBrowser',
                   params: {
-                    fromSecret: lnWallet.getSecret(),
-                    fromWallet: lnWallet,
+                    walletID: lnWallet.getID(),
                     url: urlObject.query.url,
                   },
                 },
               ]);
               break;
             }
+            case 'setelectrumserver':
+              completionHandler([
+                'ElectrumSettings',
+                {
+                  server: DeeplinkSchemaMatch.getServerFromSetElectrumServerAction(event.url),
+                },
+              ]);
+              break;
+            case 'setlndhuburl':
+              completionHandler([
+                'LightningSettings',
+                {
+                  url: DeeplinkSchemaMatch.getUrlFromSetLndhubUrlAction(event.url),
+                },
+              ]);
+              break;
           }
         }
       })();
     }
+  }
+
+  /**
+   * Extracts server from a deeplink like `bluewallet:setelectrumserver?server=electrum1.bluewallet.io%3A443%3As`
+   * returns FALSE if none found
+   *
+   * @param url {string}
+   * @return {string|boolean}
+   */
+  static getServerFromSetElectrumServerAction(url) {
+    if (!url.startsWith('bluewallet:setelectrumserver') && !url.startsWith('setelectrumserver')) return false;
+    const splt = url.split('server=');
+    if (splt[1]) return decodeURIComponent(splt[1]);
+    return false;
+  }
+
+  /**
+   * Extracts url from a deeplink like `bluewallet:setlndhuburl?url=https%3A%2F%2Flndhub.herokuapp.com`
+   * returns FALSE if none found
+   *
+   * @param url {string}
+   * @return {string|boolean}
+   */
+  static getUrlFromSetLndhubUrlAction(url) {
+    if (!url.startsWith('bluewallet:setlndhuburl') && !url.startsWith('setlndhuburl')) return false;
+    const splt = url.split('url=');
+    if (splt[1]) return decodeURIComponent(splt[1]);
+    return false;
   }
 
   static isTXNFile(filePath) {
@@ -279,7 +340,7 @@ class DeeplinkSchemaMatch {
           screen: 'SendDetails',
           params: {
             uri: uri.bitcoin,
-            fromWallet: wallet,
+            walletID: wallet.getID(),
           },
         },
       ];
@@ -290,7 +351,7 @@ class DeeplinkSchemaMatch {
           screen: 'ScanLndInvoice',
           params: {
             uri: uri.lndInvoice,
-            fromSecret: wallet.getSecret(),
+            walletID: wallet.getID(),
           },
         },
       ];

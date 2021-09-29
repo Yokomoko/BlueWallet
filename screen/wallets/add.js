@@ -12,7 +12,7 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   BlueText,
   BlueListItem,
@@ -21,10 +21,10 @@ import {
   VaultButton,
   BlueFormLabel,
   BlueButton,
-  BlueNavigationStyle,
   BlueButtonLink,
   BlueSpacing20,
 } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
 import { HDSegwitBech32Wallet, SegwitP2SHWallet, HDSegwitP2SHWallet, LightningCustodianWallet, AppStorage } from '../../class';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useTheme, useNavigation } from '@react-navigation/native';
@@ -41,14 +41,13 @@ const ButtonSelected = Object.freeze({
 
 const WalletsAdd = () => {
   const { colors } = useTheme();
-  const { addWallet, saveToDisk, setNewWalletAdded, isAdancedModeEnabled } = useContext(BlueStorageContext);
+  const { addWallet, saveToDisk, isAdancedModeEnabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
   const [walletBaseURI, setWalletBaseURI] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [label, setLabel] = useState('');
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState(false);
   const [selectedWalletType, setSelectedWalletType] = useState(false);
-  const [backdoorPressedTimes, setBackdoorPressedTimes] = useState(0);
   const { navigate, goBack } = useNavigation();
   const [entropy, setEntropy] = useState();
   const [entropyButtonText, setEntropyButtonText] = useState(loc.wallets.add_entropy_provide);
@@ -140,7 +139,6 @@ const WalletsAdd = () => {
         }
         addWallet(w);
         await saveToDisk();
-        setNewWalletAdded(true);
         A(A.ENUM.CREATED_WALLET);
         ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
         if (w.type === HDSegwitP2SHWallet.type || w.type === HDSegwitBech32Wallet.type) {
@@ -153,7 +151,7 @@ const WalletsAdd = () => {
       }
     } else if (selectedWalletType === ButtonSelected.VAULT) {
       setIsLoading(false);
-      navigate('WalletsAddMultisig');
+      navigate('WalletsAddMultisig', { walletLabel: label.trim().length > 0 ? label : loc.multisig.default_label });
     }
   };
 
@@ -185,7 +183,6 @@ const WalletsAdd = () => {
     addWallet(wallet);
     await saveToDisk();
 
-    setNewWalletAdded(true);
     A(A.ENUM.CREATED_WALLET);
     ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
     navigate('PleaseBackupLNDHub', {
@@ -202,13 +199,13 @@ const WalletsAdd = () => {
   };
 
   const handleOnVaultButtonPressed = () => {
+    Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.VAULT);
   };
 
   const handleOnBitcoinButtonPressed = () => {
     Keyboard.dismiss();
     setSelectedWalletType(ButtonSelected.ONCHAIN);
-    setBackdoorPressedTimes(backdoorPressedTimes + 1);
   };
 
   const handleOnLightningButtonPressed = () => {
@@ -247,9 +244,7 @@ const WalletsAdd = () => {
             onPress={handleOnLightningButtonPressed}
             style={styles.button}
           />
-          {backdoorPressedTimes >= 15 && (
-            <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} />
-          )}
+          <VaultButton active={selectedWalletType === ButtonSelected.VAULT} onPress={handleOnVaultButtonPressed} style={styles.button} />
         </View>
 
         <View style={styles.advanced}>
@@ -288,13 +283,13 @@ const WalletsAdd = () => {
                   <BlueSpacing20 />
                   <Text style={[styles.advancedText, stylesHook.advancedText]}>{loc.settings.advanced_options}</Text>
                   <BlueSpacing20 />
-                  <BlueText>Connect to your LNDHub</BlueText>
+                  <BlueText>{loc.wallets.add_lndhub}</BlueText>
                   <View style={[styles.lndUri, stylesHook.lndUri]}>
                     <TextInput
                       value={walletBaseURI}
                       onChangeText={setWalletBaseURI}
                       onSubmitEditing={Keyboard.dismiss}
-                      placeholder="your node address"
+                      placeholder={loc.wallets.add_lndhub_placeholder}
                       clearButtonMode="while-editing"
                       autoCapitalize="none"
                       textContentType="URL"
@@ -334,11 +329,13 @@ const WalletsAdd = () => {
   );
 };
 
-WalletsAdd.navigationOptions = ({ navigation }) => ({
-  ...BlueNavigationStyle(navigation, true),
-  headerTitle: loc.wallets.add_title,
-  headerLeft: null,
-});
+WalletsAdd.navigationOptions = navigationStyle(
+  {
+    closeButton: true,
+    headerLeft: null,
+  },
+  opts => ({ ...opts, title: loc.wallets.add_title }),
+);
 
 const styles = StyleSheet.create({
   createButton: {

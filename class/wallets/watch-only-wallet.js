@@ -2,6 +2,7 @@ import { LegacyWallet } from './legacy-wallet';
 import { HDSegwitP2SHWallet } from './hd-segwit-p2sh-wallet';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
+
 const bitcoin = require('groestlcoinjs-lib');
 const HDNode = require('bip32grs');
 
@@ -15,24 +16,30 @@ export class WatchOnlyWallet extends LegacyWallet {
     this.masterFingerprint = false;
   }
 
+  /**
+   * @inheritDoc
+   */
+  getLastTxFetch() {
+    if (this._hdWalletInstance) return this._hdWalletInstance.getLastTxFetch();
+    return super.getLastTxFetch();
+  }
+
+  timeToRefreshTransaction() {
+    if (this._hdWalletInstance) return this._hdWalletInstance.timeToRefreshTransaction();
+    return super.timeToRefreshTransaction();
+  }
+
+  timeToRefreshBalance() {
+    if (this._hdWalletInstance) return this._hdWalletInstance.timeToRefreshBalance();
+    return super.timeToRefreshBalance();
+  }
+
   allowSend() {
-    return (
-      this.useWithHardwareWalletEnabled() && this._hdWalletInstance instanceof HDSegwitBech32Wallet && this._hdWalletInstance.allowSend()
-    );
+    return this.useWithHardwareWalletEnabled() && this.isHd() && this._hdWalletInstance.allowSend();
   }
 
-  allowBatchSend() {
-    return (
-      this.useWithHardwareWalletEnabled() &&
-      this._hdWalletInstance instanceof HDSegwitBech32Wallet &&
-      this._hdWalletInstance.allowBatchSend()
-    );
-  }
-
-  allowSendMax() {
-    return (
-      this.useWithHardwareWalletEnabled() && this._hdWalletInstance instanceof HDSegwitBech32Wallet && this._hdWalletInstance.allowSendMax()
-    );
+  allowSignVerifyMessage() {
+    return false;
   }
 
   getAddress() {
@@ -56,13 +63,15 @@ export class WatchOnlyWallet extends LegacyWallet {
    * this method creates appropriate HD wallet class, depending on whether we have xpub, ypub or zpub
    * as a property of `this`, and in case such property exists - it recreates it and copies data from old one.
    * this is needed after serialization/save/load/deserialization procedure.
+   *
+   * @return {WatchOnlyWallet} this
    */
   init() {
     let hdWalletInstance;
     if (this.secret.startsWith('xpub')) hdWalletInstance = new HDLegacyP2PKHWallet();
     else if (this.secret.startsWith('ypub')) hdWalletInstance = new HDSegwitP2SHWallet();
     else if (this.secret.startsWith('zpub')) hdWalletInstance = new HDSegwitBech32Wallet();
-    else return;
+    else return this;
     hdWalletInstance._xpub = this.secret;
     if (this._hdWalletInstance) {
       // now, porting all properties from old object to new one
@@ -75,6 +84,8 @@ export class WatchOnlyWallet extends LegacyWallet {
       delete hdWalletInstance._node0;
     }
     this._hdWalletInstance = hdWalletInstance;
+
+    return this;
   }
 
   prepareForSerialization() {
@@ -171,10 +182,10 @@ export class WatchOnlyWallet extends LegacyWallet {
    * @see HDSegwitBech32Wallet.createTransaction
    */
   createTransaction(utxos, targets, feeRate, changeAddress, sequence) {
-    if (this._hdWalletInstance instanceof HDSegwitBech32Wallet) {
+    if (this._hdWalletInstance && this.isHd()) {
       return this._hdWalletInstance.createTransaction(utxos, targets, feeRate, changeAddress, sequence, true, this.getMasterFingerprint());
     } else {
-      throw new Error('Not a zpub watch-only wallet, cant create PSBT (or just not initialized)');
+      throw new Error('Not a HD watch-only wallet, cant create PSBT (or just not initialized)');
     }
   }
 
@@ -210,11 +221,17 @@ export class WatchOnlyWallet extends LegacyWallet {
       throw new Error('Not initialized');
     }
 
+    if (address && address.startsWith('BC1')) address = address.toLowerCase();
+
     return this.getAddress() === address;
   }
 
   allowHodlHodlTrading() {
     return this.isHd();
+  }
+
+  allowMasterFingerprint() {
+    return this.getSecret().startsWith('zpub');
   }
 
   useWithHardwareWalletEnabled() {
