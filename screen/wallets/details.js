@@ -590,7 +590,7 @@ const WalletDetails = () => {
                     <SecondButton onPress={navigateToXPub} testID="XPub" title={loc.wallets.details_show_xpub} />
                     <BlueSpacing20 />
 
-                    {renderMarketplaceButton()}
+                    {/* renderMarketplaceButton() */}
                   </>
                 )}
                 {wallet.allowSignVerifyMessage() && (

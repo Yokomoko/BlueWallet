@@ -1,16 +1,16 @@
 import Frisbee from 'frisbee';
 
 export const FiatUnitSource = Object.freeze({
-  CoinDesk: 'CoinDesk',
+  CoinGecko: 'CoinGecko',
   Yadio: 'Yadio',
   BitcoinduLiban: 'BitcoinduLiban',
   Exir: 'Exir',
 });
 
 const RateExtractors = Object.freeze({
-  CoinDesk: async ticker => {
-    const api = new Frisbee({ baseURI: 'https://api.coindesk.com' });
-    const res = await api.get(`/v1/bpi/currentprice/${ticker}.json`);
+  CoinGecko: async ticker => {
+    const api = new Frisbee({ baseURI: 'https://api.coingecko.com' });
+    const res = await api.get(`/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false`);
     if (res.err) throw new Error(`Could not update rate for ${ticker}: ${res.err}`);
 
     let json;
@@ -19,7 +19,7 @@ const RateExtractors = Object.freeze({
     } catch (e) {
       throw new Error(`Could not update rate for ${ticker}: ${e.message}`);
     }
-    let rate = json?.bpi?.[ticker]?.rate_float; // eslint-disable-line
+    let rate = json?.market_data?.current_price?.[ticker.toLowerCase()];// eslint-disable-line
     if (!rate) throw new Error(`Could not update rate for ${ticker}: data is wrong`);
 
     rate = Number(rate);
