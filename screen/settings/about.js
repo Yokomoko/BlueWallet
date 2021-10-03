@@ -87,7 +87,7 @@ const About = () => {
   };
 
   const handleOnDiscordPress = () => {
-    Linking.openURL('https://discord.gg/btWq2Aby2z');
+    Linking.openURL('https://discord.gg/vCKxQBz');
   };
 
   const handleOnTelegramPress = () => {
@@ -156,9 +156,9 @@ const About = () => {
           <BlueTextCentered>{loc.settings.about_awesome} 👍</BlueTextCentered>
           <BlueSpacing20 />
           <BlueTextCentered>React Native</BlueTextCentered>
-          <BlueTextCentered>bitcoinjs-lib</BlueTextCentered>
+          <BlueTextCentered>groestlcoinjs-lib</BlueTextCentered>
           <BlueTextCentered>Nodejs</BlueTextCentered>
-          <BlueTextCentered>Electrum server</BlueTextCentered>
+          <BlueTextCentered>Electrum-GRS server</BlueTextCentered>
           <BlueSpacing20 />
 
           <TouchableOpacity accessibilityRole="button" onPress={handleOnGithubPress} style={styles.buttonLink}>
