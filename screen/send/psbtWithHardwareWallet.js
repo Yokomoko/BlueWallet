@@ -32,7 +32,7 @@ import {
 import navigationStyle from '../../components/navigationStyle';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
 const bitcoin = require('groestlcoinjs-lib');
 const fs = require('../../blue_modules/fs');
@@ -131,7 +131,7 @@ const PsbtWithHardwareWallet = () => {
         setIsLoading(false);
         const txDecoded = bitcoin.Transaction.fromHex(txHex);
         const txid = txDecoded.getId();
-        Notifications.majorTomToGroundControl([], [], [txid]);
+        // Notifications.majorTomToGroundControl([], [], [txid]);
         if (memo) {
           txMetadata[txid] = { memo };
         }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Linking, StyleSheet, Platform, TextInput, View, Keyboard } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useRoute, useTheme, useNavigation } from '@react-navigation/native';
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 
 import loc from '../../loc';
 import { HDSegwitBech32Wallet } from '../../class';
@@ -20,7 +20,7 @@ import {
   SafeBlueArea,
 } from '../../BlueComponents';
 import BlueElectrum from '../../blue_modules/BlueElectrum';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 
 const scanqr = require('../../helpers/scan-qr');
 
@@ -70,7 +70,7 @@ const Broadcast = () => {
 
         setBroadcastResult(BROADCAST_RESULT.success);
         ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-        Notifications.majorTomToGroundControl([], [], [txid]);
+        // Notifications.majorTomToGroundControl([], [], [txid]);
       } else {
         setBroadcastResult(BROADCAST_RESULT.error);
       }

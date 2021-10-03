@@ -39,7 +39,7 @@ import { useTheme, useRoute, useNavigation } from '@react-navigation/native';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 import { isDesktop } from '../../blue_modules/environment';
 import { AbstractHDElectrumWallet } from '../../class/wallets/abstract-hd-electrum-wallet';
 
@@ -196,7 +196,7 @@ const WalletDetails = () => {
 
   const navigateToOverviewAndDeleteWallet = () => {
     setIsLoading(true);
-    Notifications.unsubscribe(wallet.getAllExternalAddresses(), [], []);
+    // Notifications.unsubscribe(wallet.getAllExternalAddresses(), [], []);
     popToTop();
     deleteWallet(wallet);
     saveToDisk();

@@ -98,8 +98,8 @@ function WatchConnectivity() {
         try {
           // Let's verify if notifications are already configured. Otherwise the watch app will freeze waiting for user approval in iOS app
           if (await Notifications.isNotificationsEnabled()) {
-            const decoded = await wallet.decodeInvoice(invoiceRequest);
-            Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
+            // const decoded = await wallet.decodeInvoice(invoiceRequest);
+            // Notifications.majorTomToGroundControl([], [decoded.payment_hash], []);
           }
         } catch (e) {
           console.log('WatchConnectivity - Running in Simulator');

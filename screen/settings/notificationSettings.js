@@ -29,7 +29,7 @@ const NotificationSettings = () => {
         await Notifications.setLevels(true);
       } else {
         // ok, we dont have a token. we need to try to obtain permissions, configure callbacks and save token locally:
-        await Notifications.tryToObtainPermissions();
+        // await Notifications.tryToObtainPermissions();
       }
     } else {
       // user is DISABLING notifications
