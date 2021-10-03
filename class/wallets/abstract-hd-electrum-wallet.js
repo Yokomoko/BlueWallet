@@ -283,7 +283,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (let c = 0; c < this.next_free_address_index + this.gap_limit; c++) {
       for (const tx of Object.values(txdatas)) {
         for (const vin of tx.vin) {
-          if (vin.address === this._getExternalAddressByIndex(c)) {
+          if (vin.addresses && vin.addresses.indexOf(this._getExternalAddressByIndex(c)) !== -1) {
             // this TX is related to our address
             this._txs_by_external_index[c] = this._txs_by_external_index[c] || [];
             const clonedTx = Object.assign({}, tx);
@@ -330,7 +330,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     for (let c = 0; c < this.next_free_change_address_index + this.gap_limit; c++) {
       for (const tx of Object.values(txdatas)) {
         for (const vin of tx.vin) {
-          if (vin.address === this._getInternalAddressByIndex(c)) {
+          if (vin.addresses && vin.addresses.indexOf(this._getInternalAddressByIndex(c)) !== -1) {
             // this TX is related to our address
             this._txs_by_internal_index[c] = this._txs_by_internal_index[c] || [];
             const clonedTx = Object.assign({}, tx);
@@ -413,7 +413,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
         // if input (spending) goes from our address - we are loosing!
         if (
           (vin.address && ownedAddressesHashmap[vin.address]) ||
-          (vin.address && vin.address && ownedAddressesHashmap[vin.address])
+          (vin.addresses && vin.addresses[0] && ownedAddressesHashmap[vin.addresses[0]])
         ) {
           tx.value -= new BigNumber(vin.value).multipliedBy(100000000).toNumber();
         }
