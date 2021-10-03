@@ -34,7 +34,7 @@ class WidgetAPI {
     case "Exir":
       urlString = "https://api.exir.io/v1/ticker?symbol=btc-irt"
     default:
-      urlString = "https://api.coindesk.com/v1/bpi/currentprice/\(endPointKey).json"
+      urlString = "https://api.coingecko.com/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false"
     }
 
     guard let url = URL(string:urlString) else { return }
@@ -70,12 +70,11 @@ class WidgetAPI {
         let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
         latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       default:
-        guard let bpi = json["bpi"] as? Dictionary<String, Any>,
-              let preferredCurrency = bpi[endPointKey] as? Dictionary<String, Any>,
-              let rateString = preferredCurrency["rate"] as? String,
-              let rateDouble = preferredCurrency["rate_float"] as? Double,
-              let time = json["time"] as? Dictionary<String, Any>,
-              let lastUpdatedString = time["updatedISO"] as? String
+        guard let market_data = json["market_data"] as? Dictionary<String, Any>, 
+              let current_price = market_data["current_price"] as? Dictionary<String, Any>, 
+              let rateString = current_price[endPointKey.lowercased()] as? String, 
+              let rateDouble = rateString as? Double, 
+              let lastUpdatedString = self.dateFormatTime(date: Date()) as? String
         else { break }
         latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       }

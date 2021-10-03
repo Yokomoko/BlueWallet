@@ -11,7 +11,7 @@ import Foundation
 class TodayAPI {
 
   static func fetchPrice(currency: String, completion: @escaping ((Dictionary<String, Any>?, Error?) -> Void)) {
-    guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false\(currency).json") else {return}
+    guard let url = URL(string: "https://api.coingecko.com/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false") else {return}
 
     URLSession.shared.dataTask(with: url) { (data, response, error) in
       guard let dataResponse = data,
