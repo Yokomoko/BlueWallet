@@ -117,7 +117,7 @@
     "open_direct_channel": "Direkten Kanal zu diesem Knoten eröffnen:",
     "please_pay": "Bitte zahle",
     "preimage": "Urbild",
-    "sats": "sats",
+    "gros": "sats",
     "wasnt_paid_and_expired": "Diese Rechnung wurde nicht bezahlt und ist abgelaufen."
   },
   "plausibledeniability": {
@@ -561,10 +561,10 @@
     "tip": "Wallet-Verwaltung zum Anzeigen, Beschriften, Einfrieren oder Auswählen von Münzen."
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "MAX",
-    "sat_byte": "sat/byte",
-    "sats": "sats"
+    "sat_byte": "gro/byte",
+    "gros": "sats"
   },
   "addresses": {
     "sign_title": "Meldung signieren/verifizieren",

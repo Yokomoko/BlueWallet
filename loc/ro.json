@@ -117,7 +117,7 @@
     "open_direct_channel": "Deschide canal direct cu acest nod:",
     "please_pay": "Plătește",
     "preimage": "Pre-imagine",
-    "sats": "sats.",
+    "gros": "sats.",
     "wasnt_paid_and_expired": "Această factură nu a fost plătită și a expirat."
   },
   "plausibledeniability": {
@@ -554,10 +554,10 @@
     "tip": "Această funcționalitate îți permite să vezi, etichetezi, îngheți sau selectezi monedele pentru o administrare îmbunătățită a portofelului. Poți selecta monede multiple apăsînd cercurile colorate. "
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Max",
-    "sat_byte": "sat/byte",
-    "sats": "sats"
+    "sat_byte": "gro/byte",
+    "gros": "sats"
   },
   "addresses": {
     "sign_title": "Semnează/Verifică mesaj",

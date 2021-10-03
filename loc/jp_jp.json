@@ -117,7 +117,7 @@
     "open_direct_channel": "このノードの直接チャネルを作成:",
     "please_pay": "支払う額",
     "preimage": "プリイメージ",
-    "sats": "gros",
+    "gros": "gros",
     "wasnt_paid_and_expired": "この請求書は支払いが行われなかったため無効になりました"
   },
   "plausibledeniability": {
@@ -485,9 +485,9 @@
     "use_coins": "コインを利用"
   },
   "units": {
-    "BTC": "GRS",
-    "sat_byte": "sat/byte",
-    "sats": "sats"
+    "GRS": "GRS",
+    "sat_byte": "gro/byte",
+    "gros": "sats"
   },
   "addresses": {
     "addresses_title": "アドレス",

@@ -112,7 +112,7 @@
     "open_direct_channel": "Közvetlen csatorna nyitása erre a csomópontra:",
     "please_pay": "Kérlek fizess",
     "preimage": "Pre-image (hashlock feloldáshoz)",
-    "sats": "satoshi",
+    "gros": "satoshi",
     "wasnt_paid_and_expired": "Ezt a számlát nem fizették ki és lejárt"
   },
   "plausibledeniability": {
@@ -476,8 +476,8 @@
     "use_coins": "Kriptopénz használata"
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Maximum",
-    "sat_byte": "sat/byte"
+    "sat_byte": "gro/byte"
   }
 }
