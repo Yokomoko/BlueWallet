@@ -37,10 +37,10 @@ describe('SLIP39 wallets tests', () => {
     );
 
     assert.ok(w.validateMnemonic());
-    assert.strictEqual(w._getExternalAddressByIndex(0), '18pvMjy7AJbCDtv4TLYbGPbR7SzGzjqUpj');
-    assert.strictEqual(w._getExternalAddressByIndex(1), '1LDm2yFgHesgVjENC4cEpvUnW5HdYp51gX');
-    assert.strictEqual(w._getInternalAddressByIndex(0), '1EeW2xsK52vqBpsFLYa1vL6hyxmWCsK3Nx');
-    assert.strictEqual(w._getInternalAddressByIndex(1), '1EM8ADickQ9WppVgSGGgjL8PGWhbbTqNpW');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'FaRzD8hmNC8BWb82gP4CtTv9WECsjDrzff');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'FpHVN4UDZPPpWGD2e9eyPzT8EjEv3sPBXU');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'Fg78UxZSZLwKjTdaEVWMgVbQZ7cPpJwSUk');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'FmLHb5jCkNRBECCpKdXRMUTrUAF1Z1FVME');
   });
 
   it('SLIP39SegwitP2SHWallet can generate addresses', async () => {
@@ -52,10 +52,10 @@ describe('SLIP39 wallets tests', () => {
     );
 
     assert.ok(w.validateMnemonic());
-    assert.strictEqual(w._getExternalAddressByIndex(0), '3G3HrQ7DrNJLm8gMrLHTeeD5DdzgeoScRJ');
-    assert.strictEqual(w._getExternalAddressByIndex(1), '3HgGV4fhXz8GZYVMRT1tj9WoUdMQMDrGvw');
-    assert.strictEqual(w._getInternalAddressByIndex(0), '3BdrAbZCo9BCmzP1nmpEVyGXMB9JF4MJ1L');
-    assert.strictEqual(w._getInternalAddressByIndex(1), '3GFSjHbSRGZZavmY7YTm9UJfDbmJdpCeMA');
+    assert.strictEqual(w._getExternalAddressByIndex(0), '3F43u8qRCSt4QiBBtnca8hLQbcsYsxcYRU');
+    assert.strictEqual(w._getExternalAddressByIndex(1), '33CvG9K57ZBf5j6fGBAGdWUnUHgpJwz2Zm');
+    assert.strictEqual(w._getInternalAddressByIndex(0), '3NmgRGScYS1HB51xXq3mwo3SutbyurU9mJ');
+    assert.strictEqual(w._getInternalAddressByIndex(1), '32mMdmYmX2ApWVgkE62FBV6MUvXXVSeC4y');
   });
 
   it('SLIP39SegwitBech32Wallet can generate addresses', async () => {
@@ -70,9 +70,9 @@ describe('SLIP39 wallets tests', () => {
     );
 
     assert.ok(w.validateMnemonic());
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qkchjws74hkuhamxk0qa280xc68643nu32pde20');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qrslzpjwl7ksdxvealdq0qulgspey62vr3acwnp');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qgx35amln8aryyr0lw6j2729l3gemzjftp5xrne');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1q48v0hcuz2jjsls628wj8jtn7rqp8wsyz2gxdxm');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qtzaws76ncxta0jzptucyl9qy9cdp7xuuhkhd63');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qh7wh0neumy3ke42akmfltndw2skyun4g68ru7x');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qy5v8rlhxqarmkhdq892up3a895pzznv2p8ff7j');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qmna0p8qhp6cft4pk7d3wss245fhy43gxaftvv5');
   });
 });
