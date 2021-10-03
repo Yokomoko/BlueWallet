@@ -92,8 +92,8 @@ const TransactionsDetails = () => {
           from = from.concat(input.address);
         }
         for (const output of foundTx.outputs) {
-          if (output.address) to = to.concat(output.address);
-          if (output.scriptPubKey && output.scriptPubKey.address) to = to.concat(output.scriptPubKey.address);
+          if (output.addresses) to = to.concat(output.addresses);
+          if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
         }
       }
     }

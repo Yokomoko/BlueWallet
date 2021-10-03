@@ -346,8 +346,8 @@ module.exports.getTransactionsFullByAddress = async function (address) {
       if (prevTxForVin && prevTxForVin.vout && prevTxForVin.vout[input.vout]) {
         input.value = prevTxForVin.vout[input.vout].value;
         // also, we extract destination address from prev output:
-        if (prevTxForVin.vout[input.vout].scriptPubKey && prevTxForVin.vout[input.vout].scriptPubKey.address) {
-          input.address = prevTxForVin.vout[input.vout].scriptPubKey.address;
+        if (prevTxForVin.vout[input.vout].scriptPubKey && prevTxForVin.vout[input.vout].scriptPubKey.addresses) {
+          input.addresses = prevTxForVin.vout[input.vout].scriptPubKey.addresses;
         }
         // in groestlcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
         if (prevTxForVin.vout[input.vout]?.scriptPubKey?.address) {
@@ -947,7 +947,7 @@ function txhexToElectrumTransaction(txhex) {
         hex: out.script.toString('hex'),
         reqSigs: 1, // todo
         type,
-        address: address,
+        addresses: [address],
       },
     });
     n++;
