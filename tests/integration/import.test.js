@@ -68,7 +68,7 @@ describe('import procedure', function () {
       'always direct find escape liar turn differ shy tool gap elder galaxy lawn wild movie fog moon spread casual inner box diagram outdoor tell',
     );
     assert.strictEqual(lastImportedWallet.type, HDSegwitBech32Wallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'bc1qth9qxvwvdthqmkl6x586ukkq8zvumd38nxr08l');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'grs1q5elt7p6rtduftvmv99f5tdpmjml0p8h9369yqm');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD SegWit (BIP84 Bech32 Native)');
   });
 
@@ -114,7 +114,7 @@ describe('import procedure', function () {
   it('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
     await WalletImport.processImportText('eight derive blast guide smoke piece coral burden lottery flower tomato flame');
     assert.strictEqual(lastImportedWallet.type, HDLegacyElectrumSeedP2PKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '1FgVfJ5D3HyKWKC4xk36Cio7MUaxxnXaVd');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FjrD7CoabnerwvDBqr2ZfEbS1drvdizjGB');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy Electrum (BIP32 P2PKH)');
   });
 
@@ -130,7 +130,7 @@ describe('import procedure', function () {
   it('can import HD Electrum (BIP32 P2WPKH)', async () => {
     await WalletImport.processImportText('noble mimic pipe merry knife screen enter dune crop bonus slice card');
     assert.strictEqual(lastImportedWallet.type, HDSegwitElectrumSeedP2WPKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'bc1qzzanxnr3xv9a5ha264kpzpfq260qvuameslddu');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'grs1qzzanxnr3xv9a5ha264kpzpfq260qvuamyprv5a');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Electrum (BIP32 P2WPKH)');
   });
 

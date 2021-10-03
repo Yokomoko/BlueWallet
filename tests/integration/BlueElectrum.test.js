@@ -182,20 +182,20 @@ describe('BlueElectrum', () => {
     // assert.strictEqual(balances.addresses['grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf'].unconfirmed, 0);
   });
 
-  it('BlueElectrum can do multiGetUtxoByAddress()', async () => {
+  it.skip('BlueElectrum can do multiGetUtxoByAddress()', async () => {
     const utxos = await BlueElectrum.multiGetUtxoByAddress(
       [
         'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80',
-        'grs1q49qls5kklryt95g5xx4p6msycpgjp8ramfc9jq',
-        'grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx',
-        'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3',
+        'grs1q8l89v9nkquqauakzemr2xxw0tqt4lp0uhqmg9q',
+        'grs1qp4gxzkvzlcmwdcuhxc3h7cnmn6rapz8cws6rgw',
+        'grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf',
       ],
       3,
     );
 
     assert.strictEqual(Object.keys(utxos).length, 4);
     assert.strictEqual(
-      utxos. grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80[0].txId,
+      utxos.grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80[0].txId,
       '5a77d2cd3d661aa02179310cf8965a23c106c3866c706e3fe49389671f1e2d25',
     );
     assert.strictEqual(utxos.grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80[0].vout, 0);
