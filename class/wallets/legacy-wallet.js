@@ -273,7 +273,7 @@ export class LegacyWallet extends AbstractWallet {
         // got txid and output number of _previous_ transaction we shoud look into
         if (vintxdatas[inpTxid] && vintxdatas[inpTxid].vout[inpVout]) {
           // extracting amount & addresses from previous output and adding it to _our_ input:
-          txdatas[txid].vin[inpNum].address = vintxdatas[inpTxid].vout[inpVout].scriptPubKey.address;
+          txdatas[txid].vin[inpNum].addresses = vintxdatas[inpTxid].vout[inpVout].scriptPubKey.addresses;
           txdatas[txid].vin[inpNum].value = vintxdatas[inpTxid].vout[inpVout].value;
         }
       }
@@ -283,7 +283,7 @@ export class LegacyWallet extends AbstractWallet {
 
     for (const tx of Object.values(txdatas)) {
       for (const vin of tx.vin) {
-        if (vin.address === this.getAddress()) {
+        if (vin.addresses && vin.addresses.indexOf(this.getAddress()) !== -1) {
           // this TX is related to our address
           const clonedTx = Object.assign({}, tx);
           clonedTx.inputs = tx.vin.slice(0);
@@ -295,7 +295,7 @@ export class LegacyWallet extends AbstractWallet {
         }
       }
       for (const vout of tx.vout) {
-        if (vout.scriptPubKey.address === this.getAddress()) {
+        if (vout.scriptPubKey.addresses && vout.scriptPubKey.addresses.indexOf(this.getAddress()) !== -1) {
           // this TX is related to our address
           const clonedTx = Object.assign({}, tx);
           clonedTx.inputs = tx.vin.slice(0);
