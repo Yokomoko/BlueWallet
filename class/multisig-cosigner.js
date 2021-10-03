@@ -1,4 +1,4 @@
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 const HDNode = require('bip32');
 
 export class MultisigCosigner {

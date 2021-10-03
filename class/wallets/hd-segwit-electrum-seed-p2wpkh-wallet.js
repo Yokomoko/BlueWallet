@@ -1,4 +1,4 @@
-import b58 from 'bs58check';
+import b58 from 'bs58grscheck';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
 
 const bitcoin = require('groestlcoinjs-lib');

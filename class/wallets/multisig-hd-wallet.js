@@ -986,7 +986,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
           } catch (_) {} // protects agains duplicate cosignings
 
           if (!psbt.inputHasHDKey(cc, hdRoot)) {
-            // failed signing as HD. probably bitcoinjs-lib could not match provided hdRoot's
+            // failed signing as HD. probably groestlcoinjs-lib could not match provided hdRoot's
             // fingerprint (or path?) to the ones in psbt, which is the case of stupid Electrum desktop which can
             // put bullshit paths and fingerprints in created psbt.
             // lets try to find correct priv key and sign manually.
