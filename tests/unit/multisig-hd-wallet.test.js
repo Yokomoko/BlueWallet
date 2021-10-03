@@ -6,10 +6,10 @@ const bitcoin = require('groestlcoinjs-lib');
 const Base43 = require('../../blue_modules/base43');
 
 const fp1cobo = 'D37EAD88';
-const Zpub1 = 'Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ';
+const Zpub1 = 'Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW';
 
 const fp2coldcard = '168DD603';
-const Zpub2 = 'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn';
+const Zpub2 = 'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj';
 
 const txtFileFormatMultisigLegacy =
   'UR:BYTES/TYQHZGEQGDHKYM6KV96KCAPQF46KCARFWD5KWGRNV4682UPQVE5KCEFQ9P3HYETPW3JKGGR0DCSYGVEHG4Q5GWPC9Y9ZXZJWV9KK2W3QGDT97DPNGVER2VEJGF0NYTFJPFGX7MRFVDUN5GPJYPHKVGPJPFZX2UNFWESHG6T0DCAZQMF0XS6JWZJXDAEX6CT58GS9QVJNFQ9Q53PNXAZ5Z3PC8QAZQ7RSW43RVW2NVERXS3E4V4QNJCM30PYYKNFKVGC5S6ZCF4CYG7NFWP24Q3ZZFEX5YUN2FEN4W4MZVFAYKUTWW9MHSVNDWEXHJS34VFFXWM2VG95NWC6ZVAERSET4W4ARGNRK0GEK6C2H0PCXV4TDV3XNWVTY09GH2AN3XCUX64ZPGU6YXUQ2XYMRS3ZYXCCRXW3Q0PC82C3K8Q6RW4EKVDV42UT3X35HSCMDGE3RSVMFW9G8GJJ6VEHY65Z5DDC9J62RWD6427TZ0FR8QUZ2WQE8Z7NGXD95X4JGWDXYW5TEX3TKSCTCGACKKJEEV9ZYGKNW2DNXSS3EXFGXKJZYFD5KSCJGXET5C7N50FK5UD6H2UU5WKTS2G9QHU0U3D';
@@ -18,9 +18,9 @@ const txtFileFormatMultisigWrappedSegwit =
 const txtFileFormatMultisigNativeSegwit =
   'UR:BYTES/TYQHKGEQGDHKYM6KV96KCAPQF46KCARFWD5KWGRNV4682UPQVE5KCEFQ9P3HYETPW3JKGGR0DCSYGVEHG4Q5GWPC9Y9ZXZJWV9KK2W3QGDT97VENGG65YWF3G90NYTFJPFGX7MRFVDUN5GPJYPHKVGPJPFZX2UNFWESHG6T0DCAZQMF0XSUZWTESYUHNQFE0XGNS53N0WFKKZAP6YPGRY46NFQ9Q53PNXAZ5Z3PC8QAZQKNSW43RWDRFDFCXV6Z92F9YU6NGGD94S5NNWP2XGNZ22C6K2M69D4F4YKNYFPC5GANS8944VARY2EZHJ62CDVMHQKRC2F3XVKN629M8X3ZXWPNYGJZ9FPT8G4NS0Q6YG73EG3R42468DCE9S6E40FRN2AF5X4G4GNTNT9FNYAN2DA5YU5G2XYMRS3ZYXCCRXW3QTFC82C3HX4K5Z3FCG448J7ZN0FHHJ5RDGAHXGD29XEXHJ3PHG9XYWNNWV3E824MKX5E8SUR6D9K4552TW44HWAJ9VEV9GJR3D4YRSMNZVF3NVCMR2Q6HGVNPF5EK6AMNXDCYKK2NDE9HQJ6DF4UHGERZFEZ453J40P9H57N5T9RY6WZSDC9QWZ5LU2';
 const coldcardExport =
-  '{"p2sh_deriv":"m/45\'","p2sh":"xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR","p2wsh_p2sh_deriv":"m/48\'/0\'/0\'/1\'","p2wsh_p2sh":"Ypub6kvtvTZpqGuWtQfg9bL5xe4vDWtwsirR8LzDvsY3vgXvyncW1NGXCUJ9Ps7CiizSSLV6NnnXSYyVDnxCu26QChWzWLg5YCAHam6cYjGtzRz","p2wsh_deriv":"m/48\'/0\'/0\'/2\'","p2wsh":"Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn","xfp":"168DD603"}';
+  '{"p2sh_deriv":"m/45\'","p2sh":"xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7Wa6g3Mx","p2wsh_p2sh_deriv":"m/48\'/0\'/0\'/1\'","p2wsh_p2sh":"Ypub6kvtvTZpqGuWtQfg9bL5xe4vDWtwsirR8LzDvsY3vgXvyncW1NGXCUJ9Ps7CiizSSLV6NnnXSYyVDnxCu26QChWzWLg5YCAHam6cYjGtzRz","p2wsh_deriv":"m/48\'/0\'/0\'/2\'","p2wsh":"Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj","xfp":"168DD603"}';
 const electumJson =
-  '{"x2/": {"xpub": "Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn", "hw_type": "coldcard", "ckcc_xfp": 64392470, "label": "Coldcard", "derivation": "m/48\'/1\'/0\'/1\'", "type": "hardware"}, "x1/": {"xpub": "Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ", "hw_type": "coldcard", "ckcc_xfp": 2293071571, "label": "Coldcard", "derivation": "m/48\'/1\'/0\'/1\'", "type": "hardware"}, "wallet_type": "2of2", "use_encryption": false, "seed_version": 17}';
+  '{"x2/": {"xpub": "Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj", "hw_type": "coldcard", "ckcc_xfp": 64392470, "label": "Coldcard", "derivation": "m/48\'/1\'/0\'/1\'", "type": "hardware"}, "x1/": {"xpub": "Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW", "hw_type": "coldcard", "ckcc_xfp": 2293071571, "label": "Coldcard", "derivation": "m/48\'/1\'/0\'/1\'", "type": "hardware"}, "wallet_type": "2of2", "use_encryption": false, "seed_version": 17}';
 
 describe('multisig-wallet (p2sh)', () => {
   if (!process.env.MNEMONICS_COBO) {
@@ -46,7 +46,7 @@ describe('multisig-wallet (p2sh)', () => {
     );
     assert.strictEqual(
       w.getCosigner(2),
-      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR',
+      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7Wa6g3Mx',
     );
     assert.strictEqual(w.getCosignerForFingerprint(fp1cobo), w.getCosigner(1));
     assert.strictEqual(w.getCosignerForFingerprint(fp2coldcard), w.getCosigner(2));
@@ -92,7 +92,7 @@ describe('multisig-wallet (p2sh)', () => {
     );
     assert.strictEqual(
       w.getCosigner(2),
-      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR',
+      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7Wa6g3Mx',
     );
     assert.strictEqual(w.getCosignerForFingerprint(fp1cobo), w.getCosigner(1));
     assert.strictEqual(w.getCosignerForFingerprint(fp2coldcard), w.getCosigner(2));
@@ -1176,10 +1176,10 @@ describe('multisig-wallet (native segwit)', () => {
       'Format: P2WSH\n' +
       '\n' +
       "# derivation: m/47'/17'/0'/1'\n" +
-      'D37EAD88: Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ\n' +
+      'D37EAD88: Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW\n' +
       '\n' +
       "# derivation: m/46'/17'/0'/1'\n" +
-      '168DD603: Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn\n';
+      '168DD603: Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj\n';
 
     const w = new MultisigHDWallet();
     w.setSecret(secret);
@@ -1253,7 +1253,7 @@ describe('multisig-wallet (native segwit)', () => {
   });
 
   it('can import incomplete wallet from Coldcard', async () => {
-    const Zpub2 = 'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn';
+    const Zpub2 = 'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj';
 
     const w = new MultisigHDWallet();
     w.setSecret(coldcardExport);
@@ -1781,7 +1781,7 @@ describe('multisig-wallet (native segwit)', () => {
 describe('multisig-cosigner', () => {
   it('can parse cobo json', () => {
     const cosigner = new MultisigCosigner(
-      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ","path":"m\\/48\'\\/17\'\\/0\'\\/2\'"}',
+      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW","path":"m\\/48\'\\/17\'\\/0\'\\/2\'"}',
     );
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), fp1cobo);
@@ -1800,7 +1800,7 @@ describe('multisig-cosigner', () => {
     assert.ok(cosigner.isValid());
     assert.strictEqual(
       cosigner.getXpub(),
-      'Zpub756tPxxwHiYkYiT12G2WUD2cpAHyVWhjvKPbXoY5jDZSyo71yG5C14LCuwhycTTAzgTUcQfddR8FFTQ1bSWR6kzmNbMEaVzUrj4Lhxbonjo',
+      'Zpub756tPxxwHiYkYiT12G2WUD2cpAHyVWhjvKPbXoY5jDZSyo71yG5C14LCuwhycTTAzgTUcQfddR8FFTQ1bSWR6kzmNbMEaVzUrj4LhtCjMqy',
     );
     assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
     assert.strictEqual(cosigner.howManyCosignersWeHave(), 1);
@@ -1812,33 +1812,33 @@ describe('multisig-cosigner', () => {
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), '00000000');
     assert.strictEqual(cosigner.getXpub(), Zpub1);
-    assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
+    assert.strictEqual(cosigner.getPath(), "m/48'/17'/0'/2'");
     assert.strictEqual(cosigner.howManyCosignersWeHave(), 1);
   });
 
   it('can parse wallet descriptor', () => {
     let cosigner = new MultisigCosigner(
-      '[73c5da0a/48h/0h/0h/2h]Zpub74Jru6aftwwHxCUCWEvP6DgrfFsdA4U6ZRtQ5i8qJpMcC39yZGv3egBhQfV3MS9pZtH5z8iV5qWkJsK6ESs6mSzt4qvGhzJxPeeVS2e1zUG',
+      '[73c5da0a/48h/17h/0h/2h]Zpub74Jru6aftwwHxCUCWEvP6DgrfFsdA4U6ZRtQ5i8qJpMcC39yZGv3egBhQfV3MS9pZtH5z8iV5qWkJsK6ESs6mSzt4qvGhzJxPeeVRyegaVY',
     );
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), '73c5da0a');
     assert.strictEqual(
       cosigner.getXpub(),
-      'Zpub74Jru6aftwwHxCUCWEvP6DgrfFsdA4U6ZRtQ5i8qJpMcC39yZGv3egBhQfV3MS9pZtH5z8iV5qWkJsK6ESs6mSzt4qvGhzJxPeeVS2e1zUG',
+      'Zpub74Jru6aftwwHxCUCWEvP6DgrfFsdA4U6ZRtQ5i8qJpMcC39yZGv3egBhQfV3MS9pZtH5z8iV5qWkJsK6ESs6mSzt4qvGhzJxPeeVRyegaVY',
     );
-    assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
+    assert.strictEqual(cosigner.getPath(), "m/48'/17'/0'/2'");
     assert.strictEqual(cosigner.howManyCosignersWeHave(), 1);
 
     cosigner = new MultisigCosigner(
-      '[73c5da0a/48h/0h/0h/2h]xpub6DkFAXWQ2dHxq2vatrt9qyA3bXYU4ToWQwCHbf5XB2mSTexcHZCeKS1VZYcPoBd5X8yVcbXFHJR9R8UCVpt82VX1VhR28mCyxUFL4r6KFrf',
+      '[73c5da0a/48h/17h/0h/2h]xpub6DkFAXWQ2dHxq2vatrt9qyA3bXYU4ToWQwCHbf5XB2mSTexcHZCeKS1VZYcPoBd5X8yVcbXFHJR9R8UCVpt82VX1VhR28mCyxUFL4tnpbrn',
     );
     assert.ok(cosigner.isValid());
     assert.strictEqual(cosigner.getFp(), '73c5da0a');
     assert.strictEqual(
       cosigner.getXpub(),
-      'xpub6DkFAXWQ2dHxq2vatrt9qyA3bXYU4ToWQwCHbf5XB2mSTexcHZCeKS1VZYcPoBd5X8yVcbXFHJR9R8UCVpt82VX1VhR28mCyxUFL4r6KFrf',
+      'xpub6DkFAXWQ2dHxq2vatrt9qyA3bXYU4ToWQwCHbf5XB2mSTexcHZCeKS1VZYcPoBd5X8yVcbXFHJR9R8UCVpt82VX1VhR28mCyxUFL4tnpbrn',
     );
-    assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
+    assert.strictEqual(cosigner.getPath(), "m/48'/17'/0'/2'");
     assert.strictEqual(cosigner.howManyCosignersWeHave(), 1);
   });
 
@@ -1854,11 +1854,11 @@ describe('multisig-cosigner', () => {
     const cc =
       '{\n' +
       '  "p2sh_deriv": "m/45\'",\n' +
-      '  "p2sh": "xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR",\n' +
+      '  "p2sh": "xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7Wa6g3Mx",\n' +
       '  "p2wsh_p2sh_deriv": "m/48\'/17\'/0\'/1\'",\n' +
       '  "p2wsh_p2sh": "Ypub6kvtvTZpqGuWtQfg9bL5xe4vDWtwsirR8LzDvsY3vgXvyncW1NGXCUJ9Ps7CiizSSLV6NnnXSYyVDnxCu26QChWzWLg5YCAHam6cYjGtzRz",\n' +
       '  "p2wsh_deriv": "m/48\'/17\'/0\'/2\'",\n' +
-      '  "p2wsh": "Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn",\n' +
+      '  "p2wsh": "Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj",\n' +
       '  "xfp": "168DD603"\n' +
       '}\n';
 
@@ -1873,7 +1873,7 @@ describe('multisig-cosigner', () => {
 
     assert.strictEqual(
       c1.getXpub(),
-      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7WW9GYpR',
+      'xpub6847W6cYUqq4ixcmFb83iqPtJZfnMPTkpYiCsuUybzFppJp2qzh3KCVHsLGQy4WhaxGqkK9aDDZnSfhB92PkHDKihbH6WLztzmN7Wa6g3Mx',
     );
     assert.strictEqual(c1.getFp(), '168DD603');
     assert.strictEqual(c1.getPath(), "m/45'");
@@ -1887,7 +1887,7 @@ describe('multisig-cosigner', () => {
 
     assert.strictEqual(
       c3.getXpub(),
-      'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn',
+      'Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztbAMePj',
     );
     assert.strictEqual(c3.getFp(), '168DD603');
     assert.strictEqual(c3.getPath(), "m/48'/17'/0'/2'");
@@ -1912,14 +1912,14 @@ describe('multisig-cosigner', () => {
     const result = MultisigCosigner.exportToJson(fp1cobo, Zpub1, "m/48'/0'/0'/2'");
     assert.strictEqual(
       result,
-      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ","path":"m/48\'/0\'/0\'/2\'"}',
+      '{"xfp":"D37EAD88","xpub":"Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW","path":"m/48\'/0\'/0\'/2\'"}',
     );
 
     const cosigner = new MultisigCosigner(MultisigCosigner.exportToJson(fp1cobo, Zpub1, "m/48'/0'/0'/2'"));
     assert.strictEqual(cosigner.getFp(), 'D37EAD88');
     assert.strictEqual(
       cosigner.getXpub(),
-      'Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ',
+      'Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vgHaNW',
     );
     assert.strictEqual(cosigner.getPath(), "m/48'/0'/0'/2'");
     assert.strictEqual(cosigner.isValid(), true);
@@ -1931,8 +1931,8 @@ describe('multisig-cosigner', () => {
     const c2 = new MultisigCosigner(
       MultisigCosigner.exportToJson(
         fp1cobo,
-        'zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigRFhKB8Q',
-        "m/48'/0'/0'/2'",
+        'zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigREDQF9H',
+        "m/48'/17'/0'/2'",
       ),
     );
     assert.strictEqual(c2.getChainCodeHex(), '906730ab8a03fb4baa32a912134f2c5bfe6ae70e0264e4e9fe4b0abe3a560692');
@@ -1950,7 +1950,7 @@ describe('multisig-cosigner', () => {
     result = encodeUR(
       MultisigCosigner.exportToJson(
         '42A2460E',
-        'Ypub6m2WhkZvujztfZVYWEB4Hfcq3mKfeZYMfZj2wfvgNmTDjcCncU9ua6VSxXno7FeF8P2kqp1S7N8UoYapR8YKnMLNq8bEDDd2PU6q7QCHoEb',
+        'Ypub6m2WhkZvujztfZVYWEB4Hfcq3mKfeZYMfZj2wfvgNmTDjcCncU9ua6VSxXno7FeF8P2kqp1S7N8UoYapR8YKnMLNq8bEDDd2PU6q7Nhqr2K',
         "m/48'/0'/0'/1'",
       ),
     );
@@ -1961,7 +1961,7 @@ describe('multisig-cosigner', () => {
     result = encodeUR(
       MultisigCosigner.exportToJson(
         'ED5C5B8A',
-        'xpub69dgpFkP9mFYhaAWt6svmwd1BYsuGiyyNs8sJW1GwCn8GSK69mrCmNG6ZLcrPGvBSiJzfjXD66ntgJxdqQbhMk4j273VQYHEMc5knoqFGvt',
+        'xpub69dgpFkP9mFYhaAWt6svmwd1BYsuGiyyNs8sJW1GwCn8GSK69mrCmNG6ZLcrPGvBSiJzfjXD66ntgJxdqQbhMk4j273VQYHEMc5knunRtb5',
         "m/45'",
       ),
     );
