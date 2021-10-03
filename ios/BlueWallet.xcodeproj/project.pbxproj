@@ -132,7 +132,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6D2A6468258BA92D0092292B /* Stickers.appex in Embed App Extensions */,
-				3271B0B5236E2E0700DA766F /* BlueWallet - Bitcoin Price.appex in Embed App Extensions */,
+				3271B0B5236E2E0700DA766F /* GRS BlueWallet - Groestlcoin Price.appex in Embed App Extensions */,
 				6DD410A7266CADF40087DE03 /* WidgetsExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -620,7 +620,7 @@
 				13B07F961A680F5B00A75B9A /* BlueWallet.app */,
 				B40D4E30225841EC00428FCC /* BlueWalletWatch.app */,
 				B40D4E3C225841ED00428FCC /* BlueWalletWatch Extension.appex */,
-				3271B0A9236E2E0700DA766F /* BlueWallet - Bitcoin Price.appex */,
+				3271B0A9236E2E0700DA766F /* GRS BlueWallet - Groestlcoin Price.appex */,
 				6D2A6461258BA92C0092292B /* Stickers.appex */,
 				6DD4109C266CADF10087DE03 /* WidgetsExtension.appex */,
 			);

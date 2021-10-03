@@ -1,10 +1,10 @@
-Bitcoin-lompakko, jonka avulla voit tallentaa, lähettää, vastaanottaa, sekä ostaa Bitcoinia keskittyen turvallisuuteen ja yksinkertaisuuteen.
+Groestlcoin-lompakko, jonka avulla voit tallentaa, lähettää, vastaanottaa, sekä ostaa Groestlcoinia keskittyen turvallisuuteen ja yksinkertaisuuteen.
 
-Sinä omistat yksityiset avaimesi BlueWallet bitcoin-lompakossa. Bitcoin-käyttäjien tekemä Bitcoin-lompakko yhteisölle.
+Sinä omistat yksityiset avaimesi GRS BlueWallet groestlcoin-lompakossa. Groestlcoin-käyttäjien tekemä Groestlcoin-lompakko yhteisölle.
 
 Voit tehdä heti kauppaa kenen tahansa kanssa maailmassa ja muuttaa rahoitusjärjestelmää suoraan taskustasi.
 
-Luo ilmaiseksi rajoittamaton määrä bitcoin-lompakoita tai tuo nykyinen lompakkosi. Se on yksinkertaista ja nopeaa.
+Luo ilmaiseksi rajoittamaton määrä groestlcoin-lompakoita tai tuo nykyinen lompakkosi. Se on yksinkertaista ja nopeaa.
 
 _____
 
@@ -17,13 +17,13 @@ Avoin lähdekoodi
 MIT-lisensoitu, voit rakentaa sen ja käyttää sitä itsenäisesti! Tehty ReactNative: lla
 
 Uskottava kiistettävyys
-Salasana, joka purkaa vale bitcoin-lompakot, jos sinun on pakko paljastaa käyttöoikeutesi
+Salasana, joka purkaa vale groestlcoin-lompakot, jos sinun on pakko paljastaa käyttöoikeutesi
 
 Täysi salaus
 IOS:in monikerroksisen salauksen lisäksi salaamme kaiken lisätyillä salasanoilla
 
 Täysi solmu
-Yhdistä täyteen Bitcoin solmuusi Electrumin kautta
+Yhdistä täyteen Groestlcoin solmuusi Electrum-grsin kautta
 
 Kylmäsäilytys
 Yhdistä laitteistolompakkoosi ja säilytä kolikkosi kylmäsäilössä
@@ -35,7 +35,7 @@ Yksityiset avaimesi eivät koskaan poistu laitteeltasi.
 Sinä hallitset yksityisiä avaimiasi
 
 Joustavat siirtokulut
-Alkaen 1 Satoshista. Käyttäjän itse määrittämä
+Alkaen 1 Grosta. Käyttäjän itse määrittämä
 
 Replace-By-Fee
 (RBF) Nopeuta siirtotapahtumiasi korottamalla siirtokulua (BIP125)
@@ -44,10 +44,10 @@ Vain lukuoikeus-lompakot
 Vain lukuoikeus-lompakot antavat sinun pitää silmällä kylmäsäilöä koskematta laitteistoon.
 
 Salamaverkko
-Salamalompakko nolla-konfiguraatiolla. Luvattoman halvat ja nopeat siirrot parhaalla Bitcoin käyttökokemuksella.
+Salamalompakko nolla-konfiguraatiolla. Luvattoman halvat ja nopeat siirrot parhaalla Groestlcoin käyttökokemuksella.
 
-Osta bitcoinia
-Osallistu avoimeen talouden vallankumoukseen kyvyllä ostaa bitcoinia suoraan lompakkoosi.
+Osta groestlcoinia
+Osallistu avoimeen talouden vallankumoukseen kyvyllä ostaa groestlcoinia suoraan lompakkoosi.
 
 Paikallinen kauppias
-P2p Bitcoin-vaihtoalusta, jonka avulla voit ostaa ja myydä bitcoinia suoraan muille käyttäjille ilman kolmansia osapuolia.
+P2p Groestlcoin-vaihtoalusta, jonka avulla voit ostaa ja myydä groestlcoinia suoraan muille käyttäjille ilman kolmansia osapuolia.

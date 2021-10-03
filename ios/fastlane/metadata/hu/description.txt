@@ -35,7 +35,7 @@ A privát kulcsok soha nem hagyják el az eszközöd.
 Te irányítod a privát kulcsaid,
 
 Rugalmas tranzakciós díjjak
-Már 1 satoshi-tól. Te, a felhasználó választasz.
+Már 1 gro-tól. Te, a felhasználó választasz.
 
 Tranzakciós Díj Pótlás (RBF)
 (RBF) Gyorsítsd meg a tranzakciódat a tranzakciós díj növelésével (BIP125)

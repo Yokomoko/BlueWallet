@@ -1,1 +1,1 @@
-bitcoin,portfel,portfel bitcoin,blockchain,btc,kryptowaluty,kupić bitcoin,samourai,electrum,ethereum
+groestlcoin,portfel,portfel groestlcoin,blockchain,grs,kryptowaluty,kupić groestlcoin,samourai,electrum-grs,ethereum

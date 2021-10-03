@@ -35,7 +35,7 @@ Les clés privées ne quittent jamais votre appareil.
 Vous contrôlez vos clés privées
 
 Frais flexibles
-A partir de 1 Satoshi. Définis par vous, l'utilisateur
+A partir de 1 Gro. Définis par vous, l'utilisateur
 
 Remplacer-Les-Frais
 (RBF) Accélérez vos transactions en augmentant les frais (BIP125)

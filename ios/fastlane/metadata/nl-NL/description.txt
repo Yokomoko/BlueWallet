@@ -35,7 +35,7 @@ Privé sleutels verlaten nooit uw apparaat.
 U beheert uw privé sleutels
 
 Aanpasbare vergoedingen
-Begin met 1 satoshi. Gedefinieerd door jou, de gebruiker
+Begin met 1 gro. Gedefinieerd door jou, de gebruiker
 
 Replace-By-Fee
 (RBF) Versnel uw transactie door de vergoeding te verhogen (BIP125)

@@ -1,6 +1,6 @@
 Uma carteira Groestlcoin que permite armazenar, enviar groestlcoin, receber groestlcoin e comprar groestlcoin com foco em segurança e simplicidade.
 
-BlueWallet é uma carteira de groestlcoin onde você tem posse das chaves privadas. Uma carteira Groestlcoin criada para a comunidade por usuários do Groestlcoin.
+GRS BlueWallet é uma carteira de groestlcoin onde você tem posse das chaves privadas. Uma carteira Groestlcoin criada para a comunidade por usuários do Groestlcoin.
 
 Você pode fazer transações com qualquer pessoa no mundo e transformar o sistema financeiro direto do seu bolso.
 
@@ -23,7 +23,7 @@ Totalmente criptografada
 Além da criptografia multicamadas do iOS, criptografamos tudo com senhas adicionais
 
 Nó completo
-Conecte com seu full node Groestlcoin usando Electrum
+Conecte com seu full node Groestlcoin usando Electrum-GRS
 
 Armazenamento frio (Cold)
 Conecte com sua hardwallet e mantenha suas moedas em armazenamento frio
@@ -35,7 +35,7 @@ As chaves privadas nunca saem do dispositivo.
 Você controla suas chaves privadas
 
 Taxas flexíveis
-A partir de 1 satoshi. Você decide
+A partir de 1 gro. Você decide
 
 Replace-By-Fee
 (RBF) Acelere suas transações aumentando a taxa depois de enviar (BIP125)

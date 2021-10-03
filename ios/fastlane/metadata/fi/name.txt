@@ -1,1 +1,1 @@
-BlueWallet - Bitcoin-lompakko
+GRS BlueWallet - Groestlcoin-lompakko
