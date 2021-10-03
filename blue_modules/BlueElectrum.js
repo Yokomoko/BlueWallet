@@ -346,14 +346,14 @@ module.exports.getTransactionsFullByAddress = async function (address) {
       if (prevTxForVin && prevTxForVin.vout && prevTxForVin.vout[input.vout]) {
         input.value = prevTxForVin.vout[input.vout].value;
         // also, we extract destination address from prev output:
-        if (prevTxForVin.vout[input.vout].scriptPubKey && prevTxForVin.vout[input.vout].scriptPubKey.address) {
-          input.address = prevTxForVin.vout[input.vout].scriptPubKey.address;
+        if (prevTxForVin.vout[input.vout].scriptPubKey && prevTxForVin.vout[input.vout].scriptPubKey.addresses) {
+          input.addresses = prevTxForVin.vout[input.vout].scriptPubKey.addresses;
         }
       }
     }
 
     for (const output of full.vout) {
-      if (output.scriptPubKey && output.scriptPubKey.address) output.address = output.scriptPubKey.address;
+      if (output.scriptPubKey && output.scriptPubKey.addresses) output.addresses = output.scriptPubKey.addresses;
     }
     full.inputs = full.vin;
     full.outputs = full.vout;
@@ -934,7 +934,7 @@ function txhexToElectrumTransaction(txhex) {
         hex: out.script.toString('hex'),
         reqSigs: 1, // todo
         type,
-        address: address,
+        addresses: [address],
       },
     });
     n++;
