@@ -64,15 +64,15 @@ describe('Watch only wallet', () => {
 
   it('can create PSBT base64 without signature for HW wallet xpub', async () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('xpub6CQdfC3v9gU86eaSn7AhUFcBVxiGhdtYxdC5Cw2vLmFkfth2KXCMmYcPpvZviA89X6DXDs4PJDk5QVL2G2xaVjv7SM4roWHr1gR4xB3Z7Ps');
+    w.setSecret('xpub6CQdfC3v9gU86eaSn7AhUFcBVxiGhdtYxdC5Cw2vLmFkfth2KXCMmYcPpvZviA89X6DXDs4PJDk5QVL2G2xaVjv7SM4roWHr1gR4xFYyyu6');
     w.init();
-    const changeAddress = '1KZjqYHm7a1DjhjcdcjfQvYfF2h6PqatjX';
+    const changeAddress = 'FojTHT28g4gmBJkjWij8sSLyuBy3w4DWK7';
     // hardcoding so we wont have to call w.getChangeAddressAsync()
     const utxos = [
       {
         height: 530926,
         value: 1000,
-        address: '12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG',
+        address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs',
         txid: 'd0432027a86119c63a0be8fa453275c2333b59067f1e559389cd3e0e377c8b96',
         vout: 1,
         txhex:
@@ -81,53 +81,53 @@ describe('Watch only wallet', () => {
     ];
     // hardcoding utxo so we wont have to call w.fetchUtxo() and w.getUtxo()
 
-    const { psbt } = await w.createTransaction(utxos, [{ address: '1QDCFcpnrZ4yrAQxmbvSgeUC9iZZ8ehcR5' }], 1, changeAddress);
+    const { psbt } = await w.createTransaction(utxos, [{ address: 'FtNuhXZAR3kXHmS5ehuv9AGWosqWhqgB4M' }], 1, changeAddress);
 
     assert.strictEqual(
       psbt.toBase64(),
-      'cHNidP8BAFUCAAAAAZaLfDcOPs2Jk1UefwZZOzPCdTJF+ugLOsYZYagnIEPQAQAAAAAAAACAASgDAAAAAAAAGXapFP6ZRvxlaU5S/9HQFr1i2lsgp58AiKwAAAAAAAEA4gEAAAABtjCsNkoEuDVImU3tRwW5gxay0f4Yuf/6Jie+nu8Rv2AAAAAAa0gwRQIhAJbmjZTTdOOmiO0uZgUon4EXJUCrqrX2zEMcIxkZhgdGAiB17k5kyGftnTadAamzXYsWiaghvo1yn/9/s9/MddFvZAEhAoHS5AumQi/Je2H9VkO+6D3XSdg2kzntx5XXs/AOlsaB/f///wLvAgAAAAAAABl2qRTkJx756aA6ibmBxz09aTbS9vzMBois6AMAAAAAAAAZdqkUEgrXhUFSkB6+smmsts7yDnGzz1mIrOoZCAAiBgPGm5BfckKzaIEi8GlRM5oe4A2mUvbsxlJ+pmMhRsrOYhgAAAAALAAAgAAAAIAAAACAAAAAAAAAAAAAAA==',
+      'cHNidP8BAFUCAAAAAZaLfDcOPs2Jk1UefwZZOzPCdTJF+ugLOsYZYagnIEPQAQAAAAAAAACAASgDAAAAAAAAGXapFP6ZRvxlaU5S/9HQFr1i2lsgp58AiKwAAAAAAAEA4gEAAAABtjCsNkoEuDVImU3tRwW5gxay0f4Yuf/6Jie+nu8Rv2AAAAAAa0gwRQIhAJbmjZTTdOOmiO0uZgUon4EXJUCrqrX2zEMcIxkZhgdGAiB17k5kyGftnTadAamzXYsWiaghvo1yn/9/s9/MddFvZAEhAoHS5AumQi/Je2H9VkO+6D3XSdg2kzntx5XXs/AOlsaB/f///wLvAgAAAAAAABl2qRTkJx756aA6ibmBxz09aTbS9vzMBois6AMAAAAAAAAZdqkUEgrXhUFSkB6+smmsts7yDnGzz1mIrOoZCAAiBgPGm5BfckKzaIEi8GlRM5oe4A2mUvbsxlJ+pmMhRsrOYhgAAAAALAAAgBEAAIAAAACAAAAAAAAAAAAAAA==',
     );
   });
 
   it('can create PSBT base64 without signature for HW wallet ypub', async () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('ypub6XRzrn3HB1tjhhvrHbk1vnXCecZEdXohGzCk3GXwwbDoJ3VBzZ34jNGWbC6WrS7idXrYjjXEzcPDX5VqnHEnuNf5VAXgLfSaytMkJ2rwVqy');
+    w.setSecret('ypub6XRzrn3HB1tjhhvrHbk1vnXCecZEdXohGzCk3GXwwbDoJ3VBzZ34jNGWbC6WrS7idXrYjjXEzcPDX5VqnHEnuNf5VAXgLfSaytMkJ4kGxdE');
     w.init();
-    const changeAddress = '333R1N8zst8bK7xMtqBndmwcd288qxEBmr';
+    const changeAddress = '333R1N8zst8bK7xMtqBndmwcd288qff3kQ';
     // hardcoding so we wont have to call w.getChangeAddressAsync()
     const utxos = [
       {
         height: 566299,
         value: 250000,
-        address: '37EX3KrmopubWPLB8Y8NR36wXs7icu2kjQ',
+        address: '37EX3KrmopubWPLB8Y8NR36wXs7idE7xDo',
         txid: '786f05d0c531c4bb399ab8cf406b2f118504280bd015e26e4ff9539f8201d4f4',
         vout: 0,
       },
     ];
     // hardcoding utxo so we wont have to call w.fetchUtxo() and w.getUtxo()
 
-    const { psbt } = await w.createTransaction(utxos, [{ address: '398qz3BtNG8DABpEGa2VkHBcficxkgeKvX' }], 1, changeAddress);
+    const { psbt } = await w.createTransaction(utxos, [{ address: '398qz3BtNG8DABpEGa2VkHBcficxm95mdD' }], 1, changeAddress);
 
     assert.strictEqual(
       psbt.toBase64(),
-      'cHNidP8BAFMCAAAAAfTUAYKfU/lPbuIV0AsoBIURL2tAz7iaObvEMcXQBW94AAAAAAAAAACAAdDPAwAAAAAAF6kUUatl8TFvnlvB8H/KsqbnR6kpUluHAAAAAAABASCQ0AMAAAAAABepFDzN1E7LDjAMNARzCHsU4rXqBf55hwEEFgAUG3vPJhyWYtt/ikPpOCW6jCqkmxsiBgLHMhb0QhE8eyJBnE9syGAtMehGmHe1sxpm+TlxjgFXERgAAAAAMQAAgAAAAIAAAACAAAAAAAAAAAAAAA==',
+      'cHNidP8BAFMCAAAAAfTUAYKfU/lPbuIV0AsoBIURL2tAz7iaObvEMcXQBW94AAAAAAAAAACAAdDPAwAAAAAAF6kUUatl8TFvnlvB8H/KsqbnR6kpUluHAAAAAAABASCQ0AMAAAAAABepFDzN1E7LDjAMNARzCHsU4rXqBf55hwEEFgAUG3vPJhyWYtt/ikPpOCW6jCqkmxsiBgLHMhb0QhE8eyJBnE9syGAtMehGmHe1sxpm+TlxjgFXERgAAAAAMQAAgBEAAIAAAACAAAAAAAAAAAAAAA==',
     );
   });
 
   // TODO: this was skipped previously
   it('can create PSBT base64 without signature for HW wallet zpub', async () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXiWvk3Q');
+    w.setSecret('zpub6rkSL2KXiwrQePLhUkf7gNi4XBKuNP4nXA31jxULPsjYaD4EzYHcMFP3SpEwmz4ya5xtuCWXsRVxYHd4XU2YmZe5i6ovvmwbfuSEqRkig23');
     // zpub provided by Stepan @ CryptoAdvance
     w.init();
-    const changeAddress = 'bc1quuafy8htjjj263cvpj7md84magzmc8svmh8lrm';
+    const changeAddress = 'grs1q9q7eg9gtue8pxthgtj69ftrmk8dfvqz5u69n9k';
     // hardcoding so we wont have to call w.getChangeAddressAsync()
     const utxos = [
       {
-        height: 596736,
-        value: 20000,
-        address: 'bc1qhu8jqyzfazgatpctqn44xr7pdd3mdx6qy2r6xa',
-        txId: '7f3b9e032a84413d7a5027b0d020f8acf80ad28f68b5bce8fa8ac357248c5b80',
+        height: 3760236,
+        value: 100000,
+        address: 'grs1qecaaeqwhlsg780f23fuvfackxtpjuzud9kzd3f',
+        txId: '40faef9d812420c9aca3e0ba63a6a49d51c21dee5479546da47246a91663cb20',
         vout: 0,
       },
     ];
@@ -135,25 +135,26 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
+      [{ address: 'grs1q0q5eyywz3df5fw7msm0jt2pgnczmheswehgvkd', value: 5000 }],
       1,
       changeAddress,
     );
 
     assert.strictEqual(
       psbt.toBase64(),
-      'cHNidP8BAHECAAAAAYBbjCRXw4r66Ly1aI/SCvis+CDQsCdQej1BhCoDnjt/AAAAAAAAAACAAogTAAAAAAAAFgAUwM681sPTyox13F7GLr5VMw75EOK2OQAAAAAAABYAFOc6kh7rlKStRwwMvbaeu+oFvB4MAAAAAAABAR8gTgAAAAAAABYAFL8PIBBJ6JHVhwsE61MPwWtjtptAIgYDWOHbOE3D4KiuoR7kHtmTtFZ7KXQB+8zb51QALLJxTx8YAAAAAFQAAIAAAACAAAAAgAAAAAAAAAAAAAAiAgM005BVD8MgH5kiSGnwXSfzaxLeDSl3y17Vhrx3F/9XxBgAAAAAVAAAgAAAAIAAAACAAQAAAAAAAAAA',
+      'cHNidP8BAHECAAAAASDLYxapRnKkbVR5VO4dwlGdpKZjuuCjrMkgJIGd7/pAAAAAAAAAAACAAogTAAAAAAAAFgAUeCmSEcKLU0S724bfJagongW75g42cgEAAAAAABYAFCg9lBUL5k4TLuhctFSse7HalgBUAAAAAAABAR+ghgEAAAAAABYAFM473IHX/BHjvSqKeMT3FjLDLguNIgYDBgdNpNmwG6sTKdh/YN3f1q/idwil35VwKv/vu6XMLtAYAAAAAFQAAIARAACAAAAAgAAAAAAAAAAAAAAiAgKiYrtqDdf/kQRqr81AEeMxcgD1yNrwUewFfuH7SbDSBxgAAAAAVAAAgBEAAIAAAACAAQAAAAAAAAAA',
     );
   });
 
-  it('can import coldcard/electrum compatible JSON skeleton wallet, and create a tx with master fingerprint', async () => {
+  // TODO: coldcard/electrum doesn't exist with GRS
+  it.skip('can import coldcard/electrum compatible JSON skeleton wallet, and create a tx with master fingerprint', async () => {
     const w = new WatchOnlyWallet();
     w.setSecret(require('fs').readFileSync('./tests/unit/fixtures/skeleton-coldcard.txt', 'ascii'));
     w.init();
     assert.ok(w.valid());
     assert.strictEqual(
       w.getSecret(),
-      'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygnnDwfx',
+      'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygrJxNf7',
     );
     assert.strictEqual(w.getMasterFingerprint(), 64392470);
     assert.strictEqual(w.getMasterFingerprintHex(), '168dd603');
@@ -185,14 +186,15 @@ describe('Watch only wallet', () => {
     );
   });
 
-  it('can import Electrum compatible backup wallet, and create a tx with master fingerprint', async () => {
+  // we don't have skeleton on GRS
+  it.skip('can import Electrum compatible backup wallet, and create a tx with master fingerprint', async () => {
     const w = new WatchOnlyWallet();
     w.setSecret(require('fs').readFileSync('./tests/unit/fixtures/skeleton-electrum.txt', 'ascii'));
     w.init();
     assert.ok(w.valid());
     assert.strictEqual(
       w.getSecret(),
-      'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygnnDwfx',
+      'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygrJxNf7',
     );
     assert.strictEqual(w.getMasterFingerprint(), 64392470);
     assert.strictEqual(w.getMasterFingerprintHex(), '168dd603');
@@ -202,7 +204,7 @@ describe('Watch only wallet', () => {
       {
         height: 618811,
         value: 66600,
-        address: 'bc1qzqjwye4musmz56cg44ttnchj49zueh9yr0qsxt',
+        address: 'grs1qecaaeqwhlsg780f23fuvfackxtpjuzud9kzd3f',
         txId: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
         vout: 0,
         txid: '5df595dc09ee7a5c245b34ea519288137ffee731629c4ff322a6de4f72c06222',
@@ -231,7 +233,7 @@ describe('Watch only wallet', () => {
     assert.ok(w.valid());
     assert.strictEqual(
       w.getSecret(),
-      'zpub6rcabYFcdr41zyUNRWRyHYs2Sm86E5XV8RjjRzTFYsiCngteeZnkwaF2xuhjmM6kpHjuNpFW42BMhzPmFwXt48e1FhddMB7xidZzN4SF24K',
+      'zpub6rcabYFcdr41zyUNRWRyHYs2Sm86E5XV8RjjRzTFYsiCngteeZnkwaF2xuhjmM6kpHjuNpFW42BMhzPmFwXt48e1FhddMB7xidZzN3vn6ZT',
     );
     assert.strictEqual(w.getMasterFingerprint(), 1908437330);
     assert.strictEqual(w.getMasterFingerprintHex(), '5271c071');
@@ -299,9 +301,10 @@ describe('Watch only wallet', () => {
     assert.ok(w.addressIsChange(await w._getInternalAddressByIndex(0)));
   });
 
-  it('can craft correct psbt for HW wallet to sign', async () => {
+  // we don't have a ypub wallet to use for this test
+  it.skip('can craft correct psbt for HW wallet to sign', async () => {
     const w = new WatchOnlyWallet();
-    w.setSecret('ypub6Y9u3QCRC1HkZv3stNxcQVwmw7vC7KX5Ldz38En5P88RQbesP2oy16hNyQocVCfYRQPxdHcd3pmu9AFhLv7NdChWmw5iNLryZ2U6EEHdnfo');
+    w.setSecret('ypub6Y9u3QCRC1HkZv3stNxcQVwmw7vC7KX5Ldz38En5P88RQbesP2oy16hNyQocVCfYRQPxdHcd3pmu9AFhLv7NdChWmw5iNLryZ2U6EHHW8wz');
     w.init();
 
     // a hack to make it find pubkey for address correctly:
@@ -326,7 +329,7 @@ describe('Watch only wallet', () => {
 
     const { psbt } = await w.createTransaction(
       utxos,
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 5000 }],
+      [{ address: 'grs1q0q5eyywz3df5fw7msm0jt2pgnczmheswehgvkd', value: 5000 }],
       1,
       changeAddress,
     );
@@ -368,6 +371,7 @@ describe('BC-UR', () => {
       'UR:BYTES/TYQHKGEQGDHKYM6KV96KCAPQF46KCARFWD5KWGRNV4682UPQVE5KCEFQ9P3HYETPW3JKGGR0DCSYGVEHG4Q5GWPC9Y9ZXZJWV9KK2W3QGDT97VENGG65YWF3G90NYTFJPFGX7MRFVDUN5GPJYPHKVGPJPFZX2UNFWESHG6T0DCAZQMF0XSUZWTESYUHNQFE0XGNS53N0WFKKZAP6YPGRY46NFQ9Q53PNXAZ5Z3PC8QAZQKNSW43RWDRFDFCXV6Z92F9YU6NGGD94S5NNWP2XGNZ22C6K2M69D4F4YKNYFPC5GANS8944VARY2EZHJ62CDVMHQKRC2F3XVKN629M8X3ZXWPNYGJZ9FPT8G4NS0Q6YG73EG3R42468DCE9S6E40FRN2AF5X4G4GNTNT9FNYAN2DA5YU5G2XYMRS3ZYXCCRXW3QTFC82C3HX4K5Z3FCG448J7ZN0FHHJ5RDGAHXGD29XEXHJ3PHG9XYWNNWV3E824MKX5E8SUR6D9K4552TW44HWAJ9VEV9GJR3D4YRSMNZVF3NVCMR2Q6HGVNPF5EK6AMNXDCYKK2NDE9HQJ6DF4UHGERZFEZ453J40P9H57N5T9RY6WZSDC9QWZ5LU2';
     const rez = decodeUR([txtFileFormatMultisigNativeSegwit]);
     const b = Buffer.from(rez, 'hex');
+    // these Zpubs are still in Bitcoin format since the above text data was not changed
     assert.strictEqual(
       b.toString('ascii'),
       "# CoboVault Multisig setup file (created on D37EAD88)\n#\nName: CV_33B5B91A_2-2\nPolicy: 2 of 2\nDerivation: m/48'/0'/0'/2'\nFormat: P2WSH\n\nD37EAD88: Zpub74ijpfhERJNjhCKXRspTdLJV5eoEmSRZdHqDvp9kVtdVEyiXk7pXxRbfZzQvsDFpfDHEHVtVpx4Dz9DGUWGn2Xk5zG5u45QTMsYS2vjohNQ\n168DD603: Zpub75mAE8EjyxSzoyPmGnd5E6MyD7ALGNndruWv52xpzimZQKukwvEfXTHqmH8nbbc6ccP5t2aM3mws3pKYSnKpKMMytdbNEZFUxKzztYFM8Pn\n",
@@ -386,7 +390,7 @@ describe('BC-UR', () => {
 
     assert.strictEqual(
       Buffer.from(decoded, 'hex').toString('ascii'),
-      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigRFhKB8Q","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/0\'/0\'"}',
+      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigREDQF9H","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/0\'/0\'"}',
     );
   });
 
