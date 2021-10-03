@@ -20,7 +20,7 @@ describe('HDSegwitElectrumSeedP2WPKHWallet', () => {
     assert.ok(hd.validateMnemonic());
     assert.strictEqual(
       hd.getXpub(),
-      'xpub68RzTumZwSbVWwETioxTSk2PhBvBRDGNRHepHUC5x2gptbSVWhkezF3NKbq9sCJhnNKcPx2McNWJtFFdXLx97cknHhuDTDQsFg5cG7sPSmY',
+      'zpub6n6X5F7QEogTDXchPXXhrvDQ38D5JTFNFWhFrFyri3Sazo4x225nENMeN1kKs1cYbeZDtuDUXhDQepUkxjnAi67z2PJ4d33qo8Cu3JhC3UE',
     );
 
     let address = hd._getExternalAddressByIndex(0);

@@ -39,23 +39,23 @@ describe('Segwit P2SH wallet', () => {
     // batch send + send max
     txNew = wallet.createTransaction(
       utxos,
-      [{ address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }, { address: '14YZ6iymQtBVQJk6gKnLCk49UScJK7SH4M', value: 10000 }],
+      [{ address: 'FkgkYHzZ3LvfyBig7NQJkMacvfJsjgYFqk' }, { address: 'FYiGYdi8yNs2qumDZRmofFrU8btFyTuMXa', value: 10000 }],
       1,
       wallet.getAddress(),
     );
     tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
     assert.strictEqual(tx.ins.length, 1);
     assert.strictEqual(tx.outs.length, 2);
-    assert.strictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
-    assert.strictEqual('14YZ6iymQtBVQJk6gKnLCk49UScJK7SH4M', bitcoin.address.fromOutputScript(tx.outs[1].script)); // to address
+    assert.strictEqual('FkgkYHzZ3LvfyBig7NQJkMacvfJsjgYFqk', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+    assert.strictEqual('FYiGYdi8yNs2qumDZRmofFrU8btFyTuMXa', bitcoin.address.fromOutputScript(tx.outs[1].script)); // to address
   });
 
   it('can sign and verify messages', async () => {
     const l = new SegwitBech32Wallet();
-    l.setSecret('L4rK1yDtCWekvXuE6oXD9jCYfFNV2cWRpVuPLBcCU2z8TrisoyY1'); // from bitcoinjs-message examples
+    l.setSecret('L4rK1yDtCWekvXuE6oXD9jCYfFNV2cWRpVuPLBcCU2z8TrnZQVUG'); // from groestlcoinjs-message examples
 
     const signature = l.signMessage('This is an example of a signed message.', l.getAddress());
-    assert.strictEqual(signature, 'J9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk=');
+    assert.strictEqual(signature, 'KOES8hMhdoZFP0QaMJXTExZPmrTneGfbDmJib7Jt3gTaN0CfsYjBLWRvnDtd9aKlTt8BXxV95PYFOYhdiM1x90w=');
     assert.strictEqual(l.verifyMessage('This is an example of a signed message.', l.getAddress(), signature), true);
   });
 });
