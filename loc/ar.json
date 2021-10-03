@@ -117,7 +117,7 @@
     "open_direct_channel": "فتح قناة مباشرة مع هذه العقدة:",
     "please_pay": "يُرجى الدفع",
     "preimage": "الصورة الأصلية",
-    "sats": "بالساتوشي",
+    "gros": "بالساتوشي",
     "wasnt_paid_and_expired": "لم يتم دفع هذه الفاتورة وانتهت صلاحيتها"
   },
   "plausibledeniability": {
@@ -564,7 +564,7 @@
     "BTC": "GRS",
     "MAX": "الحد الاقصى",
     "sat_byte": "ساتوشي/بايت",
-    "sats": "ساتوشي"
+    "gros": "ساتوشي"
   },
   "addresses": {
     "sign_title": "التوقيع / التحقق من الرسالة",

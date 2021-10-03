@@ -117,7 +117,7 @@
     "open_direct_channel": "Buka saluran langsung dengan node ini:",
     "please_pay": "Tolong bayar",
     "preimage": "Pra gambar",
-    "sats": "sats",
+    "gros": "gros",
     "wasnt_paid_and_expired": "Faktur ini belum dibayar dan telah kedaluwarsa"
   },
   "plausibledeniability": {

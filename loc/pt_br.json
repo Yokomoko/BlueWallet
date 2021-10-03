@@ -117,7 +117,7 @@
     "open_direct_channel": "Abrir canal direto com este node:",
     "please_pay": "Pagar",
     "preimage": "Preimage",
-    "sats": "sats.",
+    "gros": "sats.",
     "wasnt_paid_and_expired": "Esta fatura não foi paga e expirou"
   },
   "plausibledeniability": {
@@ -560,10 +560,10 @@
     "tip": "Permite que você veja, marque, congele ou selecione moedas para gerenciar melhor sua carteira."
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Máx.",
     "sat_byte": "gro/byte",
-    "sats": "sats"
+    "gros": "gros"
   },
   "addresses": {
     "sign_title": "Assinar/Verificar mensagem",

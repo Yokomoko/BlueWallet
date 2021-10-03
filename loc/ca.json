@@ -111,7 +111,7 @@
     "has_been_paid": "Aquesta factura ha estat pagada",
     "open_direct_channel": "Obrir un canal directe amb aquest node:",
     "please_pay": "Si us plau, pagui",
-    "sats": "sats",
+    "gros": "sats",
     "wasnt_paid_and_expired": "Aquesta factura no ha estat pagada i ha caducat"
   },
   "plausibledeniability": {

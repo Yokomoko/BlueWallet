@@ -117,7 +117,7 @@
     "open_direct_channel": "Abrir un canal directo con este nodo:",
     "please_pay": "Pagar por favor",
     "preimage": "Preimagen",
-    "sats": "sats.",
+    "gros": "sats.",
     "wasnt_paid_and_expired": "Esta factura no se pagó y ha caducado."
   },
   "plausibledeniability": {
@@ -561,10 +561,10 @@
     "tip": "Esta función te permite ver, etiquetar, congelar o seleccionar monedas para una mejor gestión de la cartera. Puedes seleccionar varias monedas tocando los círculos de colores."
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Máx",
     "sat_byte": "gro/byte",
-    "sats": "sats"
+    "gros": "gros"
   },
   "addresses": {
     "sign_title": "Firmar / Verificar mensaje",

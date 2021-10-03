@@ -117,7 +117,7 @@
     "open_direct_channel": "Otwórz kanał bezpośredni z tym nodem:",
     "please_pay": "Stwórz wezwanie",
     "preimage": "Wyświetl kod wezwania",
-    "sats": "sat",
+    "gros": "sat",
     "wasnt_paid_and_expired": "Ta faktura nie została opłacona i wygasła."
   },
   "plausibledeniability": {
@@ -561,10 +561,10 @@
     "tip": "Ta funkcja pozwala zobaczyć, nadać etykietę, zamrozić lub wybrać monety by usprawnić zarządzanie portelem. Możesz wybrać kilka monet wybierając kolorowe kółka."
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Max",
     "sat_byte": "gro/bajt",
-    "sats": "satoshi"
+    "gros": "gro"
   },
   "addresses": {
     "sign_title": "Podpisz/Zweryfikuj wiadomość",

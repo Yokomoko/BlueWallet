@@ -106,7 +106,7 @@
     "has_been_paid": "Denna faktura är betald",
     "open_direct_channel": "Öppna en direkt kanal med denna nod:",
     "please_pay": "Var god betala",
-    "sats": "sats"
+    "gros": "sats"
   },
   "plausibledeniability": {
     "create_fake_storage": "Skapa fejkad lagringsyta",

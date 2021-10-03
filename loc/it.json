@@ -116,7 +116,7 @@
     "open_direct_channel": "Apri un canale diretto con questo nodo:",
     "please_pay": "Per favore paga",
     "preimage": "Preimage",
-    "sats": "sats.",
+    "gros": "sats.",
     "wasnt_paid_and_expired": "Questa fattura non è stata pagata ed è scaduta."
   },
   "plausibledeniability": {
@@ -444,10 +444,10 @@
     "freezeLabel_un": "Scongela"
   },
   "units": {
-    "BTC": "GRS",
+    "GRS": "GRS",
     "MAX": "Max",
     "sat_byte": "gro/byte",
-    "sats": "sat"
+    "gros": "gro"
   },
   "addresses": {
     "sign_title": "Firma/Verifica messaggio",
