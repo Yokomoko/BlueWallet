@@ -98,7 +98,7 @@
     "bignumber.js": "9.0.1",
     "bip21grs": "2.0.3",
     "bip32grs": "2.0.6",
-    "bip39": "2.6.0",
+    "bip39": "3.0.4",
     "groestlcoinjs-lib": "5.2.0",
     "groestlcoinjs-message": "2.2.0",
     "bolt11grs": "https://github.com/Groestlcoin/bolt11grs#1.2.7",
