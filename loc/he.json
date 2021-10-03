@@ -248,7 +248,7 @@
     "biom_no_passcode": "למכשירכם אין סיסמה. במטרה להמשיך אנא הגדירו סיסמה בהגדרות המכשיר.",
     "biom_remove_decrypt": "כל ארנקיכם ימחקו והאחסון יפוענח. האם אתם בטוחים שברצונכם להמשיך?",
     "currency": "מטבע",
-    "currency_source": "ערכים מתקבלים מ- CoinDesk",
+    "currency_source": "ערכים מתקבלים מ- CoinGecko",
     "default_desc": "כאשר מבוטל, GRS BlueWallet יפתח אוטומטית את הארנק הנבחר בפתיחה.",
     "default_info": "פתיחת ברירת מחדל",
     "default_title": "בעת פתיחה",
