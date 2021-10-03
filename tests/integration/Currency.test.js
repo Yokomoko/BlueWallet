@@ -18,7 +18,7 @@ describe('currency', () => {
     await AsyncStorage.setItem(currency.PREFERRED_CURRENCY, JSON.stringify(FiatUnit.JPY));
     await currency.startUpdater();
     cur = JSON.parse(await AsyncStorage.getItem(currency.EXCHANGE_RATES));
-    assert.ok(cur.BTC_JPY > 0);
+    assert.ok(cur.GRS_JPY > 0);
 
     // now setting with a proper setter
     await currency.setPrefferedCurrency(FiatUnit.EUR);
@@ -39,7 +39,7 @@ describe('currency', () => {
     // await currency.setPrefferedCurrency(FiatUnit.LBP);
     // await currency.startUpdater();
     // cur = JSON.parse(await AsyncStorage.getItem(currency.EXCHANGE_RATES));
-    // assert.ok(cur.BTC_LBP > 0);
+    // assert.ok(cur.GRS_LBP > 0);
 
     // test Exir rate source
     await currency.setPrefferedCurrency(FiatUnit.IRR);

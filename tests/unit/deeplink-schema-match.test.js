@@ -177,6 +177,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
           },
         ],
       },
+      /*
       {
         argument: {
           url: 'bluewallet:setlndhuburl?url=https%3A%2F%2Flndhub.herokuapp.com',
@@ -204,6 +205,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
           },
         ],
       },
+      */
       {
         argument: {
           url: require('fs').readFileSync('./tests/unit/fixtures/skeleton-cobo.txt', 'ascii'),
@@ -266,7 +268,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
       },
       {
         argument: {
-          url: 'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygnnDwfx',
+          url: 'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygrJxNf7',
         },
         expected: [
           'AddWalletRoot',
@@ -274,21 +276,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
             screen: 'ImportWallet',
             params: {
               triggerImport: true,
-              label: 'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygnnDwfx',
-            },
-          },
-        ],
-      },
-      {
-        argument: {
-          url: 'aopp:?v=0&msg=vasp-chosen-msg&asset=btc&format=p2wpkh&callback=https://vasp.com/proofs/vasp-chosen-token​',
-        },
-        expected: [
-          'AOPPRoot',
-          {
-            screen: 'AOPP',
-            params: {
-              uri: 'aopp:?v=0&msg=vasp-chosen-msg&asset=btc&format=p2wpkh&callback=https://vasp.com/proofs/vasp-chosen-token​',
+              label: 'zpub6rFDtF1nuXZ9PUL4XzKURh3vJBW6Kj6TUrYL4qPtFNtDXtcTVfiqjQDyrZNwjwzt5HS14qdqo3Co2282Lv3Re6Y5wFZxAVuMEpeygrJxNf7',
             },
           },
         ],

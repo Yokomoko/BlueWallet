@@ -24,8 +24,8 @@ describe('P2SH Segwit HD (BIP49)', () => {
       '03c3ff5233bc11fa0273b508d42a144e5e475a7e5f17473d211d40d035db9da483',
     );
 
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/17'/0'/0/0"); // wrong, FIXME
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/17'/0'/1/0"); // wrong, FIXME
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/17'/0'/0/0"); // wrong, FIXME
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/17'/0'/1/0"); // wrong, FIXME
 
     assert.strictEqual('KzoosK4MqjwBBNANduQn9PpL2Y4a9sxEJNyAiQPzNArQ7XrPcPN7', hd._getExternalWIFByIndex(0));
     assert.strictEqual(
@@ -174,12 +174,12 @@ describe('P2SH Segwit HD (BIP49)', () => {
 
     // external address
     signature = hd.signMessage('vires is numeris', hd._getExternalAddressByIndex(0));
-    assert.strictEqual(signature, 'JMgoRSlLLLw6mw/Gbbg8Uj3fACkIJ85CZ52T5ZQfBnpUBkz0myRju6Rmgvmq7ugytc4WyYbzdGEc3wufNbjP09g=');
+    assert.strictEqual(signature, 'I3P8VGkplzhlVLpLrTphSMfRyn29T1+4LQrr//aDuTOyK1mEyAhUvhD0oOtF6QEjbIWlux8vdgduN7SO0oEugN8=');
     assert.strictEqual(hd.verifyMessage('vires is numeris', hd._getExternalAddressByIndex(0), signature), true);
 
     // internal address
     signature = hd.signMessage('vires is numeris', hd._getInternalAddressByIndex(0));
-    assert.strictEqual(signature, 'I5WkniWTnJhTW74t3kTAkHq3HdiupTNgOZLpMp0hvUfAJw2HMuyRiNLl2pbNWobNCCrmvffSWM7IgkOBz/J9fYA=');
+    assert.strictEqual(signature, 'I7EXnbCdcYk24OKW1tCBSPMzIF9sxYiM2CzY73qD+XA2VmgHZqDCaWiyCFrN535wCFLEOYJJobCGzAdESvjhZyg=');
     assert.strictEqual(hd.verifyMessage('vires is numeris', hd._getInternalAddressByIndex(0), signature), true);
   });
 
