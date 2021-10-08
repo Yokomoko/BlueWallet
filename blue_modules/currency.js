@@ -65,8 +65,8 @@ async function updateExchangeRate() {
   } catch (Err) {
     console.warn(Err);
     const lastSavedExchangeRate = JSON.parse(await AsyncStorage.getItem(EXCHANGE_RATES));
-    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] =
-      lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey.toLowerCase()] * 1;
+    exchangeRates['GRS_' + preferredFiatCurrency.endPointKey] =
+      lastSavedExchangeRate['GRS_' + preferredFiatCurrency.endPointKey] * 1;
     return;
   }
 
