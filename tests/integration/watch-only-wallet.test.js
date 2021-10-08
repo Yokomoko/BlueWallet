@@ -96,6 +96,6 @@ describe('Watch only wallet', () => {
     assert.strictEqual(w.getBalance(), 200000);
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 4);
-    assert.ok((await w.getAddressAsync()).startsWith('bc1'));
+    assert.ok((await w.getAddressAsync()).startsWith('grs1'));
   });
 });
