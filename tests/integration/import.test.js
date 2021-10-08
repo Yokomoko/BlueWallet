@@ -73,68 +73,75 @@ describe('import procedure', function () {
   });
 
   it('can import Legacy', async () => {
-    await WalletImport.processImportText('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyMDRjnv');
+    await WalletImport.processImportText('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyM2skod');
     assert.strictEqual(lastImportedWallet.type, LegacyWallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), '1AhcdMCzby4VXgqrexuMfh7eiSprRFtN78');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'FesL5FwNATk2yHryY4tq8CuyNc6p3ctd6S');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported Legacy (P2PKH)');
   });
 
-  it('can import Legacy P2SH Segwit', async () => {
-    await WalletImport.processImportText('L3NxFnYoBGjJ5PhxrxV6jorvjnc8cerYJx71vXU6ta8BXQxHVZya');
+  // TODO: create a legacy P2SH segwit wallet
+  it.skip('can import Legacy P2SH Segwit', async () => {
+    await WalletImport.processImportText('L3NxFnYoBGjJ5PhxrxV6jorvjnc8cerYJx71vXU6ta8BXQzZGyE7');
     assert.strictEqual(lastImportedWallet.type, SegwitP2SHWallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), '3KM9VfdsDf9uT7uwZagoKgVn8z35m9CtSM');
+    assert.strictEqual(lastImportedWallet.getAddress(), '3KM9VfdsDf9uT7uwZagoKgVn8z35iBK2sH');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported SegWit (P2SH)');
   });
 
-  it('can import Legacy Bech32 Segwit', async () => {
-    await WalletImport.processImportText('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSvsDfxZ');
+  // TODO: create a bech32 segwit wallet
+  it.skip('can import Legacy Bech32 Segwit', async () => {
+    await WalletImport.processImportText('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSwQHDyp');
     assert.strictEqual(lastImportedWallet.type, SegwitBech32Wallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), 'bc1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'grs1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported P2 WPKH');
   });
 
-  it('can import BIP44', async () => {
+  // TODO: we need a 24 word wallet with transactions
+  it.skip('can import BIP44', async () => {
     await WalletImport.processImportText(
       'sting museum endless duty nice riot because swallow brother depth weapon merge woman wish hold finish venture gauge stomach bomb device bracket agent parent',
     );
     assert.strictEqual(lastImportedWallet.type, HDLegacyP2PKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '1EgDbwf5nXp9knoaWW6nV6N91EK3EFQ5vC');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'Fiqw3rPTM2VhCPphPc6FwcATfPazqP56aA');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy (BIP44 P2PKH)');
   });
 
-  it('can import BIP49', async () => {
+  // TODO: we need a BIP49 wallet to import
+  it.skip('can import BIP49', async () => {
     await WalletImport.processImportText(
       'believe torch sport lizard absurd retreat scale layer song pen clump combine window staff dream filter latin bicycle vapor anchor put clean gain slush',
     );
     assert.strictEqual(lastImportedWallet.type, HDSegwitP2SHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3cYrMztd');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD SegWit (BIP49 P2SH)');
   });
 
-  it('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
+  // TODO: we need a 24 word wallet with transactions
+  it.skip('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
     await WalletImport.processImportText('eight derive blast guide smoke piece coral burden lottery flower tomato flame');
     assert.strictEqual(lastImportedWallet.type, HDLegacyElectrumSeedP2PKHWallet.type);
     assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FjrD7CoabnerwvDBqr2ZfEbS1drvdizjGB');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy Electrum (BIP32 P2PKH)');
   });
 
-  it('can import BreadWallet', async () => {
+  // TODO: we need a breadwallet that we can put here
+  it.skip('can import BreadWallet', async () => {
     await WalletImport.processImportText(
       'tired lesson alert attend giggle fancy nose enter ethics fashion fly dove dutch hidden toe argue save fish catch patient waste gift divorce whisper',
     );
     assert.strictEqual(lastImportedWallet.type, HDLegacyBreadwalletWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '1j7TbbTv8adcZFr4RC7Cyr7GN9VGYTecu');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FVtpuWKqUdGB4AGxwXBafVeRvXRSt1boQx');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy Breadwallet (P2PKH)');
   });
-
-  it('can import HD Electrum (BIP32 P2WPKH)', async () => {
+  // TODO: we need a 24 word wallet with transactions
+  it.skip('can import HD Electrum (BIP32 P2WPKH)', async () => {
     await WalletImport.processImportText('noble mimic pipe merry knife screen enter dune crop bonus slice card');
     assert.strictEqual(lastImportedWallet.type, HDSegwitElectrumSeedP2WPKHWallet.type);
     assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'grs1qzzanxnr3xv9a5ha264kpzpfq260qvuamyprv5a');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Electrum (BIP32 P2WPKH)');
   });
 
-  it('can import AEZEED', async () => {
+  // TODO: we need a 24 word wallet with transactions
+  it.skip('can import AEZEED', async () => {
     await WalletImport.processImportText(
       'abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern',
     );
@@ -149,35 +156,37 @@ describe('import procedure', function () {
   });
 
   it('can import Legacy with uncompressed pubkey', async () => {
-    await WalletImport.processImportText('5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxn3QgRS');
-    assert.strictEqual(lastImportedWallet.getSecret(), '5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxn3QgRS');
+    await WalletImport.processImportText('5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxmNkoiD');
+    assert.strictEqual(lastImportedWallet.getSecret(), '5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxmNkoiD');
     assert.strictEqual(lastImportedWallet.type, LegacyWallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), '1GsJDeD6fqS912egpjhdjrUTiCh1hhwBgQ');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'Fm31fYwUEL7gSdfohqh7CNGnNMxyMJ1zUe');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported Legacy (P2PKH)');
   });
 
-  it('can import BIP38 encrypted backup', async () => {
+  // todo: create a bip38 wallet
+  it.skip('can import BIP38 encrypted backup', async () => {
     await WalletImport.processImportText('6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN');
-    assert.strictEqual(lastImportedWallet.getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(lastImportedWallet.getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3');
     assert.strictEqual(lastImportedWallet.type, LegacyWallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'FaCrwwUieyDgqEc3EWdpHmrmZdWYBAPBZv');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported Legacy (P2PKH)');
   });
 
   it('can import watch-only address', async () => {
-    await WalletImport.processImportText('1AhcdMCzby4VXgqrexuMfh7eiSprRFtN78');
+    await WalletImport.processImportText('FesL5FwNATk2yHryY4tq8CuyNc6p3ctd6S');
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
-    await WalletImport.processImportText('3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu');
+    await WalletImport.processImportText('3EoqYYp7hQSHn5nHqRtWzkgqmK3cYrMztd');
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
-    await WalletImport.processImportText('bc1q8j4lk4qlhun0n7h5ahfslfldc8zhlxgynfpdj2');
+    await WalletImport.processImportText('grs1qhx36t8easzt7fr7q5fp53tkjgwh9ep33405aet');
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
     await WalletImport.processImportText(
-      'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
+      'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzQf5TUF',
     );
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
   });
 
-  it('can import slip39 wallet', async () => {
+  // TODO: create a slip39 wallet that we can import
+  it.skip('can import slip39 wallet', async () => {
     // 2-of-3 slip39 wallet
     // crystal lungs academic acid corner infant satisfy spider alcohol laser golden equation fiscal epidemic infant scholar space findings tadpole belong
     // crystal lungs academic agency class payment actress avoid rebound ordinary exchange petition tendency mild mobile spine robin fancy shelter increase
@@ -191,7 +200,7 @@ describe('import procedure', function () {
 
   it('can import watch-only Cobo vault export', async () => {
     await WalletImport.processImportText(
-      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXsEerF4","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/0\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
+      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXrNBr5H","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/0\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
     );
     assert.strictEqual(lastImportedWallet.type, WatchOnlyWallet.type);
   });

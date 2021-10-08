@@ -56,7 +56,7 @@ describe('LegacyWallet', function () {
 
   it('can fetch TXs and derive UTXO from them', async () => {
     const w = new LegacyWallet();
-    w._address = 'FZi9qkpK2KdxUQ1x6T1vbn8jjSgsZazgo8';
+    w._address = 'FhZ9dd8WhWRojpSs9cRDrGGqDn8HTyUtvL';
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 1);
 
@@ -67,16 +67,16 @@ describe('LegacyWallet', function () {
       assert.ok(tx.confirmations > 1);
     }
 
-    assert.ok(w.weOwnTransaction('0eb0797556aad47f955d00fa93b677fd82fc2c5c511378f0420c2898e18057e5'));
+    assert.ok(w.weOwnTransaction('88705d10a44842ec9e4fb4a74761d0314ec4bd8efce51e21f3cc529d4c740cad'));
     assert.ok(!w.weOwnTransaction('825c12f277d1f84911ac15ad1f41a3de28e9d906868a930b0a7bca61b17c8881'));
 
     assert.strictEqual(w.getUtxo().length, 1);
 
     for (const tx of w.getUtxo()) {
-      assert.strictEqual(tx.txid, 'b2ac59bc282083498d1e87805d89bef9d3f3bc216c1d2c4dfaa2e2911b547100');
+      assert.strictEqual(tx.txid, '88705d10a44842ec9e4fb4a74761d0314ec4bd8efce51e21f3cc529d4c740cad');
       assert.strictEqual(tx.vout, 0);
-      assert.strictEqual(tx.address, '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK');
-      assert.strictEqual(tx.value, 51432);
+      assert.strictEqual(tx.address, 'FhZ9dd8WhWRojpSs9cRDrGGqDn8HTyUtvL');
+      assert.strictEqual(tx.value, 12928680705699 );
       assert.strictEqual(tx.value, tx.amount);
       assert.ok(tx.confirmations > 0);
     }
@@ -176,7 +176,7 @@ describe('SegwitBech32Wallet', function () {
     }
 
     assert.strictEqual(w.getTransactions()[0].value, -178650);
-    assert.strictEqual(w.getTransactions()[1].value, 0);
+    assert.strictEqual(w.getTransactions()[1].value, 178650);
   });
 
   it('can fetch TXs', async () => {

@@ -5,7 +5,7 @@ import AOPP from '../../class/aopp';
 
 describe('AOPP', () => {
   it('can validate uri', async () => {
-    const a = new AOPP('aopp:?v=0&msg=vasp-chosen-msg&asset=btc&format=p2wpkh&callback=https://vasp.com/proofs/vasp-chosen-token');
+    const a = new AOPP('aopp:?v=0&msg=vasp-chosen-msg&asset=grs&format=p2wpkh&callback=https://vasp.com/proofs/vasp-chosen-token');
     assert.strictEqual(a.v, 0);
     assert.strictEqual(a.msg, 'vasp-chosen-msg');
     assert.strictEqual(a.format, 'p2wpkh');
@@ -13,13 +13,13 @@ describe('AOPP', () => {
     assert.strictEqual(a.callbackHostname, 'vasp.com');
 
     // wrong version
-    assert.throws(() => new AOPP('aopp:?v=1&msg=vasp-chosen-msg&asset=btc&format=p2wpkh&callback=https://vasp.com/'));
+    assert.throws(() => new AOPP('aopp:?v=1&msg=vasp-chosen-msg&asset=grs&format=p2wpkh&callback=https://vasp.com/'));
 
     // wrong asset
     assert.throws(() => new AOPP('aopp:?v=0&msg=vasp-chosen-msg&asset=bch&format=p2wpkh&callback=https://vasp.com/'));
 
     // wrong format
-    assert.throws(() => new AOPP('aopp:?v=0&msg=vasp-chosen-msg&asset=btc&format=erc20&callback=https://vasp.com/'));
+    assert.throws(() => new AOPP('aopp:?v=0&msg=vasp-chosen-msg&asset=grs&format=erc20&callback=https://vasp.com/'));
   });
 
   it('can cast address format to our internal segwitType', () => {

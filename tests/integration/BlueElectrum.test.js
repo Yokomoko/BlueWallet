@@ -141,21 +141,21 @@ describe('BlueElectrum', () => {
   });
 
   it('BlueElectrum can do getTransactionsFullByAddress()', async function () {
-    const txs = await BlueElectrum.getTransactionsFullByAddress('grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
+    const txs = await BlueElectrum.getTransactionsFullByAddress('grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80');
     for (const tx of txs) {
-      assert.ok(tx.address === 'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
+      assert.ok(tx.address === 'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80');
       assert.ok(tx.txid);
       assert.ok(tx.confirmations);
       assert.ok(!tx.vin);
       assert.ok(!tx.vout);
       assert.ok(tx.inputs);
-      assert.strictEqual(tx.inputs[0]?.addresses[0], 'FrPBjtbCaaG2RLthBJVJuTci3F2QL9tWUQ');
+      assert.strictEqual(tx.inputs[0]?.addresses[0], 'grs1qksxm6s3v7k4x28rsth6ptdteghckqc7jd57gjj');
       assert.ok(tx.inputs[0].addresses.length > 0);
       assert.ok(tx.inputs[0].value > 0);
       assert.ok(tx.outputs);
       assert.ok(tx.outputs[0].value > 0);
       assert.ok(tx.outputs[0].scriptPubKey);
-      // assert.ok(tx.outputs[0].addresses.length > 0);
+      assert.ok(tx.outputs[0].addresses.length > 0);
     }
   });
 
@@ -183,6 +183,7 @@ describe('BlueElectrum', () => {
     // assert.strictEqual(balances.addresses['grs1qpacqt92u22c35cau7gkmhyartnrfgdmq3ltpkf'].unconfirmed, 0);
   });
 
+  // TODO: we should not skip this test
   it.skip('BlueElectrum can do multiGetUtxoByAddress()', async () => {
     const utxos = await BlueElectrum.multiGetUtxoByAddress(
       [
@@ -255,7 +256,7 @@ describe('BlueElectrum', () => {
     assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.vout);
     assert.ok(txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9.blocktime);
     assert.strictEqual(
-      txdatas['5c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9']?.vout[0]?.scriptPubKey?.addresses[0],
+      txdatas.c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9?.vout[0]?.scriptPubKey?.addresses[0],
       'grs1qpzynsk7lzlplr4ahgxtg84r335zy9adewmcpg3',
     );
     assert.ok(Object.keys(txdatas).length === 4);
