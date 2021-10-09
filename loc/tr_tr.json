@@ -231,9 +231,9 @@
     "check_address": "Adresi kontrol et"
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "Maks",
     "sat_byte": "gro/byte",
-    "gros": "sat"
+    "sats": "sat"
   }
 }

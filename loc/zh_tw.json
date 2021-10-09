@@ -117,7 +117,7 @@
     "open_direct_channel": "使用此節點來開啟直接頻道：",
     "please_pay": "請付款",
     "preimage": "原像",
-    "gros": "聰",
+    "sats": "聰",
     "wasnt_paid_and_expired": "此賬單尚未付款，已過期。"
   },
   "plausibledeniability": {
@@ -554,10 +554,10 @@
     "tip": "此功能使您可以查看、標記、凍結或選擇幣，以改善錢包管理。 您可以通過點擊彩色圓圈選擇多個幣。"
   },
   "units": {
-    "GRS": "比特幣",
+    "BTC": "比特幣",
     "MAX": "最大",
     "sat_byte": "聰/字節",
-    "gros": "聰"
+    "sats": "聰"
   },
   "addresses": {
     "sign_title": "簽署/驗證訊息",

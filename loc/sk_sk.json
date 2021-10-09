@@ -79,7 +79,7 @@
     "has_been_paid": "Táto faktúra bola uhradená",
     "open_direct_channel": "Otvoriť priamy kanál s týmto uzlom:",
     "please_pay": "Prosím zaplaťte",
-    "gros": "sats"
+    "sats": "sats"
   },
   "plausibledeniability": {
     "create_fake_storage": "Vytvoriť falošné zašifrované úložisko",

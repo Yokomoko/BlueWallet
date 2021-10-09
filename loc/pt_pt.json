@@ -112,7 +112,7 @@
     "open_direct_channel": "Abrir canal directo com este node:",
     "please_pay": "Por favor pague",
     "preimage": "Preimage",
-    "gros": "gros",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Esta factura não foi paga e expirou"
   },
   "plausibledeniability": {

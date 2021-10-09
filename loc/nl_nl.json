@@ -117,7 +117,7 @@
     "open_direct_channel": "Open een rechtstreeks kanaal met deze node:",
     "please_pay": "Betaal alstublieft",
     "preimage": "Préimage",
-    "gros": "gros",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Deze factuur is niet betaald en is verlopen"
   },
   "plausibledeniability": {
@@ -547,10 +547,10 @@
     "tip": "Hiermee kunt u coins zien, labelen, bevriezen of selecteren voor verbeterd walletbeheer."
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "MAX",
     "sat_byte": "gro/byte",
-    "gros": "sats"
+    "sats": "sats"
   },
   "addresses": {
     "sign_title": "Onderteken/Verifieer bericht",

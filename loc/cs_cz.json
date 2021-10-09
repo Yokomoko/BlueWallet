@@ -117,7 +117,7 @@
     "open_direct_channel": "Otevřít přímý kanál s tímto uzlem:",
     "please_pay": "Prosím zaplaťte",
     "preimage": "Předobraz",
-    "gros": "sats",
+    "sats": "sats",
     "wasnt_paid_and_expired": "Tato faktura nebyla zaplacena a její platnost vypršela."
   },
   "plausibledeniability": {
@@ -561,10 +561,10 @@
     "tip": "Umožňuje zobrazit, označit, zmrazit nebo vybrat mince pro lepší správu peněženky. Klepnutím na barevné kruhy můžete vybrat více mincí."
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "MAX",
     "sat_byte": "gro/byte",
-    "gros": "sats"
+    "sats": "sats"
   },
   "addresses": {
     "sign_title": "Podepsat/Ověřit zprávu",

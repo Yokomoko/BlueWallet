@@ -117,7 +117,7 @@
     "open_direct_channel": "Ouvrir un canal direct avec ce noeud :",
     "please_pay": "Veuillez payer",
     "preimage": "Préimage",
-    "gros": "gros",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Cette requête n'a pas été réglée et a expiré"
   },
   "plausibledeniability": {
@@ -561,10 +561,10 @@
     "tip": "Permet de voir, étiqueter, bloquer ou sélectionner des UTXOs pour une meilleure gestion du portefeuille. Vous pouvez sélectionner plusieurs UTXOs en appuyant sur les cercles colorés."
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "MAX",
     "sat_byte": "gro/byte",
-    "gros": "sats"
+    "sats": "sats"
   },
   "addresses": {
     "sign_title": "Signe/vérifie le message",

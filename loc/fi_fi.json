@@ -117,7 +117,7 @@
     "open_direct_channel": "Avaa suora kanava tällä solmulla:",
     "please_pay": "Ole hyvä ja maksa",
     "preimage": "Alkukuva",
-    "gros": "sattia",
+    "sats": "sattia",
     "wasnt_paid_and_expired": "Tätä laskua ei maksettu, ja se on vanhentunut."
   },
   "plausibledeniability": {
@@ -555,10 +555,10 @@
     "tip": "Antaa sinun nähdä, merkitä, jäädyttää tai valita kolikoita parempaan lompakon hallintaan. Voit valita useita kolikoita napauttamalla värillisiä ympyröitä. "
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "MAX",
     "sat_byte": "sat/bitti",
-    "gros": "sattia"
+    "sats": "sattia"
   },
   "addresses": {
     "sign_title": "Allekirjoita/Varmenna viesti",

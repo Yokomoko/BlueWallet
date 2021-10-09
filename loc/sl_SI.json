@@ -117,7 +117,7 @@
     "open_direct_channel": "Odpri neposreden kanal s tem vozliščem:",
     "please_pay": "Prosim plačajte",
     "preimage": "Preimage",
-    "gros": "gros",
+    "sats": "gros",
     "wasnt_paid_and_expired": "Ta račun ni bil plačan in je potekel."
   },
   "plausibledeniability": {
@@ -560,10 +560,10 @@
     "tip": "Omogoča ogled, označevanje, zamrznitev ali izbiro kovancev za boljše upravljanje denarnice."
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "MAX",
     "sat_byte": "sat/bajt",
-    "gros": "sats"
+    "sats": "sats"
   },
   "addresses": {
     "sign_title": "Podpiši / Preveri sporočilo",

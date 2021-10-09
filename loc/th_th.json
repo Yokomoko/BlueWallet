@@ -107,7 +107,7 @@
     "open_direct_channel": "เปิดช่องโดยตรงไปที่โหนดนี้",
     "please_pay": "กรุณาจ่าย",
     "preimage": "Preimage",
-    "gros": "แซท",
+    "sats": "แซท",
     "wasnt_paid_and_expired": "ใบวางบิลนี้ไม่ได้จ่ายและหมดอายุแล้ว"
   },
   "plausibledeniability": {
@@ -434,8 +434,8 @@
     "use_coins": "ใช้เหรียญ"
   },
   "units": {
-    "GRS": "บิตคอยน์",
+    "BTC": "บิตคอยน์",
     "sat_byte": "แซทต่อไบท์",
-    "gros": "แซท"
+    "sats": "แซท"
   }
 }

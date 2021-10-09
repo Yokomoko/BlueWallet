@@ -116,7 +116,7 @@
     "has_been_paid": "Фактурата е платена",
     "open_direct_channel": "Директно свързване с нода:",
     "please_pay": "Моля, плати",
-    "gros": "сатоши",
+    "sats": "сатоши",
     "wasnt_paid_and_expired": "Фактурата не е платена и е изтекла."
   },
   "plausibledeniability": {

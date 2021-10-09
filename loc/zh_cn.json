@@ -117,7 +117,7 @@
     "open_direct_channel": "使用此节点来开啟直接频道：",
     "please_pay": "请支付",
     "preimage": "原像",
-    "gros": "聪",
+    "sats": "聪",
     "wasnt_paid_and_expired": "此账单尚未支付，已过期。"
   },
   "plausibledeniability": {
@@ -554,10 +554,10 @@
     "tip": "此功能使您可以查看、标记、冻结或选择币，以改善钱包管理。 您可以通过点击彩色圆圈选择多个币。"
   },
   "units": {
-    "GRS": "比特幣",
+    "BTC": "比特幣",
     "MAX": "最大",
     "sat_byte": "聪/字节",
-    "gros": "聪"
+    "sats": "聪"
   },
   "addresses": {
     "sign_title": "签署/验证信息",

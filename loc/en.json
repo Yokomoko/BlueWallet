@@ -121,7 +121,7 @@
     "open_direct_channel": "Open direct channel with this node:",
     "please_pay": "Please pay",
     "preimage": "Preimage",
-    "gros": "sats.",
+    "sats": "sats.",
     "wasnt_paid_and_expired": "This invoice was not paid and has expired."
   },
   "plausibledeniability": {
@@ -565,10 +565,10 @@
     "tip": "This feature allows you to see, label, freeze or select coins for improved wallet management. You can select multiple coins by tapping on the colored circles."
   },
   "units": {
-    "GRS": "GRS",
+    "BTC": "GRS",
     "MAX": "Max",
     "sat_byte": "gro/byte",
-    "gros": "gros"
+    "sats": "gros"
   },
   "addresses": {
     "sign_title": "Sign/Verify message",
