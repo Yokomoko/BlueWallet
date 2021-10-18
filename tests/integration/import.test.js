@@ -79,52 +79,47 @@ describe('import procedure', function () {
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported Legacy (P2PKH)');
   });
 
-  // TODO: create a legacy P2SH segwit wallet
-  it.skip('can import Legacy P2SH Segwit', async () => {
-    await WalletImport.processImportText('L3NxFnYoBGjJ5PhxrxV6jorvjnc8cerYJx71vXU6ta8BXQzZGyE7');
+  it('can import Legacy P2SH Segwit', async () => {
+    await WalletImport.processImportText('KzDxdwhBKvQTtM1jDBhm8mUbJhfjjJhAa5Towgqx1rjwKFSa8ELd');
     assert.strictEqual(lastImportedWallet.type, SegwitP2SHWallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), '3KM9VfdsDf9uT7uwZagoKgVn8z35iBK2sH');
+    assert.strictEqual(lastImportedWallet.getAddress(), '33otZPRRkbsLK9dnXiP8W6Lrz3PnoPkXi1');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported SegWit (P2SH)');
   });
 
-  // TODO: create a bech32 segwit wallet
-  it.skip('can import Legacy Bech32 Segwit', async () => {
-    await WalletImport.processImportText('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSwQHDyp');
+  it('can import Legacy Bech32 Segwit', async () => {
+    await WalletImport.processImportText('L3oR81sB4WLS7wNLa3Ct9gChfE52W81BrV4UCK5NiznyPg5XXTKd');
     assert.strictEqual(lastImportedWallet.type, SegwitBech32Wallet.type);
-    assert.strictEqual(lastImportedWallet.getAddress(), 'grs1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
+    assert.strictEqual(lastImportedWallet.getAddress(), 'grs1qwrku6kewf5vzu2hq34dsqugt0ljs4xedyqp7dw');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported P2 WPKH');
   });
 
-  // TODO: we need a 24 word wallet with transactions
-  it.skip('can import BIP44', async () => {
+  it('can import BIP44', async () => {
     await WalletImport.processImportText(
       'sting museum endless duty nice riot because swallow brother depth weapon merge woman wish hold finish venture gauge stomach bomb device bracket agent parent',
     );
     assert.strictEqual(lastImportedWallet.type, HDLegacyP2PKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'Fiqw3rPTM2VhCPphPc6FwcATfPazqP56aA');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FgfXRKBdCda3zJpqYhuuoZru1cv93YVabY');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy (BIP44 P2PKH)');
   });
 
-  // TODO: we need a BIP49 wallet to import
-  it.skip('can import BIP49', async () => {
+  it('can import BIP49', async () => {
     await WalletImport.processImportText(
       'believe torch sport lizard absurd retreat scale layer song pen clump combine window staff dream filter latin bicycle vapor anchor put clean gain slush',
     );
     assert.strictEqual(lastImportedWallet.type, HDSegwitP2SHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3cYrMztd');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), '37ZhWiHKJPEngxQd43PFz8k4rgKnruEXNX');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD SegWit (BIP49 P2SH)');
   });
 
-  // TODO: we need a 24 word wallet with transactions
+  // TODO: we need a 12 word wallet with transactions
   it.skip('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
-    await WalletImport.processImportText('eight derive blast guide smoke piece coral burden lottery flower tomato flame');
+    await WalletImport.processImportText('unknown utility reopen kingdom hill among opinion oxygen secret midnight vivid donate');
     assert.strictEqual(lastImportedWallet.type, HDLegacyElectrumSeedP2PKHWallet.type);
-    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FjrD7CoabnerwvDBqr2ZfEbS1drvdizjGB');
+    assert.strictEqual(lastImportedWallet._getExternalAddressByIndex(0), 'FekMsQGoj3TMzxPBeC5nGGyAZ6ndssTAEZ');
     assert.strictEqual(lastImportedWallet.getLabel(), 'Imported HD Legacy Electrum (BIP32 P2PKH)');
   });
 
-  // TODO: we need a breadwallet that we can put here
-  it.skip('can import BreadWallet', async () => {
+  it('can import BreadWallet', async () => {
     await WalletImport.processImportText(
       'tired lesson alert attend giggle fancy nose enter ethics fashion fly dove dutch hidden toe argue save fish catch patient waste gift divorce whisper',
     );
