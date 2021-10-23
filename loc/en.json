@@ -255,7 +255,7 @@
     "biom_remove_decrypt": "All your wallets will be removed and your storage will be decrypted. Are you sure you want to proceed?",
     "currency": "Currency",
     "currency_source": "Prices are obtained from",
-    "default_desc": "When disabled, GRS GRS BlueWallet will immediately open the selected wallet at launch.",
+    "default_desc": "When disabled, GRS BlueWallet will immediately open the selected wallet at launch.",
     "default_info": "Default info",
     "default_title": "On Launch",
     "default_wallets": "View All Wallets",
