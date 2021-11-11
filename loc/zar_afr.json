@@ -63,7 +63,7 @@
     "header": "instellings",
     "language": "Taal",
     "lightning_settings": "Lightning Instellings",
-    "lightning_settings_explain": "Om u eie LND node te konnekteer, installeer asseblief LndHub and put its URL here in settings. Leave blank om die standaard LndHub(lndhub.io) te gebruik",
+    "lightning_settings_explain": "Om u eie LND node te konnekteer, installeer asseblief LndHub and put its URL here in settings. Leave blank om die standaard LndHub(lndhub.groestlcoin.org) te gebruik",
     "password": "Wagwoord",
     "password_explain": "Skep die wagwoord wat u sal gebruik om u berging te de-enkripteer",
     "passwords_do_not_match": "Wagwoorde stem nie oor een nie",

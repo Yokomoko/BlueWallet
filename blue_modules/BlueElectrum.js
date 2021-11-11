@@ -231,7 +231,7 @@ async function presentNetworkErrorAlert(usingPeer) {
 }
 
 /**
- * Returns random hardcoded electrum server guaranteed to work
+ * Returns random hardcoded electrum-grs server guaranteed to work
  * at the time of writing.
  *
  * @returns {Promise<{tcp, host}|*>}
@@ -248,8 +248,8 @@ async function getSavedPeer() {
 }
 
 /**
- * Returns random electrum server out of list of servers
- * previous electrum server told us. Nearly half of them is
+ * Returns random electrum-grs server out of list of servers
+ * previous electrum-grs server told us. Nearly half of them is
  * usually offline.
  * Not used for now.
  *
@@ -283,7 +283,7 @@ async function getRandomDynamicPeer() {
  * @returns {Promise<Object>}
  */
 module.exports.getBalanceByAddress = async function (address) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
@@ -293,7 +293,7 @@ module.exports.getBalanceByAddress = async function (address) {
 };
 
 module.exports.getConfig = async function () {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return {
     host: mainClient.host,
     port: mainClient.port,
@@ -312,7 +312,7 @@ module.exports.getSecondsSinceLastRequest = function () {
  * @returns {Promise<Array>}
  */
 module.exports.getTransactionsByAddress = async function (address) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
@@ -381,7 +381,7 @@ module.exports.getTransactionsFullByAddress = async function (address) {
  */
 module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) {
   batchsize = batchsize || 200;
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const ret = { balance: 0, unconfirmed_balance: 0, addresses: {} };
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -427,7 +427,7 @@ module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) 
 
 module.exports.multiGetUtxoByAddress = async function (addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const ret = {};
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -470,7 +470,7 @@ module.exports.multiGetUtxoByAddress = async function (addresses, batchsize) {
 
 module.exports.multiGetHistoryByAddress = async function (addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const ret = {};
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -523,7 +523,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
   batchsize = batchsize || 45;
   // this value is fine-tuned so althrough wallets in test suite will occasionally
   // throw 'response too large (over 1,000,000 bytes', test suite will pass
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const ret = {};
   txids = [...new Set(txids)]; // deduplicate just for any case
 
@@ -571,7 +571,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
         for (let resultIndex = 0; resultIndex < transactionResults.length; resultIndex++) {
           let tx = transactionResults[resultIndex];
           if (typeof tx === 'string' && verbose) {
-            // apparently electrum server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
+            // apparently electrum-grs server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
             // lets decode it manually on our end then:
             tx = txhexToElectrumTransaction(tx);
           }
@@ -585,7 +585,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
           try {
             let tx = await mainClient.blockchainTransaction_get(txid, verbose);
             if (typeof tx === 'string' && verbose) {
-              // apparently electrum server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
+              // apparently electrum-grs server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
               // lets decode it manually on our end then:
               tx = txhexToElectrumTransaction(tx);
             }
@@ -756,7 +756,7 @@ module.exports.estimateFees = async function () {
  * @returns {Promise<number>} Satoshis per byte
  */
 module.exports.estimateFee = async function (numberOfBlocks) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   numberOfBlocks = numberOfBlocks || 1;
   const coinUnitsPerKilobyte = await mainClient.blockchainEstimatefee(numberOfBlocks);
   if (coinUnitsPerKilobyte === -1) return 1;
@@ -764,12 +764,12 @@ module.exports.estimateFee = async function (numberOfBlocks) {
 };
 
 module.exports.serverFeatures = async function () {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return mainClient.server_features();
 };
 
 module.exports.broadcast = async function (hex) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   try {
     const broadcast = await mainClient.blockchainTransaction_broadcast(hex);
     return broadcast;
@@ -779,7 +779,7 @@ module.exports.broadcast = async function (hex) {
 };
 
 module.exports.broadcastV2 = async function (hex) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return mainClient.blockchainTransaction_broadcast(hex);
 };
 
@@ -815,7 +815,7 @@ module.exports.calculateBlockTime = function (height) {
  * @param host
  * @param tcpPort
  * @param sslPort
- * @returns {Promise<boolean>} Whether provided host:port is a valid electrum server
+ * @returns {Promise<boolean>} Whether provided host:port is a valid electrum-grs server
  */
 module.exports.testConnection = async function (host, tcpPort, sslPort) {
   const client = new ElectrumClient(

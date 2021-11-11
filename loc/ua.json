@@ -54,7 +54,7 @@
     "header": "Налаштування",
     "language": "Мова",
     "lightning_settings": "Lightning settings",
-    "lightning_settings_explain": "To connect to your own LND node please install LndHub and put its URL here in settings. Leave blank to use default ndHub\n (lndhub.io)",
+    "lightning_settings_explain": "To connect to your own LND node please install LndHub and put its URL here in settings. Leave blank to use default ndHub\n (lndhub.groestlcoin.org)",
     "password": "Пароль",
     "password_explain": "Придумайте пароль для розшифровки сховища",
     "passwords_do_not_match": "Паролі не збігаються",

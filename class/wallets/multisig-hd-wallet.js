@@ -664,7 +664,7 @@ export class MultisigHDWallet extends AbstractHDElectrumWallet {
       });
       const witnessScript = p2wsh.redeem.output;
 
-      if (!input.txhex) throw new Error('Electrum server didnt provide txhex to properly create PSBT transaction');
+      if (!input.txhex) throw new Error('Electrum-GRS server didnt provide txhex to properly create PSBT transaction');
 
       psbt.addInput({
         hash: input.txId,
