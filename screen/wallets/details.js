@@ -295,7 +295,7 @@ const WalletDetails = () => {
       ),
     });
   };
-  
+
   */
 
   const exportInternals = async () => {

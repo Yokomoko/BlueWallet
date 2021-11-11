@@ -141,7 +141,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.strictEqual(
       hd.verifyMessage(
         'vires is numeris',
-        'bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el',
+        'grs1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el',
         'Hya6IaZGbKF83eOmC5i1CX5V42Wqkf+eSMi8S+hvJuJrDmp5F56ivrHgAzcxNIShIpY2lJv76M2LB6zLV70KxWQ=',
       ),
       true,

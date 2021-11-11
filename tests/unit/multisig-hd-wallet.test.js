@@ -363,7 +363,7 @@ describe('multisig-wallet (wrapped segwit)', () => {
     // transaction is gona be UNsigned because we have no keys
     const { psbt, tx } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qlhpaukt44ru7044uqdf0hp2qs0ut0p93g66k8h', value: 10000 }],
+      [{ address: 'grs1qlhpaukt44ru7044uqdf0hp2qs0ut0p93g66k8h', value: 10000 }],
       10,
       w._getInternalAddressByIndex(3),
       false,
@@ -656,8 +656,8 @@ describe('multisig-wallet (native segwit)', () => {
     w.addCosigner(Zpub2, fp2coldcard);
     w.setDerivationPath(path);
     w.setM(2);
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
     assert.strictEqual(
       w._getDerivationPathByAddressWithCustomPath(w._getExternalAddressByIndex(2), w.getDerivationPath()),
       "m/48'/17'/0'/2'/0/2",
@@ -708,10 +708,10 @@ describe('multisig-wallet (native segwit)', () => {
     w.addCosigner(process.env.MNEMONICS_COLDCARD);
     w.setDerivationPath(path);
     w.setM(2);
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
 
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 2);
@@ -752,10 +752,10 @@ describe('multisig-wallet (native segwit)', () => {
       'Zpub74k35j5DkSA6t6SFhPeHv8ENBHdNgAPALWodSWoWxsHo6vbAu2FUGq9QmUEvdEPzBoMswizfsAbTWQYU2ZnvCjdKsFje5TEfjLxuH8arBtp',
     );
 
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qnpy7c7wz6tvmhdwgyk8ka4du3s9x6uhgjal305xdatmwfa538zxsys5l0t');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvuum7egsw4r4utzart88pergghy9rp8m4j5m4s464lz6u39sn6usn89w7c');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qatmvfj5nzh4z3njxeg8z86y592clqe7sfgvp5cpund47knnm6pxsswl2lr');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qpqa9c6nkqgcruegnh8wcsr0gzc4x9y90v9k0nxr6lww0gts430zqp7wm86');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qnpy7c7wz6tvmhdwgyk8ka4du3s9x6uhgjal305xdatmwfa538zxsys5l0t');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvuum7egsw4r4utzart88pergghy9rp8m4j5m4s464lz6u39sn6usn89w7c');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qatmvfj5nzh4z3njxeg8z86y592clqe7sfgvp5cpund47knnm6pxsswl2lr');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qpqa9c6nkqgcruegnh8wcsr0gzc4x9y90v9k0nxr6lww0gts430zqp7wm86');
 
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 3);
@@ -772,7 +772,7 @@ describe('multisig-wallet (native segwit)', () => {
       {
         height: 666,
         value: 100000,
-        address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
+        address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
         txId: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
         vout: 0,
         txid: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
@@ -796,7 +796,7 @@ describe('multisig-wallet (native segwit)', () => {
 
     const { psbt } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85' }], // sendMax
+      [{ address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85' }], // sendMax
       1,
       w._getInternalAddressByIndex(0), // there should be no change in this tx
       false,
@@ -845,7 +845,7 @@ describe('multisig-wallet (native segwit)', () => {
 
     const { psbt: psbt2 } = w2.createTransaction(
       utxos,
-      [{ address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85', value: 10000 }],
+      [{ address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85', value: 10000 }],
       1,
       w2._getInternalAddressByIndex(3),
       false,
@@ -887,8 +887,8 @@ describe('multisig-wallet (native segwit)', () => {
     const ww = new MultisigHDWallet();
     ww.setSecret(w.getSecret());
 
-    assert.strictEqual(ww._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(ww._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(ww._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(ww._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
 
     assert.strictEqual(ww.getM(), 2);
     assert.strictEqual(ww.getN(), 2);
@@ -923,7 +923,7 @@ describe('multisig-wallet (native segwit)', () => {
       {
         height: 666,
         value: 100000,
-        address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
+        address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
         txId: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
         vout: 0,
         txid: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
@@ -944,7 +944,7 @@ describe('multisig-wallet (native segwit)', () => {
     // transaction is gona be partially signed because we have one of two signing keys
     const { psbt, tx } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qlhpaukt44ru7044uqdf0hp2qs0ut0p93g66k8h' }], // sendMax
+      [{ address: 'grs1qlhpaukt44ru7044uqdf0hp2qs0ut0p93g66k8h' }], // sendMax
       10,
       w._getInternalAddressByIndex(0), // there should be no change in this tx
       false,
@@ -994,7 +994,7 @@ describe('multisig-wallet (native segwit)', () => {
       {
         height: 666,
         value: 100000,
-        address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
+        address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
         txId: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
         vout: 0,
         txid: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
@@ -1008,7 +1008,7 @@ describe('multisig-wallet (native segwit)', () => {
 
     const { psbt } = walletWithNoKeys.createTransaction(
       utxos,
-      [{ address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85' }], // sendMax
+      [{ address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85' }], // sendMax
       1,
       walletWithNoKeys._getInternalAddressByIndex(0), // there should be no change in this tx
       false,
@@ -1127,10 +1127,10 @@ describe('multisig-wallet (native segwit)', () => {
       const w = new MultisigHDWallet();
       w.setSecret(secret);
 
-      assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-      assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
-      assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
-      assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
+      assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+      assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
+      assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+      assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
       assert.strictEqual(w.getM(), 2);
       assert.strictEqual(w.getN(), 2);
       assert.strictEqual(w.getDerivationPath(), path);
@@ -1184,10 +1184,10 @@ describe('multisig-wallet (native segwit)', () => {
     const w = new MultisigHDWallet();
     w.setSecret(secret);
 
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 2);
     assert.strictEqual(w.getCustomDerivationPathForCosigner(1), "m/47'/17'/0'/1'");
@@ -1203,7 +1203,7 @@ describe('multisig-wallet (native segwit)', () => {
       {
         height: 666,
         value: 100000,
-        address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
+        address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85',
         txId: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
         vout: 0,
         txid: '666b1f2ee25dfd92377bb66a8db2badf45625a59e93f5a89836e178f9f5ed396',
@@ -1217,7 +1217,7 @@ describe('multisig-wallet (native segwit)', () => {
 
     const { psbt: psbt2 } = w.createTransaction(
       utxos,
-      [{ address: 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85', value: 10000 }],
+      [{ address: 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85', value: 10000 }],
       1,
       w._getInternalAddressByIndex(3),
       false,
@@ -1291,10 +1291,10 @@ describe('multisig-wallet (native segwit)', () => {
     assert.ok(!w.isWrappedSegwit());
     assert.ok(!w.isLegacy());
 
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvwd2d7r46j7u9qyxpedfhe5p075sxuhzd0n6napuvvhq2u5nrmqs9ex90q');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qv84pedzkqz2p4sd2dxm9krs0tcfatqcn73nndycaky9qttczj9qq3az9ma');
   });
 
   it('can import electrum json file format with seeds', () => {
@@ -1314,10 +1314,10 @@ describe('multisig-wallet (native segwit)', () => {
       assert.strictEqual(w.getM(), 2);
       assert.strictEqual(w.getN(), 3);
 
-      assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qkzg22vej70cqnrlsxcee9nfnstcr70jalvsmjn0c8rjf0klwyydsk8nggs');
-      assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1q2mkhkvx9l7aqksvyf0dwd2x4yn8qx2w3sythjltdkjw70r8hsves2evfg6');
-      assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qqj0zx85x3d2frn4nmdn32fgskq5c2qkvk9sukxp3xsdzuf234mds85w068');
-      assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qwpxkr4ac7fyp6y8uegfpqa6phyqex3vdf5mwwrfayrp8889adpgszge8m5');
+      assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qkzg22vej70cqnrlsxcee9nfnstcr70jalvsmjn0c8rjf0klwyydsk8nggs');
+      assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1q2mkhkvx9l7aqksvyf0dwd2x4yn8qx2w3sythjltdkjw70r8hsves2evfg6');
+      assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qqj0zx85x3d2frn4nmdn32fgskq5c2qkvk9sukxp3xsdzuf234mds85w068');
+      assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qwpxkr4ac7fyp6y8uegfpqa6phyqex3vdf5mwwrfayrp8889adpgszge8m5');
 
       if (JSON.parse(s)['x1/'].seed) {
         assert.strictEqual(w.howManySignaturesCanWeMake(), 1);
@@ -1340,7 +1340,7 @@ describe('multisig-wallet (native segwit)', () => {
         {
           height: 666,
           value: 100000,
-          address: 'bc1q2mkhkvx9l7aqksvyf0dwd2x4yn8qx2w3sythjltdkjw70r8hsves2evfg6',
+          address: 'grs1q2mkhkvx9l7aqksvyf0dwd2x4yn8qx2w3sythjltdkjw70r8hsves2evfg6',
           txId: 'c097161e8ae3b12ae2c90da95ade1185e368269a861ea9a8da023714d6fea31e',
           vout: 0,
           txid: 'c097161e8ae3b12ae2c90da95ade1185e368269a861ea9a8da023714d6fea31e',
@@ -1421,10 +1421,10 @@ describe('multisig-wallet (native segwit)', () => {
 
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 3);
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qnpy7c7wz6tvmhdwgyk8ka4du3s9x6uhgjal305xdatmwfa538zxsys5l0t');
-    assert.strictEqual(w._getExternalAddressByIndex(1), 'bc1qvuum7egsw4r4utzart88pergghy9rp8m4j5m4s464lz6u39sn6usn89w7c');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qatmvfj5nzh4z3njxeg8z86y592clqe7sfgvp5cpund47knnm6pxsswl2lr');
-    assert.strictEqual(w._getInternalAddressByIndex(1), 'bc1qpqa9c6nkqgcruegnh8wcsr0gzc4x9y90v9k0nxr6lww0gts430zqp7wm86');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qnpy7c7wz6tvmhdwgyk8ka4du3s9x6uhgjal305xdatmwfa538zxsys5l0t');
+    assert.strictEqual(w._getExternalAddressByIndex(1), 'grs1qvuum7egsw4r4utzart88pergghy9rp8m4j5m4s464lz6u39sn6usn89w7c');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qatmvfj5nzh4z3njxeg8z86y592clqe7sfgvp5cpund47knnm6pxsswl2lr');
+    assert.strictEqual(w._getInternalAddressByIndex(1), 'grs1qpqa9c6nkqgcruegnh8wcsr0gzc4x9y90v9k0nxr6lww0gts430zqp7wm86');
     assert.ok(!w.isWrappedSegwit());
     assert.ok(w.isNativeSegwit());
     assert.ok(!w.isLegacy());
@@ -1462,8 +1462,8 @@ describe('multisig-wallet (native segwit)', () => {
     w = new MultisigHDWallet();
     w.setSecret(json2);
 
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qtah0p50d4qlftn049k7lldcwh7cs3zkjy9g8xegv63p308hsh9zsf5567q');
 
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 2);
@@ -1505,8 +1505,8 @@ describe('multisig-wallet (native segwit)', () => {
     w.setSecret(json);
     assert.strictEqual(w.getM(), 2);
     assert.strictEqual(w.getN(), 3);
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1q338rmdygx0weah4pdrp9xyycxlv2t48276gk3gxmg6m7xdkkglsqgzm6mz');
-    assert.strictEqual(w._getInternalAddressByIndex(0), 'bc1qcgn73pjlwtt6krs2u6as0kh2jp486fa0t93yyq4d7xxxc37rf24qg67ewq');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1q338rmdygx0weah4pdrp9xyycxlv2t48276gk3gxmg6m7xdkkglsqgzm6mz');
+    assert.strictEqual(w._getInternalAddressByIndex(0), 'grs1qcgn73pjlwtt6krs2u6as0kh2jp486fa0t93yyq4d7xxxc37rf24qg67ewq');
     assert.strictEqual(w.getLabel(), 'Multisig');
     assert.ok(!w.isWrappedSegwit());
     assert.ok(w.isNativeSegwit());
@@ -1602,7 +1602,7 @@ describe('multisig-wallet (native segwit)', () => {
     w.addCosigner(process.env.MNEMONICS_COLDCARD);
     w.setDerivationPath(path);
     w.setM(2);
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1qxzrzh4caw7e3genwtldtxntzj0ktfl7mhf2lh4fj8h7hnkvtvc4salvp85');
 
     assert.strictEqual(w.getCosigner(1), Zpub1);
     assert.strictEqual(w.getCosigner(2), process.env.MNEMONICS_COLDCARD);
@@ -1687,7 +1687,7 @@ describe('multisig-wallet (native segwit)', () => {
       {
         height: 662352,
         value: 100000,
-        address: 'bc1qlkh0zgq5ypcdfs9rdvrucra96c5gmjgaufm0au8cglkkrah29nesrkvewg',
+        address: 'grs1qlkh0zgq5ypcdfs9rdvrucra96c5gmjgaufm0au8cglkkrah29nesrkvewg',
         txId: 'e112e3b109aff5fe76d4fde90bd3c2df58bfb250280a4404421fff42d6801fd2',
         vout: 0,
         txid: 'e112e3b109aff5fe76d4fde90bd3c2df58bfb250280a4404421fff42d6801fd2',
@@ -1736,7 +1736,7 @@ describe('multisig-wallet (native segwit)', () => {
 
     const utxos = [
       {
-        address: 'bc1qzwt595g0q0xauxzr4h56kw4zavfrnq3r4zkx42relm8rvwuuxyvsqndmgl',
+        address: 'grs1qzwt595g0q0xauxzr4h56kw4zavfrnq3r4zkx42relm8rvwuuxyvsqndmgl',
         amount: 2120,
         confirmations: 33,
         height: 668483,
@@ -1749,7 +1749,7 @@ describe('multisig-wallet (native segwit)', () => {
         wif: false,
       },
       {
-        address: 'bc1qn0j7y5hau6s8tdcpnxyyumck256lfet78ehpxdkytv5nt570dr4qxl9s3p',
+        address: 'grs1qn0j7y5hau6s8tdcpnxyyumck256lfet78ehpxdkytv5nt570dr4qxl9s3p',
         amount: 10000,
         confirmations: 1,
         height: 668515,

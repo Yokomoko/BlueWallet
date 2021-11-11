@@ -55,15 +55,15 @@ describe('HDAezeedWallet', () => {
     );
 
     let address = aezeed._getExternalAddressByIndex(0);
-    assert.strictEqual(address, 'bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn');
-    assert.ok(aezeed.getAllExternalAddresses().includes('bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
+    assert.strictEqual(address, 'grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn');
+    assert.ok(aezeed.getAllExternalAddresses().includes('grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
 
     address = aezeed._getExternalAddressByIndex(1);
-    assert.strictEqual(address, 'bc1qswr3s4fylskqn9vemef8l28qukshuagsjz3wpe');
-    assert.ok(aezeed.getAllExternalAddresses().includes('bc1qswr3s4fylskqn9vemef8l28qukshuagsjz3wpe'));
+    assert.strictEqual(address, 'grs1qswr3s4fylskqn9vemef8l28qukshuagsjz3wpe');
+    assert.ok(aezeed.getAllExternalAddresses().includes('grs1qswr3s4fylskqn9vemef8l28qukshuagsjz3wpe'));
 
     address = aezeed._getInternalAddressByIndex(0);
-    assert.strictEqual(address, 'bc1qzyjq8sjj56n8v9fgw5klsc8sq8yuy0jx03hzzp');
+    assert.strictEqual(address, 'grs1qzyjq8sjj56n8v9fgw5klsc8sq8yuy0jx03hzzp');
 
     let wif = aezeed._getExternalWIFByIndex(0);
     assert.strictEqual(wif, 'KxtkgprHVXCcgzRetDt3JnNuRApgzQyRrvAuwiE1yFPjmYnWh6rH');
@@ -107,14 +107,14 @@ describe('HDAezeedWallet', () => {
     );
 
     const address = aezeed._getExternalAddressByIndex(0);
-    assert.strictEqual(address, 'bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn');
-    assert.ok(aezeed.getAllExternalAddresses().includes('bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
+    assert.strictEqual(address, 'grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn');
+    assert.ok(aezeed.getAllExternalAddresses().includes('grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
 
     const watchOnly = new WatchOnlyWallet();
     watchOnly.setSecret(aezeed.getXpub());
     watchOnly.init();
     assert.strictEqual(watchOnly._getExternalAddressByIndex(0), aezeed._getExternalAddressByIndex(0));
-    assert.ok(watchOnly.weOwnAddress('bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
+    assert.ok(watchOnly.weOwnAddress('grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn'));
     assert.ok(!watchOnly.weOwnAddress('garbage'));
     assert.ok(!watchOnly.weOwnAddress(false));
   });

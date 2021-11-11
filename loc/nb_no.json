@@ -63,7 +63,7 @@
     "header": "innstillinger",
     "language": "Språk",
     "lightning_settings": "Lightning innstillinger",
-    "lightning_settings_explain": "For å koble til din egen LND-node, vennligst installer LndHub og legg URLen her i innstillinger. La feltet være tomt for å bruke GRS BlueWallets LNDHub (lndhub.io). Lommebøker opprettet etter lagring av endringer, vil koble til den angitte LNDHub.",
+    "lightning_settings_explain": "For å koble til din egen LND-node, vennligst installer LndHub og legg URLen her i innstillinger. La feltet være tomt for å bruke GRS BlueWallets LNDHub (lndhub.groestlcoin.org). Lommebøker opprettet etter lagring av endringer, vil koble til den angitte LNDHub.",
     "password": "Passord",
     "password_explain": "Opprett passordet du vil bruke til å dekryptere lagringen",
     "passwords_do_not_match": "passordene er ikke like",

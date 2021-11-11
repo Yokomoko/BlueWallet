@@ -8,7 +8,7 @@ import navigationStyle from '../../components/navigationStyle';
 import { BlueButton, BlueCard, BlueCopyToClipboardButton, BlueListItem, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
 import loc from '../../loc';
 import { BlueCurrentTheme } from '../../components/themes';
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 
 const NotificationSettings = () => {
   const [isLoading, setIsLoading] = useState(true);

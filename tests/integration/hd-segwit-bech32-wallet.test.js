@@ -34,14 +34,14 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       hd.getXpub(),
     );
 
-    assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p');
-    assert.strictEqual(hd._getExternalAddressByIndex(1), 'bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh');
-    assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qcg6e26vtzja0h8up5w2m7utex0fsu4v0e0e7uy');
-    assert.strictEqual(hd._getInternalAddressByIndex(1), 'bc1qwp58x4c9e5cplsnw5096qzdkae036ug7a34x3r');
+    assert.strictEqual(hd._getExternalAddressByIndex(0), 'grs1qvd6w54sydc08z3802svkxr7297ez7cusd6266p');
+    assert.strictEqual(hd._getExternalAddressByIndex(1), 'grs1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), 'grs1qcg6e26vtzja0h8up5w2m7utex0fsu4v0e0e7uy');
+    assert.strictEqual(hd._getInternalAddressByIndex(1), 'grs1qwp58x4c9e5cplsnw5096qzdkae036ug7a34x3r');
 
-    assert.ok(hd.weOwnAddress('bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p'));
-    assert.ok(hd.weOwnAddress('BC1QVD6W54SYDC08Z3802SVKXR7297EZ7CUSD6266P'));
-    assert.ok(hd.weOwnAddress('bc1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh'));
+    assert.ok(hd.weOwnAddress('grs1qvd6w54sydc08z3802svkxr7297ez7cusd6266p'));
+    assert.ok(hd.weOwnAddress('GRS1QVD6W54SYDC08Z3802SVKXR7297EZ7CUSD6266P'));
+    assert.ok(hd.weOwnAddress('grs1qt4t9xl2gmjvxgmp5gev6m8e6s9c85979ta7jeh'));
     assert.ok(!hd.weOwnAddress('1HjsSTnrwWzzEV2oi4r5MsAYENkTkrCtwL'));
     assert.ok(!hd.weOwnAddress('garbage'));
     assert.ok(!hd.weOwnAddress(false));
@@ -189,9 +189,9 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     for (const tx of hd.getTransactions()) {
       if (tx.hash === 'e9ef58baf4cff3ad55913a360c2fa1fd124309c59dcd720cdb172ce46582097b') {
         assert.strictEqual(tx.value, -129545);
-        assert.strictEqual(tx.inputs[0].addresses[0], 'bc1qffcl35r05wyf06meu3dalfevawx559n0ufrxcw');
-        assert.strictEqual(tx.inputs[1].addresses[0], 'bc1qtvh8mjcfdg9224nx4wu3sw7fmmtmy2k3jhdeul');
-        assert.strictEqual(tx.inputs[2].addresses[0], 'bc1qhe03zgvq4fmfw8l2qq2zu4dxyhgyukcz6k2a5w');
+        assert.strictEqual(tx.inputs[0].addresses[0], 'grs1qffcl35r05wyf06meu3dalfevawx559n0ufrxcw');
+        assert.strictEqual(tx.inputs[1].addresses[0], 'grs1qtvh8mjcfdg9224nx4wu3sw7fmmtmy2k3jhdeul');
+        assert.strictEqual(tx.inputs[2].addresses[0], 'grs1qhe03zgvq4fmfw8l2qq2zu4dxyhgyukcz6k2a5w');
         txFound++;
       }
       if (tx.hash === 'e112771fd43962abfe4e4623bf788d6d95ff1bd0f9b56a6a41fb9ed4dacc75f1') {
@@ -226,7 +226,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     const { tx, inputs, outputs, fee } = hd.createTransaction(
       hd.getUtxo(),
-      [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }],
+      [{ address: 'grs1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }],
       13,
       changeAddress,
     );

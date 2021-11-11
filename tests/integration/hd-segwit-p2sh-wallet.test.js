@@ -148,7 +148,7 @@ it.skip('HD (BIP49) can create TX', async () => {
   // MAX with regular output
   txNew = hd.createTransaction(
     utxo,
-    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'bc1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 25000 }],
+    [{ address: '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK' }, { address: 'grs1qvd6w54sydc08z3802svkxr7297ez7cusd6266p', value: 25000 }],
     1,
     hd._getInternalAddressByIndex(hd.next_free_change_address_index),
   );

@@ -1,7 +1,7 @@
 import { WatchOnlyWallet } from '../../class';
 const assert = require('assert');
-global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
-global.tls = require('tls'); // needed by Electrum client. For RN it is proviced in shim.js
+global.net = require('net'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
+global.tls = require('tls'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
 const BlueElectrum = require('../../blue_modules/BlueElectrum'); // so it connects ASAP
 
 afterAll(async () => {
@@ -30,7 +30,7 @@ describe('Watch only wallet', () => {
     w.setSecret('FXbmGth3JXKH3KpAsze62DJWXGFtAhpafc');
     await w.fetchTransactions();
     assert.ok(w.getTransactions().length >= 215, w.getTransactions().length);
-    // should be 233 but electrum server cant return huge transactions >.<
+    // should be 233 but electrum-grs server cant return huge transactions >.<
 
     w = new WatchOnlyWallet();
     w.setSecret('Fie2GtRuNdoszcinPVKtMbkK9nVN3D82dt');

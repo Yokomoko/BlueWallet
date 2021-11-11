@@ -31,9 +31,9 @@ it('Legacy HD Breadwallet can fetch balance and create transaction', async () =>
   await wallet.fetchBalance();
 
   // m/0'/0/1 1K9ofAnenRn1aR9TMMTreiin9ddjKWbS7z x 0.0001
-  // m/0'/0/2 bc1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn x 0.00032084
+  // m/0'/0/2 grs1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn x 0.00032084
   // m/0'/1/0 1A9Sc4opR6c7Ui6NazECiGmsmnUPh2WeHJ x 0.00016378 BTC
-  // m/0'/1/1 bc1qksn08tz44fvnnrpgrrexvs9526t6jg3xnj9tpc x 0.00012422
+  // m/0'/1/1 grs1qksn08tz44fvnnrpgrrexvs9526t6jg3xnj9tpc x 0.00012422
   // 0.0001 + 0.00016378 + 0.00012422 + 0.00032084 = 0.00070884
   assert.strictEqual(wallet.getBalance(), 70884);
 
@@ -41,9 +41,9 @@ it('Legacy HD Breadwallet can fetch balance and create transaction', async () =>
   await wallet.fetchUtxo();
   const { tx } = wallet.createTransaction(
     wallet.getUtxo(),
-    [{ address: 'bc1q47efz9aav8g4mnnz9r6ql4pf48phy3g509p7gx' }],
+    [{ address: 'grs1q47efz9aav8g4mnnz9r6ql4pf48phy3g509p7gx' }],
     1,
-    'bc1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0',
+    'grs1qk9hvkxqsqmps6ex3qawr79rvtg8es4ecjfu5v0',
   );
 
   const transaction = bitcoin.Transaction.fromHex(tx.toHex());

@@ -357,7 +357,7 @@ describe('unit - DeepLinkSchemaMatch', function () {
     );
 
     assert.deepStrictEqual(
-      DeeplinkSchemaMatch.decodeBitcoinUri('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar'), 
+      DeeplinkSchemaMatch.decodeBitcoinUri('GROESTLCOIN:Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR?amount=20.3&label=Foobar'),
       {
         address: 'Ffqz14cyvZYJavD76t6oHNDJnGiWcZMVxR',
         amount: 20.3,

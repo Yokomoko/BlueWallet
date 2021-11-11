@@ -34,7 +34,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     );
   });
 
-  it('can convert witness to address', () => { 
+  it('can convert witness to address', () => {
     let address = SegwitP2SHWallet.witnessToAddress('035c618df829af694cb99e664ce1b34f80ad2c3b49bcd0d9c0b1836c66b2d25fd8');
     assert.strictEqual(address, '34ZVGb3gT8xMLT6fpqC6dNVqJtJmuXR3Tf');
     address = SegwitP2SHWallet.witnessToAddress();
