@@ -311,7 +311,7 @@
     "plausible_deniability": "Negación plausible",
     "privacy": "Privacidad",
     "privacy_read_clipboard": "Leer portapapeles",
-    "privacy_read_clipboard_alert": "BlueWallet usará facturas o direcciones encontradas en tu portapapeles para utilizarlas de forma más cómoda.",
+    "privacy_read_clipboard_alert": "GRS BlueWallet usará facturas o direcciones encontradas en tu portapapeles para utilizarlas de forma más cómoda.",
     "privacy_system_settings": "Configuración del sistema",
     "privacy_quickactions": "Atajos para tus carteras",
     "privacy_quickactions_explanation": "Toca y mantén pulsado el icono de GRS BlueWallet en tu pantalla de inicio para ver rápidamente el balance de tu cartera.",

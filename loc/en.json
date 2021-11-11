@@ -316,7 +316,7 @@
     "plausible_deniability": "Plausible Deniability",
     "privacy": "Privacy",
     "privacy_read_clipboard": "Read Clipboard",
-    "privacy_read_clipboard_alert": "BlueWallet will display shortcuts for handling an invoice or address found in your clipboard.",
+    "privacy_read_clipboard_alert": "GRS BlueWallet will display shortcuts for handling an invoice or address found in your clipboard.",
     "privacy_system_settings": "System Settings",
     "privacy_quickactions": "Wallet Shortcuts",
     "privacy_quickactions_explanation": "Touch and hold the GRS BlueWallet app icon on your Home Screen to quickly view your wallet’s balance.",
