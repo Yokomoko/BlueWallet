@@ -73,7 +73,7 @@ class AmountInput extends Component {
       // cache hit! we reuse old value that supposedly doesnt have rounding errors
       sats = AmountInput.conversionCache[amount + previousUnit];
     }
-    console.log('so, in sats its', sats);
+    console.log('so, in gros its', sats);
 
     const newInputValue = formatBalancePlain(sats, newUnit, false);
     console.log('and in', newUnit, 'its', newInputValue);

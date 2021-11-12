@@ -1656,12 +1656,12 @@ describe('multisig-wallet (native segwit)', () => {
   it('can sign valid tx if we have more keys than quorum ("Too many signatures" error)', async () => {
     const w = new MultisigHDWallet();
     w.setSecret(
-      '# BlueWallet Multisig setup file\n' +
+      '# GRS BlueWallet Multisig setup file\n' +
         '# this file may contain private information\n' +
         '#\n' +
         'Name: Multisig Vault\n' +
         'Policy: 3 of 6\n' +
-        "Derivation: m/48'/0'/0'/2'\n" +
+        "Derivation: m/48'/17'/0'/2'\n" +
         'Format: P2WSH\n' +
         '\n' +
         'seed: start local figure rose pony artist voice agent pyramid still spot walk\n' +
@@ -1716,12 +1716,12 @@ describe('multisig-wallet (native segwit)', () => {
   it('can sign multiple inputs', async () => {
     const w = new MultisigHDWallet();
     w.setSecret(
-      '# BlueWallet Multisig setup file\n' +
+      '# GRS BlueWallet Multisig setup file\n' +
         '# this file may contain private information\n' +
         '#\n' +
         'Name: Multisig Vault\n' +
         'Policy: 2 of 3\n' +
-        "Derivation: m/48'/0'/0'/2'\n" +
+        "Derivation: m/48'/17 '/0'/2'\n" +
         'Format: P2WSH\n' +
         '\n' +
         'seed: certain cruise forum ladder reveal frame company book sausage flat wasp mouse\n' +
