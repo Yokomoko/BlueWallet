@@ -373,7 +373,7 @@
     "updating": "جارٍ التحديث ..."
   },
   "wallets": {
-    "add_bitcoin": "بيتكوين",
+    "add_bitcoin": "غرسلكوين",
     "add_bitcoin_explain": "محفظة Groestlcoin بسيطة وقوية",
     "add_create": "الإنشاء",
     "add_entropy_generated": "{gen} بايت من الإنتروبيا (العشوائية) المحققة",
