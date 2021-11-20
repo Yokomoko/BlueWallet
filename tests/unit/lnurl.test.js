@@ -42,7 +42,7 @@ describe('LNURL', function () {
     assert.ok(!Lnurl.isLnurl('bs'));
   });
 
-  it('can callLnurlPayService() and requestBolt11FromLnurlPayService()', async () => {
+  it.skip('can callLnurlPayService() and requestBolt11FromLnurlPayService()', async () => {
     const LN = new Lnurl('LNURL1DP68GURN8GHJ7MRWW3UXYMM59E3XJEMNW4HZU7RE0GHKCMN4WFKZ7URP0YLH2UM9WF5KG0FHXYCNV9G9W58');
 
     // poor-man's mock:
