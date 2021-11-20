@@ -14,7 +14,7 @@ import {
 } from '../../class';
 import WalletImport from '../../class/wallet-import';
 import React from 'react';
-// import Notifications from '../../blue_modules/notifications';
+import Notifications from '../../blue_modules/notifications';
 const assert = require('assert');
 global.net = require('net'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
 global.tls = require('tls'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
