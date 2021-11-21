@@ -421,7 +421,10 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
       for (const vout of tx.outputs) {
         // when output goes to our address - this means we are gaining!
-        if (vout.scriptPubKey.addresses && vout.scriptPubKey.addresses[0] && ownedAddressesHashmap[vout.scriptPubKey.addresses[0]]) {
+        if (
+            (vout.scriptPubKey.address && ownedAddressesHashmap[vout.scriptPubKey.address]) || 
+            (vout.scriptPubKey.addresses && vout.scriptPubKey.addresses[0] && ownedAddressesHashmap[vout.scriptPubKey.addresses[0]]) 
+        ) {
           tx.value += new BigNumber(vout.value).multipliedBy(100000000).toNumber();
         }
       }
