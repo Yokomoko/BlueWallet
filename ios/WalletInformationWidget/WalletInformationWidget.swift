@@ -12,13 +12,13 @@ import SwiftUI
 struct WalletInformationWidgetProvider: TimelineProvider {
   typealias Entry = WalletInformationWidgetEntry
   func placeholder(in context: Context) -> WalletInformationWidgetEntry {
-    return WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 10000), allWalletsBalance: WalletData(balance: 1000000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)))
+    return WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 1), allWalletsBalance: WalletData(balance: 1000000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)))
   }
 
   func getSnapshot(in context: Context, completion: @escaping (WalletInformationWidgetEntry) -> ()) {
     let entry: WalletInformationWidgetEntry
     if (context.isPreview) {
-      entry = WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 10000), allWalletsBalance: WalletData(balance: 1000000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)))
+      entry = WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 1), allWalletsBalance: WalletData(balance: 1000000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)))
     } else {
       entry = WalletInformationWidgetEntry(date: Date(), marketData: emptyMarketData)
     }

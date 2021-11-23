@@ -11,13 +11,13 @@ import SwiftUI
 
 struct MarketWidgetProvider: TimelineProvider {
   func placeholder(in context: Context) -> MarketWidgetEntry {
-    return MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 10000))
+    return MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 1))
   }
 
   func getSnapshot(in context: Context, completion: @escaping (MarketWidgetEntry) -> ()) {
     let entry: MarketWidgetEntry
     if (context.isPreview) {
-      entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 10000))
+      entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 1))
     } else {
       entry = MarketWidgetEntry(date: Date(), marketData: emptyMarketData)
     }
@@ -27,7 +27,7 @@ struct MarketWidgetProvider: TimelineProvider {
   func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
     var entries: [MarketWidgetEntry] = []
     if context.isPreview {
-      let entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 10000))
+      let entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: 1))
       entries.append(entry)
       let timeline = Timeline(entries: entries, policy: .atEnd)
       completion(timeline)
