@@ -58,7 +58,7 @@ struct WalletInformationView: View {
 
 struct WalletInformationView_Previews: PreviewProvider {
   static var previews: some View {
-    WalletInformationView(allWalletsBalance: WalletData(balance: 10000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)), marketData: MarketData(nextBlock: "1", sats: "100 000 000", price: "$1", rate: Double(13000)))
+    WalletInformationView(allWalletsBalance: WalletData(balance: 10000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000)), marketData: MarketData(nextBlock: "1", sats: "100,000,000", price: "$1", rate: Double(13000)))
       .previewContext(WidgetPreviewContext(family: .systemSmall))
   }
 }
