@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "7.12.1",
-    "@keystonehq/bc-ur-registry": "https://github.com/BlueWallet/ur-registry",
+    "@keystonehq/bc-ur-registry": "https://github.com/BlueWallet/ur-registry#db2a4d22e97c7c352b8a0a8cc5b016ab114caaf5",
     "@ngraveio/bc-ur": "https://github.com/BlueWallet/bc-ur",
     "@react-native-async-storage/async-storage": "1.15.5",
     "@react-native-clipboard/clipboard": "1.7.0",
