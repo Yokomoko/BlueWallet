@@ -70,12 +70,11 @@ class WidgetAPI {
         let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
         latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       default:
-        guard let market_data = json["market_data"] as? Dictionary<String, Any>, 
-              let current_price = market_data["current_price"] as? Dictionary<String, Any>, 
-              let rateString = current_price[endPointKey.lowercased()] as? String, 
-              let rateDouble = rateString as? Double, 
-              let lastUpdatedString = self.dateFormatTime(date: Date()) as? String
-        else { break }
+        guard let market_data = json["market_data"] as? Dictionary<String, Any>,
+              let current_price = market_data["current_price"] as? Dictionary<String, Any>,
+              let rateString = current_price[endPointKey.lowercased()] as? String,
+              let rateDouble = Double(rateString) else { break }
+              let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
         latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       }
 

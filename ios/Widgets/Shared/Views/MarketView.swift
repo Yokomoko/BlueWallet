@@ -28,7 +28,7 @@ struct MarketView: View {
 
           Spacer()
           HStack(alignment: .center, spacing: 0, content: {
-            Text("Sats/\(WidgetAPI.getUserPreferredCurrency())").bold().lineLimit(1).font(Font.system(size:11, weight: .medium, design: .default)).foregroundColor(.textColor)
+            Text("Gros/\(WidgetAPI.getUserPreferredCurrency())").bold().lineLimit(1).font(Font.system(size:11, weight: .medium, design: .default)).foregroundColor(.textColor)
             Spacer()
             Text(marketData.sats == "..." ? "..." : marketData.sats).padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4)).lineLimit(1).minimumScaleFactor(0.1).foregroundColor(.widgetBackground).font(Font.system(size:11, weight: .semibold, design: .default)).background(Color(red: 0.97, green: 0.21, blue: 0.38)).overlay(
               RoundedRectangle(cornerRadius: 4.0)
@@ -51,7 +51,7 @@ struct MarketView: View {
 
 struct MarketView_Previews: PreviewProvider {
     static var previews: some View {
-      MarketView(marketData: MarketData(nextBlock: "26", sats: "9 134", price: "$10,000", rate: 0))
+      MarketView(marketData: MarketData(nextBlock: "1", sats: "1", price: "$1", rate: 0))
         .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

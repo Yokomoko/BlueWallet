@@ -11,23 +11,23 @@ import SwiftUI
 
 struct MarketWidgetProvider: TimelineProvider {
   func placeholder(in context: Context) -> MarketWidgetEntry {
-    return MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "26", sats: "9 134", price: "$10 000", rate: 10000))
+    return MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "1", price: "$1", rate: 10000))
   }
-  
+
   func getSnapshot(in context: Context, completion: @escaping (MarketWidgetEntry) -> ()) {
     let entry: MarketWidgetEntry
     if (context.isPreview) {
-      entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "26", sats: "9 134", price: "$10 000", rate: 10000))
+      entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "1", price: "$1", rate: 10000))
     } else {
       entry = MarketWidgetEntry(date: Date(), marketData: emptyMarketData)
     }
     completion(entry)
   }
-  
+
   func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
     var entries: [MarketWidgetEntry] = []
     if context.isPreview {
-      let entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "26", sats: "9 134", price: "$10 000", rate: 10000))
+      let entry = MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "1", price: "$1", rate: 10000))
       entries.append(entry)
       let timeline = Timeline(entries: entries, policy: .atEnd)
       completion(timeline)
@@ -38,7 +38,7 @@ struct MarketWidgetProvider: TimelineProvider {
         let entry: MarketWidgetEntry
         if let result = result {
           entry = MarketWidgetEntry(date: Date(), marketData: result)
-          
+
         } else {
           entry = MarketWidgetEntry(date: Date(), marketData: marketDataEntry)
         }
@@ -57,11 +57,11 @@ struct MarketWidgetEntry: TimelineEntry {
 
 struct MarketWidgetEntryView : View {
   var entry: MarketWidgetProvider.Entry
-  
+
   var MarketStack: some View {
     MarketView(marketData: entry.marketData).padding(EdgeInsets(top: 18, leading: 11, bottom: 18, trailing: 11))
   }
-  
+
   var body: some View {
     VStack(content: {
       MarketStack.background(Color.widgetBackground)
@@ -71,7 +71,7 @@ struct MarketWidgetEntryView : View {
 
 struct MarketWidget: Widget {
   let kind: String = "MarketWidget"
-  
+
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: MarketWidgetProvider()) { entry in
       MarketWidgetEntryView(entry: entry)
@@ -83,7 +83,7 @@ struct MarketWidget: Widget {
 
 struct MarketWidget_Previews: PreviewProvider {
   static var previews: some View {
-    MarketWidgetEntryView(entry: MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "26", sats: "9 134", price: "$10,000", rate: 0)))
+    MarketWidgetEntryView(entry: MarketWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "1", price: "$1", rate: 0)))
       .previewContext(WidgetPreviewContext(family: .systemSmall))
   }
 }

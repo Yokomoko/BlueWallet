@@ -115,10 +115,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
           return
         }
 
-        guard let market_data = result["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>,
-
-        let rateString = current_price[userPreferredCurrency.lowercased()] as? Double,//, let rateString = preferredCurrency["rate"] as? String,
-          /*let time = result["time"] as? String,*/ let lastUpdatedString = self.dateFormatTime(date: Date()) as? String/*time["updatedISO"] as? String*/
+        guard let market_data = result["market_data"] as? Dictionary<String, Any>, let current_price = market_data["current_price"] as? Dictionary<String, Any>, let rateString = current_price[userPreferredCurrency.lowercased()] as? Double,
+          let lastUpdatedString = self.dateFormatTime(date: Date()) as? String
           else {
             self.lastUpdatedDate.text = "Obtained unexpected information."
             completionHandler(.failed)

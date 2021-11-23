@@ -14,7 +14,7 @@ struct MarketData:Codable  {
   var price: String
   var rate: Double
   var formattedNextBlock: String {
-    return nextBlock == "..." ? "..." : #"\#(nextBlock) sat/b"#
+    return nextBlock == "..." ? "..." : #"\#(nextBlock) gro/b"#
   }
   var dateString: String = ""
   var formattedDate: String? {
