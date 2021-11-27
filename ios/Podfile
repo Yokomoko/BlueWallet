@@ -23,8 +23,8 @@ target 'BlueWallet' do
           target.build_configurations.each do |config|
             config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.1'
             if ['React-Core-AccessibilityResources'].include? target.name
-              config.build_settings['CODE_SIGN_STYLE'] = "Manual"
-              config.build_settings['CODE_SIGN_IDENTITY'] = "Apple Distribution: GRS Bluewallet (CMG3V3T59A)"
+              config.build_settings['CODE_SIGN_STYLE'] = "Automatic"
+              config.build_settings['CODE_SIGN_IDENTITY'] = "Apple Development"
               config.build_settings['DEVELOPMENT_TEAM'] = "CMG3V3T59A"
             end
           end
