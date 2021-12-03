@@ -138,7 +138,7 @@ android {
         applicationId "org.groestlcoin.bluewallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
+        versionCode 14
         versionName "6.1.9"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
