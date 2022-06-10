@@ -1,9 +1,9 @@
-name: Tests
+name: CI
 
 # https://dev.to/edvinasbartkus/running-react-native-detox-tests-for-ios-and-android-on-github-actions-2ekn
 # https://medium.com/@reime005/the-best-ci-cd-for-react-native-with-e2e-support-4860b4aaab29
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   test:
