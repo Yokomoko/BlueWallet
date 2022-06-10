@@ -1,5 +1,13 @@
 /* global jest */
 
+import mockClipboard from '@react-native-clipboard/clipboard/jest/clipboard-mock.js';
+
+global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
+global.tls = require('tls'); // needed by Electrum client. For RN it is proviced in shim.js
+global.fetch = require('node-fetch');
+
+jest.mock('@react-native-clipboard/clipboard', () => mockClipboard);
+
 jest.mock('react-native-watch-connectivity', () => {
   return {
     getIsWatchAppInstalled: jest.fn(() => Promise.resolve(false)),
@@ -16,14 +24,11 @@ jest.mock('@react-native-community/push-notification-ios', () => {
   return {};
 });
 
-jest.mock('@sentry/react-native', () => {
-  return {};
-});
-
 jest.mock('react-native-device-info', () => {
   return {
     getUniqueId: jest.fn().mockReturnValue('uniqueId'),
     getSystemName: jest.fn(),
+    getDeviceType: jest.fn().mockReturnValue(false),
     hasGmsSync: jest.fn().mockReturnValue(true),
     hasHmsSync: jest.fn().mockReturnValue(false),
   };
@@ -90,11 +95,12 @@ jest.mock('react-native-fs', () => {
   };
 });
 
-jest.mock('react-native-gesture-handler', () => jest.requireActual('react-native-gesture-handler/__mocks__/RNGestureHandlerModule.js'));
-
 jest.mock('react-native-document-picker', () => ({}));
 
 jest.mock('react-native-haptic-feedback', () => ({}));
+
+jest.mock('rn-ldk/lib/module', () => ({}));
+jest.mock('rn-ldk/src/index', () => ({}));
 
 const realmInstanceMock = {
   close: function () {},
@@ -138,6 +144,12 @@ jest.mock('../blue_modules/analytics', () => {
 jest.mock('react-native-share', () => {
   return {
     open: jest.fn(),
+  };
+});
+
+jest.mock('../blue_modules/WidgetCommunication', () => {
+  return {
+    reloadAllTimelines: jest.fn(),
   };
 });
 

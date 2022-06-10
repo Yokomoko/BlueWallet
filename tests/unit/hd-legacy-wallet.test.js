@@ -1,6 +1,7 @@
+import assert from 'assert';
+import * as bitcoin from 'groestlcoinjs-lib';
+
 import { HDLegacyP2PKHWallet } from '../../class';
-const assert = require('assert');
-const bitcoin = require('groestlcoinjs-lib');
 
 describe('Legacy HD (BIP44)', () => {
   it('works', async () => {
@@ -155,5 +156,41 @@ describe('Legacy HD (BIP44)', () => {
     const hd = new HDLegacyP2PKHWallet();
     hd.setSecret(mnemonic);
     assert.strictEqual(hd.getMasterFingerprintHex(), '73C5DA0A');
+  });
+
+  // from electrum tests https://github.com/spesmilo/electrum/blob/9c1a51547a301e765b9b0f9935c6d940bb9d658e/electrum/tests/test_wallet_vertical.py#L292
+  it('can use mnemonic with passphrase', () => {
+    const mnemonic = 'treat dwarf wealth gasp brass outside high rent blood crowd make initial';
+    const UNICODE_HORROR = '₿ 😀 😈     う けたま わる w͢͢͝h͡o͢͡ ̸͢k̵͟n̴͘ǫw̸̛s͘ ̀́w͘͢ḩ̵a҉̡͢t ̧̕h́o̵r͏̵rors̡ ̶͡͠lį̶e͟͟ ̶͝in͢ ͏t̕h̷̡͟e ͟͟d̛a͜r̕͡k̢̨ ͡h̴e͏a̷̢̡rt́͏ ̴̷͠ò̵̶f̸ u̧͘ní̛͜c͢͏o̷͏d̸͢e̡͝?͞';
+    const hd = new HDLegacyP2PKHWallet();
+    hd.setSecret(mnemonic);
+    hd.setPassphrase(UNICODE_HORROR);
+
+    assert.strictEqual(
+      hd.getXpub(),
+      'xpub6D85QDBajeLe2JXJrZeGyQCaw47PWKi3J9DPuHakjTkVBWCxVQQkmMVMSSfnw39tj9FntbozpRtb1AJ8ubjeVSBhyK4M5mzdvsXZzKPwodT',
+    );
+
+    assert.strictEqual(hd._getExternalAddressByIndex(0), '1F88g2naBMhDB7pYFttPWGQgryba3hPevM');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), '1H4QD1rg2zQJ4UjuAVJr5eW1fEM8WMqyxh');
+    assert.strictEqual(hd._getExternalWIFByIndex(0), 'L3HLzdVcwo4711gFiZG4fiLzLVNJpR6nejfo6J85wuYn9YF2G5zk');
+  });
+
+  it('can create with custom derivation path', async () => {
+    const hd = new HDLegacyP2PKHWallet();
+    hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
+    hd.setDerivationPath("m/44'/17'/1'");
+
+    assert.strictEqual(
+      hd.getXpub(),
+      'xpub6BosfCnifzxcJJ1wYuntGJfF2zPJkDeG9ELNHcKNjezuea4tumswN9sH1psMdSVqCMoJC21Bv8usSeqSP4Sp1tLzW7aY59fGn9GCYzx5UTo',
+    );
+
+    assert.strictEqual(hd._getExternalAddressByIndex(0), '15qucUWKf95Fo58FdCBhUTSAtsm22HHE2Q');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), '1DgjtFUiXvqxGic9A9fiDPrHNyKC4cGtTH');
+    assert.strictEqual(hd._getExternalWIFByIndex(0), 'KzReLDRfwGJ7bBH6WjLQ36e2WxjHob3d61EKnZQT86nutd5tpkvC');
+
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/44'/17'/1'/0/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/44'/17'/1'/1/0");
   });
 });

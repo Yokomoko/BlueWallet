@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import navigationStyle from '../../components/navigationStyle';
 import { SafeBlueArea, BlueListItem } from '../../BlueComponents';
 import loc from '../../loc';
-import { isDesktop } from '../../blue_modules/environment';
+import { isTorCapable } from '../../blue_modules/environment';
 
 const NetworkSettings = () => {
   const { navigate } = useNavigation();
@@ -34,12 +34,12 @@ const NetworkSettings = () => {
             chevron
           />
         ) */}
-        {!isDesktop && <BlueListItem title={loc.settings.tor_settings} onPress={navigateToTorSettings} testID="TorSettings" chevron />}
+        {isTorCapable && <BlueListItem title={loc.settings.tor_settings} onPress={navigateToTorSettings} testID="TorSettings" chevron />}
       </ScrollView>
     </SafeBlueArea>
   );
 };
 
-NetworkSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.network }));
+NetworkSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.settings.network }));
 
 export default NetworkSettings;

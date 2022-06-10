@@ -17,8 +17,7 @@ class DeeplinkSchemaMatch {
       lowercaseString.startsWith('lightning:') ||
       lowercaseString.startsWith('blue:') ||
       lowercaseString.startsWith('bluewallet:') ||
-      lowercaseString.startsWith('lapp:') ||
-      lowercaseString.startsWith('aopp:')
+      lowercaseString.startsWith('lapp:')
     );
   }
 
@@ -153,11 +152,24 @@ class DeeplinkSchemaMatch {
           },
         },
       ]);
+    } else if (Lnurl.isLightningAddress(event.url)) {
+      // this might be not just an email but a lightning addres
+      // @see https://lightningaddress.com
+      completionHandler([
+        'ScanLndInvoiceRoot',
+        {
+          screen: 'ScanLndInvoice',
+          params: {
+            uri: event.url,
+          },
+        },
+      ]);
     } else if (DeeplinkSchemaMatch.isSafelloRedirect(event)) {
       const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
 
       const safelloStateToken = urlObject.query['safello-state-token'];
       let wallet;
+      // eslint-disable-next-line no-unreachable-loop
       for (const w of context.wallets) {
         wallet = w;
         break;
@@ -168,7 +180,7 @@ class DeeplinkSchemaMatch {
         {
           uri: event.url,
           safelloStateToken,
-          wallet,
+          walletID: wallet?.getID(),
         },
       ]);
     } else if (Azteco.isRedeemUrl(event.url)) {
@@ -193,15 +205,7 @@ class DeeplinkSchemaMatch {
     } else {
       const urlObject = url.parse(event.url, true); // eslint-disable-line node/no-deprecated-api
       (async () => {
-        if (urlObject.protocol === 'aopp:') {
-          completionHandler([
-            'AOPPRoot',
-            {
-              screen: 'AOPP',
-              params: { uri: event.url },
-            },
-          ]);
-        } else if (urlObject.protocol === 'bluewallet:' || urlObject.protocol === 'lapp:' || urlObject.protocol === 'blue:') {
+        if (urlObject.protocol === 'bluewallet:' || urlObject.protocol === 'lapp:' || urlObject.protocol === 'blue:') {
           switch (urlObject.host) {
             case 'openlappbrowser': {
               console.log('opening LAPP', urlObject.query.url);
@@ -428,11 +432,21 @@ class DeeplinkSchemaMatch {
   }
 
   static bip21decode(uri) {
+    if (!uri) return {};
     return bip21.decode(uri.replace('GROESTLCOIN:', 'groestlcoin:'));
   }
 
   static bip21encode() {
-    return bip21.encode.apply(bip21, arguments);
+    const argumentsArray = Array.from(arguments);
+    for (const argument of argumentsArray) {
+      if (String(argument.label).replace(' ', '').length === 0) {
+        delete argument.label;
+      }
+      if (!(Number(argument.amount) > 0)) {
+        delete argument.amount;
+      }
+    }
+    return bip21.encode.apply(bip21, argumentsArray);
   }
 
   static decodeBitcoinUri(uri) {

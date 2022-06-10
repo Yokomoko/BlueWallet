@@ -14,9 +14,8 @@ import { FiatUnit } from './models/fiatUnit';
 import { MultisigHDWallet } from './class';
 
 function WatchConnectivity() {
-  const { walletsInitialized, wallets, fetchWalletTransactions, saveToDisk, txMetadata, preferredFiatCurrency } = useContext(
-    BlueStorageContext,
-  );
+  const { walletsInitialized, wallets, fetchWalletTransactions, saveToDisk, txMetadata, preferredFiatCurrency } =
+    useContext(BlueStorageContext);
   const isReachable = useReachability();
   const isInstalled = useInstalled(); // true | false
   const messagesListenerActive = useRef(false);
@@ -44,6 +43,10 @@ function WatchConnectivity() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletsInitialized, wallets, isReachable, isInstalled]);
+
+  useEffect(() => {
+    updateApplicationContext({ isWalletsInitialized: walletsInitialized, randomID: Math.floor(Math.random() * 11) });
+  }, [walletsInitialized]);
 
   useEffect(() => {
     if (isInstalled && isReachable && walletsInitialized && preferredFiatCurrency) {
@@ -116,34 +119,31 @@ function WatchConnectivity() {
     if (!Array.isArray(wallets)) {
       console.log('No Wallets set to sync with Watch app. Exiting...');
       return;
-    } else if (walletsInitialized && wallets.length === 0) {
-      console.log('Wallets array is set. No Wallets set to sync with Watch app. Exiting...');
-      updateApplicationContext({ wallets: [], randomID: Math.floor(Math.random() * 11) });
+    }
+    if (!walletsInitialized) {
+      console.log('Wallets not initialized. Exiting...');
       return;
     }
-
     const walletsToProcess = [];
 
     for (const wallet of wallets) {
       let receiveAddress;
-      if (wallet.getAddressAsync) {
-        if (wallet.chain === Chain.ONCHAIN) {
-          try {
-            receiveAddress = await wallet.getAddressAsync();
-          } catch (_) {}
-          if (!receiveAddress) {
-            // either sleep expired or getAddressAsync threw an exception
-            receiveAddress = wallet._getExternalAddressByIndex(wallet.next_free_address_index);
-          }
-        } else if (wallet.chain === Chain.OFFCHAIN) {
-          try {
-            await wallet.getAddressAsync();
-            receiveAddress = wallet.getAddress();
-          } catch (_) {}
-          if (!receiveAddress) {
-            // either sleep expired or getAddressAsync threw an exception
-            receiveAddress = wallet.getAddress();
-          }
+      if (wallet.chain === Chain.ONCHAIN) {
+        try {
+          receiveAddress = await wallet.getAddressAsync();
+        } catch (_) {}
+        if (!receiveAddress) {
+          // either sleep expired or getAddressAsync threw an exception
+          receiveAddress = wallet._getExternalAddressByIndex(wallet.next_free_address_index);
+        }
+      } else if (wallet.chain === Chain.OFFCHAIN) {
+        try {
+          await wallet.getAddressAsync();
+          receiveAddress = wallet.getAddress();
+        } catch (_) {}
+        if (!receiveAddress) {
+          // either sleep expired or getAddressAsync threw an exception
+          receiveAddress = wallet.getAddress();
         }
       }
       const transactions = wallet.getTransactions(10);

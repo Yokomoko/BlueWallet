@@ -17,7 +17,6 @@
     "success": "Sukses",
     "wallet_key": "Kunci Dompet",
     "invalid_animated_qr_code_fragment": "QRCode fragment tidak dapat dibaca. Mohon coba lagi",
-    "file_saved": "File ({filePath}) telah disimpa di dalam folder Unduhan anda. ",
     "discard_changes": "Batalkan perubahan?",
     "discard_changes_detail": "Anda memilki perubahan yang belum disimpan. Apakah anda yakin untuk membuang perubahan dan meninggalkan layar? "
   },
@@ -97,7 +96,6 @@
     "exchange": "Pertukaran",
     "expired": "Kadaluarsa",
     "expiredLow": "kadarluasa",
-    "expiresIn": "Berakhir: {time}",
     "payButton": "Bayar",
     "placeholder": "Faktur",
     "potentialFee": "Potensi biaya: {fee}",
@@ -163,11 +161,10 @@
     "create_details": "Detail",
     "create_fee": "Tarif",
     "create_memo": "Memo",
-    "create_satoshi_per_byte": "Gro per bit",
     "create_this_is_hex": "Ini adalah hex transaksi, siap untuk disiarkan ke jaringan.",
     "create_to": "Ke",
     "create_tx_size": "Ukuran TX",
-    "create_verify": "Verifikasi di coinb.in",
+    "create_verify": "Verifikasi di webwallet",
     "details_add_rec_add": "Tambah penerima",
     "details_add_rec_rem": "Hapus Penerima",
     "details_address": "alamat",
@@ -199,8 +196,6 @@
     "fee_custom": "Custom",
     "fee_fast": "Cepat",
     "fee_medium": "Sedang",
-    "fee_replace_min": "Jumlah biaya (gro per byte) yang ingin anda bayarkan harus lebih tinggi dari {min} gro/byte",
-    "fee_satbyte": "dalam gro/byte",
     "fee_slow": "Lambat",
     "header": "Kirim",
     "input_clear": "Hapus",
@@ -213,7 +208,6 @@
     "open_settings": "Buka Setelan",
     "permission_storage_later": "Tanyakan saya nanti",
     "permission_storage_message": "GRS BlueWallet membutuhkan izin anda untuk mengakses tempat penyimpanan anda untuk menyimpan file ini",
-    "permission_storage_denied_message": "GRS BlueWallet tidak dapat menyimpan file ini. Mohon buka setelan perangkat anda dan perbolehkan Izin Penyimpanan.",
     "permission_storage_title": "Izin Akses Penyimpanan",
     "psbt_clipboard": "Salin ke Clipboard",
     "psbt_this_is_psbt": "Ini adalah Transaksi Groestlcoin yang Ditandatangani Sebagian (PSBT). Harap selesaikan penandatanganan dengan dompet perangkat keras Anda.",
@@ -221,7 +215,6 @@
     "no_tx_signing_in_progress": "Tidak ada transaksi penandatanganan yang sedang berlangsung.",
     "psbt_tx_open": "Buka Transaksi yang Ditandatangani",
     "psbt_tx_scan": "Pindai Transaksi yang Ditandatangani",
-    "qr_error_no_qrcode": "Gambar yang dipilih tidak berisi Kode QR.",
     "qr_error_no_wallet": "File yang dipilih tidak berisi dompet yang dapat diimpor.",
     "success_done": "Selesai",
     "txSaved": "File transaksi ({filePath}) telah disimpan pada folder Unduhan.",
@@ -255,14 +248,12 @@
     "electrum_connected": "Terhubung",
     "electrum_connected_not": "Tidak Terhubung",
     "electrum_error_connect": "Tidak dapat terhubung dengan server Electrum-GRS",
-    "electrum_host": "Contoh. {example}",
-    "electrum_port": "Port TCP, biasanya {contoh}",
-    "electrum_port_ssl": "Port SSL, biasanya {contoh}",
+    "electrum_clear_alert_cancel": "Batalkan",
+    "electrum_clear": "Hapus",
     "general_adv_mode": "Enable advanced mode",
     "header": "setting",
     "language": "Bahasa",
     "lightning_settings": "Pengaturan Lightning",
-    "lightning_settings_explain": "Pasang LndHub untuk menghubungkan ke node LND kamu dan masukkan URL di sini. Biarkan kosong untuk menghubungkan ke LndHub standar (lndhub.groestlcoin.org)",
     "password": "kata sandi",
     "password_explain": "Buat kata sandi untuk dekripsi penyimpanan",
     "passwords_do_not_match": "Kata sandi tidak cocok",
@@ -270,11 +261,16 @@
     "retype_password": "Ulangi kata sandi",
     "save": "simpan"
   },
+  "notifications": {
+    "ask_me_later": "Tanyakan saya nanti"
+  },
   "transactions": {
+    "cpfp_create": "Buat",
     "details_copy": "Salin",
     "details_show_in_block_explorer": "Tampilkan di block explorer",
     "details_title": "Transaksi",
     "details_transaction_details": "Detail transaksi",
+    "pending": "tertunda",
     "list_title": "transaksi"
   },
   "wallets": {
@@ -312,9 +308,22 @@
     "xpub_copiedToClipboard": "Disalin ke clipboard.",
     "xpub_title": "XPUB dompet"
   },
+  "multisig": {
+    "confirm": "Konfirmasi",
+    "header": "Kirim",
+    "share": "bagikan",
+    "create": "Buat",
+    "co_sign_transaction": "Tanda tangani transaksi",
+    "ms_help_title5": "Enable advanced mode"
+  },
+  "units": {
+    "sats": "gros"
+  },
   "addresses": {
     "sign_placeholder_address": "Alamat",
     "sign_placeholder_message": "Pesan",
-    "sign_placeholder_signature": "Tanda Tangan"
+    "sign_placeholder_signature": "Tanda Tangan",
+    "type_receive": "Terima",
+    "transactions": "transaksi"
   }
 }

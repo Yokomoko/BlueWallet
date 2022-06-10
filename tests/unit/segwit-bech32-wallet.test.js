@@ -20,6 +20,8 @@ describe('Segwit P2SH wallet', () => {
 
     let txNew = wallet.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, wallet.getAddress());
     let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+    const satPerVbyte = txNew.fee / tx.virtualSize();
+    assert.strictEqual(Math.round(satPerVbyte), 1);
     assert.strictEqual(
       txNew.tx.toHex(),
       '02000000000101ebff950f972e51ea4791f635fef777d5ed0162bacf74f03f5819b976c08bd1570000000000ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac2e26000000000000160014c3216f2a365e031bfa15743096cc15d1bb17f6b30248304502210088050131efe80a0c6909ce9f5c13e05315fcf30cfd04d2db9697be96a824e564022079604e393cb075978c876fa03e9002fcb335c8c685bd8a676dfbd3d45e2340a9012102605dc850e6e4e50de76f6d0444ecadf881387f3e7116181bfd77ac082e79f83a00000000',

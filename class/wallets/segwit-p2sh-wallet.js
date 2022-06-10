@@ -1,4 +1,7 @@
 import { LegacyWallet } from './legacy-wallet';
+import { ECPairFactory } from 'ecpairgrs';
+const ecc = require('tiny-secp256k1');
+const ECPair = ECPairFactory(ecc);
 const bitcoin = require('groestlcoinjs-lib');
 
 /**
@@ -52,7 +55,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     if (this._address) return this._address;
     let address;
     try {
-      const keyPair = bitcoin.ECPair.fromWIF(this.secret);
+      const keyPair = ECPair.fromWIF(this.secret);
       const pubKey = keyPair.publicKey;
       if (!keyPair.compressed) {
         console.warn('only compressed public keys are good for segwit');
@@ -80,6 +83,10 @@ export class SegwitP2SHWallet extends LegacyWallet {
    */
   createTransaction(utxos, targets, feeRate, changeAddress, sequence, skipSigning = false, masterFingerprint) {
     if (targets.length === 0) throw new Error('No destination provided');
+    // compensating for coinselect inability to deal with segwit inputs, and overriding script length for proper vbytes calculation
+    for (const u of utxos) {
+      u.script = { length: 50 };
+    }
     const { inputs, outputs, fee } = this.coinselect(utxos, targets, feeRate, changeAddress);
     sequence = sequence || 0xffffffff; // disable RBF by default
     const psbt = new bitcoin.Psbt();
@@ -90,7 +97,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     inputs.forEach(input => {
       if (!skipSigning) {
         // skiping signing related stuff
-        keyPair = bitcoin.ECPair.fromWIF(this.secret); // secret is WIF
+        keyPair = ECPair.fromWIF(this.secret); // secret is WIF
       }
       values[c] = input.value;
       c++;
@@ -137,6 +144,14 @@ export class SegwitP2SHWallet extends LegacyWallet {
       tx = psbt.finalizeAllInputs().extractTransaction();
     }
     return { tx, inputs, outputs, fee, psbt };
+  }
+
+  allowSendMax() {
+    return true;
+  }
+
+  isSegwit() {
+    return true;
   }
 
   allowSignVerifyMessage() {

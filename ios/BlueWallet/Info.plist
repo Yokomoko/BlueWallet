@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>org.groestlcoin.bluewallet123.fetchTxsForWallet</string>
@@ -91,6 +93,11 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>io.bluewallet.bluewallet.receiveonchain</string>
+		<string>io.bluewallet.bluewallet.xpub</string>
+	</array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -109,7 +116,6 @@
 				<string>grsbluewallet</string>
 				<string>lapp</string>
 				<string>blue</string>
-				<string>aopp</string>
 			</array>
 		</dict>
 	</array>
@@ -350,5 +356,10 @@
 			</dict>
 		</dict>
 	</array>
+	<key>bugsnag</key>
+	<dict>
+		<key>apiKey</key>
+		<string>17ba9059f676f1cc4f45d98182388b01</string>
+	</dict>
 </dict>
 </plist>

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StatusBar, Linking } from 'react-native';
+import { StatusBar } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { BlueLoading, SafeBlueArea } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import { LightningCustodianWallet, WatchOnlyWallet } from '../../class';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
-import { isCatalyst } from '../../blue_modules/environment';
 import * as NavigationService from '../../NavigationService';
+import { FiatUnit } from '../../models/fiatUnit';
 
 const currency = require('../../blue_modules/currency');
 
@@ -26,7 +26,12 @@ export default class BuyBitcoin extends Component {
   }
 
   static async generateURL(wallet) {
-    let preferredCurrency = await currency.getPreferredCurrency();
+    let preferredCurrency;
+    try {
+      preferredCurrency = await currency.getPreferredCurrency();
+    } catch (_) {
+      preferredCurrency = FiatUnit.USD;
+    }
     preferredCurrency = preferredCurrency.endPointKey;
 
     /**  @type {AbstractHDWallet|WatchOnlyWallet|LightningCustodianWallet}   */
@@ -108,16 +113,12 @@ BuyBitcoin.propTypes = {
 BuyBitcoin.navigationOptions = navigationStyle({
   closeButton: true,
   title: '',
-  headerLeft: null,
+  stackPresentation: 'modal',
+  headerHideBackButton: true,
 });
 
 BuyBitcoin.navigate = async wallet => {
-  if (isCatalyst) {
-    const uri = await BuyBitcoin.generateURL(wallet);
-    Linking.openURL(uri);
-  } else {
-    NavigationService.navigate('BuyBitcoin', {
-      walletID: wallet.getID(),
-    });
-  }
+  NavigationService.navigate('BuyBitcoin', {
+    walletID: wallet.getID(),
+  });
 };

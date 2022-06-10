@@ -1,7 +1,11 @@
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 import b58 from 'bs58grscheck';
+import BIP32Factory from 'bip32grs';
+import * as ecc from 'tiny-secp256k1';
+
 const bitcoin = require('groestlcoinjs-lib');
 const { CipherSeed } = require('aezeed');
+const bip32 = BIP32Factory(ecc);
 
 /**
  * AEZEED mnemonics support, which is used in LND
@@ -21,7 +25,7 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
 
   setSecret(newSecret) {
     this.secret = newSecret.trim();
-    this.secret = this.secret.replace(/[^a-zA-Z0-9:]/g, ' ').replace(/\s+/g, ' ');
+    this.secret = this.secret.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\s+/g, ' ');
     return this;
   }
 
@@ -36,7 +40,7 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
 
   getXpub() {
     // first, getting xpub
-    const root = bitcoin.bip32.fromSeed(this._getEntropyCached());
+    const root = bip32.fromSeed(this._getEntropyCached());
 
     const path = "m/84'/17'/0'";
     const child = root.derivePath(path).neutered();
@@ -51,14 +55,14 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
     return this._xpub;
   }
 
-  validateMnemonic(): boolean {
+  validateMnemonic() {
     throw new Error('Use validateMnemonicAsync()');
   }
 
   async validateMnemonicAsync() {
-    const [mnemonic3, password] = this.secret.split(':');
+    const passphrase = this.getPassphrase() || 'aezeed';
     try {
-      const cipherSeed1 = await CipherSeed.fromMnemonic(mnemonic3, password || 'aezeed');
+      const cipherSeed1 = await CipherSeed.fromMnemonic(this.secret, passphrase);
       this._entropyHex = cipherSeed1.entropy.toString('hex'); // save cache
       return !!cipherSeed1.entropy;
     } catch (_) {
@@ -67,9 +71,9 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
   }
 
   async mnemonicInvalidPassword() {
-    const [mnemonic3, password] = this.secret.split(':');
+    const passphrase = this.getPassphrase() || 'aezeed';
     try {
-      const cipherSeed1 = await CipherSeed.fromMnemonic(mnemonic3, password || 'aezeed');
+      const cipherSeed1 = await CipherSeed.fromMnemonic(this.secret, passphrase);
       this._entropyHex = cipherSeed1.entropy.toString('hex'); // save cache
     } catch (error) {
       return error.message === 'Invalid Password';
@@ -82,13 +86,13 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
   }
 
   _getNode0() {
-    const root = bitcoin.bip32.fromSeed(this._getEntropyCached());
+    const root = bip32.fromSeed(this._getEntropyCached());
     const node = root.derivePath("m/84'/17'/0'");
     return node.derive(0);
   }
 
   _getNode1() {
-    const root = bitcoin.bip32.fromSeed(this._getEntropyCached());
+    const root = bip32.fromSeed(this._getEntropyCached());
     const node = root.derivePath("m/84'/17'/0'");
     return node.derive(1);
   }
@@ -121,7 +125,7 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
 
   _getWIFByIndex(internal, index) {
     if (!this.secret) return false;
-    const root = bitcoin.bip32.fromSeed(this._getEntropyCached());
+    const root = bip32.fromSeed(this._getEntropyCached());
     const path = `m/84'/17'/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
 
@@ -149,8 +153,8 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
   }
 
   getIdentityPubkey() {
-    const root = bitcoin.bip32.fromSeed(this._getEntropyCached());
-    const node = root.derivePath("m/1017'/17'/6'/0/0");  // TODO: this is a guess that 0 should be 17
+    const root = bip32.fromSeed(this._getEntropyCached());
+    const node = root.derivePath("m/1017'/17'/6'/0/0"); // TODO: this is a guess that 0 should be 17
 
     return node.publicKey.toString('hex');
   }
@@ -170,6 +174,10 @@ export class HDAezeedWallet extends AbstractHDElectrumWallet {
   }
 
   allowPayJoin() {
+    return true;
+  }
+
+  isSegwit() {
     return true;
   }
 

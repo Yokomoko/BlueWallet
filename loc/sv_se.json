@@ -14,9 +14,9 @@
     "no": "Nej",
     "save": "Spara",
     "seed": "Frö",
+    "success": "Framgång",
     "wallet_key": "Nyckel till plånbok",
-    "invalid_animated_qr_code_fragment": "Felaktig animerad QR-kod. Vänligen försök igen.",
-    "file_saved": "Filen ({filePath}) har sparats i din Sparade Filer folder"
+    "invalid_animated_qr_code_fragment": "Felaktig animerad QR-kod. Vänligen försök igen."
   },
   "azteco": {
     "codeIs": "Din kupong är",
@@ -87,7 +87,6 @@
     "exchange": "Börs",
     "expired": "Förfallen",
     "expiredLow": "förfallen",
-    "expiresIn": "Förfaller om: {tid}",
     "payButton": "Betala",
     "placeholder": "Faktura",
     "potentialFee": "Potentiell avgift: {avgift}",
@@ -123,11 +122,7 @@
   "pleasebackup": {
     "ask": "Har du skrivit ner din plånboks uppbacknings fras? Denna frasen är nödvändig för att komma åt dina pengar ifall du förlorar denna enheten. Utan denna uppbacknings frasen är dina pengar borta för alltid",
     "ask_no": "Nej",
-    "ask_yes": "Ja",
-    "ok": "OK, jag har skrivit ned orden!",
-    "ok_lnd": "Ok, jag har sparat det",
-    "text": "Innan du går vidare, var snäll och skriv ned dessa ord på ett papper och förvara på ett säkert ställe. De är din backup och säkerställer att du kan återställa din plånbok igen om något händer.",
-    "title": "Din plånbok har skapats..."
+    "ask_yes": "Ja"
   },
   "receive": {
     "details_create": "Skapa",
@@ -149,17 +144,15 @@
     "create_details": "Detaljer",
     "create_fee": "Avgift",
     "create_memo": "Memo",
-    "create_satoshi_per_byte": "Satoshis per byte",
     "create_this_is_hex": "Detta är transaktionens hex, signerad och redo att skickas ut på nätverket.",
     "create_to": "Till",
     "create_tx_size": "Transaktionsstorlek",
-    "create_verify": "Verifiera med coinb.in",
+    "create_verify": "Verifiera med webwallet",
     "details_add_rec_add": "Lägg till mottagare",
     "details_add_rec_rem": "Ta bort mottagare",
     "details_address": "adress",
     "details_address_field_is_not_valid": "Angiven adress är inte giltig",
     "details_adv_full": "Andvänd hela beloppet",
-    "details_adv_full_remove": "Dina andra mottagare kommer att tas bort från denna transaktion.",
     "details_adv_import": "Importera Transaction",
     "details_amount_field_is_not_valid": "Angivet belopp är inte giltigt",
     "details_amount_field_is_less_than_minimum_amount_sat": "Det angivna beloppet är för litet. Vänligen ange ett belopp som är större än 500 gros.",
@@ -173,7 +166,6 @@
     "dynamic_prev": "Föregående",
     "dynamic_start": "Starta",
     "dynamic_stop": "Stoppa",
-    "fee_satbyte": "i gro/byte",
     "fee_slow": "Långsamt",
     "header": "Skicka",
     "input_clear": "Töm",
@@ -185,7 +177,6 @@
     "open_settings": "Öppna inställningar",
     "permission_storage_later": "Fråga mig senare",
     "psbt_tx_export": "Exportera till fil",
-    "qr_error_no_qrcode": "Bilden innehåller inte en QR kod",
     "success_done": "Klart!"
   },
   "settings": {
@@ -197,12 +188,14 @@
     "currency": "Valuta",
     "currency_source": "Priser hämtas från",
     "default_title": "Vid uppstart",
+    "electrum_settings_server": "Electrum-GRS server",
+    "electrum_clear_alert_cancel": "Avbryt",
+    "electrum_clear": "Töm",
     "encrypt_use": "Använd {type}",
     "general_adv_mode": "Enable advanced mode",
     "header": "inställningar",
     "language": "Språk",
     "lightning_settings": "Lightning Network",
-    "lightning_settings_explain": "För att ansluta till din egen LND-nod, installera LndHub och mata in dess URL nedan. Lämna blankt för att använda GRS BlueWallet's LNDHub (lndhub.groestlcoin.org). Plånböcker skapade efter att inställningarna sparats kommer att använda den angivna LNDHub:en",
     "network": "Nätverk",
     "network_electrum": "Electrum-GRS server",
     "notifications": "Notifikationer",
@@ -226,6 +219,7 @@
     "details_show_in_block_explorer": "Visa i block explorer",
     "details_title": "Transaktion",
     "details_transaction_details": "Transaktionsdetaljer",
+    "pending": "Pågående",
     "list_title": "transaktioner",
     "status_cancel": "Avbryt transaction"
   },
@@ -252,17 +246,16 @@
     "export_title": "exportera plånbok",
     "import_do_import": "Importera",
     "import_error": "Import misslyckades. Kontrollera att informationen du matade in är korrekt.",
-    "import_explanation": "Skriv in dina ord, din privata nyckel, WIF, eller vad du kan tänkas ha. GRS BlueWallet kommer att göra sitt bästa för att gissa formatet och importera plånboken",
     "import_file": "Importera fil",
     "import_imported": "Importerad",
     "import_scan_qr": "eller skanna QR-kod istället?",
     "import_success": "Import lyckad!",
+    "import_title": "Importera",
     "list_create_a_button": "Ny plånbok",
     "list_create_a_wallet": "Ny plånbok",
     "list_empty_txs1": "Dina transaktioner kommer att visas här",
     "list_empty_txs1_lightning": "Lightningplånboken ska användas för dagliga småtransaktioner. Avgifterna är minimala och transaktioner sker direkt.",
-    "list_empty_txs2": "men än så länge finns inga!",
-    "list_empty_txs2_lightning": "\nFör att komma igång klicka på \"gros in / ta ut\" ovan och sätt in dina första Groestlcoin.",
+    "list_empty_txs2_lightning": "\nFör att komma igång klicka på \"gros in / ta ut\" ovan och sätt in dina första groestlcoin.",
     "list_latest_transaction": "senaste transaktion",
     "list_tap_here_to_buy": "Tryck här för att köpa Groestlcoin",
     "list_title": "plånböcker",
@@ -273,9 +266,22 @@
     "xpub_title": "plånbokens XPUB"
   },
   "multisig": {
-    "create": "Skapa"
+    "confirm": "Bekräfta",
+    "header": "Skicka",
+    "share": "dela",
+    "create": "Skapa",
+    "ms_help_title5": "Enable advanced mode"
   },
   "cc": {
     "change": "ändra"
+  },
+  "units": {
+    "sats": "gros"
+  },
+  "addresses": {
+    "sign_placeholder_address": "adress",
+    "type_change": "ändra",
+    "type_receive": "Ta emot",
+    "transactions": "transaktioner"
   }
 }

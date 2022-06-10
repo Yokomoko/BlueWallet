@@ -80,6 +80,16 @@ const setDateTimeLocale = async () => {
       lang = 'ja';
       require('dayjs/locale/ja');
       break;
+    case 'ko_kr':
+      lang = 'ko';
+      require('dayjs/locale/ko');
+      break;
+    case 'ms':
+      require('dayjs/locale/ms');
+      break;
+    case 'ne':
+      require('dayjs/locale/ne');
+      break;
     case 'nb_no':
       require('dayjs/locale/nb');
       break;
@@ -102,6 +112,9 @@ const setDateTimeLocale = async () => {
       break;
     case 'ru':
       require('dayjs/locale/ru');
+      break;
+    case 'si_lk':
+      require('dayjs/locale/si.js');
       break;
     case 'sk_sk':
       require('dayjs/locale/sk');
@@ -136,7 +149,7 @@ const setDateTimeLocale = async () => {
   if (localeForDayJSAvailable) {
     dayjs.locale(lang.split('_')[0]);
     const language = AvailableLanguages.find(language => language.value === lang.replace('_', '-'));
-    /* I18n Manager breaks testing. Mocking built-in RN modules is not so straightforward. 
+    /* I18n Manager breaks testing. Mocking built-in RN modules is not so straightforward.
         Only run this conditional if its outside a testing environment.
     */
     if (process.env.JEST_WORKER_ID === undefined) {
@@ -161,25 +174,40 @@ const setLanguageLocale = async () => {
   // finding out whether lang preference was saved
   const lang = await AsyncStorage.getItem(LANG);
   if (lang) {
-    strings.setLanguage(lang);
+    await strings.saveLanguage(lang);
+    await strings.setLanguage(lang);
+    if (process.env.JEST_WORKER_ID === undefined) {
+      I18nManager.allowRTL(lang.isRTL ?? false);
+      I18nManager.forceRTL(lang.isRTL ?? false);
+    }
     await setDateTimeLocale();
   } else {
     const locales = RNLocalize.getLocales();
-    if (Object.keys(AvailableLanguages).some(language => language === locales[0])) {
-      strings.saveLanguage(locales[0].languageCode);
-      strings.setLanguage(locales[0].languageCode);
+    if (Object.values(AvailableLanguages).some(language => language.value === locales[0].languageCode)) {
+      await strings.saveLanguage(locales[0].languageCode);
+      await strings.setLanguage(locales[0].languageCode);
+      if (process.env.JEST_WORKER_ID === undefined) {
+        I18nManager.allowRTL(locales[0].isRTL ?? false);
+        I18nManager.forceRTL(locales[0].isRTL ?? false);
+      }
     } else {
-      strings.saveLanguage('en');
-      strings.setLanguage('en');
+      await strings.saveLanguage('en');
+      await strings.setLanguage('en');
       if (process.env.JEST_WORKER_ID === undefined) {
         I18nManager.allowRTL(false);
         I18nManager.forceRTL(false);
       }
     }
+    await setDateTimeLocale();
   }
 };
 setLanguageLocale();
 
+/**
+ * TODO: remove this comment once this file gets properly converted to typescript.
+ *
+ * @type {any}
+ */
 const strings = new Localization({
   en: require('./en.json'),
   ar: require('./ar.json'),
@@ -201,6 +229,9 @@ const strings = new Localization({
   id_id: require('./id_id.json'),
   it: require('./it.json'),
   jp_jp: require('./jp_jp.json'),
+  ko_kr: require('./ko_KR.json'),
+  ms: require('./ms.json'),
+  ne: require('./ne.json'),
   nb_no: require('./nb_no.json'),
   nl_nl: require('./nl_nl.json'),
   pt_br: require('./pt_br.json'),
@@ -208,6 +239,7 @@ const strings = new Localization({
   pl: require('./pl.json'),
   ro: require('./ro.json'),
   ru: require('./ru.json'),
+  si_lk: require('./si_LK.json'),
   sk_sk: require('./sk_sk.json'),
   sl_si: require('./sl_SI.json'),
   sv_se: require('./sv_se.json'),
@@ -228,6 +260,9 @@ strings.saveLanguage = async lang => {
 };
 
 export const transactionTimeToReadable = time => {
+  if (time === -1) {
+    return 'unknown';
+  }
   if (time === 0) {
     return strings._.never;
   }
@@ -322,6 +357,11 @@ export function _leaveNumbersAndDots(newInputValue) {
   newInputValue = newInputValue.replace(/,/gi, '');
 
   return newInputValue;
+}
+
+// https://github.com/BlueWallet/BlueWallet/issues/3466
+export function formatStringAddTwoWhiteSpaces(text) {
+  return `${text}  `;
 }
 
 strings.LANG = LANG;

@@ -1,7 +1,6 @@
 import React, { useRef, useCallback, useImperativeHandle, forwardRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ActivityIndicator,
   Animated,
   Image,
   I18nManager,
@@ -18,14 +17,13 @@ import {
 import { useTheme } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import loc, { formatBalance, transactionTimeToReadable } from '../loc';
-import { LightningCustodianWallet, MultisigHDWallet, PlaceholderWallet } from '../class';
+import { LightningCustodianWallet, LightningLdkWallet, MultisigHDWallet } from '../class';
 import WalletGradient from '../class/wallet-gradient';
 import { BluePrivateBalance } from '../BlueComponents';
 import { BlueStorageContext } from '../blue_modules/storage-context';
 import { isHandset, isTablet, isDesktop } from '../blue_modules/environment';
 
 const nStyles = StyleSheet.create({
-  root: {},
   container: {
     borderRadius: 10,
     minHeight: Platform.OS === 'ios' ? 164 : 181,
@@ -56,7 +54,7 @@ const NewWalletPanel = ({ onPress }) => {
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop);
+  const isLargeScreen = Platform.OS === 'android' ? isTablet() : (width >= Dimensions.get('screen').width / 2 && isTablet()) || isDesktop;
   const nStylesHooks = StyleSheet.create({
     container: isLargeScreen
       ? {
@@ -119,14 +117,6 @@ const iStyles = StyleSheet.create({
     fontSize: 19,
     writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
   },
-  importError: {
-    backgroundColor: 'transparent',
-    fontSize: 19,
-    marginTop: 40,
-  },
-  activity: {
-    marginTop: 40,
-  },
   balance: {
     backgroundColor: 'transparent',
     fontWeight: 'bold',
@@ -152,7 +142,7 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
   const { walletTransactionUpdateStatus } = useContext(BlueStorageContext);
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop);
+  const isLargeScreen = Platform.OS === 'android' ? isTablet() : (width >= Dimensions.get('screen').width / 2 && isTablet()) || isDesktop;
   const onPressedIn = () => {
     const props = { duration: 50 };
     props.useNativeDriver = true;
@@ -177,50 +167,10 @@ const WalletCarouselItem = ({ item, index, onPress, handleLongPress, isSelectedW
       />
     );
 
-  if (item.type === PlaceholderWallet.type) {
-    return (
-      <Animated.View
-        style={[isLargeScreen ? iStyles.rootLargeDevice : { ...iStyles.root, width: itemWidth }, { transform: [{ scale: scaleValue }] }]}
-        shadowOpacity={40 / 100}
-        shadowOffset={{ width: 0, height: 0 }}
-        shadowRadius={5}
-      >
-        <TouchableWithoutFeedback
-          onPressIn={item.getIsFailure() ? onPressedIn : null}
-          onPressOut={item.getIsFailure() ? onPressedOut : null}
-          onPress={() => {
-            if (item.getIsFailure()) {
-              onPressedOut();
-              onPress(index);
-              onPressedOut();
-            }
-          }}
-        >
-          <LinearGradient shadowColor={colors.shadowColor} colors={WalletGradient.gradientsFor(item.type)} style={iStyles.grad}>
-            <Image
-              source={I18nManager.isRTL ? require('../img/btc-shape-rtl.png') : require('../img/btc-shape.png')}
-              style={iStyles.image}
-            />
-            <Text style={iStyles.br} />
-            <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
-              {item.getIsFailure() ? loc.wallets.import_placeholder_fail : loc.wallets.import_placeholder_inprogress}
-            </Text>
-            {item.getIsFailure() ? (
-              <Text testID="ImportError" numberOfLines={0} style={[iStyles.importError, { color: colors.inverseForegroundColor }]}>
-                {loc.wallets.list_import_error}
-              </Text>
-            ) : (
-              <ActivityIndicator style={iStyles.activity} />
-            )}
-          </LinearGradient>
-        </TouchableWithoutFeedback>
-      </Animated.View>
-    );
-  }
-
   const opacity = isSelectedWallet === false ? 0.5 : 1.0;
   let image;
   switch (item.type) {
+    case LightningLdkWallet.type:
     case LightningCustodianWallet.type:
       image = I18nManager.isRTL ? require('../img/lnd-shape-rtl.png') : require('../img/lnd-shape.png');
       break;
@@ -304,17 +254,16 @@ WalletCarouselItem.propTypes = {
 };
 
 const cStyles = StyleSheet.create({
-  loading: {
-    position: 'absolute',
-    alignItems: 'center',
-  },
   content: {
     paddingTop: 16,
   },
   contentLargeScreen: {
     paddingHorizontal: 16,
   },
-  separatorStyle: { width: 16, height: 20 },
+  separatorStyle: {
+    width: 16,
+    height: 20,
+  },
 });
 
 const WalletsCarousel = forwardRef((props, ref) => {
@@ -322,7 +271,7 @@ const WalletsCarousel = forwardRef((props, ref) => {
   const renderItem = useCallback(
     ({ item, index }) => (
       <WalletCarouselItem
-        isSelectedWallet={props.vertical && props.selectedWallet && item ? props.selectedWallet === item.getID() : undefined}
+        isSelectedWallet={!props.horizontal && props.selectedWallet && item ? props.selectedWallet === item.getID() : undefined}
         item={item}
         index={index}
         handleLongPress={props.handleLongPress}
@@ -330,7 +279,7 @@ const WalletsCarousel = forwardRef((props, ref) => {
       />
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.vertical, props.selectedWallet, props.handleLongPress, props.onPress, preferredFiatCurrency, language],
+    [props.horizontal, props.selectedWallet, props.handleLongPress, props.onPress, preferredFiatCurrency, language],
   );
   const flatListRef = useRef();
   const ListHeaderComponent = () => <View style={cStyles.separatorStyle} />;
@@ -338,47 +287,59 @@ const WalletsCarousel = forwardRef((props, ref) => {
   useImperativeHandle(ref, () => ({
     scrollToItem: ({ item }) => {
       setTimeout(() => {
-        flatListRef?.current?.scrollToItem({ item, viewPosition: 0.3 });
+        flatListRef?.current?.scrollToItem({ item, viewOffset: 16 });
       }, 300);
     },
-    scrollToIndex: index => {
+    scrollToIndex: ({ index }) => {
       setTimeout(() => {
-        flatListRef?.current?.scrollToIndex({ index, viewPosition: 0.3 });
+        flatListRef?.current?.scrollToIndex({ index, viewOffset: 16 });
       }, 300);
     },
   }));
 
-  const { width } = useWindowDimensions();
-  const sliderHeight = 190;
-  const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : width >= Dimensions.get('screen').width / 2 && (isTablet() || isDesktop);
+  const onScrollToIndexFailed = error => {
+    console.log('onScrollToIndexFailed');
+    console.log(error);
+    flatListRef.current.scrollToOffset({ offset: error.averageItemLength * error.index, animated: true });
+    setTimeout(() => {
+      if (props.data.length !== 0 && flatListRef.current !== null) {
+        flatListRef.current.scrollToIndex({ index: error.index, animated: true });
+      }
+    }, 100);
+  };
 
+  const { width } = useWindowDimensions();
+  const sliderHeight = 195;
+  const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
   return (
     <FlatList
       ref={flatListRef}
       renderItem={renderItem}
+      extraData={props.data}
       keyExtractor={(_, index) => index.toString()}
       showsVerticalScrollIndicator={false}
       pagingEnabled
       disableIntervalMomentum={isHandset}
       snapToInterval={itemWidth} // Adjust to your content width
       decelerationRate="fast"
-      contentContainerStyle={isLargeScreen ? cStyles.contentLargeScreen : cStyles.content}
+      contentContainerStyle={props.horizontal ? cStyles.content : cStyles.contentLargeScreen}
       directionalLockEnabled
       showsHorizontalScrollIndicator={false}
       initialNumToRender={10}
       ListHeaderComponent={ListHeaderComponent}
-      style={props.vertical ? {} : { height: sliderHeight + 9 }}
+      style={props.horizontal ? { minHeight: sliderHeight + 9 } : {}}
+      onScrollToIndexFailed={onScrollToIndexFailed}
       {...props}
     />
   );
 });
 
 WalletsCarousel.propTypes = {
-  vertical: PropTypes.bool,
+  horizontal: PropTypes.bool,
   selectedWallet: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   handleLongPress: PropTypes.func.isRequired,
+  data: PropTypes.array,
 };
 
 export default WalletsCarousel;

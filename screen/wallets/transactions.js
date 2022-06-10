@@ -1,4 +1,3 @@
-/* global alert */
 import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
 import {
   ActivityIndicator,
@@ -6,8 +5,6 @@ import {
   Dimensions,
   FlatList,
   InteractionManager,
-  Keyboard,
-  KeyboardAvoidingView,
   // Linking,
   PixelRatio,
   Platform,
@@ -20,26 +17,27 @@ import {
   View,
   I18nManager,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { Icon } from 'react-native-elements';
 import { useRoute, useNavigation, useTheme, useFocusEffect } from '@react-navigation/native';
 import { Chain } from '../../models/bitcoinUnits';
-import { BlueTransactionListItem, BlueWalletNavigationHeader, BlueAlertWalletExportReminder, BlueListItem } from '../../BlueComponents';
+import { BlueAlertWalletExportReminder } from '../../BlueComponents';
 import WalletGradient from '../../class/wallet-gradient';
 import navigationStyle from '../../components/navigationStyle';
-import { LightningCustodianWallet, MultisigHDWallet, WatchOnlyWallet } from '../../class';
-import HandoffComponent from '../../components/handoff';
+import { LightningCustodianWallet, LightningLdkWallet, MultisigHDWallet, WatchOnlyWallet } from '../../class';
 import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
 import { FContainer, FButton } from '../../components/FloatButtons';
-import BottomModal from '../../components/BottomModal';
+import BuyBitcoin from './buyBitcoin';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
 import { isDesktop, isMacCatalina } from '../../blue_modules/environment';
 import BlueClipboard from '../../blue_modules/clipboard';
+import LNNodeBar from '../../components/LNNodeBar';
+import TransactionsNavigationHeader from '../../components/TransactionsNavigationHeader';
+import { TransactionListItem } from '../../components/TransactionListItem';
+import alert from '../../components/Alert';
 
 const fs = require('../../blue_modules/fs');
 const BlueElectrum = require('../../blue_modules/BlueElectrum');
-const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
 
 const buttonFontSize =
   PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26) > 22
@@ -47,9 +45,8 @@ const buttonFontSize =
     : PixelRatio.roundToNearestPixel(Dimensions.get('window').width / 26);
 
 const WalletTransactions = () => {
-  const { wallets, saveToDisk, setSelectedWallet, walletTransactionUpdateStatus } = useContext(BlueStorageContext);
+  const { wallets, saveToDisk, setSelectedWallet, walletTransactionUpdateStatus, isElectrumDisabled } = useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isManageFundsModalVisible, setIsManageFundsModalVisible] = useState(false);
   const { walletID } = useRoute().params;
   const { name } = useRoute();
   const wallet = wallets.find(w => w.getID() === walletID);
@@ -60,12 +57,10 @@ const WalletTransactions = () => {
   const [pageSize, setPageSize] = useState(20);
   const { setParams, setOptions, navigate } = useNavigation();
   const { colors } = useTheme();
+  const [lnNodeInfo, setLnNodeInfo] = useState({ canReceive: 0, canSend: 0 });
   const walletActionButtonsRef = useRef();
 
   const stylesHook = StyleSheet.create({
-    advancedTransactionOptionsModalContent: {
-      backgroundColor: colors.elevated,
-    },
     listHeaderText: {
       color: colors.foregroundColor,
     },
@@ -151,6 +146,7 @@ const WalletTransactions = () => {
     if (wallet.getLastTxFetch() === 0) {
       refreshTransactions();
     }
+    refreshLnNodeInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -170,15 +166,23 @@ const WalletTransactions = () => {
     return false;
   };
 
+  const refreshLnNodeInfo = () => {
+    if (wallet.type === LightningLdkWallet.type) {
+      setLnNodeInfo({ canReceive: wallet.getReceivableBalance(), canSend: wallet.getBalance() });
+    }
+  };
+
   /**
    * Forcefully fetches TXs and balance for wallet
    */
   const refreshTransactions = async () => {
+    if (isElectrumDisabled) return setIsLoading(false);
     if (isLoading) return;
     setIsLoading(true);
     let noErr = true;
     let smthChanged = false;
     try {
+      refreshLnNodeInfo();
       // await BlueElectrum.ping();
       await BlueElectrum.waitTillConnected();
       /** @type {LegacyWallet} */
@@ -252,11 +256,19 @@ const WalletTransactions = () => {
             The idea is to avoid showing on iOS an appstore/market style app that goes against the TOS.
 
            */}
-          {/* wallet.getTransactions().length > 0 && wallet.type !== LightningCustodianWallet.type && renderSellFiat() */}
-          {/* wallet.type === LightningCustodianWallet.type && renderMarketplaceButton() */}
-          {/* wallet.type === LightningCustodianWallet.type && Platform.OS === 'ios' && renderLappBrowserButton() */}
+          {/* wallet.getTransactions().length > 0 &&
+            wallet.chain !== Chain.OFFCHAIN &&
+            wallet.type !== LightningLdkWallet.type &&
+            renderSellFiat() */}
+          {/* wallet.chain === Chain.OFFCHAIN && renderMarketplaceButton() */}
+          {/* wallet.chain === Chain.OFFCHAIN && Platform.OS === 'ios' && renderLappBrowserButton() */}
         </View>
-        <View style={[styles.listHeaderTextRow, stylesHook.listHeaderTextRow]}>
+        {wallet.type === LightningLdkWallet.type && (lnNodeInfo.canSend > 0 || lnNodeInfo.canReceive > 0) && (
+          <View style={[styles.marginHorizontal18, styles.marginBottom18]}>
+            <LNNodeBar canSend={lnNodeInfo.canSend} canReceive={lnNodeInfo.canReceive} itemPriceUnit={itemPriceUnit} />
+          </View>
+        )}
+        <View style={styles.listHeaderTextRow}>
           <Text style={[styles.listHeaderText, stylesHook.listHeaderText]}>{loc.transactions.list_title}</Text>
           <TouchableOpacity
             accessibilityRole="button"
@@ -272,51 +284,6 @@ const WalletTransactions = () => {
     );
   };
 
-  const hideManageFundsModal = () => {
-    Keyboard.dismiss();
-    setIsManageFundsModalVisible(false);
-  };
-
-  const renderManageFundsModal = () => {
-    return (
-      <BottomModal isVisible={isManageFundsModalVisible} onClose={hideManageFundsModal}>
-        <KeyboardAvoidingView enabled={!Platform.isPad} behavior={Platform.OS === 'ios' ? 'position' : null}>
-          <View style={[styles.advancedTransactionOptionsModalContent, stylesHook.advancedTransactionOptionsModalContent]}>
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                const availableWallets = [...wallets.filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
-                if (availableWallets.length === 0) {
-                  alert(loc.lnd.refill_create);
-                } else {
-                  setIsManageFundsModalVisible(false);
-                  navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN });
-                }
-              }}
-              title={loc.lnd.refill}
-            />
-            <BlueListItem
-              hideChevron
-              component={TouchableOpacity}
-              onPress={() => {
-                setIsManageFundsModalVisible(false);
-
-                navigate('ReceiveDetailsRoot', {
-                  screen: 'ReceiveDetails',
-                  params: {
-                    walletID: wallet.getID(),
-                  },
-                });
-              }}
-              title={loc.lnd.refill_external}
-            />
-          </View>
-        </KeyboardAvoidingView>
-      </BottomModal>
-    );
-  };
-
   /*  These functions are not used
 
   const navigateToBuyBitcoin = () => {
@@ -324,39 +291,42 @@ const WalletTransactions = () => {
   };
 
   const renderMarketplaceButton = () => {
-    return Platform.select({
-      android: (
-        <TouchableOpacity
-          accessibilityRole="button"
-          onPress={() => {
-            if (wallet.type === LightningCustodianWallet.type) {
-              navigate('LappBrowserRoot', {
-                screen: 'LappBrowser',
-                params: { walletID },
-              });
-            } else {
-              navigate('Marketplace', { walletID });
-            }
-          }}
-          style={[styles.marketplaceButton1, stylesHook.marketplaceButton1]}
-        >
-          <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_marketplace}</Text>
-        </TouchableOpacity>
-      ),
-      ios:
-        wallet.getBalance() > 0 ? (
+    return (
+      wallet.chain === Chain.OFFCHAIN &&
+      Platform.select({
+        android: (
           <TouchableOpacity
             accessibilityRole="button"
-            onPress={async () => {
-              Linking.openURL('https://bluewallet.io/marketplace/');
+            onPress={() => {
+              if (wallet.chain === Chain.OFFCHAIN) {
+                navigate('LappBrowserRoot', {
+                  screen: 'LappBrowser',
+                  params: { walletID },
+                });
+              } else {
+                navigate('Marketplace', { walletID });
+              }
             }}
             style={[styles.marketplaceButton1, stylesHook.marketplaceButton1]}
           >
-            <Icon name="external-link" size={18} type="font-awesome" color="#9aa0aa" />
-            <Text style={[styles.marketpalceText2, stylesHook.marketpalceText2]}>{loc.wallets.list_marketplace}</Text>
+            <Text style={[styles.marketpalceText1, stylesHook.marketpalceText1]}>{loc.wallets.list_marketplace}</Text>
           </TouchableOpacity>
-        ) : null,
-    });
+        ),
+        ios:
+          wallet.getBalance() > 0 ? (
+            <TouchableOpacity
+              accessibilityRole="button"
+              onPress={async () => {
+                Linking.openURL('https://bluewallet.io/marketplace/');
+              }}
+              style={[styles.marketplaceButton1, stylesHook.marketplaceButton1]}
+            >
+              <Icon name="external-link" size={18} type="font-awesome" color="#9aa0aa" />
+              <Text style={[styles.marketpalceText2, stylesHook.marketpalceText2]}>{loc.wallets.list_marketplace}</Text>
+            </TouchableOpacity>
+          ) : null,
+      })
+    );
   };
 
   const renderLappBrowserButton = () => {
@@ -431,7 +401,9 @@ const WalletTransactions = () => {
     });
   };
 
-  const renderItem = item => <BlueTransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} />;
+  const renderItem = item => (
+    <TransactionListItem item={item.item} itemPriceUnit={itemPriceUnit} timeElapsed={timeElapsed} walletID={walletID} />
+  );
 
   const onBarCodeRead = ret => {
     if (!isLoading) {
@@ -450,25 +422,7 @@ const WalletTransactions = () => {
   };
 
   const choosePhoto = () => {
-    launchImageLibrary(
-      {
-        title: null,
-        mediaType: 'photo',
-        takePhotoButtonTitle: null,
-      },
-      response => {
-        if (response.uri) {
-          const uri = response.uri.toString().replace('file://', '');
-          LocalQRCode.decode(uri, (error, result) => {
-            if (!error) {
-              onBarCodeRead({ data: result });
-            } else {
-              alert(loc.send.qr_error_no_qrcode);
-            }
-          });
-        }
-      },
-    );
+    fs.showImagePickerAndReadImage().then(onBarCodeRead);
   };
 
   const copyFromClipboard = async () => {
@@ -581,17 +535,34 @@ const WalletTransactions = () => {
     });
   };
 
+  const onManageFundsPressed = ({ id }) => {
+    if (id === TransactionsNavigationHeader.actionKeys.Exchange) {
+      Linking.openURL('https://zigzag.io/?utm_source=integration&utm_medium=bluewallet&utm_campaign=withdrawLink');
+    } else if (id === TransactionsNavigationHeader.actionKeys.Refill) {
+      const availableWallets = [...wallets.filter(item => item.chain === Chain.ONCHAIN && item.allowSend())];
+      if (availableWallets.length === 0) {
+        alert(loc.lnd.refill_create);
+      } else {
+        navigate('SelectWallet', { onWalletSelect, chainType: Chain.ONCHAIN });
+      }
+    } else if (id === TransactionsNavigationHeader.actionKeys.RefillWithExternalWallet) {
+      if (wallet.getUserHasSavedExport()) {
+        navigate('ReceiveDetailsRoot', {
+          screen: 'ReceiveDetails',
+          params: {
+            walletID: wallet.getID(),
+          },
+        });
+      }
+    } else if (id === TransactionsNavigationHeader.actionKeys.RefillWithBank) {
+      navigateToBuyBitcoin();
+    }
+  };
+
   return (
     <View style={styles.flex}>
-      <StatusBar barStyle="light-content" backgroundColor={WalletGradient.headerColorFor(wallet.type)} />
-      {wallet.chain === Chain.ONCHAIN && wallet.type !== MultisigHDWallet.type && (
-        <HandoffComponent
-          title={`Groestlcoin Wallet ${wallet.getLabel()}`}
-          type="org.groestlcoin.bluewallet123"
-          url={`https://blockbook.groestlcoin.org/api/v2/xpub/${wallet.getXpub()}`}
-        />
-      )}
-      <BlueWalletNavigationHeader
+      <StatusBar barStyle="light-content" backgroundColor={WalletGradient.headerColorFor(wallet.type)} animated />
+      <TransactionsNavigationHeader
         wallet={wallet}
         onWalletUnitChange={passedWallet =>
           InteractionManager.runAfterInteractions(async () => {
@@ -599,18 +570,20 @@ const WalletTransactions = () => {
             saveToDisk();
           })
         }
-        onManageFundsPressed={() => {
+        onManageFundsPressed={id => {
           if (wallet.type === MultisigHDWallet.type) {
             navigateToViewEditCosigners();
+          } else if (wallet.type === LightningLdkWallet.type) {
+            navigate('LdkInfo', { walletID: wallet.getID() });
           } else if (wallet.type === LightningCustodianWallet.type) {
             if (wallet.getUserHasSavedExport()) {
-              setIsManageFundsModalVisible(true);
+              onManageFundsPressed({ id });
             } else {
               BlueAlertWalletExportReminder({
                 onSuccess: async () => {
                   wallet.setUserHasSavedExport(true);
                   await saveToDisk();
-                  setIsManageFundsModalVisible(true);
+                  onManageFundsPressed({ id });
                 },
                 onFailure: () =>
                   navigate('WalletExportRoot', {
@@ -658,15 +631,13 @@ const WalletTransactions = () => {
               ) */}
             </ScrollView>
           }
-          onRefresh={refreshTransactions}
-          refreshing={isLoading}
+          {...(isElectrumDisabled ? {} : { refreshing: isLoading, onRefresh: refreshTransactions })}
           data={dataSource}
           extraData={[timeElapsed, dataSource, wallets]}
           keyExtractor={_keyExtractor}
           renderItem={renderItem}
           contentInset={{ top: 0, left: 0, bottom: 90, right: 0 }}
         />
-        {renderManageFundsModal()}
       </View>
 
       <FContainer ref={walletActionButtonsRef}>
@@ -748,27 +719,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 40,
   },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    minHeight: 200,
-    height: 200,
+  marginHorizontal18: {
+    marginHorizontal: 18,
   },
-  advancedTransactionOptionsModalContent: {
-    padding: 22,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    minHeight: 130,
+  marginBottom18: {
+    marginBottom: 18,
   },
   walletDetails: {
-    marginHorizontal: 16,
-    minWidth: 150,
     justifyContent: 'center',
     alignItems: 'flex-end',
   },

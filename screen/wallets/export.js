@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { useWindowDimensions, InteractionManager, ScrollView, ActivityIndicator, StatusBar, View, StyleSheet } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import { InteractionManager, ScrollView, ActivityIndicator, StatusBar, View, StyleSheet } from 'react-native';
 import { useTheme, useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 
 import { BlueSpacing20, SafeBlueArea, BlueText, BlueCopyTextToClipboard, BlueCard } from '../../BlueComponents';
@@ -10,6 +9,8 @@ import Biometric from '../../class/biometrics';
 import { LegacyWallet, LightningCustodianWallet, SegwitBech32Wallet, SegwitP2SHWallet, WatchOnlyWallet } from '../../class';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import QRCodeComponent from '../../components/QRCodeComponent';
+import HandoffComponent from '../../components/handoff';
 
 const styles = StyleSheet.create({
   loading: {
@@ -21,16 +22,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexGrow: 1,
   },
-  activeQrcode: { borderWidth: 6, borderRadius: 8, borderColor: '#FFFFFF' },
   type: {
     fontSize: 17,
     fontWeight: '700',
   },
   secret: {
-    alignItems: 'center',
+    alignSelf: 'stretch',
+    textAlign: 'center',
     paddingHorizontal: 16,
     fontSize: 16,
     lineHeight: 24,
+  },
+  secretWritingDirection: {
+    writingDirection: 'ltr',
   },
 });
 
@@ -40,8 +44,8 @@ const WalletExport = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { goBack } = useNavigation();
   const { colors } = useTheme();
-  const { width, height } = useWindowDimensions();
   const wallet = wallets.find(w => w.getID() === walletID);
+  const [qrCodeSize, setQRCodeSize] = useState(90);
   const stylesHook = {
     ...styles,
     loading: {
@@ -52,7 +56,7 @@ const WalletExport = () => {
       backgroundColor: colors.elevated,
     },
     type: { ...styles.type, color: colors.foregroundColor },
-    secret: { ...styles.secret, color: colors.foregroundColor },
+    secret: { color: colors.foregroundColor },
     warning: { ...styles.secret, color: colors.failedColor },
   };
 
@@ -96,8 +100,13 @@ const WalletExport = () => {
     secrets = [secrets];
   }
 
+  const onLayout = e => {
+    const { height, width } = e.nativeEvent.layout;
+    setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
+  };
+
   return (
-    <SafeBlueArea style={stylesHook.root}>
+    <SafeBlueArea style={stylesHook.root} onLayout={onLayout}>
       <StatusBar barStyle="light-content" />
       <ScrollView contentContainerStyle={styles.scrollViewContent} testID="WalletExportScroll">
         <View>
@@ -112,26 +121,22 @@ const WalletExport = () => {
         <BlueSpacing20 />
         {secrets.map(s => (
           <React.Fragment key={s}>
-            <View style={styles.activeQrcode}>
-              <QRCode
-                value={wallet.getSecret()}
-                logo={require('../../img/qr-code.png')}
-                size={height > width ? width - 40 : width / 2}
-                logoSize={70}
-                color="#000000"
-                logoBackgroundColor={colors.brandingColor}
-                backgroundColor="#FFFFFF"
-                ecl="H"
-              />
-            </View>
+            <QRCodeComponent isMenuAvailable={false} value={wallet.getSecret()} size={qrCodeSize} logoSize={70} />
             {wallet.type !== WatchOnlyWallet.type && <BlueText style={stylesHook.warning}>{loc.wallets.warning_do_not_disclose}</BlueText>}
             <BlueSpacing20 />
             {wallet.type === LightningCustodianWallet.type || wallet.type === WatchOnlyWallet.type ? (
               <BlueCopyTextToClipboard text={wallet.getSecret()} />
             ) : (
-              <BlueText style={stylesHook.secret} testID="Secret">
+              <BlueText style={[styles.secret, styles.secretWritingDirection, stylesHook.secret]} testID="Secret">
                 {wallet.getSecret()}
               </BlueText>
+            )}
+            {wallet.type === WatchOnlyWallet.type && (
+              <HandoffComponent
+                title={loc.wallets.xpub_title}
+                type={HandoffComponent.activityTypes.Xpub}
+                userInfo={{ xpub: wallet.getSecret() }}
+              />
             )}
           </React.Fragment>
         ))}
@@ -143,7 +148,7 @@ const WalletExport = () => {
 WalletExport.navigationOptions = navigationStyle(
   {
     closeButton: true,
-    headerLeft: null,
+    headerHideBackButton: true,
   },
   opts => ({ ...opts, title: loc.wallets.export_title }),
 );

@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { InteractionManager, useWindowDimensions, ActivityIndicator, View, StatusBar, StyleSheet } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { InteractionManager, ActivityIndicator, View, StatusBar, StyleSheet } from 'react-native';
 import { useFocusEffect, useRoute, useNavigation, useTheme } from '@react-navigation/native';
-
 import navigationStyle from '../../components/navigationStyle';
 import { BlueSpacing20, SafeBlueArea, BlueText, BlueCopyTextToClipboard } from '../../BlueComponents';
 import Privacy from '../../blue_modules/Privacy';
 import Biometric from '../../class/biometrics';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import QRCodeComponent from '../../components/QRCodeComponent';
+import HandoffComponent from '../../components/handoff';
 
 const styles = StyleSheet.create({
   root: {
@@ -20,19 +20,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  qrCodeContainer: { borderWidth: 6, borderRadius: 8, borderColor: '#FFFFFF' },
 });
 
 const WalletXpub = () => {
   const { wallets } = useContext(BlueStorageContext);
-  const { walletID } = useRoute().params;
+  const { walletID, xpub } = useRoute().params;
   const wallet = wallets.find(w => w.getID() === walletID);
   const [isLoading, setIsLoading] = useState(true);
-  const [xPub, setXPub] = useState();
   const [xPubText, setXPubText] = useState();
-  const { goBack } = useNavigation();
+  const { goBack, setParams } = useNavigation();
   const { colors } = useTheme();
-  const { width, height } = useWindowDimensions();
+  const [qrCodeSize, setQRCodeSize] = useState(90);
   const stylesHook = StyleSheet.create({ root: { backgroundColor: colors.elevated } });
 
   useFocusEffect(
@@ -47,8 +45,9 @@ const WalletXpub = () => {
               return goBack();
             }
           }
-          setXPub(wallet.getXpub());
-          setXPubText(wallet.getXpub());
+          setParams({ xpub: wallet.getXpub() });
+          setIsLoading(false);
+        } else if (xpub) {
           setIsLoading(false);
         }
       });
@@ -60,33 +59,36 @@ const WalletXpub = () => {
     }, [goBack, walletID]),
   );
 
+  useEffect(() => {
+    setXPubText(xpub);
+  }, [xpub]);
+
+  const onLayout = e => {
+    const { height, width } = e.nativeEvent.layout;
+    setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
+  };
+
   return isLoading ? (
-    <View style={[styles.root, stylesHook.root]}>
+    <View style={[styles.container, stylesHook.root]}>
       <ActivityIndicator />
     </View>
   ) : (
-    <SafeBlueArea style={[styles.root, stylesHook.root]}>
+    <SafeBlueArea style={[styles.root, stylesHook.root]} onLayout={onLayout}>
       <StatusBar barStyle="light-content" />
       <View style={styles.container}>
-        <View>
-          <BlueText>{wallet.typeReadable}</BlueText>
-        </View>
-        <BlueSpacing20 />
-        <View style={styles.qrCodeContainer}>
-          <QRCode
-            value={xPub}
-            logo={require('../../img/qr-code.png')}
-            size={height > width ? width - 40 : width / 2}
-            logoSize={90}
-            color="#000000"
-            logoBackgroundColor={colors.brandingColor}
-            backgroundColor="#FFFFFF"
-            ecl="H"
-          />
-        </View>
+        {wallet && (
+          <>
+            <View>
+              <BlueText>{wallet.typeReadable}</BlueText>
+            </View>
+            <BlueSpacing20 />
+          </>
+        )}
+        <QRCodeComponent value={xpub} size={qrCodeSize} />
 
         <BlueSpacing20 />
         <BlueCopyTextToClipboard text={xPubText} />
+        <HandoffComponent title={loc.wallets.xpub_title} type={HandoffComponent.activityTypes.Xpub} userInfo={{ xpub: xPubText }} />
       </View>
     </SafeBlueArea>
   );
@@ -95,9 +97,9 @@ const WalletXpub = () => {
 WalletXpub.navigationOptions = navigationStyle(
   {
     closeButton: true,
-    headerLeft: null,
+    headerHideBackButton: true,
   },
-  opts => ({ ...opts, title: loc.wallets.xpub_title }),
+  opts => ({ ...opts, headerTitle: loc.wallets.xpub_title }),
 );
 
 export default WalletXpub;

@@ -1,8 +1,12 @@
+import assert from 'assert';
+import * as bitcoin from 'groestlcoinjs-lib';
 import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../../class';
 import { HodlHodlApi } from '../../class/hodl-hodl-api';
+import { ECPairFactory } from 'ecpairgrs';
+const ecc = require('tiny-secp256k1');
+const ECPair = ECPairFactory(ecc);
 
-const bitcoin = require('groestlcoinjs-lib');
-const assert = require('assert');
+jest.setTimeout(200 * 1000);
 
 it.skip('can verify escrow address', () => {
   const encryptedSeed =
@@ -19,15 +23,9 @@ it.skip('can verify escrow address', () => {
 });
 
 it('can create escrow address', () => {
-  const keyPairServer = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from('9a8cfd0e33a37c90a46d358c84ca3d8dd089ed35409a6eb1973148c0df492288', 'hex'),
-  );
-  const keyPairSeller = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from('ab4163f517bfac01d7acd3a1e398bfb28b53ebd162cb1dd767cc63ae8069ef37', 'hex'),
-  );
-  const keyPairBuyer = bitcoin.ECPair.fromPrivateKey(
-    Buffer.from('b4ab9ed098b6d4b308deaefce5079f4203c43cfb51b699dd35dcc0f1ae5906fd', 'hex'),
-  );
+  const keyPairServer = ECPair.fromPrivateKey(Buffer.from('9a8cfd0e33a37c90a46d358c84ca3d8dd089ed35409a6eb1973148c0df492288', 'hex'));
+  const keyPairSeller = ECPair.fromPrivateKey(Buffer.from('ab4163f517bfac01d7acd3a1e398bfb28b53ebd162cb1dd767cc63ae8069ef37', 'hex'));
+  const keyPairBuyer = ECPair.fromPrivateKey(Buffer.from('b4ab9ed098b6d4b308deaefce5079f4203c43cfb51b699dd35dcc0f1ae5906fd', 'hex'));
 
   const pubkeys = [
     keyPairServer.publicKey, // '03141024b18929bfec5b567c12b1693d4ae02783873e2e3aa444f0d6950cb97dee', // server
@@ -96,7 +94,6 @@ describe.skip('HodlHodl API', function () {
       // dont run here as it always fails
       return;
     }
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 200 * 1000;
     const Hodl = new HodlHodlApi();
     const countries = await Hodl.getCountries();
     assert.ok(countries[0]);
@@ -157,7 +154,6 @@ describe.skip('HodlHodl API', function () {
       // dont run here as it always fails
       return;
     }
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 200 * 1000;
     if (!process.env.HODLHODL_OFFER_ID) return;
     const Hodl = new HodlHodlApi();
     const offer = await Hodl.getOffer(process.env.HODLHODL_OFFER_ID);
@@ -180,7 +176,6 @@ describe.skip('HodlHodl API', function () {
       // dont run here as it always fails
       return;
     }
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 200 * 1000;
     if (!process.env.HODLHODL_CONTRACT_ID) return;
     const Hodl = new HodlHodlApi();
     const contract = await Hodl.getContract(process.env.HODLHODL_CONTRACT_ID);
@@ -194,7 +189,6 @@ describe.skip('HodlHodl API', function () {
       // dont run here as it always fails
       return;
     }
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 200 * 1000;
     if (!process.env.HODLHODL_CONTRACT_ID) return;
     const Hodl = new HodlHodlApi();
     const result = await Hodl.markContractAsConfirmed(process.env.HODLHODL_CONTRACT_ID);

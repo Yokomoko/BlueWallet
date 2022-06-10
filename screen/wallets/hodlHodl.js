@@ -1,4 +1,3 @@
-/* global alert */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
@@ -29,6 +28,7 @@ import { BlueCurrentTheme } from '../../components/themes';
 import BottomModal from '../../components/BottomModal';
 import loc from '../../loc';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
+import alert from '../../components/Alert';
 const A = require('../../blue_modules/analytics');
 
 const CURRENCY_CODE_ANY = '_any';
@@ -150,7 +150,8 @@ export default class HodlHodl extends Component {
     this.setState({ methods });
   }
 
-  onFocus = async () => {
+  onFocus = async e => {
+    if (!e.data.closing) return;
     const hodlApiKey = await this.context.getHodlHodlApiKey();
     const displayLoginButton = !hodlApiKey;
 
@@ -168,7 +169,7 @@ export default class HodlHodl extends Component {
 
   async componentDidMount() {
     console.log('wallets/hodlHodl - componentDidMount');
-    this._unsubscribeFocus = this.props.navigation.addListener('focus', this.onFocus);
+    this._unsubscribeFocus = this.props.navigation.addListener('transitionEnd', this.onFocus);
     A(A.ENUM.NAVIGATED_TO_WALLETS_HODLHODL);
 
     const hodlApiKey = await this.context.getHodlHodlApiKey();
@@ -937,13 +938,6 @@ const styles = StyleSheet.create({
     color: BlueCurrentTheme.colors.foregroundColor,
     fontSize: 15,
     fontWeight: '600',
-  },
-  allOffersText: {
-    fontSize: 12,
-    color: '#9AA0AA',
-    position: 'absolute',
-    top: 0,
-    left: 15,
   },
   locationText: {
     top: 0,

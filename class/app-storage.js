@@ -1,4 +1,3 @@
-/* global alert */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Keychain from 'react-native-keychain';
@@ -11,17 +10,18 @@ import {
   SegwitP2SHWallet,
   SegwitBech32Wallet,
   HDSegwitBech32Wallet,
-  PlaceholderWallet,
   LightningCustodianWallet,
   HDLegacyElectrumSeedP2PKHWallet,
   HDSegwitElectrumSeedP2WPKHWallet,
   HDAezeedWallet,
   MultisigHDWallet,
+  LightningLdkWallet,
   SLIP39SegwitP2SHWallet,
   SLIP39LegacyP2PKHWallet,
   SLIP39SegwitBech32Wallet,
 } from './';
 import { randomBytes } from './rng';
+import alert from '../components/Alert';
 const encryption = require('../blue_modules/encryption');
 const Realm = require('realm');
 const createHash = require('create-hash');
@@ -228,16 +228,16 @@ export class AppStorage {
     const password = this.hashIt(this.cachedPassword || 'fyegjitkyf[eqjnc.lf');
     const buf = Buffer.from(this.hashIt(password) + this.hashIt(password), 'hex');
     const encryptionKey = Int8Array.from(buf);
-    const path = this.hashIt(this.hashIt(password)) + '-wallets.realm';
+    const path = this.hashIt(this.hashIt(password)) + '-wallettransactions.realm';
 
     const schema = [
       {
-        name: 'Wallet',
-        primaryKey: 'walletid',
+        name: 'WalletTransactions',
         properties: {
           walletid: { type: 'string', indexed: true },
-          _txs_by_external_index: 'string', // stringified json
-          _txs_by_internal_index: 'string', // stringified json
+          internal: 'bool?', // true - internal, false - external
+          index: 'int?',
+          tx: 'string', // stringified json
         },
       },
     ];
@@ -317,7 +317,12 @@ export class AppStorage {
       }
     }
     if (data !== null) {
-      const realm = await this.getRealm();
+      let realm;
+      try {
+        realm = await this.getRealm();
+      } catch (error) {
+        alert(error.message);
+      }
       data = JSON.parse(data);
       if (!data.wallets) return false;
       const wallets = data.wallets;
@@ -326,8 +331,6 @@ export class AppStorage {
         const tempObj = JSON.parse(key);
         let unserializedWallet;
         switch (tempObj.type) {
-          case PlaceholderWallet.type:
-            continue;
           case SegwitBech32Wallet.type:
             unserializedWallet = SegwitBech32Wallet.fromJson(key);
             break;
@@ -364,6 +367,17 @@ export class AppStorage {
             break;
           case HDAezeedWallet.type:
             unserializedWallet = HDAezeedWallet.fromJson(key);
+            // migrate password to this.passphrase field
+            // remove this code somewhere in year 2022
+            if (unserializedWallet.secret.includes(':')) {
+              const [mnemonic, passphrase] = unserializedWallet.secret.split(':');
+              unserializedWallet.secret = mnemonic;
+              unserializedWallet.passphrase = passphrase;
+            }
+
+            break;
+          case LightningLdkWallet.type:
+            unserializedWallet = LightningLdkWallet.fromJson(key);
             break;
           case SLIP39SegwitP2SHWallet.type:
             unserializedWallet = SLIP39SegwitP2SHWallet.fromJson(key);
@@ -391,8 +405,7 @@ export class AppStorage {
               console.log('using wallet-wide settings ', lndhub, 'for ln wallet');
               unserializedWallet.setBaseURI(lndhub);
             } else {
-              console.log('using default', LightningCustodianWallet.defaultBaseUri, 'for ln wallet');
-              unserializedWallet.setBaseURI(LightningCustodianWallet.defaultBaseUri);
+              console.log('wallet does not have a baseURI. Continuing init...');
             }
             unserializedWallet.init();
             break;
@@ -403,15 +416,20 @@ export class AppStorage {
             break;
         }
 
-        this.inflateWalletFromRealm(realm, unserializedWallet);
+        try {
+          if (realm) this.inflateWalletFromRealm(realm, unserializedWallet);
+        } catch (error) {
+          alert(error.message);
+        }
 
         // done
-        if (!this.wallets.some(wallet => wallet.getSecret() === unserializedWallet.secret)) {
+        const ID = unserializedWallet.getID();
+        if (!this.wallets.some(wallet => wallet.getID() === ID)) {
           this.wallets.push(unserializedWallet);
           this.tx_metadata = data.tx_metadata;
         }
       }
-      realm.close();
+      if (realm) realm.close();
       return true;
     } else {
       return false; // failed loading data or loading/decryptin data
@@ -425,13 +443,17 @@ export class AppStorage {
    * @param wallet {AbstractWallet}
    */
   deleteWallet = wallet => {
-    const secret = wallet.getSecret();
+    const ID = wallet.getID();
     const tempWallets = [];
 
+    if (wallet.type === LightningLdkWallet.type) {
+      /** @type {LightningLdkWallet} */
+      const ldkwallet = wallet;
+      ldkwallet.stop().then(ldkwallet.purgeLocalStorage).catch(alert);
+    }
+
     for (const value of this.wallets) {
-      if (value.type === PlaceholderWallet.type) {
-        continue;
-      } else if (value.getSecret() === secret) {
+      if (value.getID() === ID) {
         // the one we should delete
         // nop
       } else {
@@ -443,24 +465,31 @@ export class AppStorage {
   };
 
   inflateWalletFromRealm(realm, walletToInflate) {
-    const wallets = realm.objects('Wallet');
-    const filteredWallets = wallets.filtered(`walletid = "${walletToInflate.getID()}" LIMIT(1)`);
-    for (const realmWalletData of filteredWallets) {
-      try {
-        if (realmWalletData._txs_by_external_index) {
-          const txsByExternalIndex = JSON.parse(realmWalletData._txs_by_external_index);
-          const txsByInternalIndex = JSON.parse(realmWalletData._txs_by_internal_index);
-
-          if (walletToInflate._hdWalletInstance) {
-            walletToInflate._hdWalletInstance._txs_by_external_index = txsByExternalIndex;
-            walletToInflate._hdWalletInstance._txs_by_internal_index = txsByInternalIndex;
-          } else {
-            walletToInflate._txs_by_external_index = txsByExternalIndex;
-            walletToInflate._txs_by_internal_index = txsByInternalIndex;
-          }
+    const transactions = realm.objects('WalletTransactions');
+    const transactionsForWallet = transactions.filtered(`walletid = "${walletToInflate.getID()}"`);
+    for (const tx of transactionsForWallet) {
+      if (tx.internal === false) {
+        if (walletToInflate._hdWalletInstance) {
+          walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] =
+            walletToInflate._hdWalletInstance._txs_by_external_index[tx.index] || [];
+          walletToInflate._hdWalletInstance._txs_by_external_index[tx.index].push(JSON.parse(tx.tx));
+        } else {
+          walletToInflate._txs_by_external_index[tx.index] = walletToInflate._txs_by_external_index[tx.index] || [];
+          walletToInflate._txs_by_external_index[tx.index].push(JSON.parse(tx.tx));
         }
-      } catch (error) {
-        console.warn(error.message);
+      } else if (tx.internal === true) {
+        if (walletToInflate._hdWalletInstance) {
+          walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] =
+            walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index] || [];
+          walletToInflate._hdWalletInstance._txs_by_internal_index[tx.index].push(JSON.parse(tx.tx));
+        } else {
+          walletToInflate._txs_by_internal_index[tx.index] = walletToInflate._txs_by_internal_index[tx.index] || [];
+          walletToInflate._txs_by_internal_index[tx.index].push(JSON.parse(tx.tx));
+        }
+      } else {
+        if (!Array.isArray(walletToInflate._txs_by_external_index)) walletToInflate._txs_by_external_index = [];
+        walletToInflate._txs_by_external_index = walletToInflate._txs_by_external_index || [];
+        walletToInflate._txs_by_external_index.push(JSON.parse(tx.tx));
       }
     }
   }
@@ -469,19 +498,69 @@ export class AppStorage {
     const id = wallet.getID();
     const walletToSave = wallet._hdWalletInstance ?? wallet;
 
+    if (Array.isArray(walletToSave._txs_by_external_index)) {
+      // if this var is an array that means its a single-address wallet class, and this var is a flat array
+      // with transactions
+      realm.write(() => {
+        // cleanup all existing transactions for the wallet first
+        const walletTransactionsToDelete = realm.objects('WalletTransactions').filtered(`walletid = '${id}'`);
+        realm.delete(walletTransactionsToDelete);
+
+        for (const tx of walletToSave._txs_by_external_index) {
+          realm.create(
+            'WalletTransactions',
+            {
+              walletid: id,
+              tx: JSON.stringify(tx),
+            },
+            Realm.UpdateMode.Modified,
+          );
+        }
+      });
+
+      return;
+    }
+
+    /// ########################################################################################################
+
     if (walletToSave._txs_by_external_index) {
       realm.write(() => {
-        const j1 = JSON.stringify(walletToSave._txs_by_external_index);
-        const j2 = JSON.stringify(walletToSave._txs_by_internal_index);
-        realm.create(
-          'Wallet',
-          {
-            walletid: id,
-            _txs_by_external_index: j1,
-            _txs_by_internal_index: j2,
-          },
-          Realm.UpdateMode.Modified,
-        );
+        // cleanup all existing transactions for the wallet first
+        const walletTransactionsToDelete = realm.objects('WalletTransactions').filtered(`walletid = '${id}'`);
+        realm.delete(walletTransactionsToDelete);
+
+        // insert new ones:
+        for (const index of Object.keys(walletToSave._txs_by_external_index)) {
+          const txs = walletToSave._txs_by_external_index[index];
+          for (const tx of txs) {
+            realm.create(
+              'WalletTransactions',
+              {
+                walletid: id,
+                internal: false,
+                index: parseInt(index),
+                tx: JSON.stringify(tx),
+              },
+              Realm.UpdateMode.Modified,
+            );
+          }
+        }
+
+        for (const index of Object.keys(walletToSave._txs_by_internal_index)) {
+          const txs = walletToSave._txs_by_internal_index[index];
+          for (const tx of txs) {
+            realm.create(
+              'WalletTransactions',
+              {
+                walletid: id,
+                internal: true,
+                index: parseInt(index),
+                tx: JSON.stringify(tx),
+              },
+              Realm.UpdateMode.Modified,
+            );
+          }
+        }
       });
     }
   }
@@ -504,14 +583,19 @@ export class AppStorage {
 
     try {
       const walletsToSave = [];
-      const realm = await this.getRealm();
+      let realm;
+      try {
+        realm = await this.getRealm();
+      } catch (error) {
+        alert(error.message);
+      }
       for (const key of this.wallets) {
-        if (typeof key === 'boolean' || key.type === PlaceholderWallet.type) continue;
+        if (typeof key === 'boolean') continue;
         key.prepareForSerialization();
         delete key.current;
         const keyCloned = Object.assign({}, key); // stripped-down version of a wallet to save to secure keystore
         if (key._hdWalletInstance) keyCloned._hdWalletInstance = Object.assign({}, key._hdWalletInstance);
-        this.offloadWalletToRealm(realm, key);
+        if (realm) this.offloadWalletToRealm(realm, key);
         // stripping down:
         if (key._txs_by_external_index) {
           keyCloned._txs_by_external_index = {};
@@ -523,7 +607,7 @@ export class AppStorage {
         }
         walletsToSave.push(JSON.stringify({ ...keyCloned, type: keyCloned.type }));
       }
-      realm.close();
+      if (realm) realm.close();
       let data = {
         wallets: walletsToSave,
         tx_metadata: this.tx_metadata,
@@ -573,6 +657,10 @@ export class AppStorage {
     } catch (error) {
       console.error('save to disk exception:', error.message);
       alert('save to disk exception: ' + error.message);
+      if (error.message.includes('Realm file decryption failed')) {
+        console.warn('purging realm key-value database file');
+        this.purgeRealmKeyValueFile();
+      }
     } finally {
       savingInProgress = 0;
     }
@@ -590,13 +678,13 @@ export class AppStorage {
     console.log('fetchWalletBalances for wallet#', typeof index === 'undefined' ? '(all)' : index);
     if (index || index === 0) {
       let c = 0;
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
+      for (const wallet of this.wallets) {
         if (c++ === index) {
           await wallet.fetchBalance();
         }
       }
     } else {
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
+      for (const wallet of this.wallets) {
         await wallet.fetchBalance();
       }
     }
@@ -616,7 +704,7 @@ export class AppStorage {
     console.log('fetchWalletTransactions for wallet#', typeof index === 'undefined' ? '(all)' : index);
     if (index || index === 0) {
       let c = 0;
-      for (const wallet of this.wallets.filter(wallet => wallet.type !== PlaceholderWallet.type)) {
+      for (const wallet of this.wallets) {
         if (c++ === index) {
           await wallet.fetchTransactions();
           if (wallet.fetchPendingTransactions) {
@@ -672,8 +760,10 @@ export class AppStorage {
     let txs = [];
     for (const wallet of this.wallets.filter(w => includeWalletsWithHideTransactionsEnabled || !w.getHideTransactionsInWalletsList())) {
       const walletTransactions = wallet.getTransactions();
+      const walletID = wallet.getID();
       for (const t of walletTransactions) {
         t.walletPreferredBalanceUnit = wallet.getPreferredBalanceUnit();
+        t.walletID = walletID;
       }
       txs = txs.concat(walletTransactions);
     }
@@ -789,4 +879,11 @@ export class AppStorage {
   sleep = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
+
+  purgeRealmKeyValueFile() {
+    const path = 'keyvalue.realm';
+    return Realm.deleteFile({
+      path,
+    });
+  }
 }

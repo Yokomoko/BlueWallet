@@ -1,10 +1,9 @@
-import { LegacyWallet, SegwitP2SHWallet, SegwitBech32Wallet } from '../../class';
-const assert = require('assert');
-global.net = require('net'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
-global.tls = require('tls'); // needed by Electrum-GRS client. For RN it is proviced in shim.js
-const BlueElectrum = require('../../blue_modules/BlueElectrum'); // so it connects ASAP
+import assert from 'assert';
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+import { LegacyWallet, SegwitP2SHWallet, SegwitBech32Wallet } from '../../class';
+import * as BlueElectrum from '../../blue_modules/BlueElectrum';
+
+jest.setTimeout(30 * 1000);
 
 afterAll(async () => {
   // after all tests we close socket so the test suite can actually terminate
@@ -14,7 +13,7 @@ afterAll(async () => {
 beforeAll(async () => {
   // awaiting for Electrum to be connected. For RN Electrum would naturally connect
   // while app starts up, but for tests we need to wait for it
-  await BlueElectrum.waitTillConnected();
+  await BlueElectrum.connectMain();
 });
 
 describe('LegacyWallet', function () {
@@ -26,17 +25,6 @@ describe('LegacyWallet', function () {
     const b = LegacyWallet.fromJson(key);
     assert.strictEqual(b.type, LegacyWallet.type);
     assert.strictEqual(key, JSON.stringify(b));
-  });
-
-  it('can validate addresses', () => {
-    const w = new LegacyWallet();
-    assert.ok(w.isAddressValid('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs'));
-    assert.ok(!w.isAddressValid('12eQ9m4sgAwTSQoNXkRABKhCXCsjm2j'));
-    assert.ok(w.isAddressValid('34xp4vRoCGJym3xR7yCVPFHoCNxv7bXcAo'));
-    assert.ok(!w.isAddressValid('3BDsBDxDimYgNZzsqszNZobqQq3yeUo'));
-    assert.ok(!w.isAddressValid('12345'));
-    assert.ok(w.isAddressValid('grs1q44n355j5aatyz78kj5e2es7rdpq690yzlwxlqx'));
-    assert.ok(w.isAddressValid('GRS1QLE4ZLJDMPT77DTC98WHYZ90MSAMWJJE8U6D6K5'));
   });
 
   it('can fetch balance', async () => {
@@ -188,13 +176,11 @@ describe('SegwitBech32Wallet', function () {
     assert.ok(!w.weOwnAddress(false));
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 1);
-
-    for (const tx of w.getTransactions()) {
-      assert.ok(tx.hash);
-      assert.strictEqual(tx.outputs[0].value, 0.00189120);
-      assert.ok(tx.received);
-      assert.ok(tx.confirmations > 1);
-    }
+    const tx = w.getTransactions()[1];
+    assert.ok(tx.hash);
+    assert.strictEqual(tx.value, 0.00189120);
+    assert.ok(tx.received);
+    assert.ok(tx.confirmations > 1);
 
     const tx0 = w.getTransactions()[0];
     assert.ok(tx0.inputs);

@@ -1,21 +1,23 @@
-/* global alert */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet } from '../class';
 import DefaultPreference from 'react-native-default-preference';
-import RNWidgetCenter from 'react-native-widget-center';
 import loc from '../loc';
+import WidgetCommunication from './WidgetCommunication';
+import { isTorDaemonDisabled } from './environment';
+import alert from '../components/Alert';
 const bitcoin = require('groestlcoinjs-lib');
 const ElectrumClient = require('electrum-client');
 const reverse = require('buffer-reverse');
 const BigNumber = require('bignumber.js');
-const torrific = require('../blue_modules/torrific');
+const torrific = require('./torrific');
 const Realm = require('realm');
 
 const ELECTRUM_HOST = 'electrum_host';
 const ELECTRUM_TCP_PORT = 'electrum_tcp_port';
 const ELECTRUM_SSL_PORT = 'electrum_ssl_port';
 const ELECTRUM_SERVER_HISTORY = 'electrum_server_history';
+const ELECTRUM_CONNECTION_DISABLED = 'electrum_disabled';
 
 let _realm;
 async function _getRealm() {
@@ -67,14 +69,38 @@ let wasConnectedAtLeastOnce = false;
 let serverName = false;
 let disableBatching = false;
 let connectionAttempt = 0;
+let currentPeerIndex = Math.floor(Math.random() * hardcodedPeers.length);
 
 let latestBlockheight = false;
 let latestBlockheightTimestamp = false;
 
 const txhashHeightCache = {};
 
+async function isDisabled() {
+  let isDisabled;
+  try {
+    const savedValue = await AsyncStorage.getItem(ELECTRUM_CONNECTION_DISABLED);
+    if (savedValue === null) {
+      isDisabled = false;
+    } else {
+      isDisabled = savedValue;
+    }
+  } catch {
+    isDisabled = false;
+  }
+  return !!isDisabled;
+}
+
+async function setDisabled(disabled = true) {
+  return AsyncStorage.setItem(ELECTRUM_CONNECTION_DISABLED, disabled ? '1' : '');
+}
+
 async function connectMain() {
-  let usingPeer = await getRandomHardcodedPeer();
+  if (await isDisabled()) {
+    console.log('Electrum connection disabled by user. Skipping connectMain call');
+    return;
+  }
+  let usingPeer = await getNextPeer();
   const savedPeer = await getSavedPeer();
   if (savedPeer && savedPeer.host && (savedPeer.tcp || savedPeer.ssl)) {
     usingPeer = savedPeer;
@@ -83,7 +109,7 @@ async function connectMain() {
   await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
   try {
     if (usingPeer.host.endsWith('onion')) {
-      const randomPeer = await getRandomHardcodedPeer();
+      const randomPeer = await getCurrentPeer();
       await DefaultPreference.set(ELECTRUM_HOST, randomPeer.host);
       await DefaultPreference.set(ELECTRUM_TCP_PORT, randomPeer.tcp);
       await DefaultPreference.set(ELECTRUM_SSL_PORT, randomPeer.ssl);
@@ -93,7 +119,7 @@ async function connectMain() {
       await DefaultPreference.set(ELECTRUM_SSL_PORT, usingPeer.ssl);
     }
 
-    RNWidgetCenter.reloadAllTimelines();
+    WidgetCommunication.reloadAllTimelines();
   } catch (e) {
     // Must be running on Android
     console.log(e);
@@ -102,12 +128,13 @@ async function connectMain() {
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
     mainClient = new ElectrumClient(
-      usingPeer.host.endsWith('.onion') ? torrific : global.net,
+      usingPeer.host.endsWith('.onion') && !(await isTorDaemonDisabled()) ? torrific : global.net,
       global.tls,
       usingPeer.ssl || usingPeer.tcp,
       usingPeer.host,
       usingPeer.ssl ? 'tls' : 'tcp',
     );
+
     mainClient.onError = function (e) {
       console.log('electrum mainClient.onError():', e.message);
       if (mainConnected) {
@@ -152,14 +179,19 @@ async function connectMain() {
       presentNetworkErrorAlert(usingPeer);
     } else {
       console.log('reconnection attempt #', connectionAttempt);
-      setTimeout(connectMain, 500);
+      await new Promise(resolve => setTimeout(resolve, 500)); // sleep
+      return connectMain();
     }
   }
 }
 
-connectMain();
-
 async function presentNetworkErrorAlert(usingPeer) {
+  if (await isDisabled()) {
+    console.log(
+      'Electrum connection disabled by user. Perhaps we are attempting to show this network error alert after the user disabled connections.',
+    );
+    return;
+  }
   Alert.alert(
     loc.errors.network,
     loc.formatString(
@@ -200,7 +232,7 @@ async function presentNetworkErrorAlert(usingPeer) {
                     await DefaultPreference.clear(ELECTRUM_HOST);
                     await DefaultPreference.clear(ELECTRUM_SSL_PORT);
                     await DefaultPreference.clear(ELECTRUM_TCP_PORT);
-                    RNWidgetCenter.reloadAllTimelines();
+                    WidgetCommunication.reloadAllTimelines();
                   } catch (e) {
                     // Must be running on Android
                     console.log(e);
@@ -230,14 +262,20 @@ async function presentNetworkErrorAlert(usingPeer) {
   );
 }
 
+async function getCurrentPeer() {
+  return hardcodedPeers[currentPeerIndex];
+}
+
 /**
- * Returns random hardcoded electrum-grs server guaranteed to work
- * at the time of writing.
+ * Returns NEXT hardcoded electrum server (increments index after use)
  *
- * @returns {Promise<{tcp, host}|*>}
+ * @returns {Promise<{tcp, host, ssl?}|*>}
  */
-async function getRandomHardcodedPeer() {
-  return hardcodedPeers[(hardcodedPeers.length * Math.random()) | 0];
+async function getNextPeer() {
+  const peer = getCurrentPeer();
+  currentPeerIndex++;
+  if (currentPeerIndex + 1 >= hardcodedPeers.length) currentPeerIndex = 0;
+  return peer;
 }
 
 async function getSavedPeer() {
@@ -324,6 +362,19 @@ module.exports.getTransactionsByAddress = async function (address) {
   return history;
 };
 
+/**
+ *
+ * @param address {String}
+ * @returns {Promise<Array>}
+ */
+module.exports.getMempoolTransactionsByAddress = async function (address) {
+  if (!mainClient) throw new Error('Electrum client is not connected');
+  const script = bitcoin.address.toOutputScript(address);
+  const hash = bitcoin.crypto.sha256(script);
+  const reversedHash = Buffer.from(reverse(hash));
+  return mainClient.blockchainScripthash_getMempool(reversedHash.toString('hex'));
+};
+
 module.exports.ping = async function () {
   try {
     await mainClient.server_ping();
@@ -338,11 +389,37 @@ module.exports.getTransactionsFullByAddress = async function (address) {
   const txs = await this.getTransactionsByAddress(address);
   const ret = [];
   for (const tx of txs) {
-    const full = await mainClient.blockchainTransaction_get(tx.tx_hash, true);
+    let full;
+    try {
+      full = await mainClient.blockchainTransaction_get(tx.tx_hash, true);
+    } catch (error) {
+      if (String(error?.message ?? error).startsWith('verbose transactions are currently unsupported')) {
+        // apparently, stupid esplora instead of returning txhex when it cant return verbose tx started
+        // throwing a proper exception. lets fetch txhex manually and decode on our end
+        const txhex = await mainClient.blockchainTransaction_get(tx.tx_hash, false);
+        full = txhexToElectrumTransaction(txhex);
+      } else {
+        // nope, its something else
+        throw new Error(String(error?.message ?? error));
+      }
+    }
     full.address = address;
     for (const input of full.vin) {
       // now we need to fetch previous TX where this VIN became an output, so we can see its amount
-      const prevTxForVin = await mainClient.blockchainTransaction_get(input.txid, true);
+      let prevTxForVin;
+      try {
+        prevTxForVin = await mainClient.blockchainTransaction_get(input.txid, true);
+      } catch (error) {
+        if (String(error?.message ?? error).startsWith('verbose transactions are currently unsupported')) {
+          // apparently, stupid esplora instead of returning txhex when it cant return verbose tx started
+          // throwing a proper exception. lets fetch txhex manually and decode on our end
+          const txhex = await mainClient.blockchainTransaction_get(input.txid, false);
+          prevTxForVin = txhexToElectrumTransaction(txhex);
+        } else {
+          // nope, its something else
+          throw new Error(String(error?.message ?? error));
+        }
+      }
       if (prevTxForVin && prevTxForVin.vout && prevTxForVin.vout[input.vout]) {
         input.value = prevTxForVin.vout[input.vout].value;
         // also, we extract destination address from prev output:
@@ -579,18 +656,33 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
           results.push({ result: tx, param: txid });
         }
       } catch (_) {
-        // fallback. pretty sure we are connected to EPS.  we try getting transactions one-by-one. this way we wont
-        // fail and only non-tracked by EPS transactions will be omitted
-        for (const txid of chunk) {
-          try {
-            let tx = await mainClient.blockchainTransaction_get(txid, verbose);
-            if (typeof tx === 'string' && verbose) {
-              // apparently electrum-grs server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
-              // lets decode it manually on our end then:
+        if (String(_?.message ?? _).startsWith('verbose transactions are currently unsupported')) {
+          // electrs-esplora. cant use verbose, so fetching txs one by one and decoding locally
+          for (const txid of chunk) {
+            try {
+              let tx = await mainClient.blockchainTransaction_get(txid, false);
               tx = txhexToElectrumTransaction(tx);
+              results.push({ result: tx, param: txid });
+            } catch (_) {
+              console.log(_);
             }
-            results.push({ result: tx, param: txid });
-          } catch (_) {}
+          }
+        } else {
+          // fallback. pretty sure we are connected to EPS.  we try getting transactions one-by-one. this way we wont
+          // fail and only non-tracked by EPS transactions will be omitted
+          for (const txid of chunk) {
+            try {
+              let tx = await mainClient.blockchainTransaction_get(txid, verbose);
+              if (typeof tx === 'string' && verbose) {
+                // apparently electrum server (EPS?) didnt recognize VERBOSE parameter, and  sent us plain txhex instead of decoded tx.
+                // lets decode it manually on our end then:
+                tx = txhexToElectrumTransaction(tx);
+              }
+              results.push({ result: tx, param: txid });
+            } catch (_) {
+              console.log(_);
+            }
+          }
         }
       }
     } else {
@@ -601,7 +693,9 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
       if (txdata.error && txdata.error.code === -32600) {
         // response too large
         // lets do single call, that should go through okay:
-        txdata.result = await mainClient.blockchainTransaction_get(txdata.param, verbose);
+        txdata.result = await mainClient.blockchainTransaction_get(txdata.param, false);
+        // since we used VERBOSE=false, server sent us plain txhex which we must decode on our end:
+        txdata.result = txhexToElectrumTransaction(txdata.result);
       }
       ret[txdata.param] = txdata.result;
       if (ret[txdata.param]) delete ret[txdata.param].hex; // compact
@@ -645,6 +739,10 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
 module.exports.waitTillConnected = async function () {
   let waitTillConnectedInterval = false;
   let retriesCounter = 0;
+  if (await isDisabled()) {
+    console.warn('Electrum connections disabled by user. waitTillConnected skipping...');
+    return;
+  }
   return new Promise(function (resolve, reject) {
     waitTillConnectedInterval = setInterval(() => {
       if (mainConnected) {
@@ -658,14 +756,14 @@ module.exports.waitTillConnected = async function () {
         return resolve(true);
       }
 
-      if (wasConnectedAtLeastOnce && retriesCounter++ >= 30) {
+      if (wasConnectedAtLeastOnce && retriesCounter++ >= 150) {
         // `wasConnectedAtLeastOnce` needed otherwise theres gona be a race condition with the code that connects
         // electrum during app startup
         clearInterval(waitTillConnectedInterval);
         presentNetworkErrorAlert();
         reject(new Error('Waiting for Electrum connection timeout'));
       }
-    }, 500);
+    }, 100);
   });
 };
 
@@ -818,8 +916,9 @@ module.exports.calculateBlockTime = function (height) {
  * @returns {Promise<boolean>} Whether provided host:port is a valid electrum-grs server
  */
 module.exports.testConnection = async function (host, tcpPort, sslPort) {
+  const isTorDisabled = await isTorDaemonDisabled();
   const client = new ElectrumClient(
-    host.endsWith('.onion') ? torrific : global.net,
+    host.endsWith('.onion') && !isTorDisabled ? torrific : global.net,
     global.tls,
     sslPort || tcpPort,
     host,
@@ -831,7 +930,7 @@ module.exports.testConnection = async function (host, tcpPort, sslPort) {
   try {
     const rez = await Promise.race([
       new Promise(resolve => {
-        timeoutId = setTimeout(() => resolve('timeout'), host.endsWith('.onion') ? 21000 : 5000);
+        timeoutId = setTimeout(() => resolve('timeout'), host.endsWith('.onion') && !isTorDisabled ? 21000 : 5000);
       }),
       client.connect(),
     ]);
@@ -860,9 +959,10 @@ module.exports.setBatchingDisabled = () => {
 module.exports.setBatchingEnabled = () => {
   disableBatching = false;
 };
-
+module.exports.connectMain = connectMain;
+module.exports.isDisabled = isDisabled;
+module.exports.setDisabled = setDisabled;
 module.exports.hardcodedPeers = hardcodedPeers;
-module.exports.getRandomHardcodedPeer = getRandomHardcodedPeer;
 module.exports.ELECTRUM_HOST = ELECTRUM_HOST;
 module.exports.ELECTRUM_TCP_PORT = ELECTRUM_TCP_PORT;
 module.exports.ELECTRUM_SSL_PORT = ELECTRUM_SSL_PORT;

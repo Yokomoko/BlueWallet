@@ -1,8 +1,8 @@
-Un portefeuille Groestlcoin vous permettant de stocker, envoyer, recevoir et acheter du Groestlcoin avec un focus sur la sécurité et la simplicité.
+Un portefeuille Groestlcoin vous permettant de stocker, envoyer, recevoir et acheter du Groestlcoin en se concentrant sur la sécurité et la simplicité.
 
 Sur GRS BlueWallet, un portefeuille Groestlcoin où vous possédez vos clés privés. Un portefeuille Groestlcoin fait par des utilisateurs de Groestlcoin, pour la communauté.
 
-Vous pouvez faire une transaction instanément, vers n'importe où dans le monde, et transformer le système financier du bout de vos doigts.
+Vous pouvez faire une transaction instanément, vers n'importe où dans le monde, et transformer le système financier depuis votre poche.
 
 Créez gratuitement une infinité de portefeuilles Groestlcoin ou importez votre portefeuille existant. C'est simple et rapide.
 
@@ -11,7 +11,7 @@ _____
 Voici ce que vous obtenez :
 
 
-1 - Sécurité par design
+1 - Sécurité dès la conception
 
 Open Source
 Sous license MIT, vous pouvez le compiler et le lancer dans votre coin ! Conçu avec ReactNative
@@ -49,5 +49,5 @@ Un portefeuille Lightning sans aucune configuration nécessaire. Des transaction
 Acheter du groestlcoin
 Rejoignez la révolution la finance ouverte avec la possibilité d'acheter du groestlcoin directement depuis votre portefeuille.
 
-Local Trader
+Trader Local
 Une plateforme de trading de Groestlcoin pair-à-pair, vous permettant d'acheter et de vendre du groestlcoin directement auprès d'autres utilisateurs, sans aucune tierce-partie.

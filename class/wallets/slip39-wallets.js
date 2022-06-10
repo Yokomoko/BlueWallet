@@ -1,4 +1,5 @@
 import slip39 from 'slip39';
+import { WORD_LIST } from 'slip39/dist/slip39_helper';
 import createHash from 'create-hash';
 
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
@@ -8,7 +9,7 @@ import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
 // collection of SLIP39 functions
 const SLIP39Mixin = {
   _getSeed() {
-    const master = slip39.recoverSecret(this.secret);
+    const master = slip39.recoverSecret(this.secret, this.passphrase);
     return Buffer.from(master);
   },
 
@@ -24,22 +25,40 @@ const SLIP39Mixin = {
   },
 
   setSecret(newSecret) {
+    // Try to match words to the default slip39 wordlist and complete partial words
+    const lookupMap = WORD_LIST.reduce((map, word) => {
+      const prefix3 = word.substr(0, 3);
+      const prefix4 = word.substr(0, 4);
+
+      map.set(prefix3, !map.has(prefix3) ? word : false);
+      map.set(prefix4, !map.has(prefix4) ? word : false);
+
+      return map;
+    }, new Map());
+
     this.secret = newSecret
       .trim()
       .split('\n')
       .filter(s => s)
-      .map(s =>
-        s
+      .map(s => {
+        let secret = s
           .trim()
           .toLowerCase()
           .replace(/[^a-zA-Z0-9]/g, ' ')
-          .replace(/\s+/g, ' '),
-      );
+          .replace(/\s+/g, ' ');
+
+        secret = secret
+          .split(' ')
+          .map(word => lookupMap.get(word) || word)
+          .join(' ');
+
+        return secret;
+      });
     return this;
   },
 
   getID() {
-    const string2hash = this.secret.sort().join(',');
+    const string2hash = this.secret.sort().join(',') + (this.getPassphrase() || '');
     return createHash('sha256').update(string2hash).digest().toString('hex');
   },
 };

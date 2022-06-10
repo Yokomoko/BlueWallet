@@ -1,8 +1,8 @@
-global.net = require('net');
-global.tls = require('tls');
-const BlueElectrum = require('../../blue_modules/BlueElectrum');
-const assert = require('assert');
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 150 * 1000;
+import assert from 'assert';
+
+import * as BlueElectrum from '../../blue_modules/BlueElectrum';
+
+jest.setTimeout(150 * 1000);
 
 afterAll(() => {
   // after all tests we close socket so the test suite can actually terminate
@@ -13,7 +13,7 @@ beforeAll(async () => {
   // awaiting for Electrum to be connected. For RN Electrum would naturally connect
   // while app starts up, but for tests we need to wait for it
   try {
-    await BlueElectrum.waitTillConnected();
+    await BlueElectrum.connectMain();
   } catch (err) {
     console.log('failed to connect to Electrum:', err);
     process.exit(1);
@@ -138,6 +138,17 @@ describe('BlueElectrum', () => {
     assert.strictEqual(txs[0].height, 3048304);
     assert.strictEqual(txs[1].tx_hash, '5a77d2cd3d661aa02179310cf8965a23c106c3866c706e3fe49389671f1e2d25');
     assert.strictEqual(txs[1].height, 3137109);
+  });
+
+  // skipped because requires fresh address with pending txs every time
+  it.skip('BlueElectrum can do getMempoolTransactionsByAddress()', async function () {
+    const txs = await BlueElectrum.getMempoolTransactionsByAddress('bc1qp33en9mnw277c9vz5fz9vcu666cvervdnk02327wwph97hdjurqqxtl03c');
+    assert.ok(txs.length > 0);
+    assert.ok(txs[0].tx_hash);
+    assert.ok(txs[0].fee);
+
+    const rez = await BlueElectrum.multiGetTransactionByTxid([txs[0].tx_hash], 10, true);
+    assert.ok(rez[txs[0].tx_hash]);
   });
 
   it('BlueElectrum can do getTransactionsFullByAddress()', async function () {

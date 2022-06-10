@@ -1,14 +1,13 @@
 import b58 from 'bs58grscheck';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
+import BIP32Factory from 'bip32grs';
+import * as ecc from 'tiny-secp256k1';
 
 const bitcoin = require('groestlcoinjs-lib');
 const mn = require('electrum-mnemonic');
-const HDNode = require('bip32grs');
+const bip32 = BIP32Factory(ecc);
 
 const PREFIX = mn.PREFIXES.segwit;
-const MNEMONIC_TO_SEED_OPTS = {
-  prefix: PREFIX,
-};
 
 /**
  * ElectrumSeed means that instead of BIP39 seed format it works with the format invented by Electrum wallet. Otherwise
@@ -33,7 +32,9 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
-    const root = bitcoin.bip32.fromSeed(mn.mnemonicToSeedSync(this.secret, MNEMONIC_TO_SEED_OPTS));
+    const args = { prefix: PREFIX };
+    if (this.passphrase) args.passphrase = this.passphrase;
+    const root = bip32.fromSeed(mn.mnemonicToSeedSync(this.secret, args));
     const xpub = root.derivePath("m/0'").neutered().toBase58();
 
     // bitcoinjs does not support zpub yet, so we just convert it from xpub
@@ -50,7 +51,7 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     if (this.internal_addresses_cache[index]) return this.internal_addresses_cache[index]; // cache hit
 
     const xpub = this.constructor._zpubToXpub(this.getXpub());
-    const node = bitcoin.bip32.fromBase58(xpub);
+    const node = bip32.fromBase58(xpub);
     const address = bitcoin.payments.p2wpkh({
       pubkey: node.derive(1).derive(index).publicKey,
     }).address;
@@ -63,7 +64,7 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     if (this.external_addresses_cache[index]) return this.external_addresses_cache[index]; // cache hit
 
     const xpub = this.constructor._zpubToXpub(this.getXpub());
-    const node = bitcoin.bip32.fromBase58(xpub);
+    const node = bip32.fromBase58(xpub);
     const address = bitcoin.payments.p2wpkh({
       pubkey: node.derive(0).derive(index).publicKey,
     }).address;
@@ -73,7 +74,9 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
 
   _getWIFByIndex(internal, index) {
     if (!this.secret) return false;
-    const root = bitcoin.bip32.fromSeed(mn.mnemonicToSeedSync(this.secret, MNEMONIC_TO_SEED_OPTS));
+    const args = { prefix: PREFIX };
+    if (this.passphrase) args.passphrase = this.passphrase;
+    const root = bip32.fromSeed(mn.mnemonicToSeedSync(this.secret, args));
     const path = `m/0'/${internal ? 1 : 0}/${index}`;
     const child = root.derivePath(path);
 
@@ -85,13 +88,13 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
 
     if (node === 0 && !this._node0) {
       const xpub = this.constructor._zpubToXpub(this.getXpub());
-      const hdNode = HDNode.fromBase58(xpub);
+      const hdNode = bip32.fromBase58(xpub);
       this._node0 = hdNode.derive(node);
     }
 
     if (node === 1 && !this._node1) {
       const xpub = this.constructor._zpubToXpub(this.getXpub());
-      const hdNode = HDNode.fromBase58(xpub);
+      const hdNode = bip32.fromBase58(xpub);
       this._node1 = hdNode.derive(node);
     }
 
@@ -102,5 +105,9 @@ export class HDSegwitElectrumSeedP2WPKHWallet extends HDSegwitBech32Wallet {
     if (node === 1) {
       return this._node1.derive(index).publicKey;
     }
+  }
+
+  isSegwit() {
+    return true;
   }
 }
