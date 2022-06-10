@@ -1,5 +1,5 @@
 import { helperDeleteWallet, sleep, hashIt, sup, helperImportWallet, yo, extractTextFromElementById } from './helperz';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');
 
 beforeAll(async () => {
@@ -95,7 +95,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
       await sleep(1000);
     }
 
-    const bip21 = 'bitcoin:bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7?amount=0.00015&pj=https://btc.donate.kukks.org/BTC/pj';
+    const bip21 = 'groestlcoin:bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7?amount=0.00015&pj=https://btc.donate.kukks.org/BTC/pj';
     await element(by.id('scanQrBackdoorInput')).replaceText(bip21);
     await element(by.id('scanQrBackdoorOkButton')).tap();
 
@@ -349,7 +349,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     await device.launchApp({
       newInstance: true,
-      url: 'bitcoin:BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7\\?amount=0.0001\\&label=Yo',
+      url: 'groestlcoin:BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7\\?amount=0.0001\\&label=Yo',
     });
 
     // setting fee rate:
@@ -427,7 +427,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     // use frozen output to create tx using "Use coin" feature
     await element(by.text('test2')).atIndex(0).tap();
     await element(by.id('UseCoin')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
     await element(by.text('OK')).tap();

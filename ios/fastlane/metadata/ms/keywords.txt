@@ -1,1 +1,1 @@
-bitcoin,dompet,dompet bitcoin ,rabong,btc,kriptowang,beli bitcoin,samourai,electrum,ethereum
+groestlcoin,dompet,dompet groestlcoin ,rabong,grs,kriptowang,beli groestlcoin,samourai,electrum,ethereum

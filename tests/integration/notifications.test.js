@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import Notifications from '../../blue_modules/notifications';
+// import Notifications from '../../blue_modules/notifications';
 // Notifications.default = new Notifications();
 
 describe('notifications', () => {

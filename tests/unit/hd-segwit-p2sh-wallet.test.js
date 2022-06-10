@@ -211,7 +211,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
   it('can create with custom derivation path', async () => {
     const hd = new HDSegwitP2SHWallet();
     hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
-    hd.setDerivationPath("m/49'/0'/1'");
+    hd.setDerivationPath("m/49'/17'/1'");
 
     assert.strictEqual(
       hd.getXpub(),
@@ -222,7 +222,7 @@ describe('P2SH Segwit HD (BIP49)', () => {
     assert.strictEqual(hd._getInternalAddressByIndex(0), '35gZZo6xPJEPgcz1cj1mTQHRMiPP97NGRY');
     assert.strictEqual(hd._getExternalWIFByIndex(0), 'KxTxanpst8612uDETejiDfSfbC2paXJi7teZ1ZfW5RpNfXbXnszw');
 
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/0'/1'/0/0");
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/0'/1'/1/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/49'/17'/1'/0/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/49'/17'/1'/1/0");
   });
 });

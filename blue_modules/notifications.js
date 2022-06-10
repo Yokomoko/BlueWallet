@@ -182,7 +182,7 @@ function Notifications(props) {
   }
 
   /**
-   * Submits onchain bitcoin addresses and ln invoice preimage hashes to GroundControl server, so later we could
+   * Submits onchain groestlcoin addresses and ln invoice preimage hashes to GroundControl server, so later we could
    * be notified if they were paid
    *
    * @param addresses {string[]}

@@ -12,7 +12,7 @@ import loc from '../../loc';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { AbstractWallet, HDSegwitBech32Wallet, LightningLdkWallet } from '../../class';
 import { ArrowPicker } from '../../components/ArrowPicker';
-import { Psbt } from 'bitcoinjs-lib';
+import { Psbt } from 'groestlcoinjs-lib';
 import Biometric from '../../class/biometrics';
 import alert from '../../components/Alert';
 const currency = require('../../blue_modules/currency');

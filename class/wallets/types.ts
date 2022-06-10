@@ -1,4 +1,4 @@
-import bitcoin from 'bitcoinjs-lib';
+import bitcoin from 'groestlcoinjs-lib';
 
 export type Utxo = {
   // Returned by BlueElectrum

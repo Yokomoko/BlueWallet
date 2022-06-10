@@ -187,7 +187,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
   it('can create with custom derivation path', async () => {
     const hd = new HDSegwitBech32Wallet();
     hd.setSecret('abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about');
-    hd.setDerivationPath("m/84'/0'/1'");
+    hd.setDerivationPath("m/84'/17'/1'");
 
     assert.strictEqual(
       hd.getXpub(),
@@ -198,8 +198,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qt0x83f5vmnapgl2gjj9r3d67rcghvjaqrvgpck');
     assert.strictEqual(hd._getExternalWIFByIndex(0), 'L4ouJZjss1Ua8LPhsJNkzN8V8uXrQpfADNsqzsaT5JHs1G752c9j');
 
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/0'/1'/0/0");
-    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/0'/1'/1/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/17'/1'/0/0");
+    assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/17'/1'/1/0");
   });
 
   it('can generate ID', () => {
@@ -208,7 +208,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     const id1 = hd.getID();
     hd.setPassphrase('super secret passphrase');
     const id2 = hd.getID();
-    hd.setDerivationPath("m/84'/0'/1'");
+    hd.setDerivationPath("m/84'/17'/1'");
     const id3 = hd.getID();
 
     assert.notStrictEqual(id1, id2);

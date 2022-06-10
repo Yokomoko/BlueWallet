@@ -9,7 +9,7 @@ import loc, { formatBalance } from '../../loc';
 import LNNodeBar from '../../components/LNNodeBar';
 import BottomModal from '../../components/BottomModal';
 import Button, { ButtonStyle } from '../../components/Button';
-import { Psbt } from 'bitcoinjs-lib';
+import { Psbt } from 'groestlcoinjs-lib';
 import { AbstractWallet, LightningLdkWallet } from '../../class';
 import alert from '../../components/Alert';
 const selectWallet = require('../../helpers/select-wallet');
@@ -100,7 +100,7 @@ const LdkInfo = () => {
       const maturingHeight = await wallet.getMaturingHeight();
 
       if (maturingHeight > 0) {
-        const result = await fetch('https://blockstream.info/api/blocks/tip/height');
+        const result = await fetch('https://esplora.groestlcoin.org/api/blocks/tip/height');
         const tip = await result.text();
         const hrs = Math.ceil((maturingHeight - +tip) / 6); // convert blocks to hours
         setMaturingEta(`${hrs} hours`);

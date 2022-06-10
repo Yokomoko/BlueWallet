@@ -6,10 +6,10 @@ import SyncedAsyncStorage from '../synced-async-storage';
 import { randomBytes } from '../rng';
 import * as bip39 from 'bip39';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
-import bolt11 from 'bolt11';
+import bolt11 from 'bolt11grs';
 import { SegwitBech32Wallet } from './segwit-bech32-wallet';
 import alert from '../../components/Alert';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 
 export class LightningLdkWallet extends LightningCustodianWallet {
   static type = 'lightningLdk';
@@ -183,7 +183,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
     }
 
     // doing actual fetch and filling cache:
-    const response = await fetch(`https://1ml.com/node/${pubkey}/json`);
+    const response = await fetch(`https://groestlcoin.org/${pubkey}/json`);
     const json = await response.json();
     if (json && json.addresses && Array.isArray(json.addresses)) {
       for (const address of json.addresses) {
@@ -537,7 +537,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   async walletBalance() {
     let confirmedSat = 0;
     if (this._unwrapFirstExternalAddressFromMnemonicsCache) {
-      const response = await fetch('https://blockstream.info/api/address/' + this._unwrapFirstExternalAddressFromMnemonicsCache + '/utxo');
+      const response = await fetch('https://esplora.groestlcoin.org/api/address/' + this._unwrapFirstExternalAddressFromMnemonicsCache + '/utxo');
       const json = await response.json();
       if (json && Array.isArray(json)) {
         for (const utxo of json) {

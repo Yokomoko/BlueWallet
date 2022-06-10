@@ -1,6 +1,6 @@
 import { LegacyWallet } from './legacy-wallet';
 import * as bip39 from 'bip39';
-import { BIP32Interface } from 'bip32';
+import { BIP32Interface } from 'bip32grs';
 import * as bip39custom from '../../blue_modules/bip39';
 import BlueElectrum from '../../blue_modules/BlueElectrum';
 import { Transaction } from './types';

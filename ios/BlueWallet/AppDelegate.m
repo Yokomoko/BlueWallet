@@ -51,7 +51,7 @@ static void InitializeFlipper(UIApplication *application) {
                                            forKeyPath:@"deviceUIDCopy"
                                               options:NSKeyValueObservingOptionNew
                                               context:NULL];
-  
+
 #if !TARGET_OS_MACCATALYST
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
@@ -79,11 +79,11 @@ static void InitializeFlipper(UIApplication *application) {
   // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
-  
-  
+
+
   /* For debugging purposes since iOS Simulator does not support handoff
-  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.io.bluewallet.bluewallet"];
-  [defaults setValue:@{@"activityType": @"io.bluewallet.bluewallet.receiveonchain", @"userInfo": @{@"address": @""}} forKey:@"onUserActivityOpen"];
+  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.groestlcoin.bluewallet123"];
+  [defaults setValue:@{@"activityType": @"org.groestlcoin.bluewallet123.receiveonchain", @"userInfo": @{@"address": @""}} forKey:@"onUserActivityOpen"];
   */
   return YES;
 }
@@ -115,7 +115,7 @@ static void InitializeFlipper(UIApplication *application) {
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.io.bluewallet.bluewallet"];
+  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.groestlcoin.bluewallet123"];
   [defaults setValue:@{@"activityType": userActivity.activityType, @"userInfo": userActivity.userInfo} forKey:@"onUserActivityOpen"];
   if (userActivity.activityType == NSUserActivityTypeBrowsingWeb) {
     return [RCTLinkingManager application:application
@@ -138,7 +138,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (void)applicationWillTerminate:(UIApplication *)application {
   [WCSession.defaultSession updateApplicationContext:@{@"isWalletsInitialized": @NO} error:nil];
-  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.io.bluewallet.bluewallet"];
+  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.groestlcoin.bluewallet123"];
   [defaults removeObjectForKey:@"onUserActivityOpen"];
 }
 
@@ -208,7 +208,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   UIKeyCommand *preferencesCommand = [UIKeyCommand keyCommandWithInput:@"," modifierFlags:UIKeyModifierCommand action:@selector(openPreferences)];
   [preferencesCommand setTitle:@"Preferences..."];
   UIMenu *preferences = [UIMenu menuWithTitle:@"Preferences..." image:nil identifier:@"openPreferences" options:UIMenuOptionsDisplayInline children:@[preferencesCommand]];
-  
+
   [builder insertSiblingMenu:preferences afterMenuForIdentifier:UIMenuAbout];
 }
 

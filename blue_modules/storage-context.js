@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { FiatUnit } from '../models/fiatUnit';
-import Notifications from '../blue_modules/notifications';
+// import Notifications from '../blue_modules/notifications';
 import loc from '../loc';
 import { LegacyWallet } from '../class';
 import { isTorDaemonDisabled, setIsTorDaemonDisabled } from './environment';
@@ -191,7 +191,7 @@ export const BlueStorageProvider = ({ children }) => {
     await saveToDisk();
     A(A.ENUM.CREATED_WALLET);
     Alert.alert('', loc.wallets.import_success);
-    Notifications.majorTomToGroundControl(w.getAllExternalAddresses(), [], []);
+    // Notifications.majorTomToGroundControl(w.getAllExternalAddresses(), [], []);
     // start balance fetching at the background
     await w.fetchBalance();
     setWallets([...BlueApp.getWallets()]);
