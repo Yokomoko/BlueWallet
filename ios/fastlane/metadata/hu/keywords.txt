@@ -1,0 +1,1 @@
+groestlcoin,tárca,groestlcoin tárca,blokklánc,grs,cryptopénz,groestlcoin vétel,groestlcoin samourai,electrum-grs,ethereum

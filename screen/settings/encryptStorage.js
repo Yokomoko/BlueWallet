@@ -1,197 +1,170 @@
-/* global alert */
-import React, { Component } from 'react';
-import { ScrollView, Alert, Platform, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import {
-  BlueLoading,
-  BlueHeaderDefaultSub,
-  BlueListItem,
-  SafeBlueArea,
-  BlueNavigationStyle,
-  BlueSpacing20,
-  BlueCard,
-  BlueText,
-} from '../../BlueComponents';
-import PropTypes from 'prop-types';
-import { AppStorage } from '../../class';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
+import { ScrollView, Alert, TouchableOpacity, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import Biometric from '../../class/biometrics';
-let BlueApp: AppStorage = require('../../BlueApp');
-let prompt = require('../../prompt');
-let loc = require('../../loc');
+import { colors } from 'react-native-elements';
 
-export default class EncryptStorage extends Component {
-  static navigationOptions = () => ({
-    ...BlueNavigationStyle(),
-    title: 'Security',
+import navigationStyle from '../../components/navigationStyle';
+import { BlueLoading, SafeBlueArea, BlueSpacing20, BlueCard, BlueListItem, BlueHeaderDefaultSub, BlueText } from '../../BlueComponents';
+import Biometric from '../../class/biometrics';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+import alert from '../../components/Alert';
+const prompt = require('../../blue_modules/prompt');
+
+const EncryptStorage = () => {
+  const { isStorageEncrypted, encryptStorage, decryptStorage, saveToDisk } = useContext(BlueStorageContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [biometrics, setBiometrics] = useState({ isDeviceBiometricCapable: false, isBiometricsEnabled: false, biometricsType: '' });
+  const [storageIsEncryptedSwitchEnabled, setStorageIsEncryptedSwitchEnabled] = useState(false);
+  const { navigate, popToTop } = useNavigation();
+  const styles = StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
   });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      language: loc.getLanguage(),
-      deleteWalletsAfterUninstall: false,
-      biometrics: { isDeviceBiometricCapable: false, isBiometricsEnabled: false, biometricsType: '' },
-    };
-  }
-
-  async componentDidMount() {
+  const initialState = useCallback(async () => {
     const isBiometricsEnabled = await Biometric.isBiometricUseEnabled();
     const isDeviceBiometricCapable = await Biometric.isDeviceBiometricCapable();
-    const biometricsType = (await Biometric.biometricType()) || 'biometrics';
-    this.setState({
-      isLoading: false,
-      advancedModeEnabled: await BlueApp.isAdancedModeEnabled(),
-      storageIsEncrypted: await BlueApp.storageIsEncrypted(),
-      deleteWalletsAfterUninstall: await BlueApp.isDeleteWalletAfterUninstallEnabled(),
-      biometrics: { isBiometricsEnabled, isDeviceBiometricCapable, biometricsType },
-    });
-  }
+    const biometricsType = (await Biometric.biometricType()) || loc.settings.biometrics;
+    const isStorageEncryptedSwitchEnabled = await isStorageEncrypted();
+    setStorageIsEncryptedSwitchEnabled(isStorageEncryptedSwitchEnabled);
+    setBiometrics({ isBiometricsEnabled, isDeviceBiometricCapable, biometricsType });
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    initialState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  decryptStorage = async () => {
+  const handleDecryptStorage = async () => {
     const password = await prompt(loc.settings.password, loc._.storage_is_encrypted).catch(() => {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     });
     try {
-      await BlueApp.decryptStorage(password);
-      this.props.navigation.popToTop();
+      await decryptStorage(password);
+      await saveToDisk();
+      popToTop();
     } catch (e) {
       if (password) {
         alert(loc._.bad_password);
         ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
       }
-      this.setState({
-        isLoading: false,
-        storageIsEncrypted: await BlueApp.storageIsEncrypted(),
-        deleteWalletAfterUninstall: await BlueApp.isDeleteWalletAfterUninstallEnabled(),
-      });
+
+      setIsLoading(false);
+      setStorageIsEncryptedSwitchEnabled(await isStorageEncrypted());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  onDeleteWalletsAfterUninstallSwitch = async value => {
-    await BlueApp.setResetOnAppUninstallTo(value);
-    this.setState({ deleteWalletsAfterUninstall: value });
-  };
-
-  onEncryptStorageSwitch = value => {
-    this.setState({ isLoading: true }, async () => {
-      if (value === true) {
-        let p1 = await prompt(loc.settings.password, loc.settings.password_explain).catch(() => {
-          this.setState({ isLoading: false });
-          p1 = undefined;
-        });
-        if (!p1) {
-          this.setState({ isLoading: false });
-          return;
-        }
-        let p2 = await prompt(loc.settings.password, loc.settings.retype_password).catch(() => {
-          this.setState({ isLoading: false });
-        });
-        if (p1 === p2) {
-          await BlueApp.encryptStorage(p1);
-          this.setState({
-            isLoading: false,
-            storageIsEncrypted: await BlueApp.storageIsEncrypted(),
-          });
-        } else {
-          this.setState({ isLoading: false });
-          alert(loc.settings.passwords_do_not_match);
-        }
-      } else {
-        Alert.alert(
-          'Decrypt Storage',
-          'Are you sure you want to decrypt your storage? This will allow your wallets to be accessed without a password.',
-          [
-            {
-              text: loc.send.details.cancel,
-              style: 'cancel',
-              onPress: () => this.setState({ isLoading: false }),
-            },
-            {
-              text: loc._.ok,
-              style: 'destructive',
-              onPress: this.decryptStorage,
-            },
-          ],
-          { cancelable: false },
-        );
+  const onEncryptStorageSwitch = async value => {
+    setIsLoading(true);
+    if (value === true) {
+      let p1 = await prompt(loc.settings.password, loc.settings.password_explain).catch(() => {
+        setIsLoading(false);
+        p1 = undefined;
+      });
+      if (!p1) {
+        setIsLoading(false);
+        return;
       }
-    });
+      const p2 = await prompt(loc.settings.password, loc.settings.retype_password).catch(() => {
+        setIsLoading(false);
+      });
+      if (p1 === p2) {
+        await encryptStorage(p1);
+        setIsLoading(false);
+        setStorageIsEncryptedSwitchEnabled(await isStorageEncrypted());
+        saveToDisk();
+      } else {
+        setIsLoading(false);
+        alert(loc.settings.passwords_do_not_match);
+      }
+    } else {
+      Alert.alert(
+        loc.settings.encrypt_decrypt,
+        loc.settings.encrypt_decrypt_q,
+        [
+          {
+            text: loc._.cancel,
+            style: 'cancel',
+            onPress: () => setIsLoading(false),
+          },
+          {
+            text: loc._.ok,
+            style: 'destructive',
+            onPress: handleDecryptStorage,
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  onUseBiometricSwitch = async value => {
-    let isBiometricsEnabled = this.state.biometrics;
+  const onUseBiometricSwitch = async value => {
+    const isBiometricsEnabled = {
+      isDeviceBiometricCapable: biometrics.isDeviceBiometricCapable,
+      isBiometricsEnabled: biometrics.isBiometricsEnabled,
+      biometricsType: biometrics.biometricsType,
+    };
     if (await Biometric.unlockWithBiometrics()) {
       isBiometricsEnabled.isBiometricsEnabled = value;
       await Biometric.setBiometricUseEnabled(value);
-      this.setState({ biometrics: isBiometricsEnabled });
+      setBiometrics(isBiometricsEnabled);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 
-  render() {
-    if (this.state.isLoading) {
-      return <BlueLoading />;
-    }
+  const navigateToPlausibleDeniability = () => {
+    navigate('PlausibleDeniability');
+  };
 
-    return (
-      <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
-        <ScrollView>
-          {this.state.biometrics.isDeviceBiometricCapable && (
-            <>
-              <BlueHeaderDefaultSub leftText="biometrics" rightComponent={null} />
-              <BlueListItem
-                title={`Use ${this.state.biometrics.biometricsType}`}
-                Component={TouchableWithoutFeedback}
-                switch={{ value: this.state.biometrics.isBiometricsEnabled, onValueChange: this.onUseBiometricSwitch }}
-              />
-              <BlueCard>
-                <BlueText>
-                  {this.state.biometrics.biometricsType} will be used to confirm your identity prior to making a transaction, unlocking,
-                  exporting or deleting a wallet. {this.state.biometrics.biometricsType} will not be used to unlock an encrypted storage.
-                </BlueText>
-              </BlueCard>
-              <BlueSpacing20 />
-            </>
-          )}
-          <BlueHeaderDefaultSub leftText="storage" rightComponent={null} />
-          <BlueListItem
-            testID="EncyptedAndPasswordProtected"
-            hideChevron
-            title="Encypted and Password protected"
-            Component={TouchableWithoutFeedback}
-            switch={{ onValueChange: this.onEncryptStorageSwitch, value: this.state.storageIsEncrypted }}
-          />
-          {Platform.OS === 'ios' && (
+  return isLoading ? (
+    <SafeBlueArea>
+      <BlueLoading />
+    </SafeBlueArea>
+  ) : (
+    <SafeBlueArea>
+      <ScrollView contentContainerStyle={styles.root}>
+        {biometrics.isDeviceBiometricCapable && (
+          <>
+            <BlueHeaderDefaultSub leftText={loc.settings.biometrics} rightComponent={null} />
             <BlueListItem
-              hideChevron
-              title="Delete if Groestlcoin BlueWallet is uninstalled"
+              title={loc.formatString(loc.settings.encrypt_use, { type: biometrics.biometricsType })}
               Component={TouchableWithoutFeedback}
-              switch={{
-                onValueChange: this.onDeleteWalletsAfterUninstallSwitch,
-                value: this.state.deleteWalletsAfterUninstall,
-              }}
+              switch={{ value: biometrics.isBiometricsEnabled, onValueChange: onUseBiometricSwitch }}
             />
-          )}
-          {this.state.storageIsEncrypted && (
-            <BlueListItem
-              onPress={() => this.props.navigation.navigate('PlausibleDeniability')}
-              disabled={!this.state.storageIsEncrypted}
-              title={loc.settings.plausible_deniability}
-              chevron
-              testID="PlausibleDeniabilityButton"
-              Component={TouchableOpacity}
-            />
-          )}
-        </ScrollView>
-      </SafeBlueArea>
-    );
-  }
-}
-
-EncryptStorage.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    popToTop: PropTypes.func,
-    goBack: PropTypes.func,
-  }),
+            <BlueCard>
+              <BlueText>{loc.formatString(loc.settings.encrypt_use_expl, { type: biometrics.biometricsType })}</BlueText>
+            </BlueCard>
+            <BlueSpacing20 />
+          </>
+        )}
+        <BlueHeaderDefaultSub leftText={loc.settings.encrypt_tstorage} rightComponent={null} />
+        <BlueListItem
+          testID="EncyptedAndPasswordProtected"
+          hideChevron
+          title={loc.settings.encrypt_enc_and_pass}
+          Component={TouchableWithoutFeedback}
+          switch={{ onValueChange: onEncryptStorageSwitch, value: storageIsEncryptedSwitchEnabled }}
+        />
+        {storageIsEncryptedSwitchEnabled && (
+          <BlueListItem
+            onPress={navigateToPlausibleDeniability}
+            title={loc.settings.plausible_deniability}
+            chevron
+            testID="PlausibleDeniabilityButton"
+            Component={TouchableOpacity}
+          />
+        )}
+      </ScrollView>
+    </SafeBlueArea>
+  );
 };
+
+export default EncryptStorage;
+EncryptStorage.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.settings.encrypt_title }));

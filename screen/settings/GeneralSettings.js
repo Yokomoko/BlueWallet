@@ -1,90 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, Platform, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import { BlueLoading, BlueText, BlueSpacing20, BlueListItem, SafeBlueArea, BlueNavigationStyle, BlueCard } from '../../BlueComponents';
-import PropTypes from 'prop-types';
-import { AppStorage } from '../../class';
-import { useNavigation } from 'react-navigation-hooks';
-import HandoffSettings from '../../class/handoff';
-let BlueApp: AppStorage = require('../../BlueApp');
-let loc = require('../../loc');
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, Platform, TouchableWithoutFeedback, TouchableOpacity, StyleSheet } from 'react-native';
+
+import navigationStyle from '../../components/navigationStyle';
+import { BlueLoading, BlueText, BlueSpacing20, BlueListItem, BlueCard } from '../../BlueComponents';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { isURv1Enabled, clearUseURv1, setUseURv1 } from '../../blue_modules/ur';
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
 
 const GeneralSettings = () => {
+  const { isAdancedModeEnabled, setIsAdancedModeEnabled, wallets, isHandOffUseEnabled, setIsHandOffUseEnabledAsyncStorage } =
+    useContext(BlueStorageContext);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAdancedModeEnabled, setIsAdancedModeEnabled] = useState(false);
-  const [isHandoffUseEnabled, setIsHandoffUseEnabled] = useState(false);
+  const [isAdancedModeSwitchEnabled, setIsAdancedModeSwitchEnabled] = useState(false);
+  const [isURv1SwitchEnabled, setIsURv1SwitchEnabled] = useState(false);
   const { navigate } = useNavigation();
+  const { colors } = useTheme();
   const onAdvancedModeSwitch = async value => {
-    await BlueApp.setIsAdancedModeEnabled(value);
-    setIsAdancedModeEnabled(value);
+    await setIsAdancedModeEnabled(value);
+    setIsAdancedModeSwitchEnabled(value);
   };
-
-  const onHandOffEnabledSwitch = async value => {
-    await HandoffSettings.setHandoffUseEnabled(value);
-    setIsHandoffUseEnabled(value);
+  const onLegacyURv1Switch = async value => {
+    setIsURv1SwitchEnabled(value);
+    return value ? setUseURv1() : clearUseURv1();
   };
 
   useEffect(() => {
     (async () => {
-      setIsAdancedModeEnabled(await BlueApp.isAdancedModeEnabled());
-      setIsHandoffUseEnabled(await HandoffSettings.isHandoffUseEnabled());
+      setIsAdancedModeSwitchEnabled(await isAdancedModeEnabled());
+      setIsURv1SwitchEnabled(await isURv1Enabled());
       setIsLoading(false);
     })();
   });
 
+  const navigateToPrivacy = () => {
+    navigate('SettingsPrivacy');
+  };
+
+  const stylesWithThemeHook = {
+    root: {
+      ...styles.root,
+      backgroundColor: colors.background,
+    },
+    scroll: {
+      ...styles.scroll,
+      backgroundColor: colors.background,
+    },
+    scrollBody: {
+      ...styles.scrollBody,
+      backgroundColor: colors.background,
+    },
+  };
+
   return isLoading ? (
     <BlueLoading />
   ) : (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
-      <ScrollView>
-        {BlueApp.getWallets().length > 1 && (
-          <>
-            <BlueListItem component={TouchableOpacity} onPress={() => navigate('DefaultView')} title="On Launch" chevron />
-          </>
-        )}
-        {Platform.OS === 'ios' ? (
-          <>
-            <BlueListItem
-              hideChevron
-              title={'Continuity'}
-              Component={TouchableWithoutFeedback}
-              switch={{ onValueChange: onHandOffEnabledSwitch, value: isHandoffUseEnabled }}
-            />
-            <BlueCard>
-              <BlueText>
-                When enabled, you will be able to view selected wallets, and transactions, using your other Apple iCloud connected devices.
-              </BlueText>
-            </BlueCard>
-            <BlueSpacing20 />
-          </>
-        ) : null}
-        <BlueListItem
-          Component={TouchableWithoutFeedback}
-          title={loc.settings.enable_advanced_mode}
-          switch={{ onValueChange: onAdvancedModeSwitch, value: isAdancedModeEnabled }}
-        />
-        <BlueCard>
-          <BlueText>
-            When enabled, you will see advanced options such as different wallet types and the ability to specify the LNDHub instance you
-            wish to connect to.
-          </BlueText>
-        </BlueCard>
-        <BlueSpacing20 />
-      </ScrollView>
-    </SafeBlueArea>
+    <ScrollView style={stylesWithThemeHook.scroll}>
+      {wallets.length > 1 && (
+        <>
+          <BlueListItem component={TouchableOpacity} onPress={() => navigate('DefaultView')} title={loc.settings.default_title} chevron />
+        </>
+      )}
+      <BlueListItem title={loc.settings.privacy} onPress={navigateToPrivacy} testID="SettingsPrivacy" chevron />
+      {Platform.OS === 'ios' ? (
+        <>
+          <BlueListItem
+            hideChevron
+            title={loc.settings.general_continuity}
+            Component={TouchableWithoutFeedback}
+            switch={{ onValueChange: setIsHandOffUseEnabledAsyncStorage, value: isHandOffUseEnabled }}
+          />
+          <BlueCard>
+            <BlueText>{loc.settings.general_continuity_e}</BlueText>
+          </BlueCard>
+          <BlueSpacing20 />
+        </>
+      ) : null}
+      <BlueListItem
+        Component={TouchableWithoutFeedback}
+        title={loc.settings.general_adv_mode}
+        switch={{ onValueChange: onAdvancedModeSwitch, value: isAdancedModeSwitchEnabled, testID: 'AdvancedMode' }}
+      />
+      <BlueCard>
+        <BlueText>{loc.settings.general_adv_mode_e}</BlueText>
+      </BlueCard>
+      <BlueSpacing20 />
+      <BlueListItem
+        Component={TouchableWithoutFeedback}
+        title="Legacy URv1 QR"
+        switch={{ onValueChange: onLegacyURv1Switch, value: isURv1SwitchEnabled }}
+      />
+      <BlueSpacing20 />
+    </ScrollView>
   );
 };
 
-GeneralSettings.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: 'General',
-});
-
-GeneralSettings.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    popToTop: PropTypes.func,
-    goBack: PropTypes.func,
-  }),
-};
+GeneralSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.general }));
 
 export default GeneralSettings;

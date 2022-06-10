@@ -1,1 +1,1 @@
-bitcoin,wallet,bitcoin wallet,blockchain,btc,cryptocurrency,buy bitcoin,samourai,electrum,ethereum
+groestlcoin,wallet,groestlcoin wallet,blockchain,grs,cryptocurrency,buy groestlcoin,groestlcoin samourai,electrum-grs,ethereum

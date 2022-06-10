@@ -1,31 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
-import { BlueNavigationStyle, BlueLoading, SafeBlueArea, BlueListItem } from '../../BlueComponents';
-import { useNavigation } from 'react-navigation-hooks';
-const loc = require('../../loc');
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import navigationStyle from '../../components/navigationStyle';
+import { SafeBlueArea, BlueListItem } from '../../BlueComponents';
+import loc from '../../loc';
+import { isTorCapable } from '../../blue_modules/environment';
 
 const NetworkSettings = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const { navigate } = useNavigation();
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
+  const navigateToElectrumSettings = () => {
+    navigate('ElectrumSettings');
+  };
 
-  return isLoading ? (
-    <BlueLoading />
-  ) : (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
+  const navigateToTorSettings = () => {
+    navigate('TorSettings');
+  };
+
+  const navigateToLightningSettings = () => {
+    navigate('LightningSettings');
+  };
+
+  return (
+    <SafeBlueArea>
       <ScrollView>
-        <BlueListItem title={'Electrum server'} component={TouchableOpacity} onPress={() => navigate('ElectrumSettings')} />
-        <BlueListItem title={loc.settings.lightning_settings} component={TouchableOpacity} onPress={() => navigate('LightningSettings')} />
-        <BlueListItem title="Broadcast transaction" component={TouchableOpacity} onPress={() => navigate('Broadcast')} />
+        <BlueListItem title={loc.settings.network_electrum} onPress={navigateToElectrumSettings} testID="ElectrumSettings" chevron />
+        <BlueListItem title={loc.settings.lightning_settings} onPress={navigateToLightningSettings} testID="LightningSettings" chevron />
+        {/* Notifications.isNotificationsCapable && (
+          <BlueListItem
+            title={loc.settings.notifications}
+            onPress={() => navigate('NotificationSettings')}
+            testID="NotificationSettings"
+            chevron
+          />
+        ) */}
+        {isTorCapable && <BlueListItem title={loc.settings.tor_settings} onPress={navigateToTorSettings} testID="TorSettings" chevron />}
       </ScrollView>
     </SafeBlueArea>
   );
 };
-NetworkSettings.navigationOptions = {
-  ...BlueNavigationStyle(),
-  title: 'Network',
-};
+
+NetworkSettings.navigationOptions = navigationStyle({}, opts => ({ ...opts, headerTitle: loc.settings.network }));
+
 export default NetworkSettings;

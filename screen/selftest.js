@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
-import { BlueLoading, BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueNavigationStyle } from '../BlueComponents';
 import PropTypes from 'prop-types';
-import { SegwitP2SHWallet, LegacyWallet, HDSegwitP2SHWallet, HDSegwitBech32Wallet } from '../class';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import wif from 'wifgrs';
+import bip38 from 'bip38';
+import BIP32Factory from 'bip32grs';
+import * as ecc from 'tiny-secp256k1';
+
+import loc from '../loc';
+import { BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
+import navigationStyle from '../components/navigationStyle';
+import {
+  SegwitP2SHWallet,
+  LegacyWallet,
+  HDSegwitP2SHWallet,
+  HDSegwitBech32Wallet,
+  HDAezeedWallet,
+  SLIP39LegacyP2PKHWallet,
+} from '../class';
 const bitcoin = require('groestlcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
-let encryption = require('../encryption');
-let BlueElectrum = require('../BlueElectrum');
+const encryption = require('../blue_modules/encryption');
+const BlueElectrum = require('../blue_modules/BlueElectrum');
+const bip32 = BIP32Factory(ecc);
+
+const styles = StyleSheet.create({
+  center: {
+    alignItems: 'center',
+  },
+});
 
 export default class Selftest extends Component {
-  static navigationOptions = () => ({
-    ...BlueNavigationStyle(),
-    title: 'Self test',
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -27,8 +43,8 @@ export default class Selftest extends Component {
 
     try {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-        let uniqs = {};
-        let w = new SegwitP2SHWallet();
+        const uniqs = {};
+        const w = new SegwitP2SHWallet();
         for (let c = 0; c < 1000; c++) {
           await w.generate();
           if (uniqs[w.getSecret()]) {
@@ -45,37 +61,47 @@ export default class Selftest extends Component {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         await BlueElectrum.ping();
         await BlueElectrum.waitTillConnected();
-        let addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
-        let electrumBalance = await BlueElectrum.getBalanceByAddress(addr4elect);
-        if (electrumBalance.confirmed !== 51432)
+        const addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
+        const electrumBalance = await BlueElectrum.getBalanceByAddress(addr4elect);
+        if (electrumBalance.confirmed !== 496360)
           throw new Error('BlueElectrum getBalanceByAddress failure, got ' + JSON.stringify(electrumBalance));
 
-        let electrumTxs = await BlueElectrum.getTransactionsByAddress(addr4elect);
+        const electrumTxs = await BlueElectrum.getTransactionsByAddress(addr4elect);
         if (electrumTxs.length !== 1) throw new Error('BlueElectrum getTransactionsByAddress failure, got ' + JSON.stringify(electrumTxs));
       } else {
         // skipping RN-specific test'
       }
 
-      //
-
+      /*
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        const aezeed = new HDAezeedWallet();
+        aezeed.setSecret(
+          'abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern',
+        );
+        assertStrictEqual(await aezeed.validateMnemonicAsync(), true, 'Aezeed failed');
+        assertStrictEqual(aezeed._getExternalAddressByIndex(0), 'grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn', 'Aezeed failed');
+      } else {
+        // skipping RN-specific test
+      }
+      */
       let l = new LegacyWallet();
-      l.setSecret('L3rPE6WwpxofhUSPJhK7oQwPWgpSs623B86ESLRK9pacoyJ3WC9a');
-      assertStrictEqual(l.getAddress(), 'FcLwUSWYGMggXcoy7KsNKzVwB7YiCUsLkF');
+      l.setSecret('L1NwUPQZKwGuPMS9R36rjezZpxKFYLmugFvDQBZCwYFukJ3pzWdb');
+      assertStrictEqual(l.getAddress(), 'FbThBimw1krwL3QWf6XEk2Xen6NigyzGBT');
       let utxos = [
         {
-          txid: 'cc44e933a094296d9fe424ad7306f16916253a3d154d52e4f1a757c18242cec4',
+          txid: '83b97118cbc82932f5cd6b4232247a6729b9b04975171b500199e2597896d0dd',
           vout: 0,
           value: 100000,
           txhex:
-            '0200000000010161890cd52770c150da4d7d190920f43b9f88e7660c565a5a5ad141abb6de09de00000000000000008002a0860100000000001976a91426e01119d265aa980390c49eece923976c218f1588ac3e17000000000000160014c1af8c9dd85e0e55a532a952282604f820746fcd02473044022072b3f28808943c6aa588dd7a4e8f29fad7357a2814e05d6c5d767eb6b307b4e6022067bc6a8df2dbee43c87b8ce9ddd9fe678e00e0f7ae6690d5cb81eca6170c47e8012102e8fba5643e15ab70ec79528833a2c51338c1114c4eebc348a235b1a3e13ab07100000000',
+            '01000000000101a518573c27dc6bfc6fcedbed81957d5ea3acbd50b2014dfbda6e7da925a364820100000017160014a3b2e49860a9e7296e2a769ac7bcdca033f4236ffeffffff0150da1100000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac024730440220315b6ed73ab1d27bef74c38dff0be000357a0a4f932bfa26bdfdc17aa442bb2e022043b0688e8e6a44c56c6745ac0d298278979a45bec3ad3edeebcfab01e566f160012102957467ae6eb2fa89458dff90b0c3a563e01865aa2a4a603c97c9f7c0f4eb7b2600000000',
         },
       ];
 
       let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
-      let txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+      const txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '0200000001c4ce4282c157a7f1e4524d153d3a251669f10673ad24e49f6d2994a033e944cc000000006a47304402200faed160757433bcd4d9fe5f55eb92420406e8f3099a7e12ef720c77313c8c7e022044bc9e1abca6a81a8ad5c749f5ec4694301589172b83b1803bc134eda0487dbc01210337c09b3cb889801638078fd4e6998218b28c92d338ea2602720a88847aedceb3ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac2f260000000000001976a91426e01119d265aa980390c49eece923976c218f1588ac00000000',
+        '0200000001ddd0967859e29901501b177549b0b929677a2432426bcdf53229c8cb1871b983000000006b483045022100aa45ad57d62c58a871ff22b7151c5ab80a246dec3a088d71b15040070d2a176e022044e2c255b79fd61a995aa40d3f071c90cad4bedb8b3b1defceb81d3ba28d5f73012103a371ab521dfdefefb6bce17ef9d066cbadd33cfb061e2482ac496c065ecddb45ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac2e260000000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac00000000',
       );
       assertStrictEqual(txBitcoin.ins.length, 1);
       assertStrictEqual(txBitcoin.outs.length, 2);
@@ -92,7 +118,7 @@ export default class Selftest extends Component {
 
       //
 
-      let wallet = new SegwitP2SHWallet();
+      const wallet = new SegwitP2SHWallet();
       wallet.setSecret('KwZoFNfgbp62JyQY571j639L5cRJxKcx8AUJr4hBvt3hN82Sg5VV');
       assertStrictEqual(wallet.getAddress(), '3J5xoxEVcoWV9Eam9Af2223nNwuTj36HNw');
 
@@ -105,10 +131,10 @@ export default class Selftest extends Component {
       ];
 
       txNew = wallet.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, wallet.getAddress());
-      let tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
+      const tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014f4436ffe8041cdf97b217aa1a0836e3bd5786b8affffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6f3303000000000017a914247521a8d1aa867aa2fd1d331e84174b2a4f77ee87024730440220625292fcf01c2d8ea1cfafd139b9d44229b9cddc0635650c5fe0afc38a579f6b02205b8cc23978c571e62a96c3cf0e64724bbfa51fb5863c5236d4cdf1dd1f58e0870121036a47812eec720bf18843458c374dc3561ffcd94b3dcd395c9105359c78b519ba00000000',
+        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6e3303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e8702473044022022808715d4b6bd94a7a87fbdcf756703d640eabb5a114794f5373b46d84050fb02201a3450f42f00702c47bcf0b55cce0bf1c54144166d419eb6e39350dbc24b4479012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
       );
       assertStrictEqual(tx.ins.length, 1);
       assertStrictEqual(tx.outs.length, 2);
@@ -118,8 +144,8 @@ export default class Selftest extends Component {
       //
 
       const data2encrypt = 'really long data string';
-      let crypted = encryption.encrypt(data2encrypt, 'password');
-      let decrypted = encryption.decrypt(crypted, 'password');
+      const crypted = encryption.encrypt(data2encrypt, 'password');
+      const decrypted = encryption.decrypt(crypted, 'password');
 
       if (decrypted !== data2encrypt) {
         throw new Error('encryption lib is not ok');
@@ -127,15 +153,15 @@ export default class Selftest extends Component {
 
       //
 
-      let bip39 = require('bip39');
-      let mnemonic =
+      const bip39 = require('bip39');
+      const mnemonic =
         'honey risk juice trip orient galaxy win situate shoot anchor bounce remind horse traffic exotic since escape mimic ramp skin judge owner topple erode';
-      let seed = bip39.mnemonicToSeed(mnemonic);
-      let root = bitcoin.bip32grs.fromSeed(seed);
+      const seed = bip39.mnemonicToSeedSync(mnemonic);
+      const root = bip32.fromSeed(seed);
 
-      let path = "m/49'/17'/0'/0/0";
-      let child = root.derivePath(path);
-      let address = bitcoin.payments.p2sh({
+      const path = "m/49'/17'/0'/0/0";
+      const child = root.derivePath(path);
+      const address = bitcoin.payments.p2sh({
         redeem: bitcoin.payments.p2wpkh({
           pubkey: child.publicKey,
           network: bitcoin.networks.bitcoin,
@@ -149,11 +175,11 @@ export default class Selftest extends Component {
 
       //
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-        let hd = new HDSegwitP2SHWallet();
-        let hashmap = {};
+        const hd = new HDSegwitP2SHWallet();
+        const hashmap = {};
         for (let c = 0; c < 1000; c++) {
           await hd.generate();
-          let secret = hd.getSecret();
+          const secret = hd.getSecret();
           if (hashmap[secret]) {
             throw new Error('Duplicate secret generated!');
           }
@@ -163,30 +189,57 @@ export default class Selftest extends Component {
           }
         }
 
-        let hd2 = new HDSegwitP2SHWallet();
+        const hd2 = new HDSegwitP2SHWallet();
         hd2.setSecret(hd.getSecret());
         if (!hd2.validateMnemonic()) {
           throw new Error('mnemonic phrase validation not ok');
         }
 
         //
-
-        let hd4 = new HDSegwitBech32Wallet();
-        hd4._xpub = 'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP';
+        const hd4 = new HDSegwitBech32Wallet();
+        hd4._xpub = 'zpub6rkSL2KXiwrQePLhUkf7gNi4XBKuNP4nXA31jxULPsjYaD4EzYHcMFP3SpEwmz4ya5xtuCWXsRVxYHd4XU2YmZe5i6ovvmwbfuSEqRkig23';
         await hd4.fetchBalance();
-        if (hd4.getBalance() !== 200000) throw new Error('Could not fetch HD Bech32 balance');
+        // console.log("selftest balance = " + hd4.getBalance());
+        if (hd4.getBalance() === undefined) throw new Error('Could not fetch HD Bech32 balance');
         await hd4.fetchTransactions();
-        if (hd4.getTransactions().length !== 4) throw new Error('Could not fetch HD Bech32 transactions');
+        // console.log("selftest tx count = " + hd4.getTransactions().length);
+        if (hd4.getTransactions().length === 0) throw new Error('Could not fetch HD Bech32 transactions');
       } else {
         // skipping RN-specific test
       }
 
-      //
-
+      // BlueCrypto test
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         const hex = await BlueCrypto.scrypt('717765727479', '4749345a22b23cf3', 64, 8, 8, 32); // using non-default parameters to speed it up (not-bip38 compliant)
         if (hex.toUpperCase() !== 'F36AB2DC12377C788D61E6770126D8A01028C8F6D8FE01871CE0489A1F696A90')
           throw new Error('react-native-blue-crypto is not ok');
+      }
+
+      // bip38 test
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        let callbackWasCalled = false;
+        const decryptedKey = await bip38.decryptAsync(
+          '6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN',
+          'qwerty',
+          () => (callbackWasCalled = true),
+        );
+        assertStrictEqual(
+          wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
+          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
+          'bip38 failed',
+        );
+        // bip38 with BlueCrypto doesn't support progress callback
+        assertStrictEqual(callbackWasCalled, false, "bip38 doesn't use BlueCrypto");
+      }
+
+      // slip39 test
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        const w = new SLIP39LegacyP2PKHWallet();
+        w.setSecret(
+          'shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed\n' +
+            'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking',
+        );
+        assertStrictEqual(w._getExternalAddressByIndex(0), 'FaRzD8hmNC8BWb82gP4CtTv9WECsjDrzff', 'SLIP39 failed');
       }
 
       //
@@ -208,7 +261,7 @@ export default class Selftest extends Component {
     }
 
     return (
-      <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
+      <SafeBlueArea>
         <BlueCard>
           <ScrollView>
             <BlueSpacing20 />
@@ -216,15 +269,17 @@ export default class Selftest extends Component {
             {(() => {
               if (this.state.isOk) {
                 return (
-                  <View style={{ alignItems: 'center' }}>
+                  <View style={styles.center}>
                     <BlueText testID="SelfTestOk" h4>
                       OK
                     </BlueText>
+                    <BlueSpacing20 />
+                    <BlueText>{loc.settings.about_selftest_ok}</BlueText>
                   </View>
                 );
               } else {
                 return (
-                  <View style={{ alignItems: 'center' }}>
+                  <View style={styles.center}>
                     <BlueText h4 numberOfLines={0}>
                       {this.state.errorMessage}
                     </BlueText>
@@ -252,3 +307,7 @@ Selftest.propTypes = {
     goBack: PropTypes.func,
   }),
 };
+
+Selftest.navigationOptions = navigationStyle({
+  title: loc.settings.selfTest,
+});

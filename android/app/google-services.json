@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "394408748615",
+    "project_id": "grs-bluewallet",
+    "storage_bucket": "grs-bluewallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394408748615:android:e746d11a7d9f1278e4f362",
+        "android_client_info": {
+          "package_name": "org.groestlcoin.bluewallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394408748615-3lpg0bf6j72ie0p136sglouar2eje2c8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBMC4FU3itYjAI8TKez2JSLnHnCrioG-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394408748615-3lpg0bf6j72ie0p136sglouar2eje2c8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

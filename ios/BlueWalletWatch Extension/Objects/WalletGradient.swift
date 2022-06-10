@@ -12,8 +12,10 @@ enum WalletGradient: String {
   case SegwitHD = "HDsegwitP2SH"
   case Segwit = "segwitP2SH"
   case LightningCustodial = "lightningCustodianWallet"
+  case LightningLDK = "lightningLdk"
   case SegwitNative = "HDsegwitBech32"
   case WatchOnly = "watchOnly"
+  case MultiSig = "HDmultisig"
   
   var imageString: String{
     switch self {
@@ -25,8 +27,10 @@ enum WalletGradient: String {
       return "walletHD"
     case .WatchOnly:
       return "walletWatchOnly"
-    case .LightningCustodial:
+    case .LightningCustodial, .LightningLDK:
       return "walletLightningCustodial"
+    case .MultiSig:
+      return "watchMultisig"
     }
   }
 }

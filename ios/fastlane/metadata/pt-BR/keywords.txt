@@ -1,1 +1,1 @@
-bitcoin,wallet,segwit,crypto,blockchain,btc,cryptocurrency,wallet,bread,samourai,lightning,ethereum
+groestlcoin wallet,crypto,blockchain,grs,cryptocurrency,carteira,bread,groestlcoin samourai,lightning,ethereum

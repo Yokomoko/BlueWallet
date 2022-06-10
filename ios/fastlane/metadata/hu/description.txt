@@ -1,0 +1,53 @@
+Egy Groestlcoin tárca, amiben biztonságosan és egyszerűen tárolhatod-, utalhatod a Groestlcoinodat, fogadhatsz Groestlcoin utalást és vásárolhatsz Groestlcoint.
+
+A GRS BlueWallet egy Groestlcoin tárca, ahol te irányítod a privát kulcsokat. Egy Groestlcoin tárca, amit Groestlcoin felhasználok készítettek a közösségnek. 
+
+Azonnal indíthatsz közvetlen tranzakciókat bárkinek a világon, egy gombnyomással megváltoztatva a pénzügyi rendszert.
+
+Hozz létre korlátlan számú, ingyenes Groestlcoin tárcát vagy importáld a már meglévő tárcáidat. Egyszerűen és gyorsan.
+
+_____
+
+Amit kínálunk:
+
+
+1 - Tervezett biztonság
+
+Nyílt forráskód
+MIT szabadalom alapján, fejlesztheted és futtasd: a sajátod!  Készült a ReactNative támogatásával.
+
+Feltételes elutasítás
+Jelszó, ami hamis tárca adatokat old fel, ha kényszerítenek a belépésre.
+
+Teljes titkosítás
+Az iOS többszintű titkosításán felül, mi jelszóval titkosítunk mindent
+
+Teljes node
+Csatlakozz a saját Groestlcoin teljes node-hoz, Electrum-grs tárcán keresztül.
+
+Offline háttértár
+Csatlakozz a hardver tárcádhoz és tartsd a Groestlcoint offline.
+
+2 - Fókuszban a felhasználói élmény
+
+Te irányítasz
+A privát kulcsok soha nem hagyják el az eszközöd.
+Te irányítod a privát kulcsaid,
+
+Rugalmas tranzakciós díjjak
+Már 1 gro-tól. Te, a felhasználó választasz.
+
+Tranzakciós Díj Pótlás (RBF)
+(RBF) Gyorsítsd meg a tranzakciódat a tranzakciós díj növelésével (BIP125)
+
+Tárca - csak megtekintésre
+"Tárca - csak megtekintésre" lehetővé teszi, hogy szemmel tartsd az offline tárcád a hardver érintése nélkül.
+
+Lightning hálózat
+Lightning tárca, konfigurálás nélkül. Rendkívül olcsó és gyors tranzakció a legjobb Groestlcoin felhasználói élménnyel.
+
+Groestlcoin vétel
+Kapcsolódj be a nyílt pénzügyi forradalomba és vegyél Groestlcoint közvetlenül a tárcádba.
+
+Közeli elfogadóhelyek
+A peer-to-peer Groestlcoin kereskedési platform lehetővé teszi, hogy közvetlenül vegyél- és eladj Groestlcoint más felhasználóknak, közvetítő nélkül.

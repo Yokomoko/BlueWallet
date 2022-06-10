@@ -1,26 +1,22 @@
-/* global it, describe, jasmine */
-const bitcoin = require('groestlcoinjs-lib');
-global.net = require('net');
-global.tls = require('tls');
+import * as bitcoin from 'groestlcoinjs-lib';
+import assert from 'assert';
+import ElectrumClient from 'electrum-client';
 
-let assert = require('assert');
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 150 * 1000;
+jest.setTimeout(150 * 1000);
 
 const hardcodedPeers = [
-  { host: 'electrum1.bluewallet.io', ssl: '443' },
-  { host: 'electrum2.bluewallet.io', ssl: '443' },
-  { host: 'electrum3.bluewallet.io', ssl: '443' },
-  { host: 'electrum1.bluewallet.io', tcp: '50001' },
-  { host: 'electrum2.bluewallet.io', tcp: '50001' },
-  { host: 'electrum3.bluewallet.io', tcp: '50001' },
+  { host: 'electrum1.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum2.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum3.groestlcoin.org', ssl: '50002' },
+  { host: 'electrum1.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum2.groestlcoin.org', tcp: '50001' },
+  { host: 'electrum3.groestlcoin.org', tcp: '50001' },
 ];
 
 describe('ElectrumClient', () => {
   it('can connect and query', async () => {
-    const ElectrumClient = require('electrum-client');
-
-    for (let peer of hardcodedPeers) {
-      let mainClient = new ElectrumClient(peer.ssl || peer.tcp, peer.host, peer.ssl ? 'tls' : 'tcp');
+    for (const peer of hardcodedPeers) {
+      const mainClient = new ElectrumClient(global.net, global.tls, peer.ssl || peer.tcp, peer.host, peer.ssl ? 'tls' : 'tcp');
 
       try {
         await mainClient.connect();
@@ -31,17 +27,17 @@ describe('ElectrumClient', () => {
         throw new Error('bad connection: ' + JSON.stringify(peer) + ' ' + e.message);
       }
 
-      let addr4elect = 'bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej';
+      let addr4elect = 'grs1q44n355j5aatyz78kj5e2es7rdpq690yzlwxlqx';
       let script = bitcoin.address.toOutputScript(addr4elect);
       let hash = bitcoin.crypto.sha256(script);
       let reversedHash = Buffer.from(hash.reverse());
-      let start = +new Date();
+      const start = +new Date();
       let balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
-      let end = +new Date();
+      const end = +new Date();
       end - start > 1000 && console.warn(peer.host, 'took', (end - start) / 1000, 'seconds to fetch balance');
-      assert.ok(balance.confirmed > 0);
+      assert.ok(balance.confirmed === 5884000);
 
-      addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
+      addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
       script = bitcoin.address.toOutputScript(addr4elect);
       hash = bitcoin.crypto.sha256(script);
       reversedHash = Buffer.from(hash.reverse());

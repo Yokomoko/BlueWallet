@@ -1,0 +1,53 @@
+Un portefeuille Groestlcoin vous permettant de stocker, envoyer, recevoir et acheter du Groestlcoin en se concentrant sur la sécurité et la simplicité.
+
+Sur GRS BlueWallet, un portefeuille Groestlcoin où vous possédez vos clés privés. Un portefeuille Groestlcoin fait par des utilisateurs de Groestlcoin, pour la communauté.
+
+Vous pouvez faire une transaction instanément, vers n'importe où dans le monde, et transformer le système financier depuis votre poche.
+
+Créez gratuitement une infinité de portefeuilles Groestlcoin ou importez votre portefeuille existant. C'est simple et rapide.
+
+_____
+
+Voici ce que vous obtenez :
+
+
+1 - Sécurité dès la conception
+
+Open Source
+Sous license MIT, vous pouvez le compiler et le lancer dans votre coin ! Conçu avec ReactNative
+
+Possibilité de démenti plausible
+Un mot de passe qui déchiffre un faux portefeuille Groestlcoin si vous êtes forcé d'en donner l'accès
+
+Chiffrement complet
+Au-dessus du chiffrement multi-niveaux d'iOS, nous chiffrons tout avec des mots de passe supplémentaires
+
+Noeud complet
+Connectez-vous à votre noeud complet via Electrum-grs
+
+Stockage au froid
+Connectez vous à votre portefeuille matériel et gardez vos groestlcoins à l'abri
+
+2 - Un accent mis sur votre expérience
+
+Vous avez les commandes
+Les clés privées ne quittent jamais votre appareil.
+Vous contrôlez vos clés privées
+
+Frais flexibles
+A partir de 1 Gro. Définis par vous, l'utilisateur
+
+Remplacer-Les-Frais
+(RBF) Accélérez vos transactions en augmentant les frais (BIP125)
+
+Portefeuilles spectateurs
+Les portefeuilles spectateurs vous permettent de garder un oeil sur votre stockage sécurisé (cold storage) sans toucher le portefeuille matériel.
+
+Réseau Lightning
+Un portefeuille Lightning sans aucune configuration nécessaire. Des transactions rapides et très peu chères avec la meilleure expérience utilisateur Groestlcoin.
+
+Acheter du groestlcoin
+Rejoignez la révolution la finance ouverte avec la possibilité d'acheter du groestlcoin directement depuis votre portefeuille.
+
+Trader Local
+Une plateforme de trading de Groestlcoin pair-à-pair, vous permettant d'acheter et de vendre du groestlcoin directement auprès d'autres utilisateurs, sans aucune tierce-partie.

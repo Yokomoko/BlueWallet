@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { BackHandler } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { BlueLoading, BlueNavigationStyle } from '../../BlueComponents';
-import PropTypes from 'prop-types';
+
+import { BlueLoading } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 export default class Marketplace extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    ...BlueNavigationStyle(navigation, true),
-    title: 'Marketplace',
-    headerLeft: null,
-  });
-
   webview = React.createRef();
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-    if (!props.navigation.getParam('fromWallet')) throw new Error('Invalid param');
-    let fromWallet = props.navigation.getParam('fromWallet');
+    if (!props.route.params.walletID) throw new Error('Invalid param');
+    const fromWallet = context.wallets.find(w => w.getID() === props.route.params.walletID);
 
     this.state = {
       url: '',
@@ -61,6 +59,7 @@ export default class Marketplace extends Component {
 
     return (
       <WebView
+        testID="MarketplaceWebView"
         ref={this.webview}
         onNavigationStateChange={this._onNavigationStateChange}
         source={{
@@ -73,8 +72,19 @@ export default class Marketplace extends Component {
 
 Marketplace.propTypes = {
   navigation: PropTypes.shape({
-    getParam: PropTypes.func,
     navigate: PropTypes.func,
     goBack: PropTypes.func,
   }),
+  route: PropTypes.shape({
+    params: PropTypes.object,
+  }),
 };
+
+Marketplace.contextType = BlueStorageContext;
+
+Marketplace.navigationOptions = navigationStyle({
+  closeButton: true,
+  title: loc.wallets.list_marketplace,
+  stackPresentation: 'modal',
+  headerHideBackButton: true,
+});

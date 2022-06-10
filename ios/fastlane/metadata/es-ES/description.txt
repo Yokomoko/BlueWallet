@@ -1,39 +1,53 @@
-Store, send and receive bitcoin with the wallet focus on security and simplicity.
+Una cartera de Groestlcoin que te permite guardar, mandar, recibir y comprar groestlcoin centrada en la seguridad y la simplicidad.
 
-On Groestlcoin BlueWallet you own you private keys. A Groestlcoin wallet focused on us the users.
+En GRS BlueWallet tú controlas las llaves privadas. Una cartera de Groestlcoin hecha por usuarios de Groestlcoin para la comunidad.
 
-You can instantly transact with anyone in the world and transform the financial system right from your pocket.
+Realiza trámites al instante con cualquiera, sin importar dónde esté. Transforma el sistema financiero desde tu bolsillo.
 
-Create for free unlimited number of bitcoin wallets or access your existing one on your iOS device. It's simple and fast.
+Crea todas las carteras de Groestlcoin que quieras o importa una que ya tengas. Es rápido y sencillo.
 
 _____
 
-Here's what you get:
+Ofrece todo esto:
 
-1 - Security by design
 
-Open Source
-MIT licensed, you can build it and run it on your own! Made with ReactNative
+1 - Seguridad mediante diseño
 
-Plausible deniability
-Password which decrypts fake wallets if you are forced to disclose your access
+Código abierto
+Licencia MIT, compila el código tú mismo! Hecha con ReactNative
 
-Full encryption
-On top of iOS multi-layer encryption, we encrypt everyting with added passwords
+Negación plausible
+Desbloquea carteras de groestlcoin falsas si alguien te obliga a darles tu contraseña
 
-SegWit & HD wallets
-SegWit supported and HD wallets enable
+Encriptación total
+Además de la encriptación multicapa de iOS, encriptamos todo con contraseñas adicionales
 
-2 - Focused on your experience
+Nodo completo
+Conecta a tu nodo de Groestlcoin a través de Electrum-grs
 
-Be in control
-Private keys never leave your device.  You control your private keys
+Almacenamiento frío
+Conecta tu cartera de hardware y guarda tus fondos en cold storage
 
-Flexible fees
-Starting from 1 Gro.  Defined by you, the user
+2 - Centrada en tu experiencia
 
-Replace-By-Fee
-(RBF) Speed-up your transactions by increasing the fee (BIP125)
+Control total
+Las llaves privadas nunca salen de tu dispositivo
+Tú controlas las llaves privadas
 
-Sentinel wallets new
-Watch-only wallets allow you to keep an eye on your cold storage without touching the hardware.
+Comisiones flexibles
+Desde 1 Gro. Definido por ti, el usuario
+
+Replace by Fee
+(RBF) Acelera tus transacciones incrementando la comisión (BIP125)
+
+Carteras de observación
+Las carteras de observación te permiten vigilar tus groestlcoin en cold storage sin tener que tocar el hardware.
+
+Lightning Network
+Crea carteras Lighting con la mejor experiencia de usuario. Ofrecen comisiones muy bajas y transacciones super rápidas.
+
+Compra groestlcoin
+Únete a la revolución de la economía abierta con la opción de comprar groestlcoin directamente desde tu cartera.
+
+Compra-venta local
+Una plataforma P2P de compra-venta de groestlcoin, que te permite comprar y vender directamente con otros usuarios sin pasar por terceros.

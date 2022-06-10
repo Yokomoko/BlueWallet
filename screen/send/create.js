@@ -1,224 +1,252 @@
-/* global alert */
-import React, { Component } from 'react';
-import {
-  TextInput,
-  FlatList,
-  ScrollView,
-  Linking,
-  TouchableOpacity,
-  Clipboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Text,
-  View,
-  Platform,
-  PermissionsAndroid,
-} from 'react-native';
-import { BlueNavigationStyle, SafeBlueArea, BlueCard, BlueText } from '../../BlueComponents';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Privacy from '../../Privacy';
-import { BitcoinUnit } from '../../models/bitcoinUnits';
+import { TextInput, FlatList, Linking, TouchableOpacity, StyleSheet, Text, View, Platform, PermissionsAndroid, Alert } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { Icon } from 'react-native-elements';
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
-/** @type {AppStorage} */
-const BlueApp = require('../../BlueApp');
-const loc = require('../../loc');
-const currency = require('../../currency');
+import BigNumber from 'bignumber.js';
+import { BlueText } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import Privacy from '../../blue_modules/Privacy';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
+import loc from '../../loc';
+import { DynamicQRCode } from '../../components/DynamicQRCode';
+import { isDesktop } from '../../blue_modules/environment';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import alert from '../../components/Alert';
+const bitcoin = require('groestlcoinjs-lib');
+const currency = require('../../blue_modules/currency');
 
-export default class SendCreate extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    ...BlueNavigationStyle,
-    title: loc.send.create.details,
-    headerRight: navigation.state.params.exportTXN ? (
-      <TouchableOpacity style={{ marginRight: 16 }} onPress={navigation.state.params.exportTXN}>
-        <Icon size={22} name="share-alternative" type="entypo" color={BlueApp.settings.foregroundColor} />
-      </TouchableOpacity>
-    ) : null,
+const SendCreate = () => {
+  const { fee, recipients, memo = '', satoshiPerByte, psbt, showAnimatedQr, tx } = useRoute().params;
+  const transaction = bitcoin.Transaction.fromHex(tx);
+  const size = transaction.virtualSize();
+  const { colors } = useTheme();
+  const { setOptions } = useNavigation();
+
+  const styleHooks = StyleSheet.create({
+    transactionDetailsTitle: {
+      color: colors.feeText,
+    },
+    transactionDetailsSubtitle: {
+      color: colors.foregroundColor,
+    },
+    separator: {
+      backgroundColor: colors.inputBorderColor,
+    },
+    root: {
+      backgroundColor: colors.elevated,
+    },
+    cardText: {
+      color: colors.foregroundColor,
+    },
   });
 
-  constructor(props) {
-    super(props);
-    console.log('send/create constructor');
-    props.navigation.setParams({ exportTXN: this.exportTXN });
-    this.state = {
-      isLoading: false,
-      fee: props.navigation.getParam('fee'),
-      recipients: props.navigation.getParam('recipients'),
-      memo: props.navigation.getParam('memo') || '',
-      size: Math.round(props.navigation.getParam('tx').length / 2),
-      tx: props.navigation.getParam('tx'),
-      satoshiPerByte: props.navigation.getParam('satoshiPerByte'),
-      wallet: props.navigation.getParam('wallet'),
-      feeSatoshi: props.navigation.getParam('feeSatoshi'),
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     Privacy.enableBlur();
-    console.log('send/create - componentDidMount');
-  }
 
-  exportTXN = async () => {
+    console.log('send/create - useEffect');
+    return () => {
+      Privacy.disableBlur();
+    };
+  }, []);
+
+  const exportTXN = useCallback(async () => {
     const fileName = `${Date.now()}.txn`;
     if (Platform.OS === 'ios') {
       const filePath = RNFS.TemporaryDirectoryPath + `/${fileName}`;
-      await RNFS.writeFile(filePath, this.state.tx);
+      await RNFS.writeFile(filePath, tx);
       Share.open({
         url: 'file://' + filePath,
+        saveToFiles: isDesktop,
       })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error);
+        })
         .finally(() => {
           RNFS.unlink(filePath);
         });
     } else if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-        title: 'Groestlcoin BlueWallet Storage Access Permission',
-        message: 'Groestlcoin BlueWallet needs your permission to access your storage to save this transaction.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
+        title: loc.send.permission_storage_title,
+        message: loc.send.permission_storage_message,
+        buttonNeutral: loc.send.permission_storage_later,
+        buttonNegative: loc._.cancel,
+        buttonPositive: loc._.ok,
       });
 
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('Storage Permission: Granted');
-        const filePath = RNFS.ExternalCachesDirectoryPath + `/${this.fileName}`;
-        await RNFS.writeFile(filePath, this.state.tx);
-        alert(`This transaction has been saved in ${filePath}`);
+        const filePath = RNFS.DownloadDirectoryPath + `/${fileName}`;
+        try {
+          await RNFS.writeFile(filePath, tx);
+          alert(loc.formatString(loc.send.txSaved, { filePath }));
+        } catch (e) {
+          console.log(e);
+          alert(e.message);
+        }
       } else {
         console.log('Storage Permission: Denied');
+        Alert.alert(loc.send.permission_storage_title, loc.send.permission_storage_denied_message, [
+          {
+            text: loc.send.open_settings,
+            onPress: () => {
+              Linking.openSettings();
+            },
+            style: 'default',
+          },
+          { text: loc._.cancel, onPress: () => {}, style: 'cancel' },
+        ]);
       }
     }
-  };
+  }, [tx]);
 
-  componentWillUnmount() {
-    Privacy.disableBlur();
-  }
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <TouchableOpacity accessibilityRole="button" onPress={exportTXN}>
+          <Icon size={22} name="share-alternative" type="entypo" color={colors.foregroundColor} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [colors, exportTXN, setOptions]);
 
-  _renderItem = ({ index, item }) => {
+  const _renderItem = ({ index, item }) => {
     return (
       <>
         <View>
-          <Text style={styles.transactionDetailsTitle}>{loc.send.create.to}</Text>
-          <Text style={styles.transactionDetailsSubtitle}>{item.address}</Text>
-          <Text style={styles.transactionDetailsTitle}>{loc.send.create.amount}</Text>
-          <Text style={styles.transactionDetailsSubtitle}>
-            {item.value === BitcoinUnit.MAX || !item.value
-              ? currency.satoshiToBTC(this.state.wallet.getBalance()) - this.state.fee
-              : currency.satoshiToBTC(item.value)}{' '}
-            {BitcoinUnit.BTC}
+          <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_to}</Text>
+          <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>{item.address}</Text>
+          <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_amount}</Text>
+          <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>
+            {currency.satoshiToBTC(item.value)} {loc.units[BitcoinUnit.BTC]}
           </Text>
-          {this.state.recipients.length > 1 && (
-            <BlueText style={{ alignSelf: 'flex-end' }}>
-              {index + 1} of {this.state.recipients.length}
-            </BlueText>
+          {recipients.length > 1 && (
+            <BlueText style={styles.itemOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>
           )}
         </View>
       </>
     );
   };
-
-  renderSeparator = () => {
-    return <View style={{ backgroundColor: BlueApp.settings.inputBorderColor, height: 0.5, marginVertical: 16 }} />;
+  _renderItem.propTypes = {
+    index: PropTypes.number,
+    item: PropTypes.shape({
+      address: PropTypes.string,
+      value: PropTypes.number,
+    }),
   };
 
-  render() {
-    return (
-      <SafeBlueArea style={{ flex: 1, paddingTop: 19 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <ScrollView>
-            <BlueCard style={{ alignItems: 'center', flex: 1 }}>
-              <BlueText style={{ color: '#0c2550', fontWeight: '500' }}>{loc.send.create.this_is_hex}</BlueText>
-              <TextInput
-                testID={'TxhexInput'}
-                style={{
-                  borderColor: '#ebebeb',
-                  backgroundColor: '#d2f8d6',
-                  borderRadius: 4,
-                  marginTop: 20,
-                  color: '#37c0a1',
-                  fontWeight: '500',
-                  fontSize: 14,
-                  paddingHorizontal: 16,
-                  paddingBottom: 16,
-                  paddingTop: 16,
-                }}
-                height={72}
-                multiline
-                editable
-                value={this.state.tx}
-              />
+  const renderSeparator = () => {
+    return <View style={[styles.separator, styleHooks.separator]} />;
+  };
 
-              <TouchableOpacity style={{ marginVertical: 24 }} onPress={() => Clipboard.setString(this.state.tx)}>
-                <Text style={{ color: '#9aa0aa', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>Copy and broadcast later</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{ marginVertical: 24 }} onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + this.state.tx)}>
-                <Text style={{ color: '#9aa0aa', fontSize: 15, fontWeight: '500', alignSelf: 'center' }}>Verify on groestlcoin.org/webwallet</Text>
-              </TouchableOpacity>
-            </BlueCard>
-            <BlueCard>
-              <FlatList
-                scrollEnabled={this.state.recipients.length > 1}
-                extraData={this.state.recipients}
-                data={this.state.recipients}
-                renderItem={this._renderItem}
-                keyExtractor={(_item, index) => `${index}`}
-                ItemSeparatorComponent={this.renderSeparator}
-              />
-              <Text style={styles.transactionDetailsTitle}>{loc.send.create.fee}</Text>
-              <Text style={styles.transactionDetailsSubtitle}>
-                {this.state.fee} {BitcoinUnit.BTC}
-              </Text>
+  const ListHeaderComponent = (
+    <View>
+      {showAnimatedQr && psbt ? <DynamicQRCode value={psbt.toHex()} /> : null}
+      <BlueText style={[styles.cardText, styleHooks.cardText]}>{loc.send.create_this_is_hex}</BlueText>
+      <TextInput testID="TxhexInput" style={styles.cardTx} height={72} multiline editable={false} value={tx} />
 
-              <Text style={styles.transactionDetailsTitle}>{loc.send.create.tx_size}</Text>
-              <Text style={styles.transactionDetailsSubtitle}>{this.state.size} bytes</Text>
+      <TouchableOpacity accessibilityRole="button" style={styles.actionTouch} onPress={() => Clipboard.setString(tx)}>
+        <Text style={styles.actionText}>{loc.send.create_copy}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        accessibilityRole="button"
+        style={styles.actionTouch}
+        onPress={() => Linking.openURL('https://groestlcoin.org/webwallet/?verify=' + tx)}
+      >
+        <Text style={styles.actionText}>{loc.send.create_verify}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
-              <Text style={styles.transactionDetailsTitle}>{loc.send.create.satoshi_per_byte}</Text>
-              <Text style={styles.transactionDetailsSubtitle}>{this.state.satoshiPerByte} Gro/B</Text>
-              {this.state.memo.length > 0 && (
-                <>
-                  <Text style={styles.transactionDetailsTitle}>{loc.send.create.memo}</Text>
-                  <Text style={styles.transactionDetailsSubtitle}>{this.state.memo}</Text>
-                </>
-              )}
-            </BlueCard>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </SafeBlueArea>
-    );
-  }
-}
+  const ListFooterComponent = (
+    <View>
+      <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_fee}</Text>
+      <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>
+        {new BigNumber(fee).toFixed()} {BitcoinUnit.BTC}
+      </Text>
+      <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_tx_size}</Text>
+      <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>{size} vbytes</Text>
+      <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_satoshi_per_vbyte}</Text>
+      <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>{satoshiPerByte} Gro/vB</Text>
+      {memo?.length > 0 && (
+        <>
+          <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_memo}</Text>
+          <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>{memo}</Text>
+        </>
+      )}
+    </View>
+  );
+
+  return (
+    <FlatList
+      contentContainerStyle={[styles.root, styleHooks.root]}
+      extraData={recipients}
+      data={recipients}
+      renderItem={_renderItem}
+      keyExtractor={(_item, index) => `${index}`}
+      ItemSeparatorComponent={renderSeparator}
+      ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={ListFooterComponent}
+      contentInsetAdjustmentBehavior="automatic"
+      automaticallyAdjustContentInsets
+    />
+  );
+};
+
+export default SendCreate;
 
 const styles = StyleSheet.create({
   transactionDetailsTitle: {
-    color: '#0c2550',
     fontWeight: '500',
     fontSize: 17,
     marginBottom: 2,
   },
+  root: {
+    paddingHorizontal: 20,
+  },
   transactionDetailsSubtitle: {
-    color: '#9aa0aa',
     fontWeight: '500',
     fontSize: 15,
     marginBottom: 20,
   },
+  itemOf: {
+    alignSelf: 'flex-end',
+  },
+  separator: {
+    height: 0.5,
+    marginVertical: 16,
+  },
+  cardText: {
+    fontWeight: '500',
+  },
+  cardTx: {
+    borderColor: '#ebebeb',
+    backgroundColor: '#d2f8d6',
+    borderRadius: 4,
+    marginTop: 20,
+    color: '#37c0a1',
+    fontWeight: '500',
+    fontSize: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    paddingTop: 16,
+  },
+  actionTouch: {
+    marginVertical: 24,
+  },
+  actionText: {
+    color: '#9aa0aa',
+    fontSize: 15,
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
 });
 
-SendCreate.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func,
-    setParams: PropTypes.func,
-    getParam: PropTypes.func,
-    navigate: PropTypes.func,
-    dismiss: PropTypes.func,
-    state: PropTypes.shape({
-      params: PropTypes.shape({
-        amount: PropTypes.string,
-        fee: PropTypes.number,
-        address: PropTypes.string,
-        memo: PropTypes.string,
-      }),
-    }),
-  }),
-};
+SendCreate.navigationOptions = navigationStyle({}, (options, { theme, navigation, route }) => {
+  return {
+    ...options,
+    title: loc.send.create_details,
+  };
+});

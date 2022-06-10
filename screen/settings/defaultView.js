@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, View, TouchableWithoutFeedback } from 'react-native';
-import { SafeBlueArea, BlueCard, BlueText, BlueNavigationStyle, BlueListItem } from '../../BlueComponents';
-import OnAppLaunch from '../../class/onAppLaunch';
-import { useNavigation } from 'react-navigation-hooks';
-const BlueApp = require('../../BlueApp');
+import React, { useContext, useEffect, useState } from 'react';
+import { View, TouchableWithoutFeedback } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import navigationStyle from '../../components/navigationStyle';
+import { SafeBlueArea, BlueCard, BlueListItem, BlueText } from '../../BlueComponents';
+import OnAppLaunch from '../../class/on-app-launch';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
 
 const DefaultView = () => {
   const [defaultWalletLabel, setDefaultWalletLabel] = useState('');
   const [viewAllWalletsEnabled, setViewAllWalletsEnabled] = useState(true);
   const { navigate, pop } = useNavigation();
+  const { wallets } = useContext(BlueStorageContext);
 
   useEffect(() => {
     (async () => {
@@ -48,31 +52,28 @@ const DefaultView = () => {
   };
 
   return (
-    <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
+    <SafeBlueArea>
       <View>
         <BlueListItem
-          title="View All Wallets"
+          title={loc.settings.default_wallets}
           Component={TouchableWithoutFeedback}
           switch={{
             onValueChange: onViewAllWalletsSwitchValueChanged,
             value: viewAllWalletsEnabled,
-            disabled: BlueApp.getWallets().length <= 0,
+            disabled: wallets.length <= 0,
           }}
         />
         <BlueCard>
-          <BlueText>When disabled, Groestlcoin BlueWallet will immediately open the selected wallet at launch.</BlueText>
+          <BlueText>{loc.settings.default_desc}</BlueText>
         </BlueCard>
         {!viewAllWalletsEnabled && (
-          <BlueListItem title="Default into" component={TouchableOpacity} onPress={selectWallet} rightTitle={defaultWalletLabel} chevron />
+          <BlueListItem title={loc.settings.default_info} onPress={selectWallet} rightTitle={defaultWalletLabel} chevron />
         )}
       </View>
     </SafeBlueArea>
   );
 };
 
-DefaultView.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
-  title: 'On Launch',
-});
+DefaultView.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.default_title }));
 
 export default DefaultView;

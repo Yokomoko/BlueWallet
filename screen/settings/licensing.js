@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView } from 'react-native';
-import { BlueLoading, SafeBlueArea, BlueCard, BlueText, BlueNavigationStyle, BlueSpacing20 } from '../../BlueComponents';
-/** @type {AppStorage} */
+import navigationStyle from '../../components/navigationStyle';
+import { SafeBlueArea, BlueCard, BlueText, BlueSpacing20, BlueLoading } from '../../BlueComponents';
 
 const Licensing = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,14 +11,14 @@ const Licensing = () => {
   }, []);
 
   return isLoading ? (
-    (<BlueLoading />)
+    <BlueLoading />
   ) : (
-    (<SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
+    <SafeBlueArea>
       <ScrollView>
         <BlueCard>
           <BlueText>MIT License</BlueText>
           <BlueSpacing20 />
-          <BlueText>Copyright (c) 2018-2020 Groestlcoin BlueWallet Services</BlueText>
+          <BlueText>Copyright (c) 2020 - 2021 Groestlcoin Developers</BlueText>
           <BlueSpacing20 />
           <BlueText>
             Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -41,12 +41,11 @@ const Licensing = () => {
           </BlueText>
         </BlueCard>
       </ScrollView>
-    </SafeBlueArea>)
+    </SafeBlueArea>
   );
 };
 
-Licensing.navigationOptions = () => ({
-  ...BlueNavigationStyle(),
+Licensing.navigationOptions = navigationStyle({
   title: 'License',
 });
 

@@ -1,21 +1,14 @@
-import React, { Component } from 'react';
-import { View, ScrollView, TouchableOpacity, Linking } from 'react-native';
-import {
-  SafeBlueArea,
-  BlueCard,
-  BlueText,
-  BlueHeaderDefaultSub,
-  BlueLoading,
-  BlueSpacing20,
-  BlueCopyToClipboardButton,
-  BlueNavigationStyle,
-} from '../../BlueComponents';
-import HandoffSettings from '../../class/handoff';
-import Handoff from 'react-native-handoff';
-import PropTypes from 'prop-types';
-/** @type {AppStorage} */
-let BlueApp = require('../../BlueApp');
-let loc = require('../../loc');
+import React, { useContext, useEffect, useState } from 'react';
+import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StatusBar, StyleSheet, Keyboard } from 'react-native';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
+import navigationStyle from '../../components/navigationStyle';
+import HandoffComponent from '../../components/handoff';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+import Clipboard from '@react-native-clipboard/clipboard';
+import ToolTipMenu from '../../components/TooltipMenu';
+import alert from '../../components/Alert';
 const dayjs = require('dayjs');
 
 function onlyUnique(value, index, self) {
@@ -23,8 +16,8 @@ function onlyUnique(value, index, self) {
 }
 
 function arrDiff(a1, a2) {
-  let ret = [];
-  for (let v of a2) {
+  const ret = [];
+  for (const v of a2) {
     if (a1.indexOf(v) === -1) {
       ret.push(v);
     }
@@ -32,181 +25,401 @@ function arrDiff(a1, a2) {
   return ret;
 }
 
-export default class TransactionsDetails extends Component {
-  static navigationOptions = () => ({
-    ...BlueNavigationStyle(),
+const TransactionsDetails = () => {
+  const { setOptions, navigate } = useNavigation();
+  const { hash } = useRoute().params;
+  const { saveToDisk, txMetadata, wallets, getTransactions } = useContext(BlueStorageContext);
+  const [from, setFrom] = useState();
+  const [to, setTo] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [tx, setTX] = useState();
+  const [memo, setMemo] = useState();
+  const { colors } = useTheme();
+  const stylesHooks = StyleSheet.create({
+    memoTextInput: {
+      borderColor: colors.formBorder,
+      borderBottomColor: colors.formBorder,
+      backgroundColor: colors.inputBackgroundColor,
+    },
+    greyButton: {
+      backgroundColor: colors.lightButton,
+    },
+    Link: {
+      color: colors.buttonTextColor,
+    },
+    save: {
+      backgroundColor: colors.lightButton,
+    },
+    saveText: {
+      color: colors.buttonTextColor,
+    },
   });
 
-  constructor(props) {
-    super(props);
-    let hash = props.navigation.state.params.hash;
+  useEffect(() => {
+    setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          accessibilityRole="button"
+          disabled={isLoading}
+          style={[styles.save, stylesHooks.save]}
+          onPress={handleOnSaveButtonTapped}
+        >
+          <Text style={[styles.saveText, stylesHooks.saveText]}>{loc.wallets.details_save}</Text>
+        </TouchableOpacity>
+      ),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colors, isLoading, memo]);
+
+  useEffect(() => {
     let foundTx = {};
     let from = [];
     let to = [];
-    for (let tx of BlueApp.getTransactions()) {
+    for (const tx of getTransactions(null, Infinity, true)) {
       if (tx.hash === hash) {
         foundTx = tx;
-        for (let input of foundTx.inputs) {
-          from = from.concat(input.addresses);
+        for (const input of foundTx.inputs) {
+          if (input.addresses) from = from.concat(input.addresses);
+          if (input.address) from = from.concat(input.address);
         }
-        for (let output of foundTx.outputs) {
+        for (const output of foundTx.outputs) {
           if (output.addresses) to = to.concat(output.addresses);
+          if (output.address) to = to.concat(output.address);
           if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
+          if (output.scriptPubKey && output.scriptPubKey.address) to = to.concat(output.scriptPubKey.address);
         }
       }
     }
 
-    let wallet = false;
-    for (let w of BlueApp.getWallets()) {
-      for (let t of w.getTransactions()) {
+    for (const w of wallets) {
+      for (const t of w.getTransactions()) {
         if (t.hash === hash) {
           console.log('tx', hash, 'belongs to', w.getLabel());
-          wallet = w;
         }
       }
     }
-    this.state = {
-      isLoading: true,
-      tx: foundTx,
-      from,
-      to,
-      wallet,
-      isHandOffUseEnabled: false,
-    };
-  }
-
-  async componentDidMount() {
-    console.log('transactions/details - componentDidMount');
-    const isHandOffUseEnabled = await HandoffSettings.isHandoffUseEnabled();
-    this.setState({
-      isLoading: false,
-      isHandOffUseEnabled,
-    });
-  }
-
-  render() {
-    if (this.state.isLoading || !this.state.hasOwnProperty('tx')) {
-      return <BlueLoading />;
+    if (txMetadata[foundTx.hash]) {
+      if (txMetadata[foundTx.hash].memo) {
+        setMemo(txMetadata[foundTx.hash].memo);
+      }
     }
 
-    return (
-      <SafeBlueArea forceInset={{ horizontal: 'always' }} style={{ flex: 1 }}>
-        {this.state.isHandOffUseEnabled && (
-          <Handoff
-            title={`Groestlcoin Transaction ${this.state.tx.hash}`}
-            type="org.groestlcoin.bluewallet"
-            url={`https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`}
-          />
-        )}
-        <BlueHeaderDefaultSub leftText={loc.transactions.details.title} rightComponent={null} />
-        <ScrollView style={{ flex: 1 }}>
-          <BlueCard>
-            {(() => {
-              if (BlueApp.tx_metadata[this.state.tx.hash]) {
-                if (BlueApp.tx_metadata[this.state.tx.hash]['memo']) {
-                  return (
-                    <View>
-                      <BlueText h4>{BlueApp.tx_metadata[this.state.tx.hash]['memo']}</BlueText>
-                      <BlueSpacing20 />
-                    </View>
-                  );
-                }
-              }
-            })()}
+    setTX(foundTx);
+    setFrom(from);
+    setTo(to);
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hash, wallets]);
 
-            {this.state.hasOwnProperty('from') && (
-              <React.Fragment>
-                <View style={{ flex: 1, flexDirection: 'row', marginBottom: 4, justifyContent: 'space-between' }}>
-                  <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>{loc.transactions.details.from}</BlueText>
-                  <BlueCopyToClipboardButton stringToCopy={this.state.from.filter(onlyUnique).join(', ')} />
-                </View>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{this.state.from.filter(onlyUnique).join(', ')}</BlueText>
-              </React.Fragment>
-            )}
+  const handleOnSaveButtonTapped = () => {
+    Keyboard.dismiss();
+    txMetadata[tx.hash] = { memo };
+    saveToDisk().then(_success => alert(loc.transactions.transaction_note_saved));
+  };
 
-            {this.state.hasOwnProperty('to') && (
-              <React.Fragment>
-                <View style={{ flex: 1, flexDirection: 'row', marginBottom: 4, justifyContent: 'space-between' }}>
-                  <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>{loc.transactions.details.to}</BlueText>
-                  <BlueCopyToClipboardButton stringToCopy={this.state.to.filter(onlyUnique).join(', ')} />
-                </View>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>
-                  {arrDiff(this.state.from, this.state.to.filter(onlyUnique)).join(', ')}
-                </BlueText>
-              </React.Fragment>
-            )}
+  const handleOnOpenTransactionOnBlockExporerTapped = () => {
+    const url = `https://esplora.groestlcoin.org/tx/${tx.hash}`;
+    Linking.canOpenURL(url)
+      .then(supported => {
+        if (supported) {
+          Linking.openURL(url).catch(e => {
+            console.log('openURL failed in handleOnOpenTransactionOnBlockExporerTapped');
+            console.log(e.message);
+            alert(e.message);
+          });
+        } else {
+          console.log('canOpenURL supported is false in handleOnOpenTransactionOnBlockExporerTapped');
+          alert(loc.transactions.open_url_error);
+        }
+      })
+      .catch(e => {
+        console.log('canOpenURL failed in handleOnOpenTransactionOnBlockExporerTapped');
+        console.log(e.message);
+        alert(e.message);
+      });
+  };
 
-            {this.state.tx.hasOwnProperty('fee') && (
-              <React.Fragment>
-                <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>{loc.send.create.fee}</BlueText>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{this.state.tx.fee + ' gros'}</BlueText>
-              </React.Fragment>
-            )}
-
-            {this.state.tx.hasOwnProperty('hash') && (
-              <React.Fragment>
-                <View style={{ flex: 1, flexDirection: 'row', marginBottom: 4, justifyContent: 'space-between' }}>
-                  <BlueText style={{ fontSize: 16, fontWeight: '500' }}>Txid</BlueText>
-                  <BlueCopyToClipboardButton stringToCopy={this.state.tx.hash} />
-                </View>
-                <BlueText style={{ marginBottom: 8, color: 'grey' }}>{this.state.tx.hash}</BlueText>
-                <TouchableOpacity
-                  onPress={() => {
-                    const url = `https://esplora.groestlcoin.org/tx/${this.state.tx.hash}`;
-                    Linking.canOpenURL(url).then(supported => {
-                      if (supported) {
-                        Linking.openURL(url);
-                      }
-                    });
-                  }}
-                >
-                  <BlueText style={{ marginBottom: 26, color: '#2f5fb3' }}>{loc.transactions.details.show_in_block_explorer}</BlueText>
-                </TouchableOpacity>
-              </React.Fragment>
-            )}
-
-            {this.state.tx.hasOwnProperty('received') && (
-              <React.Fragment>
-                <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>Received</BlueText>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{dayjs(this.state.tx.received).format('MM/DD/YYYY h:mm A')}</BlueText>
-              </React.Fragment>
-            )}
-
-            {this.state.tx.hasOwnProperty('block_height') && this.state.tx.block_height > 0 && (
-              <React.Fragment>
-                <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>Block Height</BlueText>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{this.state.tx.block_height}</BlueText>
-              </React.Fragment>
-            )}
-
-            {this.state.tx.hasOwnProperty('inputs') && (
-              <React.Fragment>
-                <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>Inputs</BlueText>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{this.state.tx.inputs.length}</BlueText>
-              </React.Fragment>
-            )}
-
-            {this.state.tx.hasOwnProperty('outputs') && this.state.tx.outputs.length > 0 && (
-              <React.Fragment>
-                <BlueText style={{ fontSize: 16, fontWeight: '500', marginBottom: 4 }}>Outputs</BlueText>
-                <BlueText style={{ marginBottom: 26, color: 'grey' }}>{this.state.tx.outputs.length}</BlueText>
-              </React.Fragment>
-            )}
-          </BlueCard>
-        </ScrollView>
-      </SafeBlueArea>
+  const handleCopyPress = stringToCopy => {
+    Clipboard.setString(
+      stringToCopy !== TransactionsDetails.actionKeys.CopyToClipboard ? stringToCopy : `https://esplora.groestlcoin.org/tx/${tx.hash}`,
     );
-  }
-}
+  };
 
-TransactionsDetails.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func,
-    navigate: PropTypes.func,
-    state: PropTypes.shape({
-      params: PropTypes.shape({
-        hash: PropTypes.string,
-      }),
-    }),
-  }),
+  if (isLoading || !tx) {
+    return <BlueLoading />;
+  }
+
+  const weOwnAddress = address => {
+    for (const w of wallets) {
+      if (w.weOwnAddress(address)) {
+        return w;
+      }
+    }
+    return null;
+  };
+
+  const navigateToWallet = wallet => {
+    const walletID = wallet.getID();
+    navigate('WalletTransactions', {
+      walletID,
+      walletType: wallet.type,
+      key: `WalletTransactions-${walletID}`,
+    });
+  };
+
+  const renderSection = array => {
+    const fromArray = [];
+
+    for (const [index, address] of array.entries()) {
+      const actions = [];
+      actions.push({
+        id: TransactionsDetails.actionKeys.CopyToClipboard,
+        text: loc.transactions.details_copy,
+        icon: TransactionsDetails.actionIcons.Clipboard,
+      });
+      const isWeOwnAddress = weOwnAddress(address);
+      if (isWeOwnAddress) {
+        actions.push({
+          id: TransactionsDetails.actionKeys.GoToWallet,
+          text: loc.formatString(loc.transactions.view_wallet, { walletLabel: isWeOwnAddress.getLabel() }),
+          icon: TransactionsDetails.actionIcons.GoToWallet,
+        });
+      }
+
+      fromArray.push(
+        <ToolTipMenu
+          key={address}
+          isButton
+          title={address}
+          isMenuPrimaryAction
+          actions={actions}
+          onPressMenuItem={id => {
+            if (id === TransactionsDetails.actionKeys.CopyToClipboard) {
+              handleCopyPress(address);
+            } else if (id === TransactionsDetails.actionKeys.GoToWallet) {
+              navigateToWallet(isWeOwnAddress);
+            }
+          }}
+        >
+          <BlueText style={isWeOwnAddress ? [styles.rowValue, styles.weOwnAddress] : styles.rowValue}>
+            {address}
+            {index === array.length - 1 ? null : ','}
+          </BlueText>
+        </ToolTipMenu>,
+      );
+    }
+
+    return fromArray;
+  };
+
+  return (
+    <ScrollView style={styles.scroll} automaticallyAdjustContentInsets contentInsetAdjustmentBehavior="automatic">
+      <HandoffComponent
+        title={loc.transactions.details_title}
+        type={HandoffComponent.activityTypes.ViewInBlockExplorer}
+        url={`https://esplora.groestlcoin.org/tx/${tx.hash}`}
+      />
+      <StatusBar barStyle="default" />
+      <BlueCard>
+        <View>
+          <TextInput
+            placeholder={loc.send.details_note_placeholder}
+            value={memo}
+            placeholderTextColor="#81868e"
+            style={[styles.memoTextInput, stylesHooks.memoTextInput]}
+            onChangeText={setMemo}
+          />
+          <BlueSpacing20 />
+        </View>
+
+        {from && (
+          <>
+            <View style={styles.rowHeader}>
+              <BlueText style={styles.rowCaption}>{loc.transactions.details_from}</BlueText>
+              <BlueCopyToClipboardButton stringToCopy={from.filter(onlyUnique).join(', ')} />
+            </View>
+            {renderSection(from.filter(onlyUnique))}
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {to && (
+          <>
+            <View style={styles.rowHeader}>
+              <BlueText style={styles.rowCaption}>{loc.transactions.details_to}</BlueText>
+              <BlueCopyToClipboardButton stringToCopy={to.filter(onlyUnique).join(', ')} />
+            </View>
+            {renderSection(arrDiff(from, to.filter(onlyUnique)))}
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.fee && (
+          <>
+            <BlueText style={styles.rowCaption}>{loc.send.create_fee}</BlueText>
+            <BlueText style={styles.rowValue}>{tx.fee + ' sats'}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.hash && (
+          <>
+            <View style={styles.rowHeader}>
+              <BlueText style={[styles.txId, stylesHooks.txId]}>{loc.transactions.txid}</BlueText>
+              <BlueCopyToClipboardButton stringToCopy={tx.hash} />
+            </View>
+            <BlueText style={styles.rowValue}>{tx.hash}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.received && (
+          <>
+            <BlueText style={styles.rowCaption}>{loc.transactions.details_received}</BlueText>
+            <BlueText style={styles.rowValue}>{dayjs(tx.received).format('LLL')}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.block_height > 0 && (
+          <>
+            <BlueText style={styles.rowCaption}>{loc.transactions.details_block}</BlueText>
+            <BlueText style={styles.rowValue}>{tx.block_height}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.inputs && (
+          <>
+            <BlueText style={styles.rowCaption}>{loc.transactions.details_inputs}</BlueText>
+            <BlueText style={styles.rowValue}>{tx.inputs.length}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+
+        {tx.outputs?.length > 0 && (
+          <>
+            <BlueText style={styles.rowCaption}>{loc.transactions.details_outputs}</BlueText>
+            <BlueText style={styles.rowValue}>{tx.outputs.length}</BlueText>
+            <View style={styles.marginBottom18} />
+          </>
+        )}
+        <ToolTipMenu
+          isButton
+          actions={[
+            {
+              id: TransactionsDetails.actionKeys.CopyToClipboard,
+              text: loc.transactions.copy_link,
+              icon: TransactionsDetails.actionIcons.Clipboard,
+            },
+          ]}
+          onPressMenuItem={handleCopyPress}
+          onPress={handleOnOpenTransactionOnBlockExporerTapped}
+        >
+          <View style={[styles.greyButton, stylesHooks.greyButton]}>
+            <Text style={[styles.Link, stylesHooks.Link]}>{loc.transactions.details_show_in_block_explorer}</Text>
+          </View>
+        </ToolTipMenu>
+      </BlueCard>
+    </ScrollView>
+  );
 };
+
+TransactionsDetails.actionKeys = {
+  CopyToClipboard: 'copyToClipboard',
+  GoToWallet: 'goToWallet',
+};
+
+TransactionsDetails.actionIcons = {
+  Clipboard: {
+    iconType: 'SYSTEM',
+    iconValue: 'doc.on.doc',
+  },
+  GoToWallet: {
+    iconType: 'SYSTEM',
+    iconValue: 'wallet.pass',
+  },
+};
+
+const styles = StyleSheet.create({
+  scroll: {
+    flex: 1,
+  },
+  rowHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 4,
+    justifyContent: 'space-between',
+  },
+  rowCaption: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  rowValue: {
+    color: 'grey',
+  },
+  marginBottom18: {
+    marginBottom: 18,
+  },
+  txId: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  Link: {
+    fontWeight: '600',
+    fontSize: 15,
+  },
+  weOwnAddress: {
+    fontWeight: '600',
+  },
+  save: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    borderRadius: 8,
+    height: 34,
+  },
+  saveText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  memoTextInput: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderBottomWidth: 0.5,
+    minHeight: 44,
+    height: 44,
+    alignItems: 'center',
+    marginVertical: 8,
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    color: '#81868e',
+  },
+  greyButton: {
+    borderRadius: 9,
+    minHeight: 49,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'auto',
+    flexGrow: 1,
+    marginHorizontal: 4,
+  },
+});
+
+export default TransactionsDetails;
+
+TransactionsDetails.navigationOptions = navigationStyle({ headerTitle: loc.transactions.details_title }, (options, { theme }) => {
+  return {
+    ...options,
+    headerStyle: {
+      backgroundColor: theme.colors.customHeader,
+      borderBottomWidth: 0,
+      elevation: 0,
+      shadowOpacity: 0,
+      shadowOffset: { height: 0, width: 0 },
+    },
+  };
+});

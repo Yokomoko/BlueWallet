@@ -1,0 +1,53 @@
+Groestlcoin-lompakko, jonka avulla voit tallentaa, lähettää, vastaanottaa, sekä ostaa Groestlcoinia keskittyen turvallisuuteen ja yksinkertaisuuteen.
+
+Sinä omistat yksityiset avaimesi GRS BlueWallet groestlcoin-lompakossa. Groestlcoin-käyttäjien tekemä Groestlcoin-lompakko yhteisölle.
+
+Voit tehdä heti kauppaa kenen tahansa kanssa maailmassa ja muuttaa rahoitusjärjestelmää suoraan taskustasi.
+
+Luo ilmaiseksi rajoittamaton määrä groestlcoin-lompakoita tai tuo nykyinen lompakkosi. Se on yksinkertaista ja nopeaa.
+
+_____
+
+Nämä saat:
+
+
+1 - Suunniteltu tietoturvalliseksi
+
+Avoin lähdekoodi
+MIT-lisensoitu, voit rakentaa sen ja käyttää sitä itsenäisesti! Tehty ReactNative: lla
+
+Uskottava kiistettävyys
+Salasana, joka purkaa vale groestlcoin-lompakot, jos sinun on pakko paljastaa käyttöoikeutesi
+
+Täysi salaus
+IOS:in monikerroksisen salauksen lisäksi salaamme kaiken lisätyillä salasanoilla
+
+Täysi solmu
+Yhdistä täyteen Groestlcoin solmuusi Electrum-grsin kautta
+
+Kylmäsäilytys
+Yhdistä laitteistolompakkoosi ja säilytä kolikkosi kylmäsäilössä
+
+2 - Kohdennettu kokemukseesi
+
+Kontrolloi itse
+Yksityiset avaimesi eivät koskaan poistu laitteeltasi.
+Sinä hallitset yksityisiä avaimiasi
+
+Joustavat siirtokulut
+Alkaen 1 Grosta. Käyttäjän itse määrittämä
+
+Replace-By-Fee
+(RBF) Nopeuta siirtotapahtumiasi korottamalla siirtokulua (BIP125)
+
+Vain lukuoikeus-lompakot
+Vain lukuoikeus-lompakot antavat sinun pitää silmällä kylmäsäilöä koskematta laitteistoon.
+
+Salamaverkko
+Salamalompakko nolla-konfiguraatiolla. Luvattoman halvat ja nopeat siirrot parhaalla Groestlcoin käyttökokemuksella.
+
+Osta groestlcoinia
+Osallistu avoimeen talouden vallankumoukseen kyvyllä ostaa groestlcoinia suoraan lompakkoosi.
+
+Paikallinen kauppias
+P2p Groestlcoin-vaihtoalusta, jonka avulla voit ostaa ja myydä groestlcoinia suoraan muille käyttäjille ilman kolmansia osapuolia.

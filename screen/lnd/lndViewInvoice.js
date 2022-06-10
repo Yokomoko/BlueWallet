@@ -1,329 +1,343 @@
-import React, { Component } from 'react';
-import { View, Text, Dimensions, ScrollView, BackHandler, InteractionManager, TouchableOpacity } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { View, Text, StatusBar, ScrollView, BackHandler, TouchableOpacity, StyleSheet, I18nManager, Image } from 'react-native';
 import Share from 'react-native-share';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { Icon } from 'react-native-elements';
+import QRCodeComponent from '../../components/QRCodeComponent';
+import { useNavigation, useNavigationState, useRoute, useTheme } from '@react-navigation/native';
 import {
   BlueLoading,
   BlueText,
   SafeBlueArea,
   BlueButton,
   BlueCopyTextToClipboard,
-  BlueNavigationStyle,
   BlueSpacing20,
-  BlueBigCheckmark,
+  BlueTextCentered,
 } from '../../BlueComponents';
-import PropTypes from 'prop-types';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { Icon } from 'react-native-elements';
-import QRCode from 'react-native-qrcode-svg';
-/** @type {AppStorage} */
-let BlueApp = require('../../BlueApp');
-const loc = require('../../loc');
-const EV = require('../../events');
-const { width, height } = Dimensions.get('window');
+import navigationStyle from '../../components/navigationStyle';
+import loc from '../../loc';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
+import { SuccessView } from '../send/success';
+import LNDCreateInvoice from './lndCreateInvoice';
 
-export default class LNDViewInvoice extends Component {
-  static navigationOptions = ({ navigation }) =>
-    navigation.getParam('isModal') === true
-      ? {
-          ...BlueNavigationStyle(navigation, true, () => navigation.dismiss()),
-          title: 'Lightning Invoice',
-          headerLeft: null,
-        }
-      : { ...BlueNavigationStyle(), title: 'Lightning Invoice' };
+const LNDViewInvoice = () => {
+  const { invoice, walletID } = useRoute().params;
+  const { wallets, setSelectedWallet, fetchAndSaveWalletTransactions } = useContext(BlueStorageContext);
+  const wallet = wallets.find(w => w.getID() === walletID);
+  const { colors, closeImage } = useTheme();
+  const { goBack, navigate, setParams, setOptions, dangerouslyGetParent } = useNavigation();
+  const [isLoading, setIsLoading] = useState(typeof invoice === 'string');
+  const [isFetchingInvoices, setIsFetchingInvoices] = useState(true);
+  const [invoiceStatusChanged, setInvoiceStatusChanged] = useState(false);
+  const [qrCodeSize, setQRCodeSize] = useState(90);
+  const fetchInvoiceInterval = useRef();
+  const isModal = useNavigationState(state => state.routeNames[0] === LNDCreateInvoice.routeName);
 
-  constructor(props) {
-    super(props);
-    const invoice = props.navigation.getParam('invoice');
-    const fromWallet = props.navigation.getParam('fromWallet');
-    this.state = {
-      invoice,
-      fromWallet,
-      isLoading: typeof invoice === 'string',
-      addressText: typeof invoice === 'object' && invoice.hasOwnProperty('payment_request') ? invoice.payment_request : invoice,
-      isFetchingInvoices: true,
-      qrCodeHeight: height > width ? width - 20 : width / 2,
+  const stylesHook = StyleSheet.create({
+    root: {
+      backgroundColor: colors.background,
+    },
+    detailsText: {
+      color: colors.alternativeTextColor,
+    },
+    expired: {
+      backgroundColor: colors.success,
+    },
+    additionalInfo: {
+      backgroundColor: colors.brandingColor,
+    },
+  });
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      clearInterval(fetchInvoiceInterval.current);
+      fetchInvoiceInterval.current = undefined;
     };
-    this.fetchInvoiceInterval = undefined;
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentDidMount() {
-    this.fetchInvoiceInterval = setInterval(async () => {
-      if (this.state.isFetchingInvoices) {
-        try {
-          const userInvoices = await this.state.fromWallet.getUserInvoices(20);
-          // fetching only last 20 invoices
-          // for invoice that was created just now - that should be enough (it is basically the last one, so limit=1 would be sufficient)
-          // but that might not work as intended IF user creates 21 invoices, and then tries to check the status of invoice #0, it just wont be updated
-          const updatedUserInvoice = userInvoices.filter(invoice =>
-            typeof this.state.invoice === 'object'
-              ? invoice.payment_request === this.state.invoice.payment_request
-              : invoice.payment_request === this.state.invoice,
-          )[0];
+  useEffect(() => {
+    setOptions(
+      isModal
+        ? {
+            headerStyle: {
+              borderBottomWidth: 0,
+              backgroundColor: colors.customHeader,
+              elevation: 0,
+              shadowOpacity: 0,
+              shadowOffset: { height: 0, width: 0 },
+            },
+            gestureEnabled: false,
+            headerHideBackButton: true,
 
-          if (typeof updatedUserInvoice !== 'undefined') {
-            this.setState({ invoice: updatedUserInvoice, isLoading: false, addressText: updatedUserInvoice.payment_request });
-            if (updatedUserInvoice.ispaid) {
-              // we fetched the invoice, and it is paid :-)
-              this.setState({ isFetchingInvoices: false });
-              ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
-              clearInterval(this.fetchInvoiceInterval);
-              this.fetchInvoiceInterval = undefined;
-              EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // remote because we want to refetch from server tx list and balance
-            } else {
-              const currentDate = new Date();
-              const now = (currentDate.getTime() / 1000) | 0;
-              const invoiceExpiration = updatedUserInvoice.timestamp + updatedUserInvoice.expire_time;
-              if (invoiceExpiration < now && !updatedUserInvoice.ispaid) {
-                // invoice expired :-(
-                this.setState({ isFetchingInvoices: false });
-                ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
-                clearInterval(this.fetchInvoiceInterval);
-                this.fetchInvoiceInterval = undefined;
-                EV(EV.enum.TRANSACTIONS_COUNT_CHANGED);
+            headerRight: () => (
+              <TouchableOpacity
+                accessibilityRole="button"
+                style={styles.button}
+                onPress={() => {
+                  dangerouslyGetParent().pop();
+                }}
+                testID="NavigationCloseButton"
+              >
+                <Image source={closeImage} />
+              </TouchableOpacity>
+            ),
+          }
+        : {
+            headerRight: () => {},
+            headerStyle: {
+              backgroundColor: colors.customHeader,
+
+              borderBottomWidth: 0,
+              elevation: 0,
+              shadowOpacity: 0,
+              shadowOffset: { height: 0, width: 0 },
+            },
+          },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colors, isModal]);
+
+  useEffect(() => {
+    setSelectedWallet(walletID);
+    console.log('LNDViewInvoice - useEffect');
+    if (!invoice.ispaid) {
+      fetchInvoiceInterval.current = setInterval(async () => {
+        if (isFetchingInvoices) {
+          try {
+            const userInvoices = await wallet.getUserInvoices(20);
+            // fetching only last 20 invoices
+            // for invoice that was created just now - that should be enough (it is basically the last one, so limit=1 would be sufficient)
+            // but that might not work as intended IF user creates 21 invoices, and then tries to check the status of invoice #0, it just wont be updated
+            const updatedUserInvoice = userInvoices.filter(filteredInvoice =>
+              typeof invoice === 'object'
+                ? filteredInvoice.payment_request === invoice.payment_request
+                : filteredInvoice.payment_request === invoice,
+            )[0];
+            if (typeof updatedUserInvoice !== 'undefined') {
+              setInvoiceStatusChanged(true);
+              setParams({ invoice: updatedUserInvoice });
+              setIsLoading(false);
+              if (updatedUserInvoice.ispaid) {
+                // we fetched the invoice, and it is paid :-)
+                setIsFetchingInvoices(false);
+                fetchAndSaveWalletTransactions(walletID);
+              } else {
+                const currentDate = new Date();
+                const now = (currentDate.getTime() / 1000) | 0;
+                const invoiceExpiration = updatedUserInvoice.timestamp + updatedUserInvoice.expire_time;
+                if (invoiceExpiration < now && !updatedUserInvoice.ispaid) {
+                  // invoice expired :-(
+                  fetchAndSaveWalletTransactions(walletID);
+                  setIsFetchingInvoices(false);
+                  ReactNativeHapticFeedback.trigger('notificationError', { ignoreAndroidSystemSettings: false });
+                  clearInterval(fetchInvoiceInterval.current);
+                  fetchInvoiceInterval.current = undefined;
+                }
               }
             }
+          } catch (error) {
+            console.log(error);
           }
-        } catch (error) {
-          console.log(error);
         }
-      }
-    }, 3000);
-  }
+      }, 3000);
+    } else {
+      setIsFetchingInvoices(false);
+      clearInterval(fetchInvoiceInterval.current);
+      fetchInvoiceInterval.current = undefined;
+    }
 
-  async componentWillUnmount() {
-    clearInterval(this.fetchInvoiceInterval);
-    this.fetchInvoiceInterval = undefined;
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  handleBackButton = () => {
-    this.props.navigation.goBack(null);
+  const handleBackButton = () => {
+    goBack(null);
     return true;
   };
 
-  onLayout = () => {
-    const { height } = Dimensions.get('window');
-    this.setState({ qrCodeHeight: height > width ? width - 20 : width / 2 });
+  const navigateToPreImageScreen = () => {
+    navigate('LNDViewAdditionalInvoicePreImage', {
+      preImageData: invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? invoice.payment_preimage : 'none',
+    });
   };
 
-  render() {
-    if (this.state.isLoading) {
-      return <BlueLoading />;
+  const handleOnSharePressed = () => {
+    Share.open({ message: `lightning:${invoice.payment_request}` }).catch(error => console.log(error));
+  };
+
+  const handleOnViewAdditionalInformationPressed = () => {
+    navigate('LNDViewAdditionalInvoiceInformation', { walletID });
+  };
+
+  useEffect(() => {
+    if (invoice.ispaid && invoiceStatusChanged) {
+      setInvoiceStatusChanged(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [invoice]);
+
+  useEffect(() => {
+    if (invoiceStatusChanged) {
+      ReactNativeHapticFeedback.trigger('notificationSuccess', { ignoreAndroidSystemSettings: false });
+    }
+  }, [invoiceStatusChanged]);
+
+  const onLayout = e => {
+    const { height, width } = e.nativeEvent.layout;
+    setQRCodeSize(height > width ? width - 40 : e.nativeEvent.layout.width / 1.8);
+  };
+
+  const render = () => {
+    if (isLoading) {
+      return (
+        <View style={[styles.root, stylesHook.root]}>
+          <BlueLoading />
+        </View>
+      );
     }
 
-    const { invoice } = this.state;
     if (typeof invoice === 'object') {
       const currentDate = new Date();
       const now = (currentDate.getTime() / 1000) | 0;
       const invoiceExpiration = invoice.timestamp + invoice.expire_time;
-
-      if (this.state.showPreimageQr) {
-        return (
-          <SafeBlueArea style={{ flex: 1 }}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <BlueText>Preimage:</BlueText>
-              <BlueSpacing20 />
-              <QRCode
-                value={invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? invoice.payment_preimage : 'none'}
-                logo={require('../../img/qr-code.png')}
-                size={this.state.qrCodeHeight}
-                logoSize={90}
-                getRef={c => (this.qrCodeSVG = c)}
-                color={BlueApp.settings.foregroundColor}
-                logoBackgroundColor={BlueApp.settings.brandingColor}
-              />
-              <BlueSpacing20 />
-              <BlueCopyTextToClipboard
-                text={invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? invoice.payment_preimage : 'none'}
-              />
-            </View>
-          </SafeBlueArea>
-        );
-      }
-
       if (invoice.ispaid || invoice.type === 'paid_invoice') {
-        return (
-          <SafeBlueArea style={{ flex: 1 }}>
-            <View style={{ flex: 2, flexDirection: 'column', justifyContent: 'center' }}>
-              {invoice.type === 'paid_invoice' && invoice.value && (
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingBottom: 8 }}>
-                  <Text style={{ color: '#0f5cc0', fontSize: 32, fontWeight: '600' }}>{invoice.value}</Text>
-                  <Text
-                    style={{
-                      color: '#0f5cc0',
-                      fontSize: 16,
-                      marginHorizontal: 4,
-                      paddingBottom: 3,
-                      fontWeight: '600',
-                      alignSelf: 'flex-end',
-                    }}
-                  >
-                    {loc.lndViewInvoice.sats}
-                  </Text>
-                </View>
-              )}
-              {invoice.type === 'user_invoice' && invoice.amt && (
-                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingBottom: 8 }}>
-                  <Text style={{ color: '#0f5cc0', fontSize: 32, fontWeight: '600' }}>{invoice.amt}</Text>
-                  <Text
-                    style={{
-                      color: '#0f5cc0',
-                      fontSize: 16,
-                      marginHorizontal: 4,
-                      paddingBottom: 3,
-                      fontWeight: '600',
-                      alignSelf: 'flex-end',
-                    }}
-                  >
-                    {loc.lndViewInvoice.sats}
-                  </Text>
-                </View>
-              )}
-              {!invoice.ispaid && invoice.memo && invoice.memo.length > 0 && (
-                <Text
-                  style={{ color: '#9aa0aa', fontSize: 14, marginHorizontal: 4, paddingBottom: 6, fontWeight: '400', alignSelf: 'center' }}
-                >
-                  {invoice.memo}
-                </Text>
-              )}
-            </View>
-
-            <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
-              <BlueBigCheckmark style={{ marginTop: -100, marginBottom: 16 }} />
-              <BlueText>{loc.lndViewInvoice.has_been_paid}</BlueText>
-            </View>
-            <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 24, alignItems: 'center' }}>
-              {invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? (
-                <TouchableOpacity
-                  style={{ flexDirection: 'row', alignItems: 'center' }}
-                  onPress={() => this.setState({ showPreimageQr: true })}
-                >
-                  <Text style={{ color: '#9aa0aa', fontSize: 14, marginRight: 8 }}>{loc.send.create.details}</Text>
-                  <Icon name="angle-right" size={18} type="font-awesome" color="#9aa0aa" />
-                </TouchableOpacity>
-              ) : (
-                <View />
-              )}
-            </View>
-          </SafeBlueArea>
-        );
-      }
-      if (invoiceExpiration < now && !invoice.ispaid) {
-        return (
-          <SafeBlueArea style={{ flex: 1 }}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View
-                style={{
-                  backgroundColor: '#006593',
-                  width: 120,
-                  height: 120,
-                  borderRadius: 60,
-                  alignSelf: 'center',
-                  justifyContent: 'center',
-                  marginTop: -100,
-                  marginBottom: 30,
-                }}
-              >
-                <Icon name="times" size={50} type="font-awesome" color="#0f5cc0" />
-              </View>
-              <BlueText>{loc.lndViewInvoice.wasnt_paid_and_expired}</BlueText>
-            </View>
-          </SafeBlueArea>
-        );
-      } else if (invoiceExpiration > now && invoice.ispaid) {
-        if (invoice.ispaid) {
-          return (
-            <SafeBlueArea style={{ flex: 1 }}>
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <BlueText>{loc.lndViewInvoice.has_been_paid}</BlueText>
-              </View>
-            </SafeBlueArea>
-          );
+        let amount = 0;
+        if (invoice.type === 'paid_invoice' && invoice.value) {
+          amount = invoice.value;
+        } else if (invoice.type === 'user_invoice' && invoice.amt) {
+          amount = invoice.amt;
         }
-      }
-    }
-    // Invoice has not expired, nor has it been paid for.
-    return (
-      <SafeBlueArea>
-        <ScrollView>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              marginTop: 8,
-              justifyContent: 'space-between',
-            }}
-            onLayout={this.onLayout}
-          >
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 }}>
-              <QRCode
-                value={typeof this.state.invoice === 'object' ? invoice.payment_request : invoice}
-                logo={require('../../img/qr-code.png')}
-                size={this.state.qrCodeHeight}
-                logoSize={90}
-                getRef={c => (this.qrCodeSVG = c)}
-                color={BlueApp.settings.foregroundColor}
-                logoBackgroundColor={BlueApp.settings.brandingColor}
-              />
+        let description = invoice.description;
+        if (invoice.memo && invoice.memo.length > 0) {
+          description = invoice.memo;
+        }
+        return (
+          <View style={styles.root}>
+            <SuccessView
+              amount={amount}
+              amountUnit={BitcoinUnit.SATS}
+              invoiceDescription={description}
+              shouldAnimate={invoiceStatusChanged}
+            />
+            <View style={styles.detailsRoot}>
+              {invoice.payment_preimage && typeof invoice.payment_preimage === 'string' ? (
+                <TouchableOpacity accessibilityRole="button" style={styles.detailsTouch} onPress={navigateToPreImageScreen}>
+                  <Text style={[styles.detailsText, stylesHook.detailsText]}>{loc.send.create_details}</Text>
+                  <Icon
+                    name={I18nManager.isRTL ? 'angle-left' : 'angle-right'}
+                    size={18}
+                    type="font-awesome"
+                    color={colors.alternativeTextColor}
+                  />
+                </TouchableOpacity>
+              ) : undefined}
             </View>
-
+          </View>
+        );
+      }
+      if (invoiceExpiration < now) {
+        return (
+          <View style={[styles.root, stylesHook.root, styles.justifyContentCenter]}>
+            <View style={[styles.expired, stylesHook.expired]}>
+              <Icon name="times" size={50} type="font-awesome" color={colors.successCheck} />
+            </View>
+            <BlueTextCentered>{loc.lndViewInvoice.wasnt_paid_and_expired}</BlueTextCentered>
+          </View>
+        );
+      }
+      // Invoice has not expired, nor has it been paid for.
+      return (
+        <ScrollView>
+          <View style={[styles.activeRoot, stylesHook.root]}>
+            <View style={styles.activeQrcode}>
+              <QRCodeComponent value={invoice.payment_request} size={qrCodeSize} />
+            </View>
             <BlueSpacing20 />
             <BlueText>
               {loc.lndViewInvoice.please_pay} {invoice.amt} {loc.lndViewInvoice.sats}
             </BlueText>
-            {invoice && invoice.hasOwnProperty('description') && invoice.description.length > 0 && (
+            {'description' in invoice && invoice.description.length > 0 && (
               <BlueText>
                 {loc.lndViewInvoice.for} {invoice.description}
               </BlueText>
             )}
-            <BlueCopyTextToClipboard text={this.state.invoice.payment_request} />
+            <BlueCopyTextToClipboard truncated text={invoice.payment_request} />
 
-            <BlueButton
-              icon={{
-                name: 'share-alternative',
-                type: 'entypo',
-                size: 10,
-                color: BlueApp.settings.buttonTextColor,
-              }}
-              onPress={async () => {
-                if (this.qrCodeSVG === undefined) {
-                  Share.open({ message: `lightning:${invoice.payment_request}` }).catch(error => console.log(error));
-                } else {
-                  InteractionManager.runAfterInteractions(async () => {
-                    this.qrCodeSVG.toDataURL(data => {
-                      let shareImageBase64 = {
-                        message: `lightning:${invoice.payment_request}`,
-                        url: `data:image/png;base64,${data}`,
-                      };
-                      Share.open(shareImageBase64).catch(error => console.log(error));
-                    });
-                  });
-                }
-              }}
-              title={loc.receive.details.share}
-            />
+            <BlueButton onPress={handleOnSharePressed} title={loc.receive.details_share} />
+
             <BlueSpacing20 />
             <BlueButton
-              style={{
-                backgroundColor: BlueApp.settings.brandingColor,
-              }}
-              onPress={() => this.props.navigation.navigate('LNDViewAdditionalInvoiceInformation', { fromWallet: this.state.fromWallet })}
+              style={stylesHook.additionalInfo}
+              onPress={handleOnViewAdditionalInformationPressed}
               title={loc.lndViewInvoice.additional_info}
             />
           </View>
-          <BlueSpacing20 />
         </ScrollView>
-      </SafeBlueArea>
-    );
-  }
-}
+      );
+    }
+  };
 
-LNDViewInvoice.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func,
-    navigate: PropTypes.func,
-    getParam: PropTypes.func,
-    popToTop: PropTypes.func,
-  }),
+  return (
+    <SafeBlueArea onLayout={onLayout}>
+      <StatusBar barStyle="default" />
+      {render()}
+    </SafeBlueArea>
+  );
 };
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  justifyContentCenter: {
+    justifyContent: 'center',
+  },
+  detailsRoot: {
+    justifyContent: 'flex-end',
+    marginBottom: 24,
+    alignItems: 'center',
+  },
+  detailsTouch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailsText: {
+    fontSize: 14,
+    marginRight: 8,
+  },
+  expired: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+  activeRoot: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  activeQrcode: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+  },
+});
+
+LNDViewInvoice.navigationOptions = navigationStyle({}, (options, { theme }) => {
+  return {
+    ...options,
+    headerTitle: loc.lndViewInvoice.lightning_invoice,
+    headerStyle: {
+      backgroundColor: theme.colors.customHeader,
+    },
+  };
+});
+
+export default LNDViewInvoice;
