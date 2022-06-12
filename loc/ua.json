@@ -196,7 +196,7 @@
     "permission_storage_denied_message": "GRS BlueWallet не може зберегти цей файл. Відкрийте налаштування пристрою та дайте дозвіл на зберігання.",
     "permission_storage_title": "Дозвіл доступу до сховища",
     "psbt_clipboard": "Копіювати в буфер обміну",
-    "psbt_this_is_psbt": "Це частково підписана біткойн-транзакція (PSBT). Завершіть підписання за допомогою апаратного гаманця.",
+    "psbt_this_is_psbt": "Це частково підписана гростлкойн-транзакція (PSBT). Завершіть підписання за допомогою апаратного гаманця.",
     "psbt_tx_export": "Експортувати у файл",
     "no_tx_signing_in_progress": "Підписання транзакції в процесі.",
     "outdated_rate": "Останнє оновлення ціни: {date}",
@@ -288,7 +288,7 @@
   },
   "wallets": {
     "add_bitcoin": "Groestlcoin",
-    "add_bitcoin_explain": "Простий і потужний Біткойн гаманець",
+    "add_bitcoin_explain": "Простий і потужний гростлкойн гаманець",
     "add_create": "Створити",
     "add_import_wallet": "Імпортувати гаманець",
     "add_lightning": "Lightning",

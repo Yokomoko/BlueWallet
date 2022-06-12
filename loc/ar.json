@@ -151,7 +151,7 @@
     "please_pay_between_and": "يرجى دفع ما بين {min} و{max}",
     "please_pay": "يُرجى الدفع",
     "preimage": "الصورة الأصلية",
-    "sats": "بالساتوشي",
+    "sats": "بالغرو",
     "wasnt_paid_and_expired": "لم يتم دفع هذه الفاتورة وانتهت صلاحيتها"
   },
   "plausibledeniability": {
@@ -183,10 +183,10 @@
     "details_setAmount": "استلام مبلغ",
     "details_share": "مشاركة",
     "header": "استلام",
-    "maxSats": "الحد الأقصى للمبلغ هو {min} ساتوشي",
-    "maxSatsFull": "الحد الأقصى للمبلغ هو {min} ساتوشي أو {currency}",
-    "minSats": "الحد الأدنى للمبلغ هو {min} ساتوشي",
-    "minSatsFull": "الحد الأدنى للمبلغ هو {min} ساتوشي أو {currency}"
+    "maxSats": "الحد الأقصى للمبلغ هو {min} غرو",
+    "maxSatsFull": "الحد الأقصى للمبلغ هو {min} غرو أو {currency}",
+    "minSats": "الحد الأدنى للمبلغ هو {min} غرو",
+    "minSatsFull": "الحد الأدنى للمبلغ هو {min} غرو أو {currency}"
   },
   "send": {
     "provided_address_is_invoice": "يبدو أن هذا العنوان خاص بفاتورة برق (Lightning). من فضلك انتقل إلى محفظة البرق الخاصة بك لدفع هذه الفاتورة.",
@@ -203,7 +203,7 @@
     "create_details": "التفاصيل",
     "create_fee": "الرسوم",
     "create_memo": "مذكرة",
-    "create_satoshi_per_vbyte": "ساتوشي لكل ف بايت",
+    "create_satoshi_per_vbyte": "غرو لكل ف بايت",
     "create_this_is_hex": "هذا هو التنسيق السداسي لمعاملتك، موقَّع وجاهز للبث على الشبكة.",
     "create_to": "إلى",
     "create_tx_size": "حجم المعاملة",
@@ -219,11 +219,11 @@
     "details_adv_import": "استيراد المعاملة",
     "details_adv_import_qr": "استيراد معاملة (QR)",
     "details_amount_field_is_not_valid": "حقل المبلغ غير صالح",
-    "details_amount_field_is_less_than_minimum_amount_sat": "المبلغ المحدد صغير جدًا. الرجاء إدخال مبلغ أكبر من 500 ساتوشي.",
+    "details_amount_field_is_less_than_minimum_amount_sat": "المبلغ المحدد صغير جدًا. الرجاء إدخال مبلغ أكبر من 500 غرو.",
     "details_create": "إنشاء فاتورة",
     "details_error_decode": "يتعذَّر فك تشفير عنوان Groestlcoin",
     "details_fee_field_is_not_valid": "حقل الرسوم غير صالح",
-    "details_frozen": "{amount} بتكوين تم تجميدها",
+    "details_frozen": "{amount} غرسلكوين تم تجميدها",
     "details_next": "التالي",
     "details_no_signed_tx": "لا يحتوي الملف المحدَّد على معاملة موقَّعة يمكن استيرادها.",
     "details_note_placeholder": "ملاحظة شخصية",
@@ -244,8 +244,8 @@
     "fee_custom": "تخصيص",
     "fee_fast": "سريع",
     "fee_medium": "متوسط",
-    "fee_replace_minvb": "يجب أن يكون إجمالي معدل الرسوم (ساتوشي لكل ف بايت) الذي تريد دفعه أعلى من {min} ساتوشي/ف بايت.",
-    "fee_satvbyte": "بساتوشي/ف بايت",
+    "fee_replace_minvb": "يجب أن يكون إجمالي معدل الرسوم (غرو لكل ف بايت) الذي تريد دفعه أعلى من {min} غرو/ف بايت.",
+    "fee_satvbyte": "بغرو/ف بايت",
     "fee_slow": "بطيء",
     "header": "إرسال",
     "input_clear": "المسح",
@@ -438,7 +438,7 @@
     "updating": "جارٍ التحديث ..."
   },
   "wallets": {
-    "add_bitcoin": "بيتكوين",
+    "add_bitcoin": "غرسلكوين",
     "add_bitcoin_explain": "محفظة Groestlcoin بسيطة وقوية",
     "add_create": "إنشاء",
     "add_entropy_generated": "{gen} بايت من الإنتروبيا (العشوائية) المحققة",
@@ -463,7 +463,7 @@
     "details_are_you_sure": "هل أنت متأكد؟",
     "details_connected_to": "متصلة بـ",
     "details_del_wb_err": "لا يتطابق مبلغ الرصيد المقدَّم مع رصيد هذه المحفظة. يُرجى إعادة المحاولة",
-    "details_del_wb_q": "هذه المحفظة يوجد بها رصيد. قبل الاستمرار يرجى العلم أنك لن تتمكن من استرداد الأموال بدون عبارة الاسترداد لهذه المحفظة. لتجنب الحذف الغير متعمد، يرجى إدخال رصيد المحفظة البالغ {balance} ساتوشي.",
+    "details_del_wb_q": "هذه المحفظة يوجد بها رصيد. قبل الاستمرار يرجى العلم أنك لن تتمكن من استرداد الأموال بدون عبارة الاسترداد لهذه المحفظة. لتجنب الحذف الغير متعمد، يرجى إدخال رصيد المحفظة البالغ {balance} غرو.",
     "details_delete": "الحذف",
     "details_delete_wallet": "حذف المحفظة",
     "details_derivation_path": "مسار الاشتقاق (derivation path)",
@@ -534,7 +534,7 @@
     "please_continue_scanning": "الرجاء متابعة الفحص.",
     "scan_error": "خطأ في الفحص",
     "select_no_bitcoin": "لا توجد محافظ Groestlcoin متاحة حاليًا.",
-    "select_no_bitcoin_exp": "تحتاج إلى محفظة بيتكوين لإعادة تعبئة محافظ البرق (Lightning). يُرجى إنشاء محفظة أو استيراد واحدة.",
+    "select_no_bitcoin_exp": "تحتاج إلى محفظة غرسلكوين لإعادة تعبئة محافظ البرق (Lightning). يُرجى إنشاء محفظة أو استيراد واحدة.",
     "select_wallet": "اختيار محفظة",
     "take_photo": "التقاط صورة",
     "xpub_copiedToClipboard": "تم النسخ إلى الحافظة.",
@@ -644,8 +644,8 @@
   "units": {
     "BTC": "GRS",
     "MAX": "الحد الاقصى",
-    "sat_vbyte": "بساتوشي/ف بايت",
-    "sats": "ساتوشي"
+    "sat_vbyte": "بغرو/ف بايت",
+    "sats": "غرو"
   },
   "addresses": {
     "sign_title": "التوقيع/التحقق من الرسالة",
