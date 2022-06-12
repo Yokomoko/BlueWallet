@@ -134,7 +134,7 @@ export default class Selftest extends Component {
       const tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac6e3303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e8702473044022022808715d4b6bd94a7a87fbdcf756703d640eabb5a114794f5373b46d84050fb02201a3450f42f00702c47bcf0b55cce0bf1c54144166d419eb6e39350dbc24b4479012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
+        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988aca73303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e870247304402203192f04859d3866a58c67b743e6a6c420c8f71ec035b7627df6dfaefa8714e7e02204f7d1bf215aae5caa96a846176e45cb70026a1122b74bca8cd4afd5c2351bfd1012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
       );
       assertStrictEqual(tx.ins.length, 1);
       assertStrictEqual(tx.outs.length, 2);
@@ -219,13 +219,13 @@ export default class Selftest extends Component {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         let callbackWasCalled = false;
         const decryptedKey = await bip38.decryptAsync(
-          '6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN',
+          '6PYWosLNqFysPwJxhifKSoop7dB4xtYQd9cxsAPzeXjF9kjD6Xhtda1nni',
           'qwerty',
           () => (callbackWasCalled = true),
         );
         assertStrictEqual(
           wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
+          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3',
           'bip38 failed',
         );
         // bip38 with BlueCrypto doesn't support progress callback
@@ -243,13 +243,13 @@ export default class Selftest extends Component {
       }
 
       //
-
+      /*
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         assertStrictEqual(await Linking.canOpenURL('https://github.com/Groestlcoin/BlueWallet/'), true, 'Linking can not open https url');
       } else {
         // skipping RN-specific test'
       }
-
+      */
       //
     } catch (Err) {
       errorMessage += Err;

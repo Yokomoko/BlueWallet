@@ -601,7 +601,7 @@
     "ms_help_title": "Cómo funcionan las Vaults multifirma: Consejos y trucos",
     "ms_help_text": "Una cartera con múltiples claves, para aumentar exponencialmente la seguridad o para custodia compartida.",
     "ms_help_title1": "Se recomienda usar multiples dispositivos.",
-    "ms_help_1": "La Vault funcionará con otras aplicaciones de GRS BlueWallet y carteras compatibles con PSBT como Electrum-GRS, Spectre, Coldcard, Cobo Vault, etc.",
+    "ms_help_1": "La Vault funcionará con otras aplicaciones de GRS BlueWallet y carteras compatibles con PSBT como Electrum-GRS.",
     "ms_help_title2": "Editar claves",
     "ms_help_2": "Puedes crear todas las claves de la Vault en este dispositivo y eliminarlas o editarlas más tarde. Tener todas las claves en el mismo dispositivo tiene la misma seguridad que una cartera de Groestlcoin convencional.",
     "ms_help_title3": "Copias de seguridad de la Vault",

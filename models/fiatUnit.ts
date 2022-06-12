@@ -1,7 +1,7 @@
 import untypedFiatUnit from './fiatUnits.json';
 
 export const FiatUnitSource = {
-  CoinDesk: 'CoinDesk',
+  CoinGecko: 'CoinGecko',
   Yadio: 'Yadio',
   BitcoinduLiban: 'BitcoinduLiban',
   Exir: 'Exir',
@@ -9,15 +9,15 @@ export const FiatUnitSource = {
 } as const;
 
 const RateExtractors = {
-  CoinDesk: async (ticker: string): Promise<number> => {
+  CoinGecko: async (ticker: string): Promise<number> => {
     let json;
     try {
-      const res = await fetch(`https://api.coindesk.com/v1/bpi/currentprice/${ticker}.json`);
+      const res = await fetch(`https://api.coingecko.com//api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false`);
       json = await res.json();
     } catch (e: any) {
       throw new Error(`Could not update rate for ${ticker}: ${e.message}`);
     }
-    let rate = json?.bpi?.[ticker]?.rate_float; // eslint-disable-line
+    let rate = json?.market_data?.current_price?.[ticker.toLowerCase()]; // eslint-disable-line
     if (!rate) throw new Error(`Could not update rate for ${ticker}: data is wrong`);
 
     rate = Number(rate);

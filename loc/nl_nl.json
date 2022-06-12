@@ -604,7 +604,7 @@
     "ms_help_title": "Hoe Multisig kluizen werken. Tips en trucs",
     "ms_help_text": "Een wallet met meerdere sleutels, om de veiligheid exponentieel te verhogen of voor gedeelde bewaring.",
     "ms_help_title1": "Meerdere apparaten worden geadviseerd",
-    "ms_help_1": "De kluis werkt met andere GRS BlueWallet-apps en PSBT-compatibele wallets, zoals Electrum-GRS, Spectre, Coldcard, Cobo-kluis, enz.",
+    "ms_help_1": "De kluis werkt met andere GRS BlueWallet-apps en PSBT-compatibele wallets, zoals Electrum-GRS.",
     "ms_help_title2": "Sleutels bewerken",
     "ms_help_2": "Je kan alle Kluissleutels op dit apparaat opslaan en ze later aanpassen of verwijderen",
     "ms_help_title3": "Kluis Back-ups",

@@ -1,21 +1,20 @@
 #!/bin/bash
 
 
-# assumes 2 env variables: KEYSTORE_FILE_HEX & KEYSTORE_PASSWORD
+# assumes 3 env variables: KEYSTORE_FILE_BASE64, KEYSTORE_PASSWORD and KEY_PASSWORD
 #
-# PS. to turn file to hex and back:
-#     $ xxd -plain test.txt > test.hex
-#     $ xxd -plain -revert test.hex test2.txt
+# PS. to turn keystore to base64 and back:
+#     $ openssl base64 -A -in hashengineering.keystore > base64file
+#     $ cat base64file | base64 -d > bluewallet-release-key.keystore
 
 
-echo $KEYSTORE_FILE_HEX > bluewallet-release-key.keystore.hex
-xxd -plain -revert bluewallet-release-key.keystore.hex > ./android/bluewallet-release-key.keystore
-rm bluewallet-release-key.keystore.hex
+echo $KEYSTORE_FILE_BASE64 > release-key.base64
+echo "$(cat release-key.base64)" | base64 -d > ./android/bluewallet-release-key.keystore
+rm release-key.base64
 
 cd android
 TIMESTAMP=$(date +%s)
 sed -i'.original'  "s/versionCode 1/versionCode $TIMESTAMP/g" app/build.gradle
 ./gradlew assembleRelease
 mv ./app/build/outputs/apk/release/app-release-unsigned.apk ./app/build/outputs/apk/release/app-release.apk
-$ANDROID_HOME/build-tools/30.0.2/apksigner sign --ks ./bluewallet-release-key.keystore   --ks-pass=pass:$KEYSTORE_PASSWORD ./app/build/outputs/apk/release/app-release.apk
-
+$ANDROID_HOME/build-tools/30.0.2/apksigner sign --ks ./bluewallet-release-key.keystore --ks-pass=pass:$KEYSTORE_PASSWORD --key-pass=pass:$KEY_PASSWORD ./app/build/outputs/apk/release/app-release.apk

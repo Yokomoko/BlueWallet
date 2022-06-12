@@ -605,7 +605,7 @@
     "ms_help_title": "Kuinka Multisig Vault toimii. Vinkit ja neuvot.",
     "ms_help_text": "Lompakko, jossa on useita avaimia, turvallisuuden eksponentiaaliseen parantamiseen tai jaettuun säilöön.",
     "ms_help_title1": "Useita laitteita suositellaan",
-    "ms_help_1": "Vault toimii muiden GRS BlueWallet-sovellusten ja PSBT-yhteensopivien lompakoiden kanssa, kuten Electrum-GRS, Spectre, Coldcard, Cobo vault jne.",
+    "ms_help_1": "Vault toimii muiden GRS BlueWallet-sovellusten ja PSBT-yhteensopivien lompakoiden kanssa, kuten Electrum-GRS,.",
     "ms_help_title2": "Avainten Muokkaus",
     "ms_help_2": "Voit luoda holvi-avaimia tässä laitteessa. Ja sitten myöhemmin poistaa ja muokate niitä. Kaikkien avaimien pitäminen samassa laitteessa on yhtä turvallista kuin tavallisessa Groestlcoin-lompakossakin.",
     "ms_help_title3": "Vault-varmuuskopiot",

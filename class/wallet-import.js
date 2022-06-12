@@ -1,5 +1,5 @@
 import wif from 'wifgrs';
-import bip38 from 'bip38';
+import bip38 from 'bip38grs';
 
 import {
   HDAezeedWallet,

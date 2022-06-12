@@ -506,7 +506,7 @@
     "ms_help_title": "多重簽名保管庫如何運作：提示和技巧",
     "ms_help_text": "具有多重密鑰的錢包，可提高安全性或共享保管",
     "ms_help_title1": "建議使用多個設備。",
-    "ms_help_1": "這個保管庫將與其他GRS BlueWallet應用程序和PSBT兼容的錢包配合使用，例如Electrum、Spectre、Coldcard、Cobo Vault等。",
+    "ms_help_1": "這個保管庫將與其他GRS BlueWallet應用程序和PSBT兼容的錢包配合使用，例如Electrum-GRS。",
     "ms_help_title2": "編輯密鑰",
     "ms_help_title3": "保管庫備份",
     "ms_help_title4": "匯入保管庫",
