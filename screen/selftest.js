@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, Linking } from 'react-native';
 import wif from 'wifgrs';
-import bip38 from 'bip38';
+import bip38 from 'bip38grs';
 import BIP32Factory from 'bip32grs';
 import * as ecc from 'tiny-secp256k1';
 
@@ -240,6 +240,14 @@ export default class Selftest extends Component {
             'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking',
         );
         assertStrictEqual(w._getExternalAddressByIndex(0), 'FaRzD8hmNC8BWb82gP4CtTv9WECsjDrzff', 'SLIP39 failed');
+      }
+
+      //
+
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+        assertStrictEqual(await Linking.canOpenURL('https://github.com/Groestlcoin/BlueWallet/'), true, 'Linking can not open https url');
+      } else {
+        // skipping RN-specific test'
       }
 
       //
