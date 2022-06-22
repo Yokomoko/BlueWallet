@@ -1,5 +1,5 @@
 import { SegwitBech32Wallet } from './segwit-bech32-wallet';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 
 export class TaprootWallet extends SegwitBech32Wallet {
   static type = 'taproot';

@@ -183,10 +183,10 @@
     "details_setAmount": "Получить сумму",
     "details_share": "Отправить",
     "header": "Получить",
-    "maxSats": "Максимальная сумма {max} sats",
-    "maxSatsFull": "Максимальная сумма {max} sats или {currency}",
-    "minSats": "Минимальная сумма {min} sats",
-    "minSatsFull": "Минимальная сумма {min} sats или {currency}"
+    "maxSats": "Максимальная сумма {max} gro",
+    "maxSatsFull": "Максимальная сумма {max} gro или {currency}",
+    "minSats": "Минимальная сумма {min} gro",
+    "minSatsFull": "Минимальная сумма {min} gro или {currency}"
   },
   "send": {
     "provided_address_is_invoice": "Похоже, этот адрес предназначен для Лайтнинг инвойса. Пожалуйста, перейдите в свой кошелек Лайтнинг, чтобы оплатить этот счет.",
@@ -203,7 +203,7 @@
     "create_details": "Детали",
     "create_fee": "Комиссия",
     "create_memo": "Примечание",
-    "create_satoshi_per_vbyte": "Satoshi за vByte",
+    "create_satoshi_per_vbyte": "Gro за vByte",
     "create_this_is_hex": "Это данные транзакции. Транзакция подписана и готова быть транслирована в сеть. Продолжить?",
     "create_to": "Куда",
     "create_tx_size": "Размер",
@@ -223,7 +223,7 @@
     "details_create": "Создать",
     "details_error_decode": "Нельзя декодировать Groestlcoin адрес",
     "details_fee_field_is_not_valid": "Введенная комиссия неверна",
-    "details_frozen": "{amount} BTC заморожено",
+    "details_frozen": "{amount} GRS заморожено",
     "details_next": "Дальше",
     "details_no_signed_tx": "В файле нет транзакций которые можно импортировать.",
     "details_note_placeholder": "примечание платежа",
