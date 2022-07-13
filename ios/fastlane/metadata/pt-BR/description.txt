@@ -45,9 +45,3 @@ Carteiras somente leitura para você observar seu armazenamento frio sem tocar a
 
 Lightning Network
 Carteira Lightning sem precisar configurar nada. Transações muito baratas e rápidas para ter a melhor experiência com o Groestlcoin.
-
-Compre Groestlcoin
-Faça parte da revolução financeira aberta com a habilidade de comprar Groestlcoin direto na sua carteira.
-
-Trader local
-Uma plataforma de negociação de Groestlcoin p2p que permite comprar e vender groestlcoin de outros usuários diretamente, sem terceiros.

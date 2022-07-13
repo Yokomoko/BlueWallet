@@ -17,10 +17,6 @@ const NetworkSettings = () => {
     navigate('Broadcast');
   };
 
-  const navigateToLocalTrader = () => {
-    navigate('HodlHodl', { screen: 'HodlHodl' });
-  };
-
   return (
     <SafeBlueArea>
       <ScrollView>

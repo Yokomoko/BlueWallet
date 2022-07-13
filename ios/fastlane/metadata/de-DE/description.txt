@@ -48,6 +48,3 @@ Lightning Wallet ohne Konfiguration. Lightning Bezahlungen sind konkurrenzlos g�
 
 Groestlcoin kaufen
 Die Möglichkeit groestlcoin direkt aus der Wallet zu kaufen. Groestlcoin ist offen für Alle. Nimm Teil an der Finanzrevolution.
-
-Local Trader
-Eine P2P Handelsplattform, welche es Dir ohne Drittpartei erlaubt groestlcoin sicher von Nutzern zu kaufen oder zu verkaufen.

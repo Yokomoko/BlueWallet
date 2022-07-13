@@ -48,6 +48,3 @@ Portfel Lightning nie wymaga konfiguracji. Niegodziwie tanie i szybkie transakcj
 
 Kup Groestlcoin
 Wejdź do finansowej rewolucji z możliwością kupna Groestlcoin bezpośrednio z Twojego portfela.
-
-Lokalny Handel
-Platforma handlu Groestlcoin p2p, która pozwala kupować i sprzedawać bezpośrednio z użytkownikami bez pośredników (3rd party)
