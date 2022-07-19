@@ -1,4 +1,4 @@
-Eine Funktionsreiche aber einfache Groestlcoin-Wallet mit Fokus auf Sicherheit zum Empfangen, Halten, Senden und Kaufen von groestlcoin.
+Eine Funktionsreiche und einfache Groestlcoin-Wallet mit Fokus auf Sicherheit zum Empfangen, Halten, Senden und Kaufen von groestlcoin.
 
 Bei GRS BlueWallet bist Du im Besitz der privaten Schlüssel. Eine Wallet gemacht von Nutzern für die Groestlcoin Gemeinschaft.
 
@@ -31,8 +31,7 @@ Eine Hardware-Wallet Unterstützung zur sicheren groestlcoin Verwahrung.
 2 - Auf dein Erlebnis fokussiert
 
 Die alleinige Kontrolle.
-Privatschlüssel, die nie dein Gerät verlassen.
-Die volle Kontrolle über deine Privatschlüssel.
+Du allein kontrollierst die Privatschlüssel. Sie verlassen dein Gerät nie.
 
 Anpassbare Gebühren
 Freie Gebührenwahl. Beginnend bei einem Gro.
@@ -45,6 +44,3 @@ Watch-only Wallets, damit deine Schlüssel offline und deine groestlcoin gleichz
 
 Lightning Netzwerk
 Lightning Wallet ohne Konfiguration. Lightning Bezahlungen sind konkurrenzlos günstig und verblüffend schnell.
-
-Groestlcoin kaufen
-Die Möglichkeit groestlcoin direkt aus der Wallet zu kaufen. Groestlcoin ist offen für Alle. Nimm Teil an der Finanzrevolution.
