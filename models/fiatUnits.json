@@ -287,6 +287,12 @@
       "locale": "uk-UA",
       "source": "CoinGecko"
     },
+    "UGX": {
+      "endPointKey": "UGX",
+      "symbol": "USh",
+      "locale": "en-UG",
+      "source": "CoinDesk"
+    },
     "UYU": {
       "endPointKey": "UYU",
       "symbol": "$",

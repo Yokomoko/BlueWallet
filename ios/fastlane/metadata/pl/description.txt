@@ -1,4 +1,4 @@
-Portfel Groestlcoin umożliwiający trzymanie, wysyłanie, otrzymywanie i kupowanie, ze szczególną uwagą na bezpieczeństwo i prostotę.
+Portfel, który umożliwia trzymanie, wysyłanie i przyjmowanie płatności w Groestlcoinie. Kładzie nacisk na bezpieczeństo i prostotę.
 
 W GRS BlueWallet, Ty jesteś właścicielem Twojego własnego portfela Groestlcoin. To portfel stworzony przez użytkowników Groestlcoina dla społeczności.
 
@@ -31,8 +31,7 @@ Podłącz swój portfel sprzętowy i trzymaj swoje monety w zimnym portfelu
 2 - Z uwagą na Twoje doświadczenie
 
 Ty decydujesz
-Klucze prywatne nigdy nie opuszczają twojego urządzenia.
-Ty kontrolujesz swoje klucze prywatne
+Klucze prywatne pozostają na Twoim urządzeniu. Ty sprawujesz nad nimi kontrolę.
 
 Elastyczne opłaty
 Począwszy od 1 gro. Określone przez Ciebie, użytkownika
@@ -45,6 +44,3 @@ Portfele tylko-do-wglądu pozwalają pilnować Twojego zimnego portfela bez doty
 
 Sieć Lightning
 Portfel Lightning nie wymaga konfiguracji. Niegodziwie tanie i szybkie transakcje z najlepszym doświadczeniem użytkownika.
-
-Kup Groestlcoin
-Wejdź do finansowej rewolucji z możliwością kupna Groestlcoin bezpośrednio z Twojego portfela.
