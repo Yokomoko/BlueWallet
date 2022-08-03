@@ -1,1 +1,1 @@
-groestlcoin wallet,crypto,blockchain,grs,cryptocurrency,carteira,bread,groestlcoin samourai,lightning,ethereum
+groestlcoin,carteira,carteira groestlcoin,blockchain,grs,criptomoeda,groestlcoin,groestlcoin samourai,electrum-grs,ethereum

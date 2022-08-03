@@ -1,1 +1,1 @@
-groestlcoin,portfel,portfel groestlcoin,blockchain,grs,kryptowaluty,kupić groestlcoin,samourai,electrum-grs,ethereum
+groestlcoin,portfel,portfel groestlcoinowy,blockchain,grs,kryptowaluta,groestlcoin,groestlcoin samourai,electrum-grs,ethereum
