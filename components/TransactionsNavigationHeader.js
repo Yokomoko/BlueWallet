@@ -156,13 +156,6 @@ export default class TransactionsNavigationHeader extends Component {
       text: loc.lnd.refill_external,
       icon: TransactionsNavigationHeader.actionIcons.RefillWithExternalWallet,
     },
-    /* [
-      {
-        id: TransactionsNavigationHeader.actionKeys.Exchange,
-        text: loc.lnd.exchange,
-        icon: TransactionsNavigationHeader.actionIcons.Exchange,
-      },
-    ], */
   ];
 
   render() {
