@@ -97,7 +97,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "7.19.0",
-    "@bugsnag/react-native": "7.17.3",
+    "@bugsnag/react-native": "7.17.4",
     "@bugsnag/source-maps": "2.3.1",
     "@keystonehq/bc-ur-registry": "0.5.0",
     "@ngraveio/bc-ur": "1.1.6",
@@ -125,7 +125,7 @@
     "coinselect": "3.1.13",
     "crypto-js": "4.1.1",
     "dayjs": "1.11.5",
-    "detox": "19.12.0",
+    "detox": "19.12.1",
     "ecpairgrs": "2.0.1",
     "ecurve": "1.0.6",
     "electrum-client": "https://github.com/BlueWallet/rn-electrum-client#99ebcc649d91a8dc39bea7964b02dd9ead464aa4",
