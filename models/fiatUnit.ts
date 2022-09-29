@@ -95,7 +95,7 @@ type FiatUnit = {
     endPointKey: string;
     symbol: string;
     locale: string;
-    source: 'CoinGecko' | 'Yadio' | 'Exir' | 'wazirx';
+    source: 'CoinDesk' | 'Yadio' | 'Exir' | 'wazirx';
   };
 };
 export const FiatUnit = untypedFiatUnit as FiatUnit;
