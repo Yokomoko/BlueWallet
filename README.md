@@ -90,11 +90,6 @@ npm run test
 ```
 
 
-## MOTIVATION TO BUILD IT
-
-This is a fork of https://github.com/BlueWallet/BlueWallet
-
-
 ## LICENSE
 
 MIT
