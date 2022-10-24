@@ -224,12 +224,12 @@ export class AbstractWallet {
       }
       this.secret = m[2];
 
-      if (derivationPath.startsWith("m/84'/0'/") && this.secret.toLowerCase().startsWith('xpub')) {
+      if (derivationPath.startsWith("m/84'/17'/") && this.secret.toLowerCase().startsWith('xpub')) {
         // need to convert xpub to zpub
         this.secret = this._xpubToZpub(this.secret);
       }
 
-      if (derivationPath.startsWith("m/49'/0'/") && this.secret.toLowerCase().startsWith('xpub')) {
+      if (derivationPath.startsWith("m/49'/17'/") && this.secret.toLowerCase().startsWith('xpub')) {
         // need to convert xpub to ypub
         this.secret = this._xpubToYpub(this.secret);
       }

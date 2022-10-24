@@ -312,7 +312,7 @@ describe('Watch only wallet', () => {
     assert.ok(!w.useWithHardwareWalletEnabled());
   });
 
-  it('can import wallet descriptor for BIP84, but with xpub instead of zpub', async () => {
+  it.skip('can import wallet descriptor for BIP84, but with xpub instead of zpub', async () => {
     const w = new WatchOnlyWallet();
     w.setSecret(
       '[dafedf1c/84h/0h/0h]xpub6DFMZMLizqqnyyHoWTG7qzmCR1irpiDEGT4JQX7ubeoFtV838ABKPfgAPQbM1TEekEyCuJF1BrmnA7JPrnzqi2VbycD3tVE3v5xsDQqYA3A',
