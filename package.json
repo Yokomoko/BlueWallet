@@ -54,7 +54,7 @@
     "android": "react-native run-android",
     "android:clean": "cd android;  ./gradlew clean ; cd .. ; npm run android",
     "ios": "react-native run-ios",
-    "postinstall": "rn-nodeify --install buffer,events,process,stream,util,inherits,path,assert,crypto --hack; npm run releasenotes2json; npm run branch2json; npm run podinstall",
+    "postinstall": "rn-nodeify --install buffer,events,process,stream,inherits,path,assert,crypto --hack; npm run releasenotes2json; npm run branch2json; npm run podinstall",
     "test": "npm run tslint && npm run lint && npm run unit && npm run jest",
     "jest": "jest -b tests/integration/*",
     "windowspatches": "./scripts/windows-patches.sh",
@@ -97,7 +97,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "7.19.4",
-    "@bugsnag/react-native": "7.18.0",
+    "@bugsnag/react-native": "7.18.1",
     "@bugsnag/source-maps": "2.3.1",
     "@keystonehq/bc-ur-registry": "0.5.0",
     "@ngraveio/bc-ur": "1.1.6",
@@ -184,7 +184,7 @@
     "react-native-watch-connectivity": "1.1.0",
     "react-native-webview": "11.23.1",
     "react-native-widget-center": "https://github.com/BlueWallet/react-native-widget-center#b80630cc8894ce479275d6dd3a5183f41f220237",
-    "react-native-windows": "0.70.3",
+    "react-native-windows": "0.70.4",
     "react-test-render": "1.1.2",
     "readable-stream": "3.6.0",
     "realm": "^10.20.0-beta.5",
@@ -196,7 +196,6 @@
     "stream-browserify": "3.0.0",
     "tiny-secp256k1": "1.1.6",
     "url": "0.11.0",
-    "util": "0.12.4",
     "wifgrs": "2.0.6"
   },
   "react-native": {
