@@ -263,7 +263,7 @@
     "lightning_saved": "Pengubahan oleh anda berjaya disimpan.",
     "lightning_settings": "Tetapan Lightning",
     "tor_settings": "Tetapan Tor",
-    "lightning_settings_explain": "Untuk menghubungkan nod LND anda sendiri, sila pasang LNDHub dan letakkan URL LNDHub dalam tetapan ini. Kosongkan untuk menggunakan LNDHub GRS BlueWallet (lndhub.groestlcoin.org). Sila ambil perhatian hanya dompet yang dicipta setelah perubahan disimpan akan dihubungkan kepada LNDHub tersebut.",
+    "lightning_settings_explain": "Untuk menghubungkan nod LND anda sendiri, sila pasang LNDHub dan letakkan URL LNDHub dalam tetapan ini. Kosongkan untuk menggunakan LNDHub GRS BlueWallet . Sila ambil perhatian hanya dompet yang dicipta setelah perubahan disimpan akan dihubungkan kepada LNDHub tersebut.",
     "network": "Rangkaian",
     "network_broadcast": "Siarkan Urus Niaga",
     "network_electrum": "Pelayan Electrum-GRS",
