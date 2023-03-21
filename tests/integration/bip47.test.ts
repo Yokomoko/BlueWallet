@@ -6,7 +6,7 @@ import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import BIP47Factory from '@spsina/bip47';
 import assert from 'assert';
 
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const ecc = require('tiny-secp256k1');
 const ECPair = ECPairFactory(ecc);
 
