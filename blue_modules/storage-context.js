@@ -120,6 +120,10 @@ export const BlueStorageProvider = ({ children }) => {
         setWalletTransactionUpdateStatus(WalletTransactionsStatus.ALL);
       }
       await BlueElectrum.waitTillConnected();
+      const paymentCodesStart = Date.now();
+      await fetchSenderPaymentCodes(lastSnappedTo);
+      const paymentCodesEnd = Date.now();
+      console.log('fetch payment codes took', (paymentCodesEnd - paymentCodesStart) / 1000, 'sec');
       const balanceStart = +new Date();
       await fetchWalletBalances(lastSnappedTo);
       const balanceEnd = +new Date();
@@ -201,6 +205,7 @@ export const BlueStorageProvider = ({ children }) => {
   const getTransactions = BlueApp.getTransactions;
   const isAdvancedModeEnabled = BlueApp.isAdvancedModeEnabled;
 
+  const fetchSenderPaymentCodes = BlueApp.fetchSenderPaymentCodes;
   const fetchWalletBalances = BlueApp.fetchWalletBalances;
   const fetchWalletTransactions = BlueApp.fetchWalletTransactions;
   const getBalance = BlueApp.getBalance;
@@ -214,7 +219,7 @@ export const BlueStorageProvider = ({ children }) => {
   const decryptStorage = BlueApp.decryptStorage;
   const isPasswordInUse = BlueApp.isPasswordInUse;
   const cachedPassword = BlueApp.cachedPassword;
-  const setisAdvancedModeEnabled = BlueApp.setisAdvancedModeEnabled;
+  const setIsAdvancedModeEnabled = BlueApp.setIsAdvancedModeEnabled;
   const getHodlHodlSignatureKey = BlueApp.getHodlHodlSignatureKey;
   const addHodlHodlContract = BlueApp.addHodlHodlContract;
   const getHodlHodlContracts = BlueApp.getHodlHodlContracts;
@@ -260,7 +265,7 @@ export const BlueStorageProvider = ({ children }) => {
         getHodlHodlApiKey,
         decryptStorage,
         isPasswordInUse,
-        setisAdvancedModeEnabled,
+        setIsAdvancedModeEnabled,
         setPreferredFiatCurrency,
         preferredFiatCurrency,
         setLanguage,
