@@ -182,7 +182,7 @@
     "LKR": {
         "endPointKey": "LKR",
         "locale": "si-LK",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "රු."
     },
     "MXN": {
