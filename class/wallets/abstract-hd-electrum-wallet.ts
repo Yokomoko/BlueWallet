@@ -1450,11 +1450,6 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     return AbstractHDElectrumWallet.seedToFingerprint(seed);
   }
 
-  prepareForSerialization() {
-    super.prepareForSerialization();
-    delete this._bip47_instance;
-  }
-
   /**
    * Whether BIP47 is enabled. This is per-wallet setting that can be changed, NOT a feature-flag
    * @returns boolean
@@ -1468,7 +1463,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
   }
 
   getBIP47FromSeed(): BIP47Interface {
-    if (!this._bip47_instance) {
+    if (!this._bip47_instance || !this._bip47_instance.getNotificationAddress) {
       this._bip47_instance = bip47.fromBip39Seed(this.secret, undefined, this.passphrase);
     }
 
@@ -1484,7 +1479,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
   }
 
   async fetchBIP47SenderPaymentCodes(): Promise<void> {
-    const bip47_instance = BIP47Factory(ecc).fromBip39Seed(this.secret, undefined, this.passphrase);
+    const bip47_instance = this.getBIP47FromSeed();
 
     const address = bip47_instance.getNotificationAddress();
 
