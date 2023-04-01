@@ -27,18 +27,8 @@ class WidgetAPI {
 
     var urlString: String
     switch source {
-    case "Yadio":
-      urlString = "https://api.yadio.io/json/\(endPointKey)"
-    case "YadioConvert":
-      urlString = "https://api.yadio.io/convert/1/BTC/\(endPointKey)"
-    case "Exir":
-      urlString = "https://api.exir.io/v1/ticker?symbol=btc-irt"
-    case "wazirx":
-      urlString = "https://api.wazirx.com/api/v2/tickers/btcinr"
-    case "Bitstamp":
-      urlString = "https://www.bitstamp.net/api/v2/ticker/btc\(endPointKey.lowercased())"
-      case "CoinGecko":
-      urlString = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=\(endPointKey.lowercased())"
+    case "CoinGecko":
+      urlString = "https://api.coingecko.com/api/v3/simple/price?ids=groestlcoin&vs_currencies=\(endPointKey.lowercased())"
     default:
       urlString = "https://api.coingecko.com/api/v3/coins/groestlcoin?localization=false&community_data=false&developer_data=false&sparkline=false"
     }
@@ -57,44 +47,12 @@ class WidgetAPI {
 
       var latestRateDataStore: WidgetDataStore?
       switch source {
-      case "Yadio":
-        guard let rateDict = json[endPointKey] as? [String: Any],
-              let rateDouble = rateDict["price"] as? Double,
-              let lastUpdated = json["timestamp"] as? Int
-        else { break }
-        let unix = Double(lastUpdated / 1_000)
-        let lastUpdatedString = ISO8601DateFormatter().string(from: Date(timeIntervalSince1970: unix))
-        latestRateDataStore = WidgetDataStore(rate: String(rateDouble), lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       case "CoinGecko":
-        guard let rateDict = json["bitcoin"] as? [String: Any],
+        guard let rateDict = json["groestlcoin"] as? [String: Any],
               let rateDouble = rateDict[endPointKey.lowercased()] as? Double
         else { break }
         let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
         latestRateDataStore = WidgetDataStore(rate: String(rateDouble), lastUpdate: lastUpdatedString, rateDouble: rateDouble)
-      case "YadioConvert":
-        guard let rateDict = json as? [String: Any],
-              let rateDouble = rateDict["rate"] as? Double,
-              let lastUpdated = json["timestamp"] as? Int
-        else { break }
-        let unix = Double(lastUpdated / 1_000)
-        let lastUpdatedString = ISO8601DateFormatter().string(from: Date(timeIntervalSince1970: unix))
-        latestRateDataStore = WidgetDataStore(rate: String(rateDouble), lastUpdate: lastUpdatedString, rateDouble: rateDouble)
-      case "Exir":
-        guard let rateDouble = json["last"] as? Double else { break }
-        let rateString = String(rateDouble)
-        let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
-        latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
-      case "Bitstamp":
-        guard let rateString = json["last"] as? String, let rateDouble = Double(rateString) else { break }
-        let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
-        latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
-      case "wazirx":
-        guard let tickerDict = json["ticker"] as? [String: Any],
-              let rateString = tickerDict["buy"] as? String,
-              let rateDouble = Double(rateString)
-        else { break }
-        let lastUpdatedString = ISO8601DateFormatter().string(from: Date())
-        latestRateDataStore = WidgetDataStore(rate: rateString, lastUpdate: lastUpdatedString, rateDouble: rateDouble)
       default:
         guard let market_data = json["market_data"] as? Dictionary<String, Any>,
               let current_price = market_data["current_price"] as? Dictionary<String, Any>,
