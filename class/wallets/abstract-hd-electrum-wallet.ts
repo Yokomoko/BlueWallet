@@ -3,12 +3,14 @@ import * as bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
 import b58 from 'bs58grscheck';
 import BIP32Factory, { BIP32Interface } from 'bip32grs';
-import * as ecc from 'tiny-secp256k1';
-import BIP47Factory, { BIP47Interface } from '@spsina/bip47';
-import { ECPairFactory } from 'ecpairgrs';
+
 import { ECPairInterface } from 'ecpairgrs/src/ecpair';
 import { Psbt, Transaction as BTransaction } from 'groestlcoinjs-lib';
 import { CoinSelectReturnInput, CoinSelectTarget } from 'coinselect';
+import ecc from '../../blue_modules/noble_ecc';
+
+import BIP47Factory, { BIP47Interface } from '@spsina/bip47';
+import { ECPairFactory } from 'ecpairgrs';
 
 import { randomBytes } from '../rng';
 import { AbstractHDWallet } from './abstract-hd-wallet';
@@ -1501,7 +1503,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
 
         // final check if PC is even valid (could've been constructed by a buggy code, and our code would crash with that):
         try {
-          BIP47Factory(ecc).fromPaymentCode(paymentCode);
+          bip47.fromPaymentCode(paymentCode);
         } catch (_) {
           continue;
         }

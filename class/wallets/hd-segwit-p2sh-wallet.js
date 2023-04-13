@@ -1,7 +1,7 @@
 import b58 from 'bs58grscheck';
 import { AbstractHDElectrumWallet } from './abstract-hd-electrum-wallet';
 import BIP32Factory from 'bip32grs';
-import * as ecc from 'tiny-secp256k1';
+import ecc from '../../blue_modules/noble_ecc';
 const bip32 = BIP32Factory(ecc);
 const bitcoin = require('groestlcoinjs-lib');
 

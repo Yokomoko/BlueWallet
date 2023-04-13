@@ -1,6 +1,6 @@
 import { LegacyWallet } from '../../class';
 import { ECPairFactory } from 'ecpairgrs';
-const ecc = require('tiny-secp256k1');
+import ecc from '../../blue_modules/noble_ecc';
 const ECPair = ECPairFactory(ecc);
 const bitcoin = require('groestlcoinjs-lib');
 const assert = require('assert');

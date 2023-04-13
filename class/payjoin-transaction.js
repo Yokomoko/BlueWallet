@@ -2,7 +2,7 @@ import * as bitcoin from 'groestlcoinjs-lib';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import alert from '../components/Alert';
 import { ECPairFactory } from 'ecpairgrs';
-const ecc = require('tiny-secp256k1');
+import ecc from '../blue_modules/noble_ecc';
 const ECPair = ECPairFactory(ecc);
 
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
