@@ -8,8 +8,8 @@
 import createHash from 'create-hash';
 import { createHmac } from 'crypto';
 import * as necc from '@noble/secp256k1';
-import { TinySecp256k1Interface } from 'ecpair/src/ecpair';
-import { TinySecp256k1Interface as TinySecp256k1InterfaceBIP32 } from 'bip32/types/bip32';
+import { TinySecp256k1Interface } from 'ecpairgrs/src/ecpair';
+import { TinySecp256k1Interface as TinySecp256k1InterfaceBIP32 } from 'bip32grs/types/bip32';
 
 export interface TinySecp256k1InterfaceExtended {
   pointMultiply(p: Uint8Array, tweak: Uint8Array, compressed?: boolean): Uint8Array | null;

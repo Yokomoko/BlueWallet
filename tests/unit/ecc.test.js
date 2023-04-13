@@ -1,5 +1,5 @@
 import ecc from '../../blue_modules/noble_ecc';
-import { ECPairFactory } from 'ecpair';
+import { ECPairFactory } from 'ecpairgrs';
 const assert = require('assert');
 
 const h = hex => Buffer.from(hex, 'hex');
