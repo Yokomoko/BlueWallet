@@ -3,10 +3,10 @@ import { LightningCustodianWallet } from './lightning-custodian-wallet';
 import { randomBytes } from '../rng';
 import * as bip39 from 'bip39';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
-import bolt11 from 'bolt11';
+import bolt11 from 'bolt11grs';
 import { SegwitBech32Wallet } from './segwit-bech32-wallet';
 import alert from '../../components/Alert';
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 
 export class LightningLdkWallet extends LightningCustodianWallet {
   static type = 'lightningLdk';
@@ -19,13 +19,10 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   private _lastTimeBlockchainCheckedTs: number = 0;
   private _unwrapFirstExternalAddressFromMnemonicsCache: string = '';
   private static _predefinedNodes: Record<string, string> = {
-    Bitrefill: '03d607f3e69fd032524a867b288216bfab263b6eaee4e07783799a6fe69bb84fac@3.237.23.179:9735',
-    'OpenNode.com': '03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e@3.132.230.42:9735',
-    Fold: '02816caed43171d3c9854e3b0ab2cf0c42be086ff1bd4005acc2a5f7db70d83774@35.238.153.25:9735',
-    'Moon (paywithmoon.com)': '025f1456582e70c4c06b61d5c8ed3ce229e6d0db538be337a2dc6d163b0ebc05a5@52.86.210.65:9735',
-    'coingate.com': '0242a4ae0c5bef18048fbecf995094b74bfb0f7391418d71ed394784373f41e4f3@3.124.63.44:9735',
-    'Blockstream Store': '02df5ffe895c778e10f7742a6c5b8a0cefbe9465df58b92fadeb883752c8107c8f@35.232.170.67:9735',
-    ACINQ: '03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f@3.33.236.230:9735',
+    'grspay.com': '02c0ef8fad8a9d3176424826367a7f9470feb2ad86fa4634d9454190eda876d0ad@104.236.133.196:9735',
+    'swaps.groestlcoin.org': '02f31ea82a5c07387abec0274b457db35355ef874e21bb2fdc4f4abb3f5d0d82ce@104.236.15.120:9735',
+    'lndhub.groestlcoin.org': '02cfc4c212e4183ca8bd8bd21e18996603f69706553d5f4e1464fdc6cb612b433b@104.236.14.225:9735',
+    'olympus1.groestlcoin.org': '0226cbef3bef64405046de9fb182acb0fd344e535b524c6e98d2a9131235b8390b@82.196.11.189:9735',
   };
 
   static getPredefinedNodes() {
@@ -141,7 +138,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
     }
 
     // doing actual fetch and filling cache:
-    const response = await fetch(`https://1ml.com/node/${pubkey}/json`);
+    const response = await fetch(`https://groestlcoin.org/node/${pubkey}/json`);
     const json = await response.json();
     if (json && json.addresses && Array.isArray(json.addresses)) {
       for (const address of json.addresses) {
@@ -330,7 +327,7 @@ export class LightningLdkWallet extends LightningCustodianWallet {
   async walletBalance() {
     let confirmedSat = 0;
     if (this._unwrapFirstExternalAddressFromMnemonicsCache) {
-      const response = await fetch('https://blockstream.info/api/address/' + this._unwrapFirstExternalAddressFromMnemonicsCache + '/utxo');
+      const response = await fetch('https://esplora.groestlcoin.org/api/address/' + this._unwrapFirstExternalAddressFromMnemonicsCache + '/utxo');
       const json = await response.json();
       if (json && Array.isArray(json)) {
         for (const utxo of json) {
