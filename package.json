@@ -1,6 +1,6 @@
 {
   "name": "bluewallet",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.20.0",
-    "@bugsnag/react-native": "7.19.0",
+    "@bugsnag/react-native": "7.20.2",
     "@bugsnag/source-maps": "2.3.1",
     "@keystonehq/bc-ur-registry": "0.5.4",
     "@ngraveio/bc-ur": "1.1.6",
@@ -140,7 +140,7 @@
     "junderw-crc32c": "1.2.0",
     "lottie-ios": "3.4.4",
     "lottie-react-native": "5.1.5",
-    "metro-react-native-babel-preset": "0.76.2",
+    "metro-react-native-babel-preset": "0.76.3",
     "path-browserify": "1.0.1",
     "payjoin-client": "1.0.1",
     "process": "0.11.10",
@@ -177,7 +177,7 @@
     "react-native-quick-actions": "0.3.13",
     "react-native-randombytes": "3.6.1",
     "react-native-rate": "1.2.12",
-    "react-native-reanimated": "2.15.0",
+    "react-native-reanimated": "2.17.0",
     "react-native-safe-area-context": "3.4.1",
     "react-native-screens": "3.20.0",
     "react-native-secure-key-store": "https://github.com/BlueWallet/react-native-secure-key-store#2076b48",
