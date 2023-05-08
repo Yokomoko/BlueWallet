@@ -185,8 +185,26 @@ async function connectMain() {
       mainConnected = true;
       wasConnectedAtLeastOnce = true;
       if (ver[0].startsWith('ElectrumPersonalServer') || ver[0].startsWith('electrs') || ver[0].startsWith('Fulcrum')) {
-        // TODO: once they release support for batching - disable batching only for lower versions
         disableBatching = true;
+
+        // exeptions for versions:
+        const [electrumImplementation, electrumVersion] = ver[0].split(' ');
+        switch (electrumImplementation) {
+          case 'electrs':
+            if (semVerToInt(electrumVersion) >= semVerToInt('0.9.0')) {
+              disableBatching = false;
+            }
+            break;
+          case 'electrs-esplora':
+            // its a different one, and it does NOT support batching
+            // nop
+            break;
+          case 'Fulcrum':
+            if (semVerToInt(electrumVersion) >= semVerToInt('1.9.0')) {
+              disableBatching = false;
+            }
+            break;
+        }
       }
       const header = await mainClient.blockchainHeaders_subscribe();
       if (header && header.height) {
@@ -733,7 +751,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
 
   // in groestlcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
   for (const txid of Object.keys(ret) ?? []) {
-    for (const vout of ret[txid].vout ?? []) {
+    for (const vout of ret[txid]?.vout ?? []) {
       if (vout?.scriptPubKey?.address) vout.scriptPubKey.addresses = [vout.scriptPubKey.address];
     }
   }
@@ -1010,6 +1028,17 @@ const splitIntoChunks = function (arr, chunkSize) {
     groups.push(arr.slice(i, i + chunkSize));
   }
   return groups;
+};
+
+const semVerToInt = function (semver) {
+  if (!semver) return 0;
+  if (semver.split('.').length !== 3) return 0;
+
+  const ret = semver.split('.')[0] * 1000000 + semver.split('.')[1] * 1000 + semver.split('.')[2] * 1;
+
+  if (isNaN(ret)) return 0;
+
+  return ret;
 };
 
 function txhexToElectrumTransaction(txhex) {
