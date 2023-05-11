@@ -262,14 +262,14 @@ class BlueURDecoder extends URDecoder {
         result.MasterFingerprint = cryptoAccount.getMasterFingerprint().toString('hex').toUpperCase();
         result.AccountKeyPath = derivationPath;
 
-        if (derivationPath.startsWith("m/49'/0'/")) {
+        if (derivationPath.startsWith("m/49'/17'/")) {
           // converting to ypub
           let data = b58.decode(result.ExtPubKey);
           data = data.slice(4);
           result.ExtPubKey = b58.encode(Buffer.concat([Buffer.from('049d7cb2', 'hex'), data]));
         }
 
-        if (derivationPath.startsWith("m/44'/0'/")) {
+        if (derivationPath.startsWith("m/44'/17'/")) {
           // converting to xpub
           let data = b58.decode(result.ExtPubKey);
           data = data.slice(4);
