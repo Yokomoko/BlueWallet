@@ -389,7 +389,7 @@ describe('import procedure', () => {
   it('can import watch-only Cobo vault export', async () => {
     const store = createStore();
     const { promise } = startImport(
-      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXsEerF4","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/0\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
+      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXsEerF4","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/17\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
       false,
       false,
       ...store.callbacks,
@@ -397,12 +397,47 @@ describe('import procedure', () => {
     await promise;
     assert.strictEqual(store.state.wallets[0].type, WatchOnlyWallet.type);
     assert.strictEqual(store.state.wallets[0].getDerivationPath(), "m/84'/17'/0'");
+    assert.strictEqual(store.state.wallets[0].getMasterFingerprintHex(), '7d2f0272');
+  });
+
+  it('can import watch-only Cobo vault export', async () => {
+    const store = createStore();
+    const { promise } = startImport(
+      `[{"ExtPubKey":"zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/84'/17'/0'"},{"ExtPubKey":"ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf663zsP","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/49'/0'/0'"},{"ExtPubKey":"xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39T9nMdj","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/44'/17'/0'"}]`,
+      false,
+      false,
+      ...store.callbacks,
+    );
+    await promise;
+    assert.strictEqual(store.state.wallets[0].type, WatchOnlyWallet.type);
+    assert.strictEqual(store.state.wallets[0].getDerivationPath(), "m/84'/17'/0'");
+    assert.strictEqual(store.state.wallets[0].getMasterFingerprintHex(), '73c5da0a');
+    assert.strictEqual(
+      store.state.wallets[0].getSecret(),
+      'zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs',
+    );
+
+    assert.strictEqual(store.state.wallets[1].type, WatchOnlyWallet.type);
+    assert.strictEqual(store.state.wallets[1].getDerivationPath(), "m/49'/17'/0'");
+    assert.strictEqual(store.state.wallets[1].getMasterFingerprintHex(), '73c5da0a');
+    assert.strictEqual(
+      store.state.wallets[1].getSecret(),
+      'ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf663zsP',
+    );
+
+    assert.strictEqual(store.state.wallets[2].type, WatchOnlyWallet.type);
+    assert.strictEqual(store.state.wallets[2].getDerivationPath(), "m/44'/17'/0'");
+    assert.strictEqual(store.state.wallets[2].getMasterFingerprintHex(), '73c5da0a');
+    assert.strictEqual(
+      store.state.wallets[2].getSecret(),
+      'xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39T9nMdj',
+    );
   });
 
   it('can import watch-only Keystone vault export', async () => {
     const store = createStore();
     const { promise } = startImport(
-      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigRFhKB8Q","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/0\'/0\'"}',
+      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigRFhKB8Q","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/17\'/0\'"}',
       false,
       false,
       ...store.callbacks,
