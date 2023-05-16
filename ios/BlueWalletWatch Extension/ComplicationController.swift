@@ -10,35 +10,35 @@ import ClockKit
 
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
-  
+
   // MARK: - Timeline Configuration
-  
+
   func getSupportedTimeTravelDirections(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimeTravelDirections) -> Void) {
     handler([])
   }
-  
+
   func getTimelineStartDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
     handler(nil)
   }
-  
+
   @available(watchOSApplicationExtension 7.0, *)
   func complicationDescriptors() async -> [CLKComplicationDescriptor] {
     return  [CLKComplicationDescriptor(
-      identifier: "io.bluewallet.bluewallet",
+      identifier: "org.groestlcoin.bluewallet123",
       displayName: "Market Price",
       supportedFamilies: CLKComplicationFamily.allCases)]
   }
-  
+
   func getTimelineEndDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
     handler(nil)
   }
-  
+
   func getPrivacyBehavior(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void) {
     handler(.showOnLockScreen)
   }
-  
+
   // MARK: - Timeline Population
-  
+
   func getCurrentTimelineEntry(
     for complication: CLKComplication,
     withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void)
@@ -67,10 +67,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       currencySymbol = fiatUnit(currency: "USD")!.symbol
       date = Date()
     }
-    
+
     let line2Text = CLKSimpleTextProvider(text:currencySymbol)
     let line1SmallText = CLKSimpleTextProvider(text: valueSmallLabel)
-    
+
     switch complication.family {
     case .circularSmall:
       let template = CLKComplicationTemplateCircularSmallStackText()
@@ -87,7 +87,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       }
       entry = CLKComplicationTimelineEntry(date: date, complicationTemplate: template)
       handler(entry)
-      
+
     case .utilitarianSmall:
       let template = CLKComplicationTemplateUtilitarianSmallRingImage()
       template.imageProvider = CLKImageProvider(onePieceImage: UIImage(named: "Complication/Utilitarian")!)
@@ -187,7 +187,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
       fatalError()
     }
   }
-  
+
 }
 
 func getTimelineEntries(for complication: CLKComplication, before date: Date, limit: Int, withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
