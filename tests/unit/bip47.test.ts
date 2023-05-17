@@ -3,7 +3,7 @@ import ecc from 'tiny-secp256k1';
 import assert from 'assert';
 
 import { HDSegwitBech32Wallet, WatchOnlyWallet } from '../../class';
-import { ECPairFactory } from 'ecpair';
+import { ECPairFactory } from 'ecpairgrs';
 const bitcoin = require('groestlcoinjs-lib');
 
 const ECPair = ECPairFactory(ecc);

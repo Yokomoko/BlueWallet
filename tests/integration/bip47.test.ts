@@ -1,5 +1,5 @@
 // import assert from 'assert';
-import { ECPairFactory } from 'ecpair';
+import { ECPairFactory } from 'ecpairgrs';
 
 import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet } from '../../class';
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
