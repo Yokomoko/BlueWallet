@@ -1343,7 +1343,7 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
       return false;
     }
     // only check BIP47 if derivation path is regular, otherwise too many wallets will be found
-    if (!["m/84'/0'/0'", "m/44'/0'/0'", "m/49'/0'/0'"].includes(this.getDerivationPath() as string)) {
+    if (!["m/84'/17'/0'", "m/44'/17'/0'", "m/49'/17'/0'"].includes(this.getDerivationPath() as string)) {
       return false;
     }
 

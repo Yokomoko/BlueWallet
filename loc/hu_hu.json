@@ -435,7 +435,7 @@
     "reorder_instructions": "Érintse meg és tartsa lenyomva, hogy át húzzhassa a listán.",
     "please_continue_scanning": "Kérem szkenneljen folyamatosan.",
     "select_no_bitcoin": "Jelenleg nincs elérhető Groestlcoin tárca.",
-    "select_no_bitcoin_exp": "A Lightning tárca feltöltéséhez Groestlcoin tárcára van szükség. Készíts vagy importálj egy Bitcoin tárcát.",
+    "select_no_bitcoin_exp": "A Lightning tárca feltöltéséhez Groestlcoin tárcára van szükség. Készíts vagy importálj egy Groestlcoin tárcát.",
     "select_wallet": "Válassz tárcát",
     "xpub_copiedToClipboard": "Vágólapra másolva",
     "pull_to_refresh": "Húzza le a frissítéshez",

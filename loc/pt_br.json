@@ -561,7 +561,7 @@
   },
   "addresses": {
     "sign_title": "Assinar/Verificar Mensagem",
-    "sign_help": "Aqui você pode criar ou verificar uma assinatura realizada por um endereço Bitcoin",
+    "sign_help": "Aqui você pode criar ou verificar uma assinatura realizada por um endereço Groestlcoin",
     "sign_sign": "Assinar",
     "sign_verify": "Verificar",
     "sign_signature_correct": "Verificação concluída!",

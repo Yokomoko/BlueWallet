@@ -561,7 +561,7 @@
   },
   "addresses": {
     "sign_title": "Allekirjoita/Varmenna viesti",
-    "sign_help": "Täällä voit luoda tai varmentaa Bitcoin-osoitteeseen perustuvan kryptografisen allekirjoituksen.",
+    "sign_help": "Täällä voit luoda tai varmentaa Groestlcoin-osoitteeseen perustuvan kryptografisen allekirjoituksen.",
     "sign_sign": "Allekirjoita",
     "sign_verify": "Varmenna",
     "sign_signature_correct": "Varmennus onnistui!",
