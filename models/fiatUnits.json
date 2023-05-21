@@ -11,12 +11,6 @@
         "source": "CoinGecko",
         "symbol": "د.إ."
     },
-    "ANG": {
-        "endPointKey": "ANG",
-        "locale": "en-SX",
-        "source": "CoinGecko",
-        "symbol": "ƒ"
-    },
     "ARS": {
         "endPointKey": "ARS",
         "locale": "es-AR",
@@ -28,12 +22,6 @@
         "locale": "en-AU",
         "source": "CoinGecko",
         "symbol": "$"
-    },
-    "AWG": {
-        "endPointKey": "AWG",
-        "locale": "nl-AW",
-        "source": "CoinGecko",
-        "symbol": "ƒ"
     },
     "BHD": {
         "endPointKey": "BHD",
@@ -71,12 +59,6 @@
         "source": "CoinGecko",
         "symbol": "¥"
     },
-    "COP": {
-        "endPointKey": "COP",
-        "locale": "es-CO",
-        "source": "CoinGecko",
-        "symbol": "$"
-    },
     "CZK": {
         "endPointKey": "CZK",
         "locale": "cs-CZ",
@@ -100,12 +82,6 @@
         "locale": "en-GB",
         "source": "CoinGecko",
         "symbol": "£"
-    },
-    "HRK": {
-        "endPointKey": "HRK",
-        "locale": "hr-HR",
-        "source": "CoinGecko",
-        "symbol": "HRK"
     },
     "HUF": {
         "endPointKey": "HUF",
@@ -131,35 +107,11 @@
         "source": "CoinGecko",
         "symbol": "₹"
     },
-    "IRR": {
-        "endPointKey": "IRR",
-        "locale": "fa-IR",
-        "source": "CoinGecko",
-        "symbol": "﷼"
-    },
-    "IRT": {
-        "endPointKey": "IRT",
-        "locale": "fa-IR",
-        "source": "CoinGecko",
-        "symbol": "تومان"
-    },
-    "ISK": {
-        "endPointKey": "ISK",
-        "locale": "is-IS",
-        "source": "CoinGecko",
-        "symbol": "kr"
-    },
     "JPY": {
         "endPointKey": "JPY",
         "locale": "ja-JP",
         "source": "CoinGecko",
         "symbol": "¥"
-    },
-    "KES": {
-        "endPointKey": "KES",
-        "locale": "en-KE",
-        "source": "CoinGecko",
-        "symbol": "Ksh"
     },
     "KRW": {
         "endPointKey": "KRW",
@@ -172,12 +124,6 @@
         "locale": "ar-KW",
         "source": "CoinGecko",
         "symbol": "د.ك."
-    },
-    "LBP": {
-        "endPointKey": "LBP",
-        "locale": "ar-LB",
-        "source": "CoinGecko",
-        "symbol": "ل.ل."
     },
     "LKR": {
         "endPointKey": "LKR",
@@ -197,12 +143,6 @@
         "source": "CoinGecko",
         "symbol": "RM"
     },
-    "MZN": {
-        "endPointKey": "MZN",
-        "locale": "seh-MZ",
-        "source": "CoinGecko",
-        "symbol": "MTn"
-    },
     "NGN": {
         "endPointKey": "NGN",
         "locale": "en-NG",
@@ -221,12 +161,6 @@
         "source": "CoinGecko",
         "symbol": "$"
     },
-    "OMR": {
-        "endPointKey": "OMR",
-        "locale": "ar-OM",
-        "source": "CoinGecko",
-        "symbol": "ر.ع."
-    },
     "PHP": {
         "endPointKey": "PHP",
         "locale": "en-PH",
@@ -238,12 +172,6 @@
         "locale": "pl-PL",
         "source": "CoinGecko",
         "symbol": "zł"
-    },
-    "QAR": {
-        "endPointKey": "QAR",
-        "locale": "ar-QA",
-        "source": "CoinGecko",
-        "symbol": "ر.ق."
     },
     "RUB": {
         "endPointKey": "RUB",
@@ -287,38 +215,14 @@
         "source": "CoinGecko",
         "symbol": "NT$"
     },
-    "TZS": {
-        "endPointKey": "TZS",
-        "locale": "en-TZ",
-        "source": "CoinGecko",
-        "symbol": "TSh"
-    },
     "UAH": {
         "endPointKey": "UAH",
         "locale": "uk-UA",
         "source": "CoinGecko",
         "symbol": "₴"
     },
-    "UGX": {
-        "endPointKey": "UGX",
-        "locale": "en-UG",
-        "source": "CoinGecko",
-        "symbol": "USh"
-    },
-    "UYU": {
-        "endPointKey": "UYU",
-        "locale": "es-UY",
-        "source": "CoinGecko",
-        "symbol": "$"
-    },
     "VEF": {
         "endPointKey": "VEF",
-        "locale": "es-VE",
-        "source": "CoinGecko",
-        "symbol": "Bs."
-    },
-    "VES": {
-        "endPointKey": "VES",
         "locale": "es-VE",
         "source": "CoinGecko",
         "symbol": "Bs."
