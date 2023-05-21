@@ -142,7 +142,7 @@ describe('BlueElectrum', () => {
 
   // skipped because requires fresh address with pending txs every time
   it.skip('BlueElectrum can do getMempoolTransactionsByAddress()', async function () {
-    const txs = await BlueElectrum.getMempoolTransactionsByAddress('bc1qp33en9mnw277c9vz5fz9vcu666cvervdnk02327wwph97hdjurqqxtl03c');
+    const txs = await BlueElectrum.getMempoolTransactionsByAddress('grs1qp33en9mnw277c9vz5fz9vcu666cvervdnk02327wwph97hdjurqqfsqr7u');
     assert.ok(txs.length > 0);
     assert.ok(txs[0].tx_hash);
     assert.ok(txs[0].fee);

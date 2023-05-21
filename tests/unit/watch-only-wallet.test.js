@@ -329,7 +329,7 @@ describe('Watch only wallet', () => {
       'zpub6rutAggZJCvkgZg3BAqNGAxCkx1khxCE6g6jyJugMfZ1zgkVdUWSdnzSRpWX1GYVZXCpQFS87BUsvgXXJBpsJVroiHbu4Js2TY69zbWcTNb',
     );
 
-    assert.strictEqual(w._getExternalAddressByIndex(0), 'bc1q68y6r45k4kvxe42xl37dgjueg2suqwnh4ze0sr');
+    assert.strictEqual(w._getExternalAddressByIndex(0), 'grs1q68y6r45k4kvxe42xl37dgjueg2suqwnhgn9wfz');
 
     assert.ok(!w.useWithHardwareWalletEnabled());
   });

@@ -34,11 +34,11 @@ describe('HDLegacyBreadwalletWallet', () => {
 
     assert.strictEqual(
       hdBread.getXpub(),
-      'xpub68hPk9CrHimZMBQEja43qWRC2TuXmCDdgZcR5YMebr38XatUEPu2Q2oaBViSMshDcyuMDGkGbTS2aqNHFKdcN1sFWaZgK6SLg84dtN7Ym64',
+      'xpub68hPk9CrHimZMBQEja43qWRC2TuXmCDdgZcR5YMebr38XatUEPu2Q2oaBViSMshDcyuMDGkGbTS2aqNHFKdcN1sFWaZgK6SLg84dtMn5LLF',
     );
 
-    assert.ok(hdBread.getAllExternalAddresses().includes('1M1UphJDb1mpXV3FVEg6b2qqaBieNuaNrt'));
-    assert.ok(hdBread.getAllExternalAddresses().includes('bc1qh0vtrnjn7zs99j4n6xaadde95ctnnvegh9l2jn'));
+    assert.ok(hdBread.getAllExternalAddresses().includes('FqBCGc2b9WTMy64NNLfa3YeAELzbvbpKZZ'));
+    assert.ok(hdBread.getAllExternalAddresses().includes('grs1qh0vtrnjn7zs99j4n6xaadde95ctnnveg25rttj'));
   });
 
   it('Can use french seed', async () => {

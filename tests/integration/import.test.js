@@ -76,7 +76,7 @@ describe('import procedure', () => {
 
   it('can be stopped', async () => {
     const store = createStore();
-    const { promise, stop } = startImport('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyMDRjnv', false, false, ...store.callbacks);
+    const { promise, stop } = startImport('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyM2skod', false, false, ...store.callbacks);
     stop();
     await assert.doesNotReject(async () => await promise);
     const imprt = await promise;
@@ -105,7 +105,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDSegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qth9qxvwvdthqmkl6x586ukkq8zvumd38nxr08l');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'grs1qth9qxvwvdthqmkl6x586ukkq8zvumd38whlw77');
   });
 
   it('can import BIP84 with passphrase', async () => {
@@ -118,15 +118,15 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDSegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qe8q660wfj6uvqg7zyn86jcsux36natklqnfdrc');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'grs1qe8q660wfj6uvqg7zyn86jcsux36natklaz4v6e');
   });
 
   it('can import Legacy', async () => {
     const store = createStore();
-    const { promise } = startImport('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyMDRjnv', false, false, ...store.callbacks);
+    const { promise } = startImport('KztVRmc2EJJBHi599mCdXrxMTsNsGy3NUjc3Fb3FFDSMYyM2skod', false, false, ...store.callbacks);
     await promise;
     assert.strictEqual(store.state.wallets[0].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), '1AhcdMCzby4VXgqrexuMfh7eiSprRFtN78');
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'FesL5FwNATk2yHryY4tq8CuyNc6p3ctd6S');
   });
 
   it('can import P2SH Segwit', async () => {
@@ -134,31 +134,31 @@ describe('import procedure', () => {
     const { promise } = startImport('L3NxFnYoBGjJ5PhxrxV6jorvjnc8cerYJx71vXU6ta8BXQxHVZya', false, false, ...store.callbacks);
     await promise;
     assert.strictEqual(store.state.wallets[0].type, SegwitP2SHWallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), '3KM9VfdsDf9uT7uwZagoKgVn8z35m9CtSM');
+    assert.strictEqual(store.state.wallets[0].getAddress(), '3KM9VfdsDf9uT7uwZagoKgVn8z35iBK2sH');
     assert.strictEqual(store.state.wallets[1].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[1].getAddress(), '1L7AmTTKbAAefBe93gJcFRTH9fdfhkMdHt');
+    assert.strictEqual(store.state.wallets[1].getAddress(), 'FpGtDNBh9erC6nfFvnJ5hwFbopudPnPFWW');
   });
 
   it('can import Bech32 Segwit', async () => {
     const store = createStore();
-    const { promise } = startImport('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSvsDfxZ', false, false, ...store.callbacks);
+    const { promise } = startImport('L1T6FfKpKHi8JE6eBKrsXkenw34d5FfFzJUZ6dLs2utxkSwQHDyp', false, false, ...store.callbacks);
     await promise;
     assert.strictEqual(store.state.wallets[0].type, SegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), 'bc1q763rf54hzuncmf8dtlz558uqe4f247mq39rjvr');
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'grs1q763rf54hzuncmf8dtlz558uqe4f247mqv5ln4z');
     assert.strictEqual(store.state.wallets[1].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[1].getAddress(), '1PV5YV6UWWL6rJuKsNH5uY75E9377hFFWn');
+    assert.strictEqual(store.state.wallets[1].getAddress(), 'FsenzPpr511eHuvSkUGZN3uPtJK4gdZQ7i');
   });
 
   it('can import Legacy/P2SH/Bech32 from an empty wallet', async () => {
     const store = createStore();
-    const { promise } = startImport('L36mabzoQyMZoHHsBFVNB7PUBXgXTynwY6yR7kYZ82EkS7oejVp2', false, false, ...store.callbacks);
+    const { promise } = startImport('L36mabzoQyMZoHHsBFVNB7PUBXgXTynwY6yR7kYZ82EkS7q2o3ks', false, false, ...store.callbacks);
     await promise;
     assert.strictEqual(store.state.wallets[0].type, SegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), 'bc1q8dkdgpaq9sd2xwptsjhe7krwp0k595w0hdtkfr');
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'grs1q8dkdgpaq9sd2xwptsjhe7krwp0k595w02uhhsz');
     assert.strictEqual(store.state.wallets[1].type, SegwitP2SHWallet.type);
-    assert.strictEqual(store.state.wallets[1].getAddress(), '3QNykAevvcnyw8S85wn4U8tsH2nksRMEKr');
+    assert.strictEqual(store.state.wallets[1].getAddress(), '3QNykAevvcnyw8S85wn4U8tsH2nkpY9VB9');
     assert.strictEqual(store.state.wallets[2].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[2].getAddress(), '16RDEqXtDmZjm8f4s6Uf3EHgjCpsSqB2zM');
+    assert.strictEqual(store.state.wallets[2].getAddress(), 'FaavgkGFnGFHCjgBkCU8Vk61PN6q85XLvm');
   });
 
   it('can import BIP44', async () => {
@@ -171,7 +171,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDLegacyP2PKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '1EgDbwf5nXp9knoaWW6nV6N91EK3EFQ5vC');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'Fiqw3rPTM2VhCPphPc6FwcATfPazqP56aA');
   });
 
   it('can import BIP44 with mnemonic in french', async () => {
@@ -184,7 +184,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDLegacyP2PKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '1JFdzwd8SqFn5LeeiDKcbYUfXxvButqXgX');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'FnRMSrMW1KwKWwfmbKK644GzC8C9WFfhKV');
   });
 
   it('can import BIP49', async () => {
@@ -197,7 +197,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDSegwitP2SHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '3EoqYYp7hQSHn5nHqRtWzkgqmK3cYrMztd');
   });
 
   it('can import HD Legacy Electrum (BIP32 P2PKH)', async () => {
@@ -210,7 +210,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDLegacyElectrumSeedP2PKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '1FgVfJ5D3HyKWKC4xk36Cio7MUaxxnXaVd');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'FjrD7CoabnerwvDBqr2ZfEbS1drvdizjGB');
   });
 
   it('can import HD Legacy Electrum (BIP32 P2PKH) with passphrase', async () => {
@@ -223,7 +223,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDLegacyElectrumSeedP2PKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '13sPvsrgRN8XibZNHtZXNqVDJPnNZLjTap');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'FY37Nnb3yrp5ACaVAzYzqMHXxZ4LDJf1fQ');
   });
 
   it('can import BreadWallet', async () => {
@@ -236,8 +236,8 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDLegacyBreadwalletWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), '1G5tkEuWWirz8AFyzrafSgFxvKsRwcBqwY');
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(1), 'bc1q5gslp44fkfdkq6r255utxpq85c9n02m3hsla68');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'FkFcC9dt5DYXZmH6sxa8uC4HaV9PXvJJfJ');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(1), 'grs1q5gslp44fkfdkq6r255utxpq85c9n02m32prurx');
   });
 
   it('can import HD Electrum (BIP32 P2WPKH)', async () => {
@@ -250,7 +250,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDSegwitElectrumSeedP2WPKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qzzanxnr3xv9a5ha264kpzpfq260qvuameslddu');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'grs1qzzanxnr3xv9a5ha264kpzpfq260qvuamyprv5a');
   });
 
   it('can import HD Electrum (BIP32 P2WPKH) with passphrase', async () => {
@@ -264,7 +264,7 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, HDSegwitElectrumSeedP2WPKHWallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1qx94dutas7ysn2my645cyttujrms5d9p57f6aam');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'grs1qx94dutas7ysn2my645cyttujrms5d9p5rcxuy6');
   });
 
   it('can import AEZEED', async () => {
@@ -302,47 +302,47 @@ describe('import procedure', () => {
 
   it('can import Legacy with uncompressed pubkey', async () => {
     const store = createStore();
-    const { promise } = startImport('5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxn3QgRS', false, false, ...store.callbacks);
+    const { promise } = startImport('5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxmNkoiD', false, false, ...store.callbacks);
     await promise;
-    assert.strictEqual(store.state.wallets[0].getSecret(), '5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxn3QgRS');
+    assert.strictEqual(store.state.wallets[0].getSecret(), '5KE6tf9vhYkzYSbgEL6M7xvkY69GMFHF3WxzYaCFMvwMxmNkoiD');
     assert.strictEqual(store.state.wallets[0].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), '1GsJDeD6fqS912egpjhdjrUTiCh1hhwBgQ');
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'Fm31fYwUEL7gSdfohqh7CNGnNMxyMJ1zUe');
   });
 
   it('can import BIP38 encrypted backup', async () => {
     const store = createStore('qwerty');
     const { promise } = startImport('6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN', false, false, ...store.callbacks);
     await promise;
-    assert.strictEqual(store.state.wallets[0].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(store.state.wallets[0].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3');
     assert.strictEqual(store.state.wallets[0].type, SegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0].getAddress(), 'bc1qxaqgapg7sugyvq3zh0re8plqkgrvrxzr6snmqr');
-    assert.strictEqual(store.state.wallets[1].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(store.state.wallets[0].getAddress(), 'grs1qxaqgapg7sugyvq3zh0re8plqkgrvrxzr8p06ez');
+    assert.strictEqual(store.state.wallets[1].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3');
     assert.strictEqual(store.state.wallets[1].type, SegwitP2SHWallet.type);
-    assert.strictEqual(store.state.wallets[1].getAddress(), '3ANCYnBvFPJyc4sxNFWnLkVBfDrKBZCVSp');
-    assert.strictEqual(store.state.wallets[2].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc');
+    assert.strictEqual(store.state.wallets[1].getAddress(), '3ANCYnBvFPJyc4sxNFWnLkVBfDrKD5EoqK');
+    assert.strictEqual(store.state.wallets[2].getSecret(), 'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3');
     assert.strictEqual(store.state.wallets[2].type, LegacyWallet.type);
-    assert.strictEqual(store.state.wallets[2].getAddress(), '1639W2kM6UY9PdavMQeLqG4SuUEae9NZfq');
+    assert.strictEqual(store.state.wallets[2].getAddress(), 'FaCrwwUieyDgqEc3EWdpHmrmZdWYBAPBZv');
   });
 
   it('can import watch-only address', async () => {
     const store1 = createStore();
-    const { promise: promise1 } = startImport('1AhcdMCzby4VXgqrexuMfh7eiSprRFtN78', false, false, ...store1.callbacks);
+    const { promise: promise1 } = startImport('FesL5FwNATk2yHryY4tq8CuyNc6p3ctd6S', false, false, ...store1.callbacks);
     await promise1;
     assert.strictEqual(store1.state.wallets[0].type, WatchOnlyWallet.type);
 
     const store2 = createStore();
-    const { promise: promise2 } = startImport('3EoqYYp7hQSHn5nHqRtWzkgqmK3caQ2SUu', false, false, ...store2.callbacks);
+    const { promise: promise2 } = startImport('3EoqYYp7hQSHn5nHqRtWzkgqmK3cYrMztd', false, false, ...store2.callbacks);
     await promise2;
     assert.strictEqual(store2.state.wallets[0].type, WatchOnlyWallet.type);
 
     const store3 = createStore();
-    const { promise: promise3 } = startImport('bc1q8j4lk4qlhun0n7h5ahfslfldc8zhlxgynfpdj2', false, false, ...store3.callbacks);
+    const { promise: promise3 } = startImport('grs1q8j4lk4qlhun0n7h5ahfslfldc8zhlxgywcavtt', false, false, ...store3.callbacks);
     await promise3;
     assert.strictEqual(store3.state.wallets[0].type, WatchOnlyWallet.type);
 
     const store4 = createStore();
     const { promise: promise4 } = startImport(
-      'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
+      'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzQf5TUF',
       false,
       false,
       ...store4.callbacks,
@@ -383,13 +383,13 @@ describe('import procedure', () => {
     );
     await promise;
     assert.strictEqual(store.state.wallets[0].type, SLIP39SegwitBech32Wallet.type);
-    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'bc1q5k23fle53w8a3982m82e9f6hqlnrh3mv5s9s6z');
+    assert.strictEqual(store.state.wallets[0]._getExternalAddressByIndex(0), 'grs1q5k23fle53w8a3982m82e9f6hqlnrh3mvfpe3rr');
   });
 
   it('can import watch-only Cobo vault export', async () => {
     const store = createStore();
     const { promise } = startImport(
-      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXsEerF4","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/17\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
+      '{"ExtPubKey":"zpub6riZchHnrWzhhZ3Z4dhCJmesGyafMmZBRC9txhnidR313XJbcv4KiDubderKHhL7rMsqacYd82FQ38e4whgs8Dg7CpsxX3dSGWayXrNBr5H","MasterFingerprint":"7D2F0272","AccountKeyPath":"84\'\\/17\'\\/0\'","CoboVaultFirmwareVersion":"2.6.1(BTC-Only)"}',
       false,
       false,
       ...store.callbacks,
@@ -403,7 +403,7 @@ describe('import procedure', () => {
   it('can import watch-only Cobo vault export', async () => {
     const store = createStore();
     const { promise } = startImport(
-      `[{"ExtPubKey":"zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/84'/17'/0'"},{"ExtPubKey":"ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf663zsP","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/49'/0'/0'"},{"ExtPubKey":"xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39T9nMdj","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/44'/17'/0'"}]`,
+      `[{"ExtPubKey":"zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AHsbxPu","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/84'/17'/0'"},{"ExtPubKey":"ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf6zU4Ru","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/49'/0'/0'"},{"ExtPubKey":"xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39QFUjw4","MasterFingerprint":"73C5DA0A","AccountKeyPath":"m/44'/17'/0'"}]`,
       false,
       false,
       ...store.callbacks,
@@ -414,7 +414,7 @@ describe('import procedure', () => {
     assert.strictEqual(store.state.wallets[0].getMasterFingerprintHex(), '73c5da0a');
     assert.strictEqual(
       store.state.wallets[0].getSecret(),
-      'zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs',
+      'zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AHsbxPu',
     );
 
     assert.strictEqual(store.state.wallets[1].type, WatchOnlyWallet.type);
@@ -422,7 +422,7 @@ describe('import procedure', () => {
     assert.strictEqual(store.state.wallets[1].getMasterFingerprintHex(), '73c5da0a');
     assert.strictEqual(
       store.state.wallets[1].getSecret(),
-      'ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf663zsP',
+      'ypub6Ww3ibxVfGzLrAH1PNcjyAWenMTbbAosGNB6VvmSEgytSER9azLDWCxoJwW7Ke7icmizBMXrzBx9979FfaHxHcrArf3zbeJJJUZPf6zU4Ru',
     );
 
     assert.strictEqual(store.state.wallets[2].type, WatchOnlyWallet.type);
@@ -430,14 +430,14 @@ describe('import procedure', () => {
     assert.strictEqual(store.state.wallets[2].getMasterFingerprintHex(), '73c5da0a');
     assert.strictEqual(
       store.state.wallets[2].getSecret(),
-      'xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39T9nMdj',
+      'xpub6BosfCnifzxcFwrSzQiqu2DBVTshkCXacvNsWGYJVVhhawA7d4R5WSWGFNbi8Aw6ZRc1brxMyWMzG3DSSSSoekkudhUd9yLb6qx39QFUjw4',
     );
   });
 
   it('can import watch-only Keystone vault export', async () => {
     const store = createStore();
     const { promise } = startImport(
-      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigRFhKB8Q","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/17\'/0\'"}',
+      '{"ExtPubKey":"zpub6qT7amLcp2exr4mU4AhXZMjD9CFkopECVhUxc9LHW8pNsJG2B9ogs5sFbGZpxEeT5TBjLmc7EFYgZA9EeWEM1xkJMFLefzZc8eigREDQF9H","MasterFingerprint":"01EBDA7D","AccountKeyPath":"m/84\'/17\'/0\'"}',
       false,
       false,
       ...store.callbacks,

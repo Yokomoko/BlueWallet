@@ -59,11 +59,11 @@ describe('HDSegwitElectrumSeedP2WPKHWallet', () => {
 
     assert.strictEqual(
       hd.getXpub(),
-      'zpub6nD7dvF6ArArjskKHZLmEL9ky8FqaSti1LN5maDWGwFrqwwGTp1b6ic4EHwciFNaYDmCXcQYxXSiF9BjcLCMPcaYkVN2nQD6QjYQ8vpSR3Z',
+      'zpub6nD7dvF6ArArjskKHZLmEL9ky8FqaSti1LN5maDWGwFrqwwGTp1b6ic4EHwciFNaYDmCXcQYxXSiF9BjcLCMPcaYkVN2nQD6QjYQ8qeA2DV',
     );
 
-    assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qx94dutas7ysn2my645cyttujrms5d9p57f6aam');
-    assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qcywwsy87sdp8vz5rfjh3sxdv6rt95kujdqq38g');
-    assert.strictEqual(hd._getExternalWIFByIndex(0), 'KyBagP6JHrNTGanqBSDVzKrsBTVbD9hhkTeVe1zEhewKeCU6wJb7');
+    assert.strictEqual(hd._getExternalAddressByIndex(0), 'grs1qx94dutas7ysn2my645cyttujrms5d9p5rcxuy6');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), 'grs1qcywwsy87sdp8vz5rfjh3sxdv6rt95kujs3us7f');
+    assert.strictEqual(hd._getExternalWIFByIndex(0), 'KyBagP6JHrNTGanqBSDVzKrsBTVbD9hhkTeVe1zEhewKeCWxWk48');
   });
 });

@@ -176,12 +176,12 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     assert.strictEqual(
       hd.getXpub(),
-      'zpub6qNvUL1qNQwaReccveprgd4urE2EUvShpcFe7WB9tzf9L4NJNcWhPzJSk4fzNXqBNZdRr6135hBKaqqp5RVvyxZ6eMbZXL6u5iK4zrfkCaQ',
+      'zpub6qNvUL1qNQwaReccveprgd4urE2EUvShpcFe7WB9tzf9L4NJNcWhPzJSk4fzNXqBNZdRr6135hBKaqqp5RVvyxZ6eMbZXL6u5iK4zwLW4XA',
     );
 
-    assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qgaj3satczjem43pz46ct6r3758twhnny4y720z');
-    assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qthe7wh5eplzxczslvthyrer36ph3kxpnfnxgjg');
-    assert.strictEqual(hd._getExternalWIFByIndex(0), 'L1tfV6fbRjDNwGQdJqHC9fneM9bTHigApnWgoKoU8JwgziwbbE7i');
+    assert.strictEqual(hd._getExternalAddressByIndex(0), 'grs1qgaj3satczjem43pz46ct6r3758twhnnyg4ztkr');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), 'grs1qthe7wh5eplzxczslvthyrer36ph3kxpn5z6ftf');
+    assert.strictEqual(hd._getExternalWIFByIndex(0), 'L1tfV6fbRjDNwGQdJqHC9fneM9bTHigApnWgoKoU8Jwgziue7d2h');
   });
 
   it('can create with custom derivation path', async () => {
@@ -191,12 +191,12 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     assert.strictEqual(
       hd.getXpub(),
-      'zpub6rFR7y4Q2AijF6Gk1bofHLs1d66hKFamhXWdWBup1Em25wfabZqkDqvaieV63fDQFaYmaatCG7jVNUpUiM2hAMo6SAVHcrUpSnHDpNzucB7',
+      'zpub6rFR7y4Q2AijF6Gk1bofHLs1d66hKFamhXWdWBup1Em25wfabZqkDqvaieV63fDQFaYmaatCG7jVNUpUiM2hAMo6SAVHcrUpSnHDpPi8zun',
     );
 
-    assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1qku0qh0mc00y8tk0n65x2tqw4trlspak0fnjmfz');
-    assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1qt0x83f5vmnapgl2gjj9r3d67rcghvjaqrvgpck');
-    assert.strictEqual(hd._getExternalWIFByIndex(0), 'L4ouJZjss1Ua8LPhsJNkzN8V8uXrQpfADNsqzsaT5JHs1G752c9j');
+    assert.strictEqual(hd._getExternalAddressByIndex(0), 'grs1qku0qh0mc00y8tk0n65x2tqw4trlspak05zw6sr');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), 'grs1qt0x83f5vmnapgl2gjj9r3d67rcghvjaq7a5qph');
+    assert.strictEqual(hd._getExternalWIFByIndex(0), 'L4ouJZjss1Ua8LPhsJNkzN8V8uXrQpfADNsqzsaT5JHs1GCXguTr');
 
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getExternalAddressByIndex(0)), "m/84'/17'/1'/0/0");
     assert.strictEqual(hd._getDerivationPathByAddress(hd._getInternalAddressByIndex(0)), "m/84'/17'/1'/1/0");
@@ -228,7 +228,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     const utxo = [
       {
         value: 69909,
-        address: 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl',
+        address: 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967',
         txId: '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20',
         vout: 0,
         txid: '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20',
@@ -239,9 +239,9 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     const { tx, psbt } = hd.createTransaction(
       utxo,
-      [{ address: 'bc1qtmcfj7lvgjp866w8lytdpap82u7eege58jy52hp4ctk0hsncegyqel8prp' }], // sendMAX
+      [{ address: 'grs1qtmcfj7lvgjp866w8lytdpap82u7eege58jy52hp4ctk0hsncegyqkycdv9' }], // sendMAX
       1,
-      'bc1qtmcfj7lvgjp866w8lytdpap82u7eege58jy52hp4ctk0hsncegyqel8prp', // change wont actually be used
+      'grs1qtmcfj7lvgjp866w8lytdpap82u7eege58jy52hp4ctk0hsncegyqkycdv9', // change wont actually be used
     );
 
     const actualFeerate = psbt.getFee() / tx.virtualSize();
@@ -257,7 +257,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     hd.setSecret('abaisser abaisser abaisser abaisser abaisser abaisser abaisser abaisser abaisser abaisser abaisser abeille');
 
     assert.strictEqual(true, hd.validateMnemonic());
-    assert.strictEqual(hd._getExternalAddressByIndex(0), 'bc1q3gsf7a6es9603g9a2k50lqxxxtd7x9pt7r5z9s');
-    assert.strictEqual(hd._getInternalAddressByIndex(0), 'bc1q3ugpcustjrtt806uc5kqutlv5ue5sv0cfcr93c');
+    assert.strictEqual(hd._getExternalAddressByIndex(0), 'grs1q3gsf7a6es9603g9a2k50lqxxxtd7x9ptrjgru3');
+    assert.strictEqual(hd._getInternalAddressByIndex(0), 'grs1q3ugpcustjrtt806uc5kqutlv5ue5sv0c5flyge');
   });
 });

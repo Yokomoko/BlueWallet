@@ -66,7 +66,7 @@ describe('Bech32 Segwit HD (BIP84) with BIP47', () => {
       'PM8TJXuZNUtSibuXKFM6bhCxpNaSye6r4px2GXRV5v86uRdH9Raa8ZtXEkG7S4zLREf4ierjMsxLXSFTbRVUnRmvjw9qnc7zZbyXyBstSmjcb7uVcDYF',
     );
 
-    expect(w._getExternalAddressByIndex(0)).toEqual('bc1q07l355j4yd5kyut36vjxn2u60d3dknnpt39t6y');
+    expect(w._getExternalAddressByIndex(0)).toEqual('grs1q07l355j4yd5kyut36vjxn2u60d3dknnpkqe2r9');
 
     const bip47 = BIP47Factory(ecc).fromBip39Seed(w.getSecret(), undefined, w.getPassphrase());
     const ourNotificationAddress = bip47.getNotificationAddress();
@@ -83,13 +83,13 @@ describe('Bech32 Segwit HD (BIP84) with BIP47', () => {
         .includes('PM8TJi1RuCrgSHTzGMoayUf8xUW6zYBGXBPSWwTiMhMMwqto7G6NA4z9pN5Kn8Pbhryo2eaHMFRRcidCGdB3VCDXJD4DdPD2ZyG3ScLMEvtStAetvPMo'),
     ); // sparrow payment code
 
-    assert.ok(w.weOwnAddress('bc1q57nwf9vfq2qsl80q37wq5h0tjytsk95vgjq4fe')); // this is an address that was derived (and paid) from counterparty payment code
+    assert.ok(w.weOwnAddress('grs1q57nwf9vfq2qsl80q37wq5h0tjytsk95v4ru5sc')); // this is an address that was derived (and paid) from counterparty payment code
 
-    const keyPair2 = ECPair.fromWIF(w._getWIFbyAddress('bc1q57nwf9vfq2qsl80q37wq5h0tjytsk95vgjq4fe') || '');
+    const keyPair2 = ECPair.fromWIF(w._getWIFbyAddress('grs1q57nwf9vfq2qsl80q37wq5h0tjytsk95v4ru5sc') || '');
     const address = bitcoin.payments.p2wpkh({
       pubkey: keyPair2.publicKey,
     }).address;
-    assert.strictEqual(address, 'bc1q57nwf9vfq2qsl80q37wq5h0tjytsk95vgjq4fe');
+    assert.strictEqual(address, 'grs1q57nwf9vfq2qsl80q37wq5h0tjytsk95v4ru5sc');
 
     await w.fetchTransactions();
 
@@ -113,7 +113,7 @@ describe('Bech32 Segwit HD (BIP84) with BIP47', () => {
     // now, constructing OP_RETURN data to notify sparrow about us
 
     const aliceBip47 = bip47;
-    const keyPair = ECPair.fromWIF(w._getWIFbyAddress('bc1q57nwf9vfq2qsl80q37wq5h0tjytsk95vgjq4fe') || '');
+    const keyPair = ECPair.fromWIF(w._getWIFbyAddress('grs1q57nwf9vfq2qsl80q37wq5h0tjytsk95v4ru5sc') || '');
     const bobBip47 = BIP47Factory(ecc).fromPaymentCode(
       'PM8TJi1RuCrgSHTzGMoayUf8xUW6zYBGXBPSWwTiMhMMwqto7G6NA4z9pN5Kn8Pbhryo2eaHMFRRcidCGdB3VCDXJD4DdPD2ZyG3ScLMEvtStAetvPMo',
     );

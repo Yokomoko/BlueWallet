@@ -18,7 +18,7 @@ beforeAll(async () => {
   await device.launchApp({ delete: true });
 
   console.log('before all - importing bip48...');
-  await helperImportWallet(process.env.HD_MNEMONIC_BIP84, 'HDsegwitBech32', 'Imported HD SegWit (BIP84 Bech32 Native)', '0.00105526 BTC');
+  await helperImportWallet(process.env.HD_MNEMONIC_BIP84, 'HDsegwitBech32', 'Imported HD SegWit (BIP84 Bech32 Native)', '0.00105526 GRS');
   console.log('...imported!');
   await device.pressBack();
   await sleep(15000);
@@ -41,7 +41,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     // lets create real transaction:
     await element(by.id('SendButton')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     await element(by.id('BitcoinAmountInput')).typeText('0.0001\n');
 
     // setting fee rate:
@@ -60,7 +60,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await yo('TransactionValue');
     await expect(element(by.id('TransactionValue'))).toHaveText('0.0001');
     const transactionFee = await extractTextFromElementById('TransactionFee');
-    assert.ok(transactionFee.startsWith('Fee: 0.00000292 BTC'), 'Unexpected tx fee: ' + transactionFee);
+    assert.ok(transactionFee.startsWith('Fee: 0.00000292 GRS'), 'Unexpected tx fee: ' + transactionFee);
     await element(by.id('TransactionDetailsButton')).tap();
 
     let txhex = await extractTextFromElementById('TxhexInput');
@@ -68,7 +68,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     let transaction = bitcoin.Transaction.fromHex(txhex);
     assert.ok(transaction.ins.length === 1 || transaction.ins.length === 2); // depending on current fees gona use either 1 or 2 inputs
     assert.strictEqual(transaction.outs.length, 2);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl'); // to address
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967'); // to address
     assert.strictEqual(transaction.outs[0].value, 10000);
 
     // checking fee rate:
@@ -96,7 +96,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
       await sleep(1000);
     }
 
-    const bip21 = 'groestlcoin:bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7?amount=0.00015&pj=https://btc.donate.kukks.org/BTC/pj';
+    const bip21 = 'groestlcoin:grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl?amount=0.00015&pj=https://grspay.com/GRS/pj';
     await element(by.id('scanQrBackdoorInput')).replaceText(bip21);
     await element(by.id('scanQrBackdoorOkButton')).tap();
 
@@ -110,7 +110,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('TransactionDetailsButton')).tap();
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     assert.strictEqual(transaction.outs[0].value, 15000);
 
     // now, testing scanQR with just address after amount set to 1.1 USD. Denomination should not change after qrcode scan
@@ -128,7 +128,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
       await sleep(1000);
     }
 
-    await element(by.id('scanQrBackdoorInput')).replaceText('bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    await element(by.id('scanQrBackdoorInput')).replaceText('grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     await element(by.id('scanQrBackdoorOkButton')).tap();
 
     if (process.env.TRAVIS) await sleep(5000);
@@ -141,20 +141,20 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('TransactionDetailsButton')).tap();
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
-    assert.notEqual(transaction.outs[0].value, 110000000); // check that it is 1.1 USD, not 1 BTC
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
+    assert.notEqual(transaction.outs[0].value, 110000000); // check that it is 1.1 USD, not 1 GRS
     assert.ok(transaction.outs[0].value < 10000); // 1.1 USD ~ 0,00001964 sats in march 2021
 
     // now, testing units switching, and then creating tx with SATS:
 
     await device.pressBack();
     await device.pressBack();
-    await element(by.id('changeAmountUnitButton')).tap(); // switched to BTC
+    await element(by.id('changeAmountUnitButton')).tap(); // switched to GRS
     await element(by.id('BitcoinAmountInput')).replaceText('0.00015');
     await element(by.id('changeAmountUnitButton')).tap(); // switched to sats
     assert.strictEqual(await extractTextFromElementById('BitcoinAmountInput'), '15000');
     await element(by.id('changeAmountUnitButton')).tap(); // switched to FIAT
-    await element(by.id('changeAmountUnitButton')).tap(); // switched to BTC
+    await element(by.id('changeAmountUnitButton')).tap(); // switched to GRS
     assert.strictEqual(await extractTextFromElementById('BitcoinAmountInput'), '0.00015');
     await element(by.id('changeAmountUnitButton')).tap(); // switched to sats
     await element(by.id('BitcoinAmountInput')).replaceText('50000');
@@ -190,7 +190,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('SendButton')).tap();
 
     // lets create real transaction:
-    await element(by.id('AddressInput')).replaceText('bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    await element(by.id('AddressInput')).replaceText('grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     await element(by.id('BitcoinAmountInput')).replaceText('0.0001\n');
 
     // setting fee rate:
@@ -204,7 +204,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction1'); // adding a recipient autoscrolls it to the last one
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction1'))).replaceText('0.0002\n');
 
     await element(by.id('advancedOptionsMenuButton')).tap();
@@ -220,7 +220,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction2'); // adding a recipient autoscrolls it to the last one
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction2'))).replaceText('bc1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction2'))).replaceText('grs1qh6tf004ty7z7un2v5ntu4mkf630545gv2pf49l');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction2'))).replaceText('0.0003\n');
 
     // remove second output
@@ -239,9 +239,9 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     const txhex = await extractTextFromElementById('TxhexInput');
     const transaction = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(transaction.outs.length, 3);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     assert.strictEqual(transaction.outs[0].value, 10000);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'bc1qh6tf004ty7z7un2v5ntu4mkf630545gvhs45u7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'grs1qh6tf004ty7z7un2v5ntu4mkf630545gv2pf49l');
     assert.strictEqual(transaction.outs[1].value, 30000, `got txhex ${txhex}`);
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
@@ -271,7 +271,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.text('OK')).tap();
 
     // first send MAX output
-    await element(by.id('AddressInput')).replaceText('bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    await element(by.id('AddressInput')).replaceText('grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     await element(by.id('BitcoinAmountInput')).typeText('0.0001\n');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
@@ -295,7 +295,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('AddRecipient')).tap();
     await yo('Transaction1');
-    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput').withAncestor(by.id('Transaction1'))).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     await element(by.id('BitcoinAmountInput').withAncestor(by.id('Transaction1'))).typeText('0.0001\n');
 
     if (process.env.TRAVIS) await sleep(5000);
@@ -308,9 +308,9 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     txhex = await extractTextFromElementById('TxhexInput');
     transaction = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(transaction.outs.length, 2, 'should be single output, no change');
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qnapskphjnwzw2w3dk4anpxntunc77v6qrua0f7');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qnapskphjnwzw2w3dk4anpxntunc77v6q7dpwsl');
     assert.ok(transaction.outs[0].value > 50000);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[1].script), 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     assert.strictEqual(transaction.outs[1].value, 10000);
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
@@ -353,7 +353,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     const transaction = bitcoin.Transaction.fromHex(txhex);
     assert.strictEqual(transaction.ins.length, 1);
     assert.strictEqual(transaction.outs.length, 1);
-    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'bc1qffcl35r05wyf06meu3dalfevawx559n0ufrxcw'); // to address
+    assert.strictEqual(bitcoin.address.fromOutputScript(transaction.outs[0].script), 'grs1qffcl35r05wyf06meu3dalfevawx559n0pcl8p0'); // to address
     assert.strictEqual(transaction.outs[0].value, 1000);
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
@@ -421,7 +421,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     await device.launchApp({
       newInstance: true,
-      url: 'groestlcoin:BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7\\?amount=0.0001\\&label=Yo',
+      url: 'groestlcoin:GRS1QH6TF004TY7Z7UN2V5NTU4MKF630545GV2PF49L\\?amount=0.0001\\&label=Yo',
     });
 
     // setting fee rate:
@@ -439,7 +439,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     // created. verifying:
     await yo('TransactionValue');
     await expect(element(by.id('TransactionValue'))).toHaveText('0.0001');
-    await expect(element(by.id('TransactionAddress'))).toHaveText('BC1QH6TF004TY7Z7UN2V5NTU4MKF630545GVHS45U7');
+    await expect(element(by.id('TransactionAddress'))).toHaveText('GRS1QH6TF004TY7Z7UN2V5NTU4MKF630545GV2PF49L');
 
     process.env.TRAVIS && require('fs').writeFileSync(lockFile, '1');
   });
@@ -495,7 +495,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
     // use frozen output to create tx using "Use coin" feature
     await element(by.text('test2')).atIndex(0).tap();
     await element(by.id('UseCoin')).tap();
-    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
     await element(by.text('OK')).tap();
@@ -524,7 +524,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     // create tx with unfrozen input
     await element(by.id('SendButton')).tap();
-    await element(by.id('AddressInput')).replaceText('bc1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnuktyrl');
+    await element(by.id('AddressInput')).replaceText('grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967');
     await element(by.id('advancedOptionsMenuButton')).tap();
     await element(by.id('sendMaxButton')).tap();
     await element(by.text('OK')).tap();
