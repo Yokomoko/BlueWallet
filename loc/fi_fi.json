@@ -113,10 +113,10 @@
     "details_setAmount": "Vastaanotettava summa",
     "details_share": "jaa",
     "header": "Vastaanota",
-    "maxSats": "Enimmäismäärä on {max} satsia",
-    "maxSatsFull": "Enimmäismäärä on {max} satsia tai {valuutta}",
-    "minSats": "Vähimmäismäärä on {min} satsia",
-    "minSatsFull": "Vähimmäismäärä on {min} satsia tai {valuutta}"
+    "maxSats": "Enimmäismäärä on {max} grosia",
+    "maxSatsFull": "Enimmäismäärä on {max} grosia tai {valuutta}",
+    "minSats": "Vähimmäismäärä on {min} grosia",
+    "minSatsFull": "Vähimmäismäärä on {min} grosia tai {valuutta}"
   },
   "send": {
     "provided_address_is_invoice": "Tämä osoite vaikuttaa olevan Salamalasku. Maksun suorittamiseksi, siirry Salamalompakkoosi.",
@@ -133,7 +133,7 @@
     "create_details": "Tarkemmat tiedot",
     "create_fee": "Siirtomaksu",
     "create_memo": "Muistio",
-    "create_satoshi_per_vbyte": "Satoshi per vByte",
+    "create_satoshi_per_vbyte": "Gro per vByte",
     "create_this_is_hex": "Tämä on siirtotapahtuman hex-numero, allekirjoitettu ja valmis lähetettävksi verkkoon.",
     "create_to": "Vastaanottaja",
     "create_tx_size": "Siirtotapahtuman koko",

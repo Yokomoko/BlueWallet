@@ -182,7 +182,7 @@
     "fee_custom": "Anpassa",
     "fee_fast": "Snabb",
     "fee_medium": "Mellan",
-    "fee_replace_minvb": "Den totala avgiftssatsen (gro per vByte) du vill betala bör vara högre än {min} gro/vByte.",
+    "fee_replace_minvb": "Den totala avgiftsgrosen (gro per vByte) du vill betala bör vara högre än {min} gro/vByte.",
     "fee_satvbyte": "i gro/vByte",
     "fee_slow": "Långsamt",
     "header": "Skicka",

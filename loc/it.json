@@ -121,10 +121,10 @@
     "details_setAmount": "Ricevi con importo",
     "details_share": "Condividi",
     "header": "Ricevi",
-    "maxSats": "L'importo massimo è {max} sats",
-    "maxSatsFull": "L'importo massimo è {max} sats o {currency}",
-    "minSats": "L'importo minimo è {min} sats",
-    "minSatsFull": "L'importo minimo è {min} sats o {currency}"
+    "maxSats": "L'importo massimo è {max} gros",
+    "maxSatsFull": "L'importo massimo è {max} gros o {currency}",
+    "minSats": "L'importo minimo è {min} gros",
+    "minSatsFull": "L'importo minimo è {min} gros o {currency}"
   },
   "send": {
     "provided_address_is_invoice": "Questo indirizzo sembra essere associato ad una fattura Lightning. Apri il tuo portafoglio Lightning per effettuare il pagamento di questa fattura.",
@@ -141,7 +141,7 @@
     "create_details": "Dettagli",
     "create_fee": "Commissione",
     "create_memo": "Memo",
-    "create_satoshi_per_vbyte": "Satoshi per vByte",
+    "create_satoshi_per_vbyte": "Gro per vByte",
     "create_this_is_hex": "Questo è l'hex della tua transazione—firmata e pronta ad essere trasmessa alla rete.",
     "create_to": "A",
     "create_tx_size": "Dimensione della transazione",
