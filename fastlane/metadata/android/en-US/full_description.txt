@@ -1,7 +1,7 @@
-A Bitcoin wallet that allows you to store, send Bitcoin, receive Bitcoin with focus on security and simplicity.
-On BlueWallet, a bitcoin wallet you own you private keys. A Bitcoin wallet made by Bitcoin users for the community.
+A Groestlcoin wallet that allows you to store, send Groestlcoin, receive Groestlcoin with focus on security and simplicity.
+On GRS BlueWallet, a groestlcoin wallet you own you private keys. A Groestlcoin wallet made by Groestlcoin users for the community.
 You can instantly transact with anyone in the world and transform the financial system right from your pocket.
-Create for free unlimited number of bitcoin wallets or import your existing one on your Android device. It's simple and fast.
+Create for free unlimited number of groestlcoin wallets or import your existing one on your Android device. It's simple and fast.
 _____
 
 Here's what you get:
@@ -12,7 +12,7 @@ Here's what you get:
 MIT licensed, you can build it and run it on your own! Made with ReactNative
 
 • Plausible deniability
-Password which decrypts fake bitcoin wallets if you are forced to disclose your access
+Password which decrypts fake groestlcoin wallets if you are forced to disclose your access
 
 • Full encryption
 On top of the iOS multi-layer encryption, we encrypt everything with added passwords
@@ -26,7 +26,7 @@ SegWit supported and HD wallets enable
 Private keys never leave your device. You control your private keys
 
 • Flexible fees
-Starting from 1 Satoshi. Defined by you, the user
+Starting from 1 Gro. Defined by you, the user
 
 • Replace-By-Fee
 (RBF) Speed-up your transactions by increasing the fee (BIP125)
@@ -35,4 +35,4 @@ Starting from 1 Satoshi. Defined by you, the user
 Watch-only wallets allow you to keep an eye on your cold storage without touching the hardware.
 
 • Lightning Network
-Lightning wallet with zero-configuration. Unfairly cheap and fast transactions with the best Bitcoin user experience.
+Lightning wallet with zero-configuration. Unfairly cheap and fast transactions with the best Groestlcoin user experience.

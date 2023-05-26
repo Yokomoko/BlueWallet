@@ -11,7 +11,7 @@ import Foundation
 import WatchConnectivity
 
 class WalletDetailsInterfaceController: WKInterfaceController {
-  
+
   var wallet: Wallet?
   static let identifier = "WalletDetailsInterfaceController"
   @IBOutlet weak var walletBasicsGroup: WKInterfaceGroup!
@@ -22,8 +22,8 @@ class WalletDetailsInterfaceController: WKInterfaceController {
   @IBOutlet weak var viewXPubButton: WKInterfaceButton!
   @IBOutlet weak var noTransactionsLabel: WKInterfaceLabel!
   @IBOutlet weak var transactionsTable: WKInterfaceTable!
-  
-  
+
+
   override func awake(withContext context: Any?) {
     super.awake(withContext: context)
     guard let identifier = context as? Int else {
@@ -32,7 +32,7 @@ class WalletDetailsInterfaceController: WKInterfaceController {
     }
     processInterface(identifier: identifier)
   }
-  
+
   func processInterface(identifier: Int)  {
   let wallet = WatchDataSource.shared.wallets[identifier]
   self.wallet = wallet
@@ -45,8 +45,8 @@ class WalletDetailsInterfaceController: WKInterfaceController {
       viewXPubButton.setHidden(!((wallet.type != WalletGradient.LightningCustodial.rawValue ||  wallet.type != WalletGradient.LightningLDK.rawValue) && !(wallet.xpub ?? "").isEmpty))
   processWalletsTable()
   }
-  
-  
+
+
   @IBAction func toggleBalanceVisibility(_ sender: Any) {
     guard let wallet = wallet else {
        return
@@ -58,8 +58,8 @@ class WalletDetailsInterfaceController: WKInterfaceController {
       hideBalanceMenuItemTapped()
     }
   }
-  
-  
+
+
   @objc func showBalanceMenuItemTapped() {
     guard let identifier = wallet?.identifier else { return }
     WatchDataSource.toggleWalletHideBalance(walletIdentifier: identifier, hideBalance: false) { [weak self] _ in
@@ -69,7 +69,7 @@ class WalletDetailsInterfaceController: WKInterfaceController {
       }
     }
   }
-  
+
   @objc func hideBalanceMenuItemTapped() {
     guard let identifier = wallet?.identifier else { return }
     WatchDataSource.toggleWalletHideBalance(walletIdentifier: identifier, hideBalance: true) { [weak self] _ in
@@ -79,31 +79,31 @@ class WalletDetailsInterfaceController: WKInterfaceController {
       }
     }
   }
-  
+
   @IBAction func viewXPubMenuItemTapped() {
     guard let xpub = wallet?.xpub else {
       return
     }
     presentController(withName: ViewQRCodefaceController.identifier, context: xpub)
   }
-  
+
   override func willActivate() {
     super.willActivate()
     transactionsTable.setHidden(wallet?.transactions.isEmpty ?? true)
     noTransactionsLabel.setHidden(!(wallet?.transactions.isEmpty ?? false))
   }
-  
+
   @IBAction func receiveMenuItemTapped() {
     presentController(withName: ReceiveInterfaceController.identifier, context: (wallet, "receive"))
   }
-  
-  
+
+
   @objc private func processWalletsTable() {
     transactionsTable.setNumberOfRows(wallet?.transactions.count ?? 0, withRowType: TransactionTableRow.identifier)
-    
+
     for index in 0..<transactionsTable.numberOfRows {
       guard let controller = transactionsTable.rowController(at: index) as? TransactionTableRow, let transaction = wallet?.transactions[index] else { continue }
-      
+
       controller.amount = transaction.amount
       controller.type = transaction.type
       controller.memo = transaction.memo
@@ -112,19 +112,19 @@ class WalletDetailsInterfaceController: WKInterfaceController {
     transactionsTable.setHidden(wallet?.transactions.isEmpty ?? true)
     noTransactionsLabel.setHidden(!(wallet?.transactions.isEmpty ?? false))
   }
-  
+
   @IBAction func createInvoiceTapped() {
     if (WatchDataSource.shared.companionWalletsInitialized) {
       pushController(withName: ReceiveInterfaceController.identifier, context: (wallet?.identifier, "createInvoice"))
     } else {
-      presentAlert(withTitle: "Error", message: "Unable to create invoice. Please open BlueWallet on your iPhone and unlock your wallets.", preferredStyle: .alert, actions: [WKAlertAction(title: "OK", style: .default, handler: { [weak self] in
+      presentAlert(withTitle: "Error", message: "Unable to create invoice. Please open GRS BlueWallet on your iPhone and unlock your wallets.", preferredStyle: .alert, actions: [WKAlertAction(title: "OK", style: .default, handler: { [weak self] in
         self?.dismiss()
         })])
       }
   }
-  
+
   override func contextForSegue(withIdentifier segueIdentifier: String) -> Any? {
     return (wallet?.identifier, "receive")
   }
-  
+
 }

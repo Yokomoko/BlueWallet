@@ -16,7 +16,7 @@ class SpecifyInterfaceController: WKInterfaceController {
   @IBOutlet weak var descriptionButton: WKInterfaceButton!
   @IBOutlet weak var amountButton: WKInterfaceButton!
   @IBOutlet weak var createButton: WKInterfaceButton!
-  
+
   struct SpecificQRCodeContent {
     var amount: Double?
     var description: String?
@@ -57,13 +57,13 @@ class SpecifyInterfaceController: WKInterfaceController {
       if let amountDouble = Double(title), let keyPadType = self?.specifiedQRContent.bitcoinUnit {
         self?.specifiedQRContent.amount = amountDouble
         self?.amountButton.setTitle("\(title) \(keyPadType)")
-        
+
         var isShouldCreateButtonBeEnabled = amountDouble > 0 && !title.isEmpty
-        
+
         if (wallet.type == WalletGradient.LightningCustodial.rawValue || wallet.type == WalletGradient.LightningLDK.rawValue) && !WCSession.default.isReachable {
           isShouldCreateButtonBeEnabled = false
         }
-        
+
         self?.createButton.setEnabled(isShouldCreateButtonBeEnabled)
         self?.createButton.setAlpha(isShouldCreateButtonBeEnabled ? 1.0 : 0.5)
         }
@@ -87,23 +87,23 @@ class SpecifyInterfaceController: WKInterfaceController {
       }
     }
   }
-  
+
   @IBAction func createButtonTapped() {
     if WatchDataSource.shared.companionWalletsInitialized {
       NotificationCenter.default.post(name: NotificationName.createQRCode, object: specifiedQRContent)
       dismiss()
     } else {
-      presentAlert(withTitle: "Error", message: "Unable to create invoice. Please open BlueWallet on your iPhone and unlock your wallets.", preferredStyle: .alert, actions: [WKAlertAction(title: "OK", style: .default, handler: { [weak self] in
+      presentAlert(withTitle: "Error", message: "Unable to create invoice. Please open GRS BlueWallet on your iPhone and unlock your wallets.", preferredStyle: .alert, actions: [WKAlertAction(title: "OK", style: .default, handler: { [weak self] in
         self?.dismiss()
         })])
     }
   }
-  
+
   override func contextForSegue(withIdentifier segueIdentifier: String) -> Any? {
     if segueIdentifier == NumericKeypadInterfaceController.identifier {
       return specifiedQRContent
     }
     return nil
   }
-  
+
 }
