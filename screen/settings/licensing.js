@@ -18,7 +18,7 @@ const Licensing = () => {
         <BlueCard>
           <BlueText>MIT License</BlueText>
           <BlueSpacing20 />
-          <BlueText>Copyright (c) 2020-2022 Groestlcoin Developers</BlueText>
+          <BlueText>Copyright (c) 2020-2023 Groestlcoin Developers</BlueText>
           <BlueSpacing20 />
           <BlueText>
             Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
