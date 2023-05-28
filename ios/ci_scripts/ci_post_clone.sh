@@ -12,7 +12,14 @@ set -x
 brew install node cocoapods
 
 # Install node and pods dependencies.
-ls && cd .. && npm install && npx pod-install
+if [ $CI_PRODUCT_PLATFORM = 'macOS' ]
+then
+    cd .. &&
+    cd .. &&
+    ./scripts/maccatalystpatches/applypatchesformaccatalyst.sh
+else
+    cd .. && npm install && npx pod-install
+fi
 
 echo "🎯 Stage: Post-clone is done .... "
 
