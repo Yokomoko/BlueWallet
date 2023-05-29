@@ -11,7 +11,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>GRS&#x2007;BlueWallet</string>
+	<string>GRS&#x0020;BlueWallet</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -64,7 +64,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>GRS&#x0020;BlueWallet</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>org.groestlcoin.bluewallet123.receiveonchain</string>
