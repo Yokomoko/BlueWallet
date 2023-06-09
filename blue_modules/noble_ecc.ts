@@ -10,11 +10,16 @@ import { createHmac } from 'crypto';
 import * as necc from '@noble/secp256k1';
 import { TinySecp256k1Interface } from 'ecpairgrs/src/ecpair';
 import { TinySecp256k1Interface as TinySecp256k1InterfaceBIP32 } from 'bip32grs/types/bip32';
+// fix-groestlcoinjs-lib import { XOnlyPointAddTweakResult } from 'groestlcoinjs-lib/src/types';
 
 export interface TinySecp256k1InterfaceExtended {
   pointMultiply(p: Uint8Array, tweak: Uint8Array, compressed?: boolean): Uint8Array | null;
 
   pointAdd(pA: Uint8Array, pB: Uint8Array, compressed?: boolean): Uint8Array | null;
+
+  // fix-groestlcoinjs-lib isXOnlyPoint(p: Uint8Array): boolean;
+
+  // fix-groestlcoinjs-lib xOnlyPointAddTweak(p: Uint8Array, tweak: Uint8Array): XOnlyPointAddTweakResult | null;
 }
 
 necc.utils.sha256Sync = (...messages: Uint8Array[]): Uint8Array => {
@@ -74,9 +79,9 @@ const ecc: TinySecp256k1InterfaceExtended & TinySecp256k1Interface & TinySecp256
     } */
     return necc.utils.isValidPrivateKey(d);
   },
-  // isXOnlyPoint: (p: Uint8Array): boolean => isPoint(p, true),
+  // fix-groestlcoinjs-lib isXOnlyPoint: (p: Uint8Array): boolean => isPoint(p, true),
 
-  /*  xOnlyPointAddTweak: (p: Uint8Array, tweak: Uint8Array): { parity: 0 | 1; xOnlyPubkey: Uint8Array } | null =>
+  /*  fix-groestlcoinjs-lib xOnlyPointAddTweak: (p: Uint8Array, tweak: Uint8Array): { parity: 0 | 1; xOnlyPubkey: Uint8Array } | null =>
     throwToNull(() => {
       const P = necc.utils.pointAddScalar(p, tweak, true);
       const parity = P[0] % 2 === 1 ? 1 : 0;
