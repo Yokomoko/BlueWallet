@@ -2,4 +2,4 @@
 
 ## Reporting a Vulnerability
 
-bluewallet at bluewallet dot io
+groestlcoin at gmail dot com
