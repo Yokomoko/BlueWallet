@@ -152,7 +152,7 @@ const LNDCreateInvoice = () => {
       let invoiceAmount = amount;
       switch (unit) {
         case BitcoinUnit.SATS:
-          invoiceAmount = parseInt(invoiceAmount); // basically nop
+          invoiceAmount = parseInt(invoiceAmount, 10); // basically nop
           break;
         case BitcoinUnit.BTC:
           invoiceAmount = currency.btcToSatoshi(invoiceAmount);
@@ -292,19 +292,19 @@ const LNDCreateInvoice = () => {
         throw new Error('Unsupported lnurl');
       }
 
-      // amount that comes from lnurl is always in gros
-      let amount = (reply.maxWithdrawable / 1000).toString();
-      const sats = amount;
+      // amount that comes from lnurl is always in sats
+      let newAmount = (reply.maxWithdrawable / 1000).toString();
+      const sats = newAmount;
       switch (unit) {
         case BitcoinUnit.SATS:
           // nop
           break;
         case BitcoinUnit.BTC:
-          amount = currency.satoshiToBTC(amount);
+          newAmount = currency.satoshiToBTC(newAmount);
           break;
         case BitcoinUnit.LOCAL_CURRENCY:
-          amount = formatBalancePlain(amount, BitcoinUnit.LOCAL_CURRENCY);
-          AmountInput.setCachedSatoshis(amount, sats);
+          newAmount = formatBalancePlain(newAmount, BitcoinUnit.LOCAL_CURRENCY);
+          AmountInput.setCachedSatoshis(newAmount, sats);
           break;
       }
 
@@ -316,7 +316,7 @@ const LNDCreateInvoice = () => {
         min: (reply.minWithdrawable || 0) / 1000,
         max: reply.maxWithdrawable / 1000,
       });
-      setAmount(amount);
+      setAmount(newAmount);
       setDescription(reply.defaultDescription);
       setIsLoading(false);
     } catch (Err) {

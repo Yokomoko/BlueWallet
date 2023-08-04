@@ -150,7 +150,7 @@ describe('SegwitBech32Wallet', function () {
     assert.strictEqual(l1, l2);
   });
 
-  it('can fetch TXs', async () => {
+  it('can fetch TXs LegacyWallet', async () => {
     const w = new LegacyWallet();
     w._address = 'grs1qvsf5qwd5xpgftfndc7yncr9ydjer47cvxacd9y';
     await w.fetchTransactions();
@@ -167,7 +167,7 @@ describe('SegwitBech32Wallet', function () {
     assert.strictEqual(w.getTransactions()[1].value, 178650);
   });
 
-  it('can fetch TXs', async () => {
+  it('can fetch TXs SegwitBech32Wallet', async () => {
     const w = new SegwitBech32Wallet();
     w._address = 'grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80';
     assert.ok(w.weOwnAddress('grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80'));

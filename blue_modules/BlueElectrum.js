@@ -106,18 +106,18 @@ let latestBlockheightTimestamp = false;
 const txhashHeightCache = {};
 
 async function isDisabled() {
-  let isDisabled;
+  let result;
   try {
     const savedValue = await AsyncStorage.getItem(ELECTRUM_CONNECTION_DISABLED);
     if (savedValue === null) {
-      isDisabled = false;
+      result = false;
     } else {
-      isDisabled = savedValue;
+      result = savedValue;
     }
   } catch {
-    isDisabled = false;
+    result = false;
   }
-  return !!isDisabled;
+  return !!result;
 }
 
 async function setDisabled(disabled = true) {
@@ -340,7 +340,7 @@ async function getSavedPeer() {
  *
  * @returns {Promise<{tcp: number, host: string}>}
  */
-// eslint-disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getRandomDynamicPeer() {
   try {
     let peers = JSON.parse(await AsyncStorage.getItem(storageKey));
@@ -710,8 +710,8 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
               let tx = await mainClient.blockchainTransaction_get(txid, false);
               tx = txhexToElectrumTransaction(tx);
               results.push({ result: tx, param: txid });
-            } catch (_) {
-              console.log(_);
+            } catch (error) {
+              console.log(error);
             }
           }
         } else {
@@ -726,8 +726,8 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
                 tx = txhexToElectrumTransaction(tx);
               }
               results.push({ result: tx, param: txid });
-            } catch (_) {
-              console.log(_);
+            } catch (error) {
+              console.log(error);
             }
           }
         }
