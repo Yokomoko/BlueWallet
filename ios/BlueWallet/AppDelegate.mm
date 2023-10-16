@@ -103,7 +103,9 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-  [WCSession.defaultSession updateApplicationContext:@{@"isWalletsInitialized": @NO} error:nil];
+  if ([[WCSession defaultSession] isReachable]) {
+    [WCSession.defaultSession updateApplicationContext:@{@"isWalletsInitialized": @NO} error:nil];
+  }
   NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.groestlcoin.bluewallet123"];
   [defaults removeObjectForKey:@"onUserActivityOpen"];
 }
