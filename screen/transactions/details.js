@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StatusBar, StyleSheet, Keyboard } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StyleSheet, Keyboard } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
@@ -220,7 +220,6 @@ const TransactionsDetails = () => {
         type={HandoffComponent.activityTypes.ViewInBlockExplorer}
         url={`https://esplora.groestlcoin.org/tx/${tx.hash}`}
       />
-      <StatusBar barStyle="default" />
       <BlueCard>
         <View>
           <TextInput
@@ -415,6 +414,7 @@ export default TransactionsDetails;
 TransactionsDetails.navigationOptions = navigationStyle({ headerTitle: loc.transactions.details_title }, (options, { theme }) => {
   return {
     ...options,
+    statusBarStyle: 'auto',
     headerStyle: {
       backgroundColor: theme.colors.customHeader,
       borderBottomWidth: 0,
