@@ -26,14 +26,12 @@ import loc from './loc';
 import { BlueDefaultTheme, BlueDarkTheme } from './components/themes';
 import InitRoot from './Navigation';
 import BlueClipboard from './blue_modules/clipboard';
-import { isDesktop } from './blue_modules/environment';
 import { BlueStorageContext } from './blue_modules/storage-context';
 import WatchConnectivity from './WatchConnectivity';
 import DeviceQuickActions from './class/quick-actions';
 import Notifications from './blue_modules/notifications';
 import Biometric from './class/biometrics';
 import WidgetCommunication from './blue_modules/WidgetCommunication';
-import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import ActionSheet from './screen/ActionSheet';
 import HandoffComponent from './components/handoff';
 import Privacy from './blue_modules/Privacy';
@@ -118,27 +116,6 @@ const App = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletsInitialized]);
-
-  useEffect(() => {
-    return () => {
-      Linking.removeEventListener('url', handleOpenURL);
-      AppState.removeEventListener('change', handleAppStateChange);
-      eventEmitter?.removeAllListeners('onNotificationReceived');
-      eventEmitter?.removeAllListeners('openSettings');
-      eventEmitter?.removeAllListeners('onUserActivityOpen');
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (colorScheme) {
-      if (colorScheme === 'light') {
-        changeNavigationBarColor(BlueDefaultTheme.colors.background, true, true);
-      } else {
-        changeNavigationBarColor(BlueDarkTheme.colors.buttonBackgroundColor, false, true);
-      }
-    }
-  }, [colorScheme]);
 
   const addListeners = () => {
     Linking.addEventListener('url', handleOpenURL);
@@ -387,8 +364,8 @@ const App = () => {
           <InitRoot />
           <Notifications onProcessNotifications={processPushNotifications} />
         </NavigationContainer>
-        {walletsInitialized && !isDesktop && <WatchConnectivity />}
       </View>
+      <WatchConnectivity />
       <DeviceQuickActions />
       <Biometric />
       <WidgetCommunication />
