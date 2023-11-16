@@ -25,7 +25,6 @@ ios/.xcode.env.local
 .cxx/
 *.keystore
 !debug.keystore
-
 # Android/IntelliJ
 #
 build/
