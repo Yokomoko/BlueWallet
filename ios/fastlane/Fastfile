@@ -10,7 +10,7 @@ platform :ios do
   desc "Create a temporary keychain"
   lane :create_temp_keychain do
     UI.message("Creating a temporary keychain...")
-  
+
     create_keychain(
       name: "temp_keychain",
       password: ENV["KEYCHAIN_PASSWORD"],
@@ -19,7 +19,7 @@ platform :ios do
       timeout: 3600,
       lock_when_sleeps: true
     )
-  
+
     UI.message("Temporary keychain created successfully.")
   end
 
@@ -27,11 +27,11 @@ platform :ios do
   lane :setup_provisioning_profiles do
     UI.message("Setting up provisioning profiles...")
     target_to_app_identifier = {
-      'BlueWallet' => 'io.bluewallet.bluewallet',
-      'BlueWalletWatch' => 'io.bluewallet.bluewallet.watch',
-      'BlueWalletWatchExtension' => 'io.bluewallet.bluewallet.watch.extension',
-      'Stickers' => 'io.bluewallet.bluewallet.Stickers',
-      'MarketWidget' => 'io.bluewallet.bluewallet.MarketWidget'
+      'BlueWallet' => 'org.groestlcoin.bluewallet123',
+      'BlueWalletWatch' => 'org.groestlcoin.bluewallet123.watch',
+      'BlueWalletWatchExtension' => 'org.groestlcoin.bluewallet123.watch.extension',
+      'Stickers' => 'org.groestlcoin.bluewallet123.Stickers',
+      'MarketWidget' => 'org.groestlcoin.bluewallet123.MarketWidget'
     }
 
     target_to_app_identifier.each do |target, app_identifier|
@@ -58,13 +58,13 @@ platform :ios do
   desc "Increment build number"
   lane :increment_build_number_lane do
     UI.message("Incrementing build number to current timestamp...")
-    
+
     # Set the new build number
     increment_build_number(
-      xcodeproj: "BlueWallet.xcodeproj", 
+      xcodeproj: "BlueWallet.xcodeproj",
       build_number: ENV["NEW_BUILD_NUMBER"]
       )
-  
+
     UI.message("Build number set to: #{ENV['NEW_BUILD_NUMBER']}")
   end
 
@@ -89,11 +89,11 @@ platform :ios do
       export_options: {
         signingStyle: "manual",
         provisioningProfiles: {
-          'io.bluewallet.bluewallet' => 'match AppStore io.bluewallet.bluewallet',
-          'io.bluewallet.bluewallet.watch' => 'match AppStore io.bluewallet.bluewallet.watch',
-          'io.bluewallet.bluewallet.watch.extension' => 'match AppStore io.bluewallet.bluewallet.watch.extension',
-          'io.bluewallet.bluewallet.Stickers' => 'match AppStore io.bluewallet.bluewallet.Stickers',
-          'io.bluewallet.bluewallet.MarketWidget' => 'match AppStore io.bluewallet.bluewallet.MarketWidget'
+          'org.groestlcoin.bluewallet123' => 'match AppStore org.groestlcoin.bluewallet123',
+          'org.groestlcoin.bluewallet123.watch' => 'match AppStore org.groestlcoin.bluewallet123.watch',
+          'org.groestlcoin.bluewallet123.watch.extension' => 'match AppStore org.groestlcoin.bluewallet123.watch.extension',
+          'org.groestlcoin.bluewallet123.Stickers' => 'match AppStore org.groestlcoin.bluewallet123.Stickers',
+          'org.groestlcoin.bluewallet123.MarketWidget' => 'match AppStore org.groestlcoin.bluewallet123.MarketWidget'
         }
       },
       xcargs: "GCC_PREPROCESSOR_DEFINITIONS='$(inherited) VERBOSE_LOGGING=1'",
@@ -111,7 +111,7 @@ platform :ios do
     begin
       UI.message("Uploading to TestFlight without processing wait...")
       changelog = ENV["LATEST_COMMIT_MESSAGE"]
-  
+
       upload_to_testflight(
         api_key_path: "appstore_api_key.json",
         ipa: "./build/BlueWallet.#{ENV['PROJECT_VERSION']}(#{ENV['NEW_BUILD_NUMBER']}).ipa",
