@@ -6,7 +6,6 @@
     "clipboard": "Schowek",
     "enter_password": "Wprowadź hasło",
     "never": "Nigdy",
-    "disabled": "Wyłączone",
     "of": "{number} z {total}",
     "ok": "OK",
     "storage_is_encrypted": "Twoje dane są zaszyfrowane. Hasło jest wymagane do ich rozszyfrowania",
@@ -64,6 +63,7 @@
     "node_alias": "Alias węzła",
     "expiresIn": "Traci ważność w ciągu {time} minut",
     "payButton": "Zapłać",
+    "payment": "Płatność",
     "placeholder": "Faktura lub adres",
     "open_channel": "Otwórz kanał",
     "funding_amount_placeholder": "Kwota fundująca, np. 0.001",
@@ -549,6 +549,12 @@
     "check_address": "Sprawdź adres",
     "no_wallet_owns_address": "Żaden z dostępnych portfeli nie posiada podanego adresu.",
     "view_qrcode": "Pokaż kod QR"
+  },
+  "autofill_word": {
+    "title": "Generuj ostatnie słowo mnemoniku",
+    "enter": "Wprowadź częściową frazę mnemoniku",
+    "generate_word": "Generuj ostatnie słowo",
+    "error": "Dane wejściowe nie są częściowym mnemonikiem składającym się z 11 lub 23 słów!"
   },
   "cc": {
     "change": "Reszta",
