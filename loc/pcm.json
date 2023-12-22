@@ -11,7 +11,7 @@
   },
   "lnd": {
     "are_you_sure_open_channel": "You sure say you wan open this channel?",
-    "refill_create": "To proceed like this so, abeg create Bitcoin wallet wey you go refill am with",
+    "refill_create": "To proceed like this so, abeg create Groestlcoin wallet wey you go refill am with",
     "can_send": "You fit send",
     "can_receive": "You fit receive",
     "view_logs": "run shadow your logs"
@@ -27,8 +27,8 @@
     "success": "You correct"
   },
   "receive": {
-    "maxSats": "Maximum amount na {max} sats",
-    "minSatsFull": "Minimal amount na {min} sats or {currency}"
+    "maxSats": "Maximum amount na {max} gros",
+    "minSatsFull": "Minimal amount na {min} gros or {currency}"
   },
   "send": {
     "broadcastPending": "Pend",
@@ -38,7 +38,7 @@
     "create_copy": "Copy make you broadcast am later",
     "details_total_exceeds_balance": "The amount you dey try send pass wetin you get for balance",
     "details_unrecognized_file_format": "We no sabi this file format",
-    "details_wallet_before_tx": "Before you create transaction, you go first add Bitcoin wallet.",
+    "details_wallet_before_tx": "Before you create transaction, you go first add Groestlcoin wallet.",
     "dynamic_init": "E dey load",
     "input_clear": "wipe am",
     "psbt_this_is_psbt": "Na Partially Signed Bitcoin Transaction be this. Abeg run am finish with your hardware wallet wey dey offline.  ",
@@ -57,13 +57,13 @@
     "default_title": "As you launch",
     "default_wallets": "See all your wallets",
     "electrum_clear_alert_title": "You wan clear history?",
-    "electrum_clear_alert_message": "You wan clear electrum servers history?",
+    "electrum_clear_alert_message": "You wan clear electrum-grs servers history?",
     "electrum_clear_alert_cancel": "Cancel",
     "electrum_clear_alert_ok": "Ok",
     "electrum_select": "Select",
     "electrum_unable_to_connect": "We nor fit connect to [server]",
     "electrum_history": "The server history",
-    "electrum_reset_to_default": "You sure say you wan reset your Electrum settings to as e take dey before?",
+    "electrum_reset_to_default": "You sure say you wan reset your Electrum-GRS settings to as e take dey before?",
     "electrum_clear": "wipe am"
   },
   "transactions": {
