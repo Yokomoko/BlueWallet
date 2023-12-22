@@ -199,11 +199,11 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await expect(element(by.id('cr34t3d'))).toBeVisible();
     await element(by.id('cr34t3d')).tap();
     await element(by.id('ReceiveButton')).tap();
-    await element(by.text('Yes, I have')).tap();
+    await element(by.text('Yes, I have.')).tap();
     try {
       // in case emulator has no google services and doesnt support pushes
       // we just dont show this popup
-      await element(by.text(`No, and don’t ask me again`)).tap();
+      await element(by.text(`No, and do not ask me again.`)).tap();
     } catch (_) {}
     await yo('BitcoinAddressQRCodeContainer');
     await yo('BlueCopyTextToClipboard');
@@ -593,6 +593,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await element(by.id('WalletsList')).swipe('left', 'fast', 1); // in case emu screen is small and it doesnt fit
     // going to Import Wallet screen and importing mnemonic
     await element(by.id('CreateAWallet')).tap();
+    await element(by.id('ScrollView')).swipe('up', 'fast', 0.9); // in case emu screen is small and it doesnt fit
     await element(by.id('ImportWallet')).tap();
     await element(by.id('MnemonicInput')).replaceText(
       'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
@@ -618,10 +619,10 @@ describe('BlueWallet UI Tests - no wallets', () => {
     // open custom derivation path screen and import the wallet
     await element(by.id('CustomDerivationPathButton')).tap();
     await element(by.id('DerivationPathInput')).replaceText("m/44'/17'/1'");
-    await waitFor(element(by.text('found'))) // wait for discovery to be completed
+    await waitFor(element(by.text('Found'))) // wait for discovery to be completed
       .toExist()
       .withTimeout(300 * 1000);
-    await element(by.text('found')).tap();
+    await element(by.text('Found')).tap();
     await element(by.id('ImportButton')).tap();
     await element(by.text('OK')).tap();
 
