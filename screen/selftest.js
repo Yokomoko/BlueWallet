@@ -6,7 +6,7 @@ import bip38 from 'bip38grs';
 import BIP32Factory from 'bip32grs';
 
 import loc from '../loc';
-import { BlueSpacing20, SafeBlueArea, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
+import { BlueSpacing20, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
 import navigationStyle from '../components/navigationStyle';
 import {
   SegwitP2SHWallet,
@@ -18,6 +18,7 @@ import {
 } from '../class';
 import ecc from '../blue_modules/noble_ecc';
 import Button from '../components/Button';
+import SafeArea from '../components/SafeArea';
 const bitcoin = require('groestlcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
 const encryption = require('../blue_modules/encryption');
@@ -275,7 +276,7 @@ export default class Selftest extends Component {
     }
 
     return (
-      <SafeBlueArea>
+      <SafeArea>
         <BlueCard>
           <ScrollView>
             <BlueSpacing20 />
@@ -309,7 +310,7 @@ export default class Selftest extends Component {
             )}
           </ScrollView>
         </BlueCard>
-      </SafeBlueArea>
+      </SafeArea>
     );
   }
 }
