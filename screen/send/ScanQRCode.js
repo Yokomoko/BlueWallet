@@ -86,7 +86,7 @@ const ScanQRCode = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
-  const { launchedBy, onBarScanned, onDismiss, showFileImportButton, onBarScannerDismissWithoutData = () => {} } = route.params;
+  const { launchedBy, onBarScanned, onDismiss, showFileImportButton } = route.params;
   const scannedCache = {};
   const { colors } = useTheme();
   const isFocused = useIsFocused();
@@ -302,7 +302,6 @@ const ScanQRCode = () => {
   };
 
   const dismiss = () => {
-    onBarScannerDismissWithoutData();
     if (launchedBy) {
       navigation.navigate({ name: launchedBy, params: {}, merge: true });
     } else {
@@ -411,6 +410,8 @@ ScanQRCode.initialParams = {
   urTotal: undefined,
   urHave: undefined,
   backdoorText: '',
+  onDismiss: undefined,
+  showFileImportButton: true,
   backdoorVisible: false,
   animatedQRCodeData: {},
 };
