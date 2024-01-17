@@ -421,7 +421,7 @@ describe('BlueWallet UI Tests - import BIP84 wallet', () => {
 
     await device.launchApp({
       newInstance: true,
-      url: 'groestlcoin:GRS1QH6TF004TY7Z7UN2V5NTU4MKF630545GV2PF49L\\?amount=0.0001\\&label=Yo',
+      url: 'groestlcoin:GRS1QH6TF004TY7Z7UN2V5NTU4MKF630545GV2PF49L?amount=0.0001&label=Yo',
     });
 
     // setting fee rate:
