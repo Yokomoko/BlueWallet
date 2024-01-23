@@ -16,8 +16,6 @@
     "success": "Success",
     "wallet_key": "Wallet key",
     "invalid_animated_qr_code_fragment": "Invalid animated QR Code fragment. Please try again.",
-    "file_saved": "File {filePath} has been saved in your {destination}.",
-    "downloads_folder": "Downloads Folder",
     "close": "Close",
     "change_input_currency": "Change input currency",
     "refresh": "Refresh",
@@ -454,7 +452,6 @@
     "no_ln_wallet_error": "Before paying a Lightning invoice, you must first add a Lightning wallet.",
     "looks_like_bip38": "This looks like a password-protected private key (BIP38).",
     "reorder_title": "Re-order Wallets",
-    "reorder_instructions": "Tap and hold a wallet to drag it across the list.",
     "please_continue_scanning": "Please continue scanning.",
     "select_no_bitcoin": "There are currently no Groestlcoin wallets available.",
     "select_no_bitcoin_exp": "A Groestlcoin wallet is required to refill Lightning wallets. Please create or import one.",
@@ -464,7 +461,8 @@
     "warning_do_not_disclose": "Warning! Do not disclose.",
     "add_ln_wallet_first": "You must first add a Lightning wallet.",
     "identity_pubkey": "Identity Pubkey",
-    "xpub_title": "Wallet XPUB"
+    "xpub_title": "Wallet XPUB",
+    "search_wallets": "Search Wallets"
   },
   "multisig": {
     "multisig_vault": "Vault",

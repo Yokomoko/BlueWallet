@@ -50,17 +50,6 @@
 #endif
 }
 
-/// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.
-///
-/// @see: https://reactjs.org/blog/2022/03/29/react-v18.html
-/// @note: This requires to be rendering on Fabric (i.e. on the New Architecture).
-/// @return: `true` if the `concurrentRoot` feature is enabled. Otherwise, it returns `false`.
-- (BOOL)concurrentRootEnabled
-{
-  return true;
-}
-
-
 - (void)observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
     if([keyPath isEqual:@"deviceUID"] || [keyPath isEqual:@"deviceUIDCopy"])
@@ -127,7 +116,7 @@
   [builder removeMenuForIdentifier:UIMenuFormat];
   [builder removeMenuForIdentifier:UIMenuToolbar];
 
-  // Add Wallet action with Command + A shortcut
+  // File -> Add Wallet (Command + A)
    UIKeyCommand *addWalletCommand = [UIKeyCommand keyCommandWithInput:@"A" modifierFlags:UIKeyModifierCommand action:@selector(addWalletAction:)];
    [addWalletCommand setTitle:@"Add Wallet"];
    UIMenu *addWalletMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[addWalletCommand]];
@@ -140,11 +129,13 @@
        UIMenu *newFileMenu = [UIMenu menuWithTitle:fileMenu.title image:nil identifier:fileMenu.identifier options:fileMenu.options children:@[addWalletMenu]];
        [builder replaceMenuForIdentifier:UIMenuFile withMenu:newFileMenu];
    }
-    // Existing settings menu
-    UIKeyCommand *settingsCommand = [UIKeyCommand keyCommandWithInput:@"," modifierFlags:UIKeyModifierCommand action:@selector(openSettings)];
-    [settingsCommand setTitle:@"Settings..."];
-    UIMenu *settings = [UIMenu menuWithTitle:@"Settings..." image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[settingsCommand]];
-    [builder insertSiblingMenu:settings afterMenuForIdentifier:UIMenuAbout];
+
+  // BlueWallet -> Settings (Command + ,)
+  UIKeyCommand *settingsCommand = [UIKeyCommand keyCommandWithInput:@"," modifierFlags:UIKeyModifierCommand action:@selector(openSettings:)];
+  [settingsCommand setTitle:@"Settings..."];
+  UIMenu *settings = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[settingsCommand]];
+
+  [builder insertSiblingMenu:settings afterMenuForIdentifier:UIMenuAbout];
 }
 
 // Action for Add Wallet
