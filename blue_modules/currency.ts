@@ -8,8 +8,8 @@ import WidgetCommunication from './WidgetCommunication';
 const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';
 const EXCHANGE_RATES_STORAGE_KEY = 'exchangeRates';
 const LAST_UPDATED = 'LAST_UPDATED';
-const GROUP_IO_BLUEWALLET = 'group.io.bluewallet.bluewallet';
-const BTC_PREFIX = 'BTC_';
+const GROUP_IO_BLUEWALLET = 'group.org.groestlcoin.bluewallet123';
+const BTC_PREFIX = 'GRS_';
 
 export interface CurrencyRate {
   LastUpdated: Date | null;

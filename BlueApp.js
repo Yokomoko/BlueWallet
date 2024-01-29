@@ -856,7 +856,7 @@ class AppStorage {
 
   setDoNotTrack = async value => {
     await AsyncStorage.setItem(AppStorage.DO_NOT_TRACK, value ? '1' : '');
-    await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+    await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
     await DefaultPreference.set(AppStorage.DO_NOT_TRACK, value);
   };
 
