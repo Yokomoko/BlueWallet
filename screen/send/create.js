@@ -17,8 +17,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import alert from '../../components/Alert';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { useTheme } from '../../components/themes';
+import { satoshiToBTC } from '../../blue_modules/currency';
 const bitcoin = require('groestlcoinjs-lib');
-const currency = require('../../blue_modules/currency');
 
 const SendCreate = () => {
   const { fee, recipients, memo = '', satoshiPerByte, psbt, showAnimatedQr, tx } = useRoute().params;
@@ -116,7 +116,7 @@ const SendCreate = () => {
           <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>{item.address}</Text>
           <Text style={[styles.transactionDetailsTitle, styleHooks.transactionDetailsTitle]}>{loc.send.create_amount}</Text>
           <Text style={[styles.transactionDetailsSubtitle, styleHooks.transactionDetailsSubtitle]}>
-            {currency.satoshiToBTC(item.value)} {loc.units[BitcoinUnit.BTC]}
+            {satoshiToBTC(item.value)} {loc.units[BitcoinUnit.BTC}
           </Text>
           {recipients.length > 1 && (
             <BlueText style={styles.itemOf}>{loc.formatString(loc._.of, { number: index + 1, total: recipients.length })}</BlueText>
