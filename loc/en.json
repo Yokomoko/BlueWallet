@@ -571,6 +571,8 @@
     "sats": "gros"
   },
   "addresses": {
+    "copy_private_key": "Copy private key",
+    "sensitive_private_key": "Warning: private keys are extremely sensitive. Continue?",
     "sign_title": "Sign/Verify Message",
     "sign_help": "Here you can create or verify a cryptographic signature based on a Groestlcoin address.",
     "sign_sign": "Sign",
