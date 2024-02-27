@@ -32,6 +32,7 @@ describe('LegacyWallet', function () {
     w._address = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD'; // hack internals
     assert.ok(w.weOwnAddress('3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD'));
     assert.ok(!w.weOwnAddress('aaa'));
+    // @ts-ignore wrong type on purpose
     assert.ok(!w.weOwnAddress(false));
     assert.ok(w.getBalance() === 0);
     assert.ok(w.getUnconfirmedBalance() === 0);
@@ -52,7 +53,7 @@ describe('LegacyWallet', function () {
       assert.ok(tx.hash);
       assert.ok(tx.value !== undefined);
       assert.ok(tx.received);
-      assert.ok(tx.confirmations > 1);
+      assert.ok(tx.confirmations! > 1);
     }
 
     assert.ok(w.weOwnTransaction('88705d10a44842ec9e4fb4a74761d0314ec4bd8efce51e21f3cc529d4c740cad'));
@@ -66,7 +67,7 @@ describe('LegacyWallet', function () {
       assert.strictEqual(tx.address, 'FhZ9dd8WhWRojpSs9cRDrGGqDn8HTyUtvL');
       assert.strictEqual(tx.value, 12928680705699 );
       assert.strictEqual(tx.value, tx.amount);
-      assert.ok(tx.confirmations > 0);
+      assert.ok(tx.confirmations! > 0);
     }
   });
 /*
@@ -88,7 +89,7 @@ describe('LegacyWallet', function () {
         assert.ok(tx.hash);
         assert.ok(tx.value !== undefined);
         assert.ok(tx.received);
-        assert.ok(tx.confirmations > 1);
+        assert.ok(tx.confirmations! > 1);
       }
     },
     240000,
@@ -99,13 +100,14 @@ describe('LegacyWallet', function () {
     const w = new LegacyWallet();
     w._address = '39f9bbx46WGZoLU3CUxRXi8ibXMX9SpyKD';
     await w.fetchUtxo();
-    assert.ok(w.utxo.length > 0, 'unexpected empty UTXO');
+    assert.ok(w._utxo.length > 0, 'unexpected empty UTXO');
     assert.ok(w.getUtxo().length > 0, 'unexpected empty UTXO');
 
     assert.ok(w.getUtxo()[0].value);
     assert.ok(w.getUtxo()[0].vout === 0, JSON.stringify(w.getUtxo()[0]));
     assert.ok(w.getUtxo()[0].txid);
     assert.ok(w.getUtxo()[0].confirmations);
+    assert.ok(w.getUtxo()[0].txhex);
   });
 });
 
@@ -117,6 +119,7 @@ describe('SegwitP2SHWallet', function () {
     assert.ok(l.getAddress() === (await l.getAddressAsync()));
     assert.ok(l.weOwnAddress('34AgLJhwXrvmkZS1o5TrcdeevMt1ywshkh'));
     assert.ok(!l.weOwnAddress('garbage'));
+    // @ts-ignore wrong type on purpose
     assert.ok(!l.weOwnAddress(false));
   });
 });
@@ -128,6 +131,7 @@ describe('SegwitBech32Wallet', function () {
     assert.ok(w.weOwnAddress('grs1qphjsj69a65q9uv6ehp65hr84zjtffvw9630pcx'));
     assert.ok(w.weOwnAddress('GRS1QPHJSJ69A65Q9UV6EHP65HR84ZJTFFVW9630PCX'));
     assert.ok(!w.weOwnAddress('garbage'));
+    // @ts-ignore wrong type on purpose
     assert.ok(!w.weOwnAddress(false));
     await w.fetchBalance();
     assert.strictEqual(w.getBalance(), 0);
@@ -160,7 +164,7 @@ describe('SegwitBech32Wallet', function () {
       assert.ok(tx.hash);
       assert.ok(tx.value !== undefined);
       assert.ok(tx.received);
-      assert.ok(tx.confirmations > 1);
+      assert.ok(tx.confirmations! > 1);
     }
 
     assert.strictEqual(w.getTransactions()[0].value, -178650);
@@ -173,6 +177,7 @@ describe('SegwitBech32Wallet', function () {
     assert.ok(w.weOwnAddress('grs1q0h03f6hw65yll5a7lnmu6atpdplw7y34752g80'));
     assert.ok(w.weOwnAddress('GRS1Q0H03F6HW65YLL5A7LNMU6ATPDPLW7Y34752G80'));
     assert.ok(!w.weOwnAddress('garbage'));
+    // @ts-ignore wrong type on purpose
     assert.ok(!w.weOwnAddress(false));
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 1);
@@ -180,7 +185,7 @@ describe('SegwitBech32Wallet', function () {
     assert.ok(tx.hash);
     assert.strictEqual(tx.value, 0.00189120);
     assert.ok(tx.received);
-    assert.ok(tx.confirmations > 1);
+    assert.ok(tx.confirmations! > 1);
 
     const tx0 = w.getTransactions()[0];
     assert.ok(tx0.inputs);

@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { FlatList, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import navigationStyle from '../../components/navigationStyle';
+import { BlueStorageContext } from '../../blue_modules/storage-context';
+import presentAlert from '../../components/Alert';
+import ListItem from '../../components/ListItem';
+import { useTheme } from '../../components/themes';
 import loc, { saveLanguage } from '../../loc';
 import { AvailableLanguages, TLanguage } from '../../loc/languages';
-import { BlueStorageContext } from '../../blue_modules/storage-context';
-import alert from '../../components/Alert';
-import { useTheme } from '../../components/themes';
-import ListItem from '../../components/ListItem';
 
 const styles = StyleSheet.create({
   flex: {
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Language: React.FC = () => {
+const Language = () => {
   const { setLanguage, language } = useContext(BlueStorageContext);
   const [selectedLanguage, setSelectedLanguage] = useState<string>(loc.getLanguage());
   const { setOptions } = useNavigation();
@@ -43,7 +42,7 @@ const Language: React.FC = () => {
       setSelectedLanguage(item.value);
       setLanguage();
       if (currentLanguage?.isRTL !== item.isRTL) {
-        alert(loc.settings.language_isRTL);
+        presentAlert({ message: loc.settings.language_isRTL });
       }
     });
   };
@@ -65,7 +64,5 @@ const Language: React.FC = () => {
     />
   );
 };
-// @ts-ignore: Fix later
-Language.navigationOptions = navigationStyle({}, opts => ({ ...opts, title: loc.settings.language }));
 
 export default Language;

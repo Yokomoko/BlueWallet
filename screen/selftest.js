@@ -19,7 +19,7 @@ import {
 import ecc from '../blue_modules/noble_ecc';
 import Button from '../components/Button';
 import SafeArea from '../components/SafeArea';
-import alert from '../components/Alert';
+import presentAlert from '../components/Alert';
 const bitcoin = require('groestlcoinjs-lib');
 const BlueCrypto = require('react-native-blue-crypto');
 const encryption = require('../blue_modules/encryption');
@@ -49,9 +49,9 @@ export default class Selftest extends Component {
     try {
       fs.showFilePickerAndReadFile().then(file => {
         if (file && file.data && file.data.length > 0) {
-          alert(file.data);
+          presentAlert({ message: file.data });
         } else {
-          alert('Error reading file');
+          presentAlert({ message: 'Error reading file' });
         }
       });
     } catch (err) {
@@ -272,6 +272,10 @@ export default class Selftest extends Component {
         // skipping RN-specific test'
       }
       */
+      //
+
+      assertStrictEqual(Buffer.from('00ff0f', 'hex').reverse().toString('hex'), '0fff00');
+
       //
     } catch (Err) {
       errorMessage += Err;

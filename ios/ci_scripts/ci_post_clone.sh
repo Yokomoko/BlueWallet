@@ -1,26 +1,20 @@
 #!/bin/zsh
 
-# fail if any command fails
+echo "===== Installling CocoaPods ====="
+export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+brew install cocoapods
+echo "===== Installing Node.js ====="
+brew install node@21
+echo "===== Installing yarn (Xcode Cloud doenst like NPM ) ====="
+brew install yarn
 
-echo "🧩 Stage: Post-clone is activated .... "
+# LDK is not currently available for Catalyst, so we need to patch the wallet
+echo "===== Running LDK is not currently available for Catalyst, so we need to patch the wallet ====="
+cp scripts/maccatalystpatches/lightning-ldk-wallet.ts class/wallets/lightning-ldk-wallet.ts
 
-set -e
-# debug log
-set -x
-
-# Install dependencies using Homebrew.
-brew install node cocoapods
-
-# Install node and pods dependencies.
-if [ $CI_PRODUCT_PLATFORM = 'macOS' ]
-then
-    cd .. &&
-    cd .. &&
-    ./scripts/maccatalystpatches/applypatchesformaccatalyst.sh
-else
-    cd .. && npm install && npx pod-install
-fi
-
-echo "🎯 Stage: Post-clone is done .... "
-
-exit 0
+# Install dependencies
+echo "===== Running yarn install ====="
+yarn install
+echo "===== Running pod install ====="
+cd ios
+pod install

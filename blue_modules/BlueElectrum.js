@@ -4,10 +4,9 @@ import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet, TaprootWallet } fro
 import DefaultPreference from 'react-native-default-preference';
 import loc from '../loc';
 import WidgetCommunication from './WidgetCommunication';
-import alert from '../components/Alert';
+import presentAlert from '../components/Alert';
 const bitcoin = require('groestlcoinjs-lib');
 const ElectrumClient = require('electrum-client');
-const reverse = require('buffer-reverse');
 const BigNumber = require('bignumber.js');
 
 const net = require('net');
@@ -272,7 +271,7 @@ async function presentNetworkErrorAlert(usingPeer) {
                     // Must be running on Android
                     console.log(e);
                   }
-                  alert(loc.settings.electrum_saved);
+                  presentAlert({ message: loc.settings.electrum_saved });
                   setTimeout(connectMain, 500);
                 },
               },
@@ -359,7 +358,7 @@ module.exports.getBalanceByAddress = async function (address) {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
-  const reversedHash = Buffer.from(reverse(hash));
+  const reversedHash = Buffer.from(hash).reverse();
   const balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
   balance.addr = address;
   return balance;
@@ -388,7 +387,7 @@ module.exports.getTransactionsByAddress = async function (address) {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
-  const reversedHash = Buffer.from(reverse(hash));
+  const reversedHash = Buffer.from(hash).reverse();
   const history = await mainClient.blockchainScripthash_getHistory(reversedHash.toString('hex'));
   for (const h of history || []) {
     if (h.tx_hash) txhashHeightCache[h.tx_hash] = h.height; // cache tx height
@@ -406,7 +405,7 @@ module.exports.getMempoolTransactionsByAddress = async function (address) {
   if (!mainClient) throw new Error('Electrum client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
-  const reversedHash = Buffer.from(reverse(hash));
+  const reversedHash = Buffer.from(hash).reverse();
   return mainClient.blockchainScripthash_getMempool(reversedHash.toString('hex'));
 };
 
@@ -503,7 +502,7 @@ module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) 
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      let reversedHash = Buffer.from(hash).reverse();
       reversedHash = reversedHash.toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
@@ -549,7 +548,7 @@ module.exports.multiGetUtxoByAddress = async function (addresses, batchsize) {
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      let reversedHash = Buffer.from(hash).reverse();
       reversedHash = reversedHash.toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
@@ -592,7 +591,7 @@ module.exports.multiGetHistoryByAddress = async function (addresses, batchsize) 
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      let reversedHash = Buffer.from(hash).reverse();
       reversedHash = reversedHash.toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
@@ -1065,7 +1064,7 @@ function txhexToElectrumTransaction(txhex) {
     if (inn.witness[1]) txinwitness.push(inn.witness[1].toString('hex'));
 
     ret.vin.push({
-      txid: reverse(inn.hash).toString('hex'),
+      txid: Buffer.from(inn.hash).reverse().toString('hex'),
       vout: inn.index,
       scriptSig: { hex: inn.script.toString('hex'), asm: '' },
       txinwitness,

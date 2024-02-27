@@ -5,7 +5,7 @@ import loc from '../loc';
 import DocumentPicker from 'react-native-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { isDesktop } from './environment';
-import alert from '../components/Alert';
+import presentAlert from '../components/Alert';
 import { readFile } from './react-native-bw-file-access';
 
 const LocalQRCode = require('@remobile/react-native-qrcode-local-image');
@@ -16,7 +16,7 @@ const _shareOpen = async (filePath: string) => {
     saveToFiles: isDesktop,
   })
     .catch(error => {
-      alert(error.message);
+      presentAlert({ message: error.message });
       console.log(error);
     })
     .finally(() => {
@@ -28,7 +28,7 @@ const _shareOpen = async (filePath: string) => {
  * Writes a file to fs, and triggers an OS sharing dialog, so user can decide where to put this file (share to cloud
  * or perhabs messaging app). Provided filename should be just a file name, NOT a path
  */
-const writeFileAndExport = async function (filename: string, contents: string) {
+export const writeFileAndExport = async function (filename: string, contents: string) {
   if (Platform.OS === 'ios') {
     const filePath = RNFS.TemporaryDirectoryPath + `/${filename}`;
     await RNFS.writeFile(filePath, contents);
@@ -52,7 +52,7 @@ const writeFileAndExport = async function (filename: string, contents: string) {
         await _shareOpen(filePath);
       } catch (e: any) {
         console.log(e);
-        alert(e.message);
+        presentAlert({ message: e.message });
       }
     } else {
       console.log('Storage Permission: Denied');
@@ -68,14 +68,14 @@ const writeFileAndExport = async function (filename: string, contents: string) {
       ]);
     }
   } else {
-    alert('Not implemented for this platform');
+    presentAlert({ message: 'Not implemented for this platform' });
   }
 };
 
 /**
  * Opens & reads *.psbt files, and returns base64 psbt. FALSE if something went wrong (wont throw).
  */
-const openSignedTransaction = async function (): Promise<string | boolean> {
+export const openSignedTransaction = async function (): Promise<string | boolean> {
   try {
     const res = await DocumentPicker.pickSingle({
       type: Platform.OS === 'ios' ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn'] : [DocumentPicker.types.allFiles],
@@ -84,7 +84,7 @@ const openSignedTransaction = async function (): Promise<string | boolean> {
     return await _readPsbtFileIntoBase64(res.uri);
   } catch (err) {
     if (!DocumentPicker.isCancel(err)) {
-      alert(loc.send.details_no_signed_tx);
+      presentAlert({ message: loc.send.details_no_signed_tx });
     }
   }
 
@@ -106,7 +106,7 @@ const _readPsbtFileIntoBase64 = async function (uri: string): Promise<string> {
   }
 };
 
-const showImagePickerAndReadImage = () => {
+export const showImagePickerAndReadImage = () => {
   return new Promise((resolve, reject) =>
     launchImageLibrary(
       {
@@ -134,7 +134,7 @@ const showImagePickerAndReadImage = () => {
   );
 };
 
-const showFilePickerAndReadFile = async function (): Promise<{ data: string | false; uri: string | false }> {
+export const showFilePickerAndReadFile = async function (): Promise<{ data: string | false; uri: string | false }> {
   try {
     const res = await DocumentPicker.pickSingle({
       copyTo: 'cachesDirectory',
@@ -152,7 +152,7 @@ const showFilePickerAndReadFile = async function (): Promise<{ data: string | fa
     });
 
     if (!res.fileCopyUri) {
-      alert('Picking and caching a file failed');
+      presentAlert({ message: 'Picking and caching a file failed' });
       return { data: false, uri: false };
     }
 
@@ -169,7 +169,7 @@ const showFilePickerAndReadFile = async function (): Promise<{ data: string | fa
       return new Promise(resolve => {
         if (!res.fileCopyUri) {
           // to make ts happy, should not need this check here
-          alert('Picking and caching a file failed');
+          presentAlert({ message: 'Picking and caching a file failed' });
           resolve({ data: false, uri: false });
           return;
         }
@@ -188,24 +188,19 @@ const showFilePickerAndReadFile = async function (): Promise<{ data: string | fa
     return { data: file, uri: fileCopyUri };
   } catch (err: any) {
     if (!DocumentPicker.isCancel(err)) {
-      alert(err.message);
+      presentAlert({ message: err.message });
     }
     return { data: false, uri: false };
   }
 };
 
-const readFileOutsideSandbox = (filePath: string) => {
+export const readFileOutsideSandbox = (filePath: string) => {
   if (Platform.OS === 'ios') {
     return readFile(filePath);
   } else if (Platform.OS === 'android') {
     return RNFS.readFile(filePath);
   } else {
-    alert('Not implemented for this platform');
+    presentAlert({ message: 'Not implemented for this platform' });
+    throw new Error('Not implemented for this platform');
   }
 };
-
-module.exports.writeFileAndExport = writeFileAndExport;
-module.exports.openSignedTransaction = openSignedTransaction;
-module.exports.showFilePickerAndReadFile = showFilePickerAndReadFile;
-module.exports.showImagePickerAndReadImage = showImagePickerAndReadImage;
-module.exports.readFileOutsideSandbox = readFileOutsideSandbox;

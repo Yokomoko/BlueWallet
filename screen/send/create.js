@@ -8,16 +8,16 @@ import RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import { BlueText } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
-import Privacy from '../../blue_modules/Privacy';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc from '../../loc';
 import { DynamicQRCode } from '../../components/DynamicQRCode';
 import { isDesktop } from '../../blue_modules/environment';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import alert from '../../components/Alert';
+import presentAlert from '../../components/Alert';
 import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
 import { useTheme } from '../../components/themes';
 import { satoshiToBTC } from '../../blue_modules/currency';
+import usePrivacy from '../../hooks/usePrivacy';
 const bitcoin = require('groestlcoinjs-lib');
 
 const SendCreate = () => {
@@ -26,6 +26,7 @@ const SendCreate = () => {
   const size = transaction.virtualSize();
   const { colors } = useTheme();
   const { setOptions } = useNavigation();
+  const { enableBlur, disableBlur } = usePrivacy();
 
   const styleHooks = StyleSheet.create({
     transactionDetailsTitle: {
@@ -46,13 +47,12 @@ const SendCreate = () => {
   });
 
   useEffect(() => {
-    Privacy.enableBlur();
-
     console.log('send/create - useEffect');
+    enableBlur();
     return () => {
-      Privacy.disableBlur();
+      disableBlur();
     };
-  }, []);
+  }, [disableBlur, enableBlur]);
 
   const exportTXN = useCallback(async () => {
     const fileName = `${Date.now()}.txn`;
@@ -76,10 +76,10 @@ const SendCreate = () => {
         const filePath = RNFS.DownloadDirectoryPath + `/${fileName}`;
         try {
           await RNFS.writeFile(filePath, tx);
-          alert(loc.formatString(loc.send.txSaved, { filePath }));
+          presentAlert({ message: loc.formatString(loc.send.txSaved, { filePath }) });
         } catch (e) {
           console.log(e);
-          alert(e.message);
+          presentAlert({ message: e.message });
         }
       } else {
         console.log('Storage Permission: Denied');
