@@ -96,10 +96,18 @@ describe('Watch only wallet', () => {
     assert.strictEqual(w.getBalance(), 200000);
     await w.fetchTransactions();
     assert.strictEqual(w.getTransactions().length, 4);
-    assert.ok((await w.getAddressAsync()).startsWith('grs1'));
+    const nextAddress = await w.getAddressAsync();
+
+    assert.strictEqual(w.getNextFreeAddressIndex(), 2);
+    assert.strictEqual(nextAddress, 'grs1q6442dedpwvqldldnsyux3cuz27paqks0uckh4g');
+    assert.strictEqual(nextAddress, w._getExternalAddressByIndex(w.getNextFreeAddressIndex()));
+
+    const nextChangeAddress = await w.getChangeAddressAsync();
+    assert.strictEqual(nextChangeAddress, 'grs1qgltdyjnertcyvdn9hlkfpgr6hc260rjrdpfy99');
   });
 
   // skipped because its generally rare case
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('can fetch txs for address funded by genesis txs', async () => {
     const w = new WatchOnlyWallet();
     w.setSecret('37jKPSmbEGwgfacCr2nayn1wTaqMAbA94Z');

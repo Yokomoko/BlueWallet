@@ -22,15 +22,18 @@ const RateExtractors = {
   },
 } as const;
 
-type FiatUnit = {
-  [key: string]: {
-    endPointKey: string;
-    symbol: string;
-    locale: string;
-    source: 'CoinGecko';
-  };
+export type TFiatUnit = {
+  endPointKey: string;
+  symbol: string;
+  locale: string;
+  source: 'CoinGecko';
 };
-export const FiatUnit = untypedFiatUnit as FiatUnit;
+
+export type TFiatUnits = {
+  [key: string]: TFiatUnit;
+};
+
+export const FiatUnit = untypedFiatUnit as TFiatUnits;
 
 export type FiatUnitType = {
   endPointKey: string;

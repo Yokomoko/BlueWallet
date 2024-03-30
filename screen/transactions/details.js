@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { View, ScrollView, TouchableOpacity, Text, TextInput, Linking, StyleSheet, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { BlueCard, BlueCopyToClipboardButton, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
+import { BlueCard, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import HandoffComponent from '../../components/handoff';
 import loc from '../../loc';
@@ -10,6 +10,8 @@ import { BlueStorageContext } from '../../blue_modules/storage-context';
 import ToolTipMenu from '../../components/TooltipMenu';
 import presentAlert from '../../components/Alert';
 import { useTheme } from '../../components/themes';
+import triggerHapticFeedback, { HapticFeedbackTypes } from '../../blue_modules/hapticFeedback';
+import CopyToClipboardButton from '../../components/CopyToClipboardButton';
 const dayjs = require('dayjs');
 
 function onlyUnique(value, index, self) {
@@ -116,27 +118,33 @@ const TransactionsDetails = () => {
   const handleOnSaveButtonTapped = () => {
     Keyboard.dismiss();
     txMetadata[tx.hash] = { memo };
-    saveToDisk().then(_success => presentAlert({ message: loc.transactions.transaction_note_saved }));
+    saveToDisk().then(_success => {
+      triggerHapticFeedback(HapticFeedbackTypes.Success);
+      presentAlert({ message: loc.transactions.transaction_note_saved });
+    });
   };
 
-  const handleOnOpenTransactionOnBlockExporerTapped = () => {
+  const handleOnOpenTransactionOnBlockExplorerTapped = () => {
     const url = `https://esplora.groestlcoin.org/tx/${tx.hash}`;
     Linking.canOpenURL(url)
       .then(supported => {
         if (supported) {
           Linking.openURL(url).catch(e => {
-            console.log('openURL failed in handleOnOpenTransactionOnBlockExporerTapped');
+            console.log('openURL failed in handleOnOpenTransactionOnBlockExplorerTapped');
             console.log(e.message);
+            triggerHapticFeedback(HapticFeedbackTypes.NotificationError);
             presentAlert({ message: e.message });
           });
         } else {
-          console.log('canOpenURL supported is false in handleOnOpenTransactionOnBlockExporerTapped');
+          console.log('canOpenURL supported is false in handleOnOpenTransactionOnBlockExplorerTapped');
+          triggerHapticFeedback(HapticFeedbackTypes.NotificationError);
           presentAlert({ message: loc.transactions.open_url_error });
         }
       })
       .catch(e => {
-        console.log('canOpenURL failed in handleOnOpenTransactionOnBlockExporerTapped');
+        console.log('canOpenURL failed in handleOnOpenTransactionOnBlockExplorerTapped');
         console.log(e.message);
+        triggerHapticFeedback(HapticFeedbackTypes.NotificationError);
         presentAlert({ message: e.message });
       });
   };
@@ -236,7 +244,7 @@ const TransactionsDetails = () => {
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_from}</BlueText>
-              <BlueCopyToClipboardButton stringToCopy={from.filter(onlyUnique).join(', ')} />
+              <CopyToClipboardButton stringToCopy={from.filter(onlyUnique).join(', ')} />
             </View>
             {renderSection(from.filter(onlyUnique))}
             <View style={styles.marginBottom18} />
@@ -247,7 +255,7 @@ const TransactionsDetails = () => {
           <>
             <View style={styles.rowHeader}>
               <BlueText style={styles.rowCaption}>{loc.transactions.details_to}</BlueText>
-              <BlueCopyToClipboardButton stringToCopy={to.filter(onlyUnique).join(', ')} />
+              <CopyToClipboardButton stringToCopy={to.filter(onlyUnique).join(', ')} />
             </View>
             {renderSection(arrDiff(from, to.filter(onlyUnique)))}
             <View style={styles.marginBottom18} />
@@ -265,8 +273,8 @@ const TransactionsDetails = () => {
         {tx.hash && (
           <>
             <View style={styles.rowHeader}>
-              <BlueText style={[styles.txId, stylesHooks.txId]}>{loc.transactions.txid}</BlueText>
-              <BlueCopyToClipboardButton stringToCopy={tx.hash} />
+              <BlueText style={styles.txid}>{loc.transactions.txid}</BlueText>
+              <CopyToClipboardButton stringToCopy={tx.hash} />
             </View>
             <BlueText style={styles.rowValue}>{tx.hash}</BlueText>
             <View style={styles.marginBottom18} />
@@ -314,11 +322,10 @@ const TransactionsDetails = () => {
             },
           ]}
           onPressMenuItem={handleCopyPress}
-          onPress={handleOnOpenTransactionOnBlockExporerTapped}
+          onPress={handleOnOpenTransactionOnBlockExplorerTapped}
+          buttonStyle={[styles.greyButton, stylesHooks.greyButton]}
         >
-          <View style={[styles.greyButton, stylesHooks.greyButton]}>
-            <Text style={[styles.Link, stylesHooks.Link]}>{loc.transactions.details_show_in_block_explorer}</Text>
-          </View>
+          <Text style={[styles.Link, stylesHooks.Link]}>{loc.transactions.details_show_in_block_explorer}</Text>
         </ToolTipMenu>
       </BlueCard>
     </ScrollView>
@@ -362,7 +369,7 @@ const styles = StyleSheet.create({
   marginBottom18: {
     marginBottom: 18,
   },
-  txId: {
+  txid: {
     fontSize: 16,
     fontWeight: '500',
   },
@@ -371,7 +378,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   weOwnAddress: {
-    fontWeight: '600',
+    fontWeight: '700',
   },
   save: {
     alignItems: 'center',

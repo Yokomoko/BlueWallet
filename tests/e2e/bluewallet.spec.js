@@ -206,7 +206,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
       await element(by.text(`No, and do not ask me again.`)).tap();
     } catch (_) {}
     await yo('BitcoinAddressQRCodeContainer');
-    await yo('BlueCopyTextToClipboard');
+    await yo('CopyTextToClipboard');
     await element(by.id('SetCustomAmountButton')).tap();
     await element(by.id('BitcoinAmountInput')).replaceText('1');
     await element(by.id('CustomAmountDescription')).typeText('test');
@@ -214,7 +214,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await sup('1 GRS');
     await sup('test');
     await yo('BitcoinAddressQRCodeContainer');
-    await yo('BlueCopyTextToClipboard');
+    await yo('CopyTextToClipboard');
     await device.pressBack();
     await device.pressBack();
     await helperDeleteWallet('cr34t3d');
@@ -461,6 +461,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await helperSwitchAdvancedMode();
     await yo('WalletsList');
     await element(by.id('WalletsList')).swipe('left', 'fast', 1); // in case emu screen is small and it doesnt fit
+    await sleep(200); // Wait until bounce animation finishes.
     // going to Import Wallet screen and importing Vault
     await element(by.id('CreateAWallet')).tap();
     await yo('ActivateVaultButton');
@@ -538,6 +539,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await device.launchApp({ newInstance: true });
     await yo('WalletsList');
     await element(by.id('WalletsList')).swipe('left', 'fast', 1); // in case emu screen is small and it doesnt fit
+    await sleep(200); // Wait until bounce animation finishes.
     // going to Import Wallet screen and importing mnemonic
     await element(by.id('CreateAWallet')).tap();
     await element(by.id('ImportWallet')).tap();
@@ -672,7 +674,7 @@ describe('BlueWallet UI Tests - no wallets', () => {
     await helperSwitchAdvancedMode();
 
     await element(by.id('WalletsList')).swipe('left', 'fast', 1); // in case emu screen is small and it doesnt fit
-    await sleep(100); // wait swipe animation to finish
+    await sleep(200); // Wait until bounce animation finishes.
     // going to Import Wallet screen and importing mnemonic
     await element(by.id('CreateAWallet')).tap();
     await element(by.id('ScrollView')).swipe('up', 'fast', 0.9); // in case emu screen is small and it doesnt fit

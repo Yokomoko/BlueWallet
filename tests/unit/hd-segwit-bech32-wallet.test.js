@@ -227,12 +227,10 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     const utxo = [
       {
-        value: 69909,
         address: 'grs1q063ctu6jhe5k4v8ka99qac8rcm2tzjjnp8h967',
-        txId: '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20',
         vout: 0,
         txid: '8b0ab2c7196312e021e0d3dc73f801693826428782970763df6134457bd2ec20',
-        amount: 69909,
+        value: 69909,
         wif: '-',
       },
     ];

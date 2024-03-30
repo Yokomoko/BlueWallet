@@ -10,19 +10,10 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 import Share from 'react-native-share';
 import QRCodeComponent from '../../components/QRCodeComponent';
-import {
-  BlueLoading,
-  BlueCopyTextToClipboard,
-  BlueButtonLink,
-  BlueText,
-  BlueSpacing20,
-  BlueAlertWalletExportReminder,
-  BlueCard,
-  BlueSpacing40,
-} from '../../BlueComponents';
+import { BlueLoading, BlueButtonLink, BlueText, BlueSpacing20, BlueCard, BlueSpacing40 } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
@@ -39,6 +30,8 @@ import { useTheme } from '../../components/themes';
 import Button from '../../components/Button';
 import triggerHapticFeedback, { HapticFeedbackTypes } from '../../blue_modules/hapticFeedback';
 import { fiatToBTC, satoshiToBTC } from '../../blue_modules/currency';
+import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
+import CopyTextToClipboard from '../../components/CopyTextToClipboard';
 
 const ReceiveDetails = () => {
   const { walletID, address } = useRoute().params;
@@ -53,7 +46,7 @@ const ReceiveDetails = () => {
   const [showPendingBalance, setShowPendingBalance] = useState(false);
   const [showConfirmedBalance, setShowConfirmedBalance] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
-  const { navigate, goBack, setParams } = useNavigation();
+  const { goBack, setParams } = useExtendedNavigation();
   const { colors } = useTheme();
   const [intervalMs, setIntervalMs] = useState(5000);
   const [eta, setEta] = useState('');
@@ -61,6 +54,7 @@ const ReceiveDetails = () => {
   const [initialUnconfirmed, setInitialUnconfirmed] = useState(0);
   const [displayBalance, setDisplayBalance] = useState('');
   const fetchAddressInterval = useRef();
+  const receiveAddressButton = useRef();
   const stylesHook = StyleSheet.create({
     modalContent: {
       backgroundColor: colors.modal,
@@ -100,34 +94,27 @@ const ReceiveDetails = () => {
 
   // re-fetching address balance periodically
   useEffect(() => {
-    console.log('receive/defails - useEffect');
+    console.log('receive/details - useEffect');
 
-    if (fetchAddressInterval.current) {
-      // interval already exists, lets cleanup it and recreate, so theres no duplicate intervals
-      clearInterval(fetchAddressInterval.current);
-      fetchAddressInterval.current = undefined;
-    }
-
-    fetchAddressInterval.current = setInterval(async () => {
+    const intervalId = setInterval(async () => {
       try {
         const decoded = DeeplinkSchemaMatch.bip21decode(bip21encoded);
-        const address2use = address || decoded.address;
-        if (!address2use) return;
+        const addressToUse = address || decoded.address;
+        if (!addressToUse) return;
 
-        console.log('checking address', address2use, 'for balance...');
-        const balance = await BlueElectrum.getBalanceByAddress(address2use);
+        console.log('checking address', addressToUse, 'for balance...');
+        const balance = await BlueElectrum.getBalanceByAddress(addressToUse);
         console.log('...got', balance);
 
         if (balance.unconfirmed > 0) {
           if (initialConfirmed === 0 && initialUnconfirmed === 0) {
-            // saving initial values for later (when tx gets confirmed)
             setInitialConfirmed(balance.confirmed);
             setInitialUnconfirmed(balance.unconfirmed);
             setIntervalMs(25000);
             triggerHapticFeedback(HapticFeedbackTypes.ImpactHeavy);
           }
 
-          const txs = await BlueElectrum.getMempoolTransactionsByAddress(address2use);
+          const txs = await BlueElectrum.getMempoolTransactionsByAddress(addressToUse);
           const tx = txs.pop();
           if (tx) {
             const rez = await BlueElectrum.multiGetTransactionByTxid([tx.tx_hash], 10, true);
@@ -136,11 +123,9 @@ const ReceiveDetails = () => {
               const fees = await BlueElectrum.estimateFees();
               if (satPerVbyte >= fees.fast) {
                 setEta(loc.formatString(loc.transactions.eta_10m));
-              }
-              if (satPerVbyte >= fees.medium && satPerVbyte < fees.fast) {
+              } else if (satPerVbyte >= fees.medium) {
                 setEta(loc.formatString(loc.transactions.eta_3h));
-              }
-              if (satPerVbyte < fees.medium) {
+              } else {
                 setEta(loc.formatString(loc.transactions.eta_1d));
               }
             }
@@ -157,25 +142,19 @@ const ReceiveDetails = () => {
         } else if (balance.unconfirmed === 0 && initialUnconfirmed !== 0) {
           // now, handling a case when unconfirmed == 0, but in past it wasnt (i.e. it changed while user was
           // staring at the screen)
-
           const balanceToShow = balance.confirmed - initialConfirmed;
 
           if (balanceToShow > 0) {
-            // address has actually more coins then initially, so we definately gained something
+            // address has actually more coins than initially, so we definitely gained something
             setShowConfirmedBalance(true);
             setShowPendingBalance(false);
             setShowAddress(false);
-
-            clearInterval(fetchAddressInterval.current);
-            fetchAddressInterval.current = undefined;
-
             setDisplayBalance(
               loc.formatString(loc.transactions.received_with_amount, {
                 amt1: formatBalance(balanceToShow, BitcoinUnit.LOCAL_CURRENCY, true).toString(),
                 amt2: formatBalance(balanceToShow, BitcoinUnit.BTC, true).toString(),
               }),
             );
-
             fetchAndSaveWalletTransactions(walletID);
           } else {
             // rare case, but probable. transaction evicted from mempool (maybe cancelled by the sender)
@@ -188,6 +167,8 @@ const ReceiveDetails = () => {
         console.log(error);
       }
     }, intervalMs);
+
+    return () => clearInterval(intervalId);
   }, [bip21encoded, address, initialConfirmed, initialUnconfirmed, intervalMs, fetchAndSaveWalletTransactions, walletID]);
 
   const renderConfirmedBalance = () => {
@@ -270,7 +251,7 @@ const ReceiveDetails = () => {
           )}
 
           <QRCodeComponent value={bip21encoded} />
-          <BlueCopyTextToClipboard text={isCustom ? bip21encoded : address} />
+          <CopyTextToClipboard text={isCustom ? bip21encoded : address} ref={receiveAddressButton} />
         </View>
         <View style={styles.share}>
           <BlueCard>
@@ -295,7 +276,7 @@ const ReceiveDetails = () => {
     let newAddress;
     if (address) {
       setAddressBIP21Encoded(address);
-      // await Notifications.tryToObtainPermissions();
+      // await Notifications.tryToObtainPermissions(receiveAddressButton);
       // Notifications.majorTomToGroundControl([address], [], []);
     } else {
       if (wallet.chain === Chain.ONCHAIN) {
@@ -323,7 +304,7 @@ const ReceiveDetails = () => {
         }
       }
       setAddressBIP21Encoded(newAddress);
-      // await Notifications.tryToObtainPermissions();
+      // await Notifications.tryToObtainPermissions(receiveAddressButton);
       // Notifications.majorTomToGroundControl([newAddress], [], []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -340,22 +321,7 @@ const ReceiveDetails = () => {
     useCallback(() => {
       const task = InteractionManager.runAfterInteractions(async () => {
         if (wallet) {
-          if (!wallet.getUserHasSavedExport()) {
-            BlueAlertWalletExportReminder({
-              onSuccess: obtainWalletAddress,
-              onFailure: () => {
-                goBack();
-                navigate('WalletExportRoot', {
-                  screen: 'WalletExport',
-                  params: {
-                    walletID: wallet.getID(),
-                  },
-                });
-              },
-            });
-          } else {
-            obtainWalletAddress();
-          }
+          obtainWalletAddress();
         } else if (!wallet && address) {
           setAddressBIP21Encoded(address);
         }

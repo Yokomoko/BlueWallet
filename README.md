@@ -80,6 +80,7 @@ npx react-native run-ios
 
 ```
 npx pod-install
+npm start
 ```
 
 Open ios/BlueWallet.xcworkspace. Once the project loads, select the scheme/target BlueWallet-NoLDK. Click Run.
