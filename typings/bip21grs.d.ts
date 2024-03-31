@@ -1,4 +1,4 @@
-declare module 'bip21' {
+declare module 'bip21grs' {
   export type TOptions =
     | {
         amount?: number;

@@ -1,4 +1,4 @@
-import BIP32Factory, { BIP32Interface } from 'bip32';
+import BIP32Factory, { BIP32Interface } from 'bip32grs';
 import * as bip39 from 'bip39';
 import * as bitcoin from 'groestlcoinjs-lib';
 import { Psbt, Transaction } from 'groestlcoinjs-lib';
