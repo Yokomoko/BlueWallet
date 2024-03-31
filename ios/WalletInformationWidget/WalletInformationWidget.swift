@@ -90,14 +90,12 @@ struct WalletInformationWidget: Widget {
       }
       .configurationDisplayName("Balance")
       .description("View your accumulated balance.").supportedFamilies([.systemSmall])
-      .contentMarginsDisabledIfAvailable()
     } else {
       return StaticConfiguration(kind: kind, provider: WalletInformationWidgetProvider()) { entry in
         WalletInformationWidgetEntryView(entry: entry)
       }
       .configurationDisplayName("Balance")
       .description("View your accumulated balance.").supportedFamilies([.systemSmall])
-      .contentMarginsDisabledIfAvailable()
     }
   }
 }
