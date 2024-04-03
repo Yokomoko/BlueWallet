@@ -5,7 +5,6 @@ import { Icon, Text, Header } from 'react-native-elements';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   InputAccessoryView,
   Keyboard,
   KeyboardAvoidingView,
@@ -15,7 +14,6 @@ import {
   TouchableOpacity,
   View,
   I18nManager,
-  ImageBackground,
 } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import NetworkTransactionFees, { NetworkTransactionFee, NetworkTransactionFeeType } from './models/networkTransactionFees';
@@ -33,140 +31,6 @@ if (aspectRatio > 1.6) {
 } else {
   isIpad = true;
 }
-
-export const BitcoinButton = props => {
-  const { colors } = useTheme();
-  return (
-    <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
-      <View
-        style={{
-          borderColor: (props.active && colors.newBlue) || colors.buttonDisabledBackgroundColor,
-          borderWidth: 1.5,
-          borderRadius: 8,
-          backgroundColor: colors.buttonDisabledBackgroundColor,
-          minWidth: props.style.width,
-          minHeight: props.style.height,
-          height: props.style.height,
-          flex: 1,
-          marginBottom: 8,
-        }}
-      >
-        <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/bitcoin.png')} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: colors.newBlue, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>
-              {loc.wallets.add_bitcoin}
-            </Text>
-            <Text
-              style={{
-                color: colors.alternativeTextColor,
-                fontSize: 13,
-                fontWeight: '500',
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.wallets.add_bitcoin_explain}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-export const VaultButton = props => {
-  const { colors } = useTheme();
-  return (
-    <TouchableOpacity accessibilityRole="button" testID={props.testID} onPress={props.onPress}>
-      <View
-        style={{
-          borderColor: (props.active && colors.foregroundColor) || colors.buttonDisabledBackgroundColor,
-          borderWidth: 1.5,
-          borderRadius: 8,
-          backgroundColor: colors.buttonDisabledBackgroundColor,
-          minWidth: props.style.width,
-          minHeight: props.style.height,
-          height: props.style.height,
-          flex: 1,
-        }}
-      >
-        <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/vault.png')} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                color: colors.foregroundColor,
-                fontWeight: 'bold',
-                fontSize: 18,
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.multisig.multisig_vault}
-            </Text>
-            <Text
-              style={{
-                color: colors.alternativeTextColor,
-                fontSize: 13,
-                fontWeight: '500',
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.multisig.multisig_vault_explain}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-export const LightningButton = props => {
-  const { colors } = useTheme();
-  return (
-    <TouchableOpacity accessibilityRole="button" onPress={props.onPress}>
-      <View
-        style={{
-          borderColor: (props.active && colors.lnborderColor) || colors.buttonDisabledBackgroundColor,
-          borderWidth: 1.5,
-          borderRadius: 8,
-          backgroundColor: colors.buttonDisabledBackgroundColor,
-          minWidth: props.style.width,
-          minHeight: props.style.height,
-          height: props.style.height,
-          flex: 1,
-          marginBottom: 8,
-        }}
-      >
-        <View style={{ marginHorizontal: 16, marginVertical: 10, flexDirection: 'row', alignItems: 'center' }}>
-          <View>
-            <Image style={{ width: 34, height: 34, marginRight: 8 }} source={require('./img/addWallet/lightning.png')} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{ color: colors.lnborderColor, fontWeight: 'bold', fontSize: 18, writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}
-            >
-              {loc.wallets.add_lightning}
-            </Text>
-            <Text
-              style={{
-                color: colors.alternativeTextColor,
-                fontSize: 13,
-                fontWeight: '500',
-                writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-              }}
-            >
-              {loc.wallets.add_lightning_explain}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 /**
  * TODO: remove this comment once this file gets properly converted to typescript.
@@ -190,18 +54,6 @@ export const BlueButtonLink = forwardRef((props, ref) => {
     </TouchableOpacity>
   );
 });
-
-export const BluePrivateBalance = () => {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 13, borderRadius: 9 }}>
-      <ImageBackground
-        blurRadius={6}
-        style={{ backgroundColor: '#FFFFFF', opacity: 0.5, height: 30, width: 110, marginRight: 8, borderRadius: 9 }}
-      />
-      <Icon name="eye-slash" type="font-awesome" color="#FFFFFF" />
-    </View>
-  );
-};
 
 export const BlueCard = props => {
   return <View {...props} style={{ padding: 20 }} />;

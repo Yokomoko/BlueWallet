@@ -1,19 +1,17 @@
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
+import * as bitcoin from 'groestlcoinjs-lib';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
-import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
-
 import { BlueSpacing20 } from '../../BlueComponents';
-import navigationStyle from '../../components/navigationStyle';
-import { DynamicQRCode } from '../../components/DynamicQRCode';
-import { SquareButton } from '../../components/SquareButton';
-
-import loc from '../../loc';
 import presentAlert from '../../components/Alert';
-import { scanQrHelper } from '../../helpers/scan-qr';
-import { useTheme } from '../../components/themes';
+import { DynamicQRCode } from '../../components/DynamicQRCode';
 import SafeArea from '../../components/SafeArea';
-const bitcoin = require('groestlcoinjs-lib');
-const fs = require('../../blue_modules/fs');
+import { SquareButton } from '../../components/SquareButton';
+import navigationStyle from '../../components/navigationStyle';
+import { useTheme } from '../../components/themes';
+import { scanQrHelper } from '../../helpers/scan-qr';
+import loc from '../../loc';
+import SaveFileButton from '../../components/SaveFileButton';
 
 const PsbtMultisigQRCode = () => {
   const { navigate } = useNavigation();
@@ -66,17 +64,14 @@ const PsbtMultisigQRCode = () => {
     onBarScanned({ data: scanned });
   };
 
-  const exportPSBT = () => {
+  const saveFileButtonBeforeOnPress = () => {
     dynamicQRCode.current?.stopAutoMove();
     setIsLoading(true);
-    setTimeout(
-      () =>
-        fs.writeFileAndExport(fileName, psbt.toBase64()).finally(() => {
-          setIsLoading(false);
-          dynamicQRCode.current?.startAutoMove();
-        }),
-      10,
-    );
+  };
+
+  const saveFileButtonAfterOnPress = () => {
+    setIsLoading(false);
+    dynamicQRCode.current?.startAutoMove();
   };
 
   return (
@@ -100,7 +95,15 @@ const PsbtMultisigQRCode = () => {
           {isLoading ? (
             <ActivityIndicator />
           ) : (
-            <SquareButton style={[styles.exportButton, stylesHook.exportButton]} onPress={exportPSBT} title={loc.multisig.share} />
+            <SaveFileButton
+              fileName={fileName}
+              fileContent={psbt.toBase64()}
+              beforeOnPress={saveFileButtonBeforeOnPress}
+              afterOnPress={saveFileButtonAfterOnPress}
+              style={[styles.exportButton, stylesHook.exportButton]}
+            >
+              <SquareButton title={loc.multisig.share} />
+            </SaveFileButton>
           )}
         </View>
       </ScrollView>

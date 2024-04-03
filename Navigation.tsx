@@ -27,7 +27,7 @@ import WalletsAddMultisigStep2 from './screen/wallets/addMultisigStep2';
 import WalletAddresses from './screen/wallets/addresses';
 import WalletDetails from './screen/wallets/details';
 import WalletExport from './screen/wallets/export';
-import ExportMultisigCoordinationSetup from './screen/wallets/exportMultisigCoordinationSetup';
+import ExportMultisigCoordinationSetup from './screen/wallets/ExportMultisigCoordinationSetup';
 import GenerateWord from './screen/wallets/generateWord';
 import ImportWallet from './screen/wallets/import';
 import ImportCustomDerivationPath from './screen/wallets/importCustomDerivationPath';
@@ -107,7 +107,15 @@ const WalletsRoot = () => {
       <WalletsStack.Screen name="CPFP" component={CPFP} options={CPFP.navigationOptions(theme)} />
       <WalletsStack.Screen name="RBFBumpFee" component={RBFBumpFee} options={RBFBumpFee.navigationOptions(theme)} />
       <WalletsStack.Screen name="RBFCancel" component={RBFCancel} options={RBFCancel.navigationOptions(theme)} />
-      <WalletsStack.Screen name="Settings" component={Settings} options={Settings.navigationOptions(theme)} />
+      <WalletsStack.Screen
+        name="Settings"
+        component={Settings}
+        options={navigationStyle({
+          headerTransparent: true,
+          title: Platform.select({ ios: loc.settings.header, default: '' }),
+          headerLargeTitle: true,
+        })(theme)}
+      />
       <WalletsStack.Screen name="SelectWallet" component={SelectWallet} options={SelectWallet.navigationOptions(theme)} />
       <WalletsStack.Screen name="Currency" component={Currency} options={navigationStyle({ title: loc.settings.currency })(theme)} />
       <WalletsStack.Screen name="About" component={About} options={About.navigationOptions(theme)} />
@@ -548,7 +556,12 @@ const ExportMultisigCoordinationSetupRoot = () => {
       <ExportMultisigCoordinationSetupStack.Screen
         name="ExportMultisigCoordinationSetup"
         component={ExportMultisigCoordinationSetup}
-        options={ExportMultisigCoordinationSetup.navigationOptions(theme)}
+        options={navigationStyle({
+          closeButton: true,
+          headerBackVisible: false,
+          statusBarStyle: 'light',
+          title: loc.multisig.export_coordination_setup,
+        })(theme)}
       />
     </ExportMultisigCoordinationSetupStack.Navigator>
   );
