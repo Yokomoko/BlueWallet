@@ -3,6 +3,7 @@
     "bad_password": "Nesprávne heslo! Skúste to znovu.",
     "cancel": "Zrušiť",
     "continue": "Pokračovať",
+    "discard_changes": "Zahodiť zmeny?",
     "enter_password": "Zadajte heslo",
     "never": "Nikdy",
     "of": "{number} z {total}",
@@ -77,7 +78,6 @@
     "details_create": "Vytvoriť",
     "details_label": "Popis",
     "details_setAmount": "Prijať čiastku...",
-    "details_share": "zdieľať",
     "header": "Prijať"
   },
   "send": {
@@ -207,7 +207,6 @@
     "details_connected_to": "Napojené na",
     "details_delete": "Zmazaž",
     "details_delete_wallet": "Zmazať peňaženku",
-    "details_display": "zobraziť v zozname peňaženiek",
     "details_export_backup": "Exportovať / zálohovať",
     "details_master_fingerprint": "Hlavný odtlačok prsta",
     "details_no_cancel": "Nie, zrušiť",
@@ -244,7 +243,6 @@
   "multisig": {
     "confirm": "Potvrdiť",
     "header": "Poslať",
-    "share": "zdieľať",
     "view": "Zobraziť",
     "create": "Vytvoriť",
     "create_new_key": "Vytvoriť novú",

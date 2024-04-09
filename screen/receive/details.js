@@ -17,7 +17,7 @@ import { BlueLoading, BlueButtonLink, BlueText, BlueSpacing20, BlueCard, BlueSpa
 import navigationStyle from '../../components/navigationStyle';
 import BottomModal from '../../components/BottomModal';
 import { Chain, BitcoinUnit } from '../../models/bitcoinUnits';
-import HandoffComponent from '../../components/handoff';
+import HandOffComponent from '../../components/HandOffComponent';
 import AmountInput from '../../components/AmountInput';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import loc, { formatBalance } from '../../loc';
@@ -117,7 +117,7 @@ const ReceiveDetails = () => {
           const txs = await BlueElectrum.getMempoolTransactionsByAddress(addressToUse);
           const tx = txs.pop();
           if (tx) {
-            const rez = await BlueElectrum.multiGetTransactionByTxid([tx.tx_hash], 10, true);
+            const rez = await BlueElectrum.multiGetTransactionByTxid([tx.tx_hash], true, 10);
             if (rez && rez[tx.tx_hash] && rez[tx.tx_hash].vsize) {
               const satPerVbyte = Math.round(tx.fee / rez[tx.tx_hash].vsize);
               const fees = await BlueElectrum.estimateFees();
@@ -426,7 +426,7 @@ const ReceiveDetails = () => {
   return (
     <View style={[styles.root, stylesHook.root]}>
       {address !== undefined && showAddress && (
-        <HandoffComponent title={loc.send.details_address} type={HandoffComponent.activityTypes.ReceiveOnchain} userInfo={{ address }} />
+        <HandOffComponent title={loc.send.details_address} type={HandOffComponent.activityTypes.ReceiveOnchain} userInfo={{ address }} />
       )}
       {showConfirmedBalance ? renderConfirmedBalance() : null}
       {showPendingBalance ? renderPendingBalance() : null}

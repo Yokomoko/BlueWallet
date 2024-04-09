@@ -8,7 +8,7 @@ import TransactionIncomingIcon from '../../components/icons/TransactionIncomingI
 import TransactionOutgoingIcon from '../../components/icons/TransactionOutgoingIcon';
 import TransactionPendingIcon from '../../components/icons/TransactionPendingIcon';
 import navigationStyle from '../../components/navigationStyle';
-import HandoffComponent from '../../components/handoff';
+import HandOffComponent from '../../components/HandOffComponent';
 import { HDSegwitBech32Transaction } from '../../class';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import loc, { formatBalanceWithoutSuffix } from '../../loc';
@@ -114,7 +114,7 @@ const TransactionsStatus = () => {
         setIntervalMs(31000); // upon first execution we increase poll interval;
 
         console.log('checking tx', hash, 'for confirmations...');
-        const transactions = await BlueElectrum.multiGetTransactionByTxid([hash], 10, true);
+        const transactions = await BlueElectrum.multiGetTransactionByTxid([hash], true, 10);
         const txFromElectrum = transactions[hash];
         console.log('got txFromElectrum=', txFromElectrum);
 
@@ -360,9 +360,9 @@ const TransactionsStatus = () => {
   }
   return (
     <SafeArea>
-      <HandoffComponent
+      <HandOffComponent
         title={loc.transactions.details_title}
-        type={HandoffComponent.activityTypes.ViewInBlockExplorer}
+        type={HandOffComponent.activityTypes.ViewInBlockExplorer}
         url={`https://esplora.groestlcoin.org/tx/${tx.hash}`}
       />
 

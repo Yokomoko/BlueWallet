@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { ContextMenuView, ContextMenuButton } from 'react-native-ios-context-menu';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 
-const ToolTipMenu = (props, ref) => {
+const BaseToolTipMenu = (props, ref) => {
   const menuItemMapped = ({ action, menuOptions }) => {
     const item = {
       actionKey: action.id,
@@ -42,12 +42,16 @@ const ToolTipMenu = (props, ref) => {
   const renderPreview = props.renderPreview ?? undefined;
   const disabled = props.disabled ?? false;
   const onPress = props.onPress ?? undefined;
+  const onMenuWillShow = props.onMenuWillShow ?? undefined;
+  const onMenuWillHide = props.onMenuWillHide ?? undefined;
 
   const buttonStyle = props.buttonStyle;
   return isButton ? (
     <TouchableOpacity onPress={onPress} disabled={disabled} accessibilityRole="button" style={buttonStyle}>
       <ContextMenuButton
         ref={ref}
+        onMenuWillShow={onMenuWillShow}
+        onMenuWillHide={onMenuWillHide}
         useActionSheetFallback={false}
         onPressMenuItem={({ nativeEvent }) => {
           props.onPressMenuItem(nativeEvent.actionKey);
@@ -117,9 +121,11 @@ const ToolTipMenu = (props, ref) => {
   );
 };
 
+const ToolTipMenu = forwardRef(BaseToolTipMenu);
+
 export default ToolTipMenu;
 ToolTipMenu.propTypes = {
-  actions: PropTypes.object.isRequired,
+  actions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   title: PropTypes.string,
   children: PropTypes.node,
   onPressMenuItem: PropTypes.func.isRequired,

@@ -20,7 +20,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.12)
   - hermes-engine/Pre-built (0.72.12)
   - libevent (2.1.12)
-  - lottie-ios (4.4.1)
+  - lottie-ios (4.4.2)
   - lottie-react-native (6.7.0):
     - lottie-ios (~> 4.4.1)
     - React-Core
@@ -475,7 +475,7 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.23.1):
     - React-Core
-  - RNCClipboard (1.13.2):
+  - RNCClipboard (1.14.0):
     - React-Core
   - RNCPushNotificationIOS (1.11.0):
     - React-Core
@@ -492,7 +492,7 @@ PODS:
     - React
   - RNKeychain (8.1.3):
     - React-Core
-  - RNLocalize (3.0.6):
+  - RNLocalize (3.1.0):
     - React-Core
   - RNPermissions (4.1.5):
     - React-Core
@@ -792,7 +792,7 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: e89344b9e9e54351c3c5cac075e0275148fb37ba
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
+  lottie-ios: 4445b0bdb583c7a5325529f62246d311ee85fcd0
   lottie-react-native: e3205322282d72e23efb3bff3287d0bd16fb1b01
   PasscodeAuth: 3e88093ff46c31a952d8b36c488240de980517be
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -845,7 +845,7 @@ SPEC CHECKSUMS:
   RealmJS: 385df5ee940d96f1de26b1dab153e325633d3052
   rn-ldk: 0d8749d98cc5ce67302a32831818c116b67f7643
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
-  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
+  RNCClipboard: 090462274cc05b02628bd158baf6d73c3abe8441
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNDefaultPreference: 08bdb06cfa9188d5da97d4642dac745218d7fb31
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
@@ -853,7 +853,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: b83cf821f60b7ec59827f0ed9e5b8c46b1de2c99
   RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
   RNKeychain: f1b48665a4646f61191eb048c4c05c58d9a7596f
-  RNLocalize: 4222a3756cdbe2dc9a5bdf445765a4d2572107cb
+  RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNPermissions: 9fa74223844f437bc309e112994859dc47194829
   RNPrivacySnapshot: 71919dde3c6a29dd332115409c2aec564afee8f4
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93

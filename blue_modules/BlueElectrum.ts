@@ -1,55 +1,92 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BigNumber from 'bignumber.js';
+import * as bitcoin from 'groestlcoinjs-lib';
 import { Alert } from 'react-native';
-import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet, TaprootWallet } from '../class';
 import DefaultPreference from 'react-native-default-preference';
+import Realm from 'realm';
+
+import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet, TaprootWallet } from '../class';
+import presentAlert from '../components/Alert';
 import loc from '../loc';
 import WidgetCommunication from './WidgetCommunication';
-import presentAlert from '../components/Alert';
-const bitcoin = require('groestlcoinjs-lib');
-const ElectrumClient = require('electrum-client');
-const BigNumber = require('bignumber.js');
 
+const ElectrumClient = require('electrum-client');
 const net = require('net');
 const tls = require('tls');
 
-const Realm = require('realm');
+type Utxo = {
+  height: number;
+  value: number;
+  address: string;
+  txid: string;
+  vout: number;
+  wif?: string;
+};
 
-const ELECTRUM_HOST = 'electrum_host';
-const ELECTRUM_TCP_PORT = 'electrum_tcp_port';
-const ELECTRUM_SSL_PORT = 'electrum_ssl_port';
-const ELECTRUM_SERVER_HISTORY = 'electrum_server_history';
+type ElectrumTransaction = {
+  txid: string;
+  hash: string;
+  version: number;
+  size: number;
+  vsize: number;
+  weight: number;
+  locktime: number;
+  vin: {
+    txid: string;
+    vout: number;
+    scriptSig: { asm: string; hex: string };
+    txinwitness: string[];
+    sequence: number;
+    addresses?: string[];
+    value?: number;
+  }[];
+  vout: {
+    value: number;
+    n: number;
+    scriptPubKey: {
+      asm: string;
+      hex: string;
+      reqSigs: number;
+      type: string;
+      addresses: string[];
+    };
+  }[];
+  blockhash: string;
+  confirmations?: number;
+  time: number;
+  blocktime: number;
+};
+
+type ElectrumTransactionWithHex = ElectrumTransaction & {
+  hex: string;
+};
+
+type MempoolTransaction = {
+  height: 0;
+  tx_hash: string;
+  fee: number;
+};
+
+type Peer =
+  | {
+      host: string;
+      ssl: string;
+      tcp?: undefined;
+    }
+  | {
+      host: string;
+      tcp: string;
+      ssl?: undefined;
+    };
+
+export const ELECTRUM_HOST = 'electrum_host';
+export const ELECTRUM_TCP_PORT = 'electrum_tcp_port';
+export const ELECTRUM_SSL_PORT = 'electrum_ssl_port';
+export const ELECTRUM_SERVER_HISTORY = 'electrum_server_history';
 const ELECTRUM_CONNECTION_DISABLED = 'electrum_disabled';
-
-let _realm;
-async function _getRealm() {
-  if (_realm) return _realm;
-
-  const password = bitcoin.crypto.sha256(Buffer.from('fyegjitkyf[eqjnc.lf')).toString('hex');
-  const buf = Buffer.from(password + password, 'hex');
-  const encryptionKey = Int8Array.from(buf);
-  const path = 'electrumcache.realm';
-
-  const schema = [
-    {
-      name: 'Cache',
-      primaryKey: 'cache_key',
-      properties: {
-        cache_key: { type: 'string', indexed: true },
-        cache_value: 'string', // stringified json
-      },
-    },
-  ];
-  _realm = await Realm.open({
-    schema,
-    path,
-    encryptionKey,
-  });
-  return _realm;
-}
-
 const storageKey = 'ELECTRUM_PEERS';
 const defaultPeer = { host: 'electrum1.groestlcoin.org', ssl: '50002' };
-const hardcodedPeers = [
+export const hardcodedPeers: Peer[] = [
   { host: 'electrum1.groestlcoin.org', ssl: '50002' },
   { host: 'electrum2.groestlcoin.org', ssl: '50002' },
   { host: 'electrum11.groestlcoin.org', ssl: '50002' },
@@ -84,21 +121,46 @@ const hardcodedPeers = [
   { host: 'electrum40.groestlcoin.org', ssl: '50002' },
 ];
 
-/** @type {ElectrumClient} */
-let mainClient;
-let mainConnected = false;
-let wasConnectedAtLeastOnce = false;
-let serverName = false;
-let disableBatching = false;
-let connectionAttempt = 0;
+let mainClient: typeof ElectrumClient | undefined;
+let mainConnected: boolean = false;
+let wasConnectedAtLeastOnce: boolean = false;
+let serverName: string | false = false;
+let disableBatching: boolean = false;
+let connectionAttempt: number = 0;
 let currentPeerIndex = Math.floor(Math.random() * hardcodedPeers.length);
+let latestBlock: { height: number; time: number } | { height: undefined; time: undefined } = { height: undefined, time: undefined };
+const txhashHeightCache: Record<string, number> = {};
+let _realm: Realm | undefined;
 
-let latestBlockheight = false;
-let latestBlockheightTimestamp = false;
+async function _getRealm() {
+  if (_realm) return _realm;
 
-const txhashHeightCache = {};
+  const password = bitcoin.crypto.sha256(Buffer.from('fyegjitkyf[eqjnc.lf')).toString('hex');
+  const buf = Buffer.from(password + password, 'hex');
+  const encryptionKey = Int8Array.from(buf);
+  const path = 'electrumcache.realm';
 
-async function isDisabled() {
+  const schema = [
+    {
+      name: 'Cache',
+      primaryKey: 'cache_key',
+      properties: {
+        cache_key: { type: 'string', indexed: true },
+        cache_value: 'string', // stringified json
+      },
+    },
+  ];
+
+  // @ts-ignore schema doesn't match Realm's schema type
+  _realm = await Realm.open({
+    schema,
+    path,
+    encryptionKey,
+  });
+  return _realm;
+}
+
+export async function isDisabled(): Promise<boolean> {
   let result;
   try {
     const savedValue = await AsyncStorage.getItem(ELECTRUM_CONNECTION_DISABLED);
@@ -113,16 +175,50 @@ async function isDisabled() {
   return !!result;
 }
 
-async function setDisabled(disabled = true) {
+export async function setDisabled(disabled = true) {
   return AsyncStorage.setItem(ELECTRUM_CONNECTION_DISABLED, disabled ? '1' : '');
 }
 
-async function connectMain() {
+function getCurrentPeer() {
+  return hardcodedPeers[currentPeerIndex];
+}
+
+/**
+ * Returns NEXT hardcoded electrum server (increments index after use)
+ */
+function getNextPeer() {
+  const peer = getCurrentPeer();
+  currentPeerIndex++;
+  if (currentPeerIndex + 1 >= hardcodedPeers.length) currentPeerIndex = 0;
+  return peer;
+}
+
+async function getSavedPeer(): Promise<Peer | null> {
+  const host = await AsyncStorage.getItem(ELECTRUM_HOST);
+  const tcpPort = await AsyncStorage.getItem(ELECTRUM_TCP_PORT);
+  const sslPort = await AsyncStorage.getItem(ELECTRUM_SSL_PORT);
+
+  if (!host) {
+    return null;
+  }
+
+  if (sslPort) {
+    return { host, ssl: sslPort };
+  }
+
+  if (tcpPort) {
+    return { host, tcp: tcpPort };
+  }
+
+  return null;
+}
+
+export async function connectMain(): Promise<void> {
   if (await isDisabled()) {
     console.log('Electrum connection disabled by user. Skipping connectMain call');
     return;
   }
-  let usingPeer = await getNextPeer();
+  let usingPeer = getNextPeer();
   const savedPeer = await getSavedPeer();
   if (savedPeer && savedPeer.host && (savedPeer.tcp || savedPeer.ssl)) {
     usingPeer = savedPeer;
@@ -131,14 +227,14 @@ async function connectMain() {
   await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
   try {
     if (usingPeer.host.endsWith('onion')) {
-      const randomPeer = await getCurrentPeer();
+      const randomPeer = getCurrentPeer();
       await DefaultPreference.set(ELECTRUM_HOST, randomPeer.host);
-      await DefaultPreference.set(ELECTRUM_TCP_PORT, randomPeer.tcp);
-      await DefaultPreference.set(ELECTRUM_SSL_PORT, randomPeer.ssl);
+      await DefaultPreference.set(ELECTRUM_TCP_PORT, randomPeer.tcp ?? '');
+      await DefaultPreference.set(ELECTRUM_SSL_PORT, randomPeer.ssl ?? '');
     } else {
       await DefaultPreference.set(ELECTRUM_HOST, usingPeer.host);
-      await DefaultPreference.set(ELECTRUM_TCP_PORT, usingPeer.tcp);
-      await DefaultPreference.set(ELECTRUM_SSL_PORT, usingPeer.ssl);
+      await DefaultPreference.set(ELECTRUM_TCP_PORT, usingPeer.tcp ?? '');
+      await DefaultPreference.set(ELECTRUM_SSL_PORT, usingPeer.ssl ?? '');
     }
 
     WidgetCommunication.reloadAllTimelines();
@@ -151,7 +247,7 @@ async function connectMain() {
     console.log('begin connection:', JSON.stringify(usingPeer));
     mainClient = new ElectrumClient(net, tls, usingPeer.ssl || usingPeer.tcp, usingPeer.host, usingPeer.ssl ? 'tls' : 'tcp');
 
-    mainClient.onError = function (e) {
+    mainClient.onError = function (e: { message: string }) {
       console.log('electrum mainClient.onError():', e.message);
       if (mainConnected) {
         // most likely got a timeout from electrum ping. lets reconnect
@@ -195,8 +291,10 @@ async function connectMain() {
       }
       const header = await mainClient.blockchainHeaders_subscribe();
       if (header && header.height) {
-        latestBlockheight = header.height;
-        latestBlockheightTimestamp = Math.floor(+new Date() / 1000);
+        latestBlock = {
+          height: header.height,
+          time: Math.floor(+new Date() / 1000),
+        };
       }
       // AsyncStorage.setItem(storageKey, JSON.stringify(peers));  TODO: refactor
     }
@@ -219,7 +317,7 @@ async function connectMain() {
   }
 }
 
-async function presentNetworkErrorAlert(usingPeer) {
+const presentNetworkErrorAlert = async (usingPeer?: Peer) => {
   if (await isDisabled()) {
     console.log(
       'Electrum connection disabled by user. Perhaps we are attempting to show this network error alert after the user disabled connections.',
@@ -294,47 +392,24 @@ async function presentNetworkErrorAlert(usingPeer) {
     ],
     { cancelable: false },
   );
-}
-
-async function getCurrentPeer() {
-  return hardcodedPeers[currentPeerIndex];
-}
-
-/**
- * Returns NEXT hardcoded electrum server (increments index after use)
- *
- * @returns {Promise<{tcp, host, ssl?}|*>}
- */
-async function getNextPeer() {
-  const peer = getCurrentPeer();
-  currentPeerIndex++;
-  if (currentPeerIndex + 1 >= hardcodedPeers.length) currentPeerIndex = 0;
-  return peer;
-}
-
-async function getSavedPeer() {
-  const host = await AsyncStorage.getItem(ELECTRUM_HOST);
-  const port = await AsyncStorage.getItem(ELECTRUM_TCP_PORT);
-  const sslPort = await AsyncStorage.getItem(ELECTRUM_SSL_PORT);
-  return { host, tcp: port, ssl: sslPort };
-}
+};
 
 /**
  * Returns random electrum-grs server out of list of servers
  * previous electrum-grs server told us. Nearly half of them is
  * usually offline.
  * Not used for now.
- *
- * @returns {Promise<{tcp: number, host: string}>}
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function getRandomDynamicPeer() {
+async function getRandomDynamicPeer(): Promise<Peer> {
   try {
-    let peers = JSON.parse(await AsyncStorage.getItem(storageKey));
+    let peers = JSON.parse((await AsyncStorage.getItem(storageKey)) as string);
     peers = peers.sort(() => Math.random() - 0.5); // shuffle
     for (const peer of peers) {
-      const ret = {};
-      ret.host = peer[1];
+      const ret = {
+        host: peer[1] as string,
+        tcp: '',
+      };
       for (const item of peer[2]) {
         if (item.startsWith('t')) {
           ret.tcp = item.replace('t', '');
@@ -349,12 +424,7 @@ async function getRandomDynamicPeer() {
   }
 }
 
-/**
- *
- * @param address {String}
- * @returns {Promise<Object>}
- */
-module.exports.getBalanceByAddress = async function (address) {
+export const getBalanceByAddress = async function (address: string): Promise<{ confirmed: number; unconfirmed: number }> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
@@ -364,7 +434,7 @@ module.exports.getBalanceByAddress = async function (address) {
   return balance;
 };
 
-module.exports.getConfig = async function () {
+export const getConfig = async function () {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return {
     host: mainClient.host,
@@ -374,16 +444,11 @@ module.exports.getConfig = async function () {
   };
 };
 
-module.exports.getSecondsSinceLastRequest = function () {
+export const getSecondsSinceLastRequest = function () {
   return mainClient && mainClient.timeLastCall ? (+new Date() - mainClient.timeLastCall) / 1000 : -1;
 };
 
-/**
- *
- * @param address {String}
- * @returns {Promise<Array>}
- */
-module.exports.getTransactionsByAddress = async function (address) {
+export const getTransactionsByAddress = async function (address: string): Promise<ElectrumHistory[]> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
@@ -396,12 +461,7 @@ module.exports.getTransactionsByAddress = async function (address) {
   return history;
 };
 
-/**
- *
- * @param address {String}
- * @returns {Promise<Array>}
- */
-module.exports.getMempoolTransactionsByAddress = async function (address) {
+export const getMempoolTransactionsByAddress = async function (address: string): Promise<MempoolTransaction[]> {
   if (!mainClient) throw new Error('Electrum client is not connected');
   const script = bitcoin.address.toOutputScript(address);
   const hash = bitcoin.crypto.sha256(script);
@@ -409,7 +469,7 @@ module.exports.getMempoolTransactionsByAddress = async function (address) {
   return mainClient.blockchainScripthash_getMempool(reversedHash.toString('hex'));
 };
 
-module.exports.ping = async function () {
+export const ping = async function () {
   try {
     await mainClient.server_ping();
   } catch (_) {
@@ -419,14 +479,100 @@ module.exports.ping = async function () {
   return true;
 };
 
-module.exports.getTransactionsFullByAddress = async function (address) {
-  const txs = await this.getTransactionsByAddress(address);
-  const ret = [];
+// exported only to be used in unit tests
+export function txhexToElectrumTransaction(txhex: string): ElectrumTransactionWithHex {
+  const tx = bitcoin.Transaction.fromHex(txhex);
+
+  const ret: ElectrumTransactionWithHex = {
+    txid: tx.getId(),
+    hash: tx.getId(),
+    version: tx.version,
+    size: Math.ceil(txhex.length / 2),
+    vsize: tx.virtualSize(),
+    weight: tx.weight(),
+    locktime: tx.locktime,
+    vin: [],
+    vout: [],
+    hex: txhex,
+    blockhash: '',
+    confirmations: 0,
+    time: 0,
+    blocktime: 0,
+  };
+
+  if (txhashHeightCache[ret.txid]) {
+    // got blockheight where this tx was confirmed
+    ret.confirmations = estimateCurrentBlockheight() - txhashHeightCache[ret.txid];
+    if (ret.confirmations < 0) {
+      // ugly fix for when estimator lags behind
+      ret.confirmations = 1;
+    }
+    ret.time = calculateBlockTime(txhashHeightCache[ret.txid]);
+    ret.blocktime = calculateBlockTime(txhashHeightCache[ret.txid]);
+  }
+
+  for (const inn of tx.ins) {
+    const txinwitness = [];
+    if (inn.witness[0]) txinwitness.push(inn.witness[0].toString('hex'));
+    if (inn.witness[1]) txinwitness.push(inn.witness[1].toString('hex'));
+
+    ret.vin.push({
+      txid: Buffer.from(inn.hash).reverse().toString('hex'),
+      vout: inn.index,
+      scriptSig: { hex: inn.script.toString('hex'), asm: '' },
+      txinwitness,
+      sequence: inn.sequence,
+    });
+  }
+
+  let n = 0;
+  for (const out of tx.outs) {
+    const value = new BigNumber(out.value).dividedBy(100000000).toNumber();
+    let address: false | string = false;
+    let type: false | string = false;
+
+    if (SegwitBech32Wallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
+      address = SegwitBech32Wallet.scriptPubKeyToAddress(out.script.toString('hex'));
+      type = 'witness_v0_keyhash';
+    } else if (SegwitP2SHWallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
+      address = SegwitP2SHWallet.scriptPubKeyToAddress(out.script.toString('hex'));
+      type = '???'; // TODO
+    } else if (LegacyWallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
+      address = LegacyWallet.scriptPubKeyToAddress(out.script.toString('hex'));
+      type = '???'; // TODO
+    } else {
+      address = TaprootWallet.scriptPubKeyToAddress(out.script.toString('hex'));
+      type = 'witness_v1_taproot';
+    }
+
+    if (!address) {
+      throw new Error('Internal error: unable to decode address from output script');
+    }
+
+    ret.vout.push({
+      value,
+      n,
+      scriptPubKey: {
+        asm: '',
+        hex: out.script.toString('hex'),
+        reqSigs: 1, // todo
+        type,
+        addresses: [address],
+      },
+    });
+    n++;
+  }
+  return ret;
+}
+
+export const getTransactionsFullByAddress = async (address: string): Promise<ElectrumTransaction[]> => {
+  const txs = await getTransactionsByAddress(address);
+  const ret: ElectrumTransaction[] = [];
   for (const tx of txs) {
     let full;
     try {
       full = await mainClient.blockchainTransaction_get(tx.tx_hash, true);
-    } catch (error) {
+    } catch (error: any) {
       if (String(error?.message ?? error).startsWith('verbose transactions are currently unsupported')) {
         // apparently, stupid esplora instead of returning txhex when it cant return verbose tx started
         // throwing a proper exception. lets fetch txhex manually and decode on our end
@@ -443,7 +589,7 @@ module.exports.getTransactionsFullByAddress = async function (address) {
       let prevTxForVin;
       try {
         prevTxForVin = await mainClient.blockchainTransaction_get(input.txid, true);
-      } catch (error) {
+      } catch (error: any) {
         if (String(error?.message ?? error).startsWith('verbose transactions are currently unsupported')) {
           // apparently, stupid esplora instead of returning txhex when it cant return verbose tx started
           // throwing a proper exception. lets fetch txhex manually and decode on our end
@@ -468,8 +614,8 @@ module.exports.getTransactionsFullByAddress = async function (address) {
     }
 
     for (const output of full.vout) {
-      if (output.scriptPubKey && output.scriptPubKey.addresses) output.addresses = output.scriptPubKey.addresses;
-      // in groestlcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
+      if (output?.scriptPubKey && output.scriptPubKey.addresses) output.addresses = output.scriptPubKey.addresses;
+      // in bitcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
       if (output?.scriptPubKey?.address) output.addresses = [output.scriptPubKey.address];
     }
     full.inputs = full.vin;
@@ -484,26 +630,28 @@ module.exports.getTransactionsFullByAddress = async function (address) {
   return ret;
 };
 
-/**
- *
- * @param addresses {Array}
- * @param batchsize {Number}
- * @returns {Promise<{balance: number, unconfirmed_balance: number, addresses: object}>}
- */
-module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) {
-  batchsize = batchsize || 200;
+type MultiGetBalanceResponse = {
+  balance: number;
+  unconfirmed_balance: number;
+  addresses: Record<string, { confirmed: number; unconfirmed: number }>;
+};
+
+export const multiGetBalanceByAddress = async (addresses: string[], batchsize: number = 200): Promise<MultiGetBalanceResponse> => {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
-  const ret = { balance: 0, unconfirmed_balance: 0, addresses: {} };
+  const ret = {
+    balance: 0,
+    unconfirmed_balance: 0,
+    addresses: {} as Record<string, { confirmed: number; unconfirmed: number }>,
+  };
 
   const chunks = splitIntoChunks(addresses, batchsize);
   for (const chunk of chunks) {
     const scripthashes = [];
-    const scripthash2addr = {};
+    const scripthash2addr: Record<string, string> = {};
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(hash).reverse();
-      reversedHash = reversedHash.toString('hex');
+      const reversedHash = Buffer.from(hash).reverse().toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
     }
@@ -512,7 +660,7 @@ module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) 
 
     if (disableBatching) {
       const promises = [];
-      const index2scripthash = {};
+      const index2scripthash: Record<number, string> = {};
       for (let promiseIndex = 0; promiseIndex < scripthashes.length; promiseIndex++) {
         promises.push(mainClient.blockchainScripthash_getBalance(scripthashes[promiseIndex]));
         index2scripthash[promiseIndex] = scripthashes[promiseIndex];
@@ -536,20 +684,18 @@ module.exports.multiGetBalanceByAddress = async function (addresses, batchsize) 
   return ret;
 };
 
-module.exports.multiGetUtxoByAddress = async function (addresses, batchsize) {
-  batchsize = batchsize || 100;
+export const multiGetUtxoByAddress = async function (addresses: string[], batchsize: number = 100): Promise<Record<string, Utxo[]>> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
-  const ret = {};
+  const ret: Record<string, any> = {};
 
   const chunks = splitIntoChunks(addresses, batchsize);
   for (const chunk of chunks) {
     const scripthashes = [];
-    const scripthash2addr = {};
+    const scripthash2addr: Record<string, string> = {};
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(hash).reverse();
-      reversedHash = reversedHash.toString('hex');
+      const reversedHash = Buffer.from(hash).reverse().toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
     }
@@ -579,20 +725,27 @@ module.exports.multiGetUtxoByAddress = async function (addresses, batchsize) {
   return ret;
 };
 
-module.exports.multiGetHistoryByAddress = async function (addresses, batchsize) {
-  batchsize = batchsize || 100;
+export type ElectrumHistory = {
+  tx_hash: string;
+  height: number;
+  address: string;
+};
+
+export const multiGetHistoryByAddress = async function (
+  addresses: string[],
+  batchsize: number = 100,
+): Promise<Record<string, ElectrumHistory[]>> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
-  const ret = {};
+  const ret: Record<string, ElectrumHistory[]> = {};
 
   const chunks = splitIntoChunks(addresses, batchsize);
   for (const chunk of chunks) {
     const scripthashes = [];
-    const scripthash2addr = {};
+    const scripthash2addr: Record<string, string> = {};
     for (const addr of chunk) {
       const script = bitcoin.address.toOutputScript(addr);
       const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(hash).reverse();
-      reversedHash = reversedHash.toString('hex');
+      const reversedHash = Buffer.from(hash).reverse().toString('hex');
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
     }
@@ -601,7 +754,7 @@ module.exports.multiGetHistoryByAddress = async function (addresses, batchsize) 
 
     if (disableBatching) {
       const promises = [];
-      const index2scripthash = {};
+      const index2scripthash: Record<number, string> = {};
       for (let promiseIndex = 0; promiseIndex < scripthashes.length; promiseIndex++) {
         index2scripthash[promiseIndex] = scripthashes[promiseIndex];
         promises.push(mainClient.blockchainScripthash_getHistory(scripthashes[promiseIndex]));
@@ -630,13 +783,20 @@ module.exports.multiGetHistoryByAddress = async function (addresses, batchsize) 
   return ret;
 };
 
-module.exports.multiGetTransactionByTxid = async function (txids, batchsize, verbose = true) {
+// if verbose === true ? Record<string, ElectrumTransaction> : Record<string, string>
+type MultiGetTransactionByTxidResult<T extends boolean> = T extends true ? Record<string, ElectrumTransaction> : Record<string, string>;
+
+// TODO: this function returns different results based on the value of `verboseParam`, consider splitting it into two
+export async function multiGetTransactionByTxid<T extends boolean>(
+  txids: string[],
+  verbose: T,
+  batchsize: number = 45,
+): Promise<MultiGetTransactionByTxidResult<T>> {
   txids = txids.filter(txid => !!txid); // failsafe: removing 'undefined' or other falsy stuff from txids array
-  batchsize = batchsize || 45;
   // this value is fine-tuned so althrough wallets in test suite will occasionally
   // throw 'response too large (over 1,000,000 bytes', test suite will pass
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
-  const ret = {};
+  const ret: MultiGetTransactionByTxidResult<T> = {};
   txids = [...new Set(txids)]; // deduplicate just for any case
 
   // lets try cache first:
@@ -647,7 +807,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
     const jsonString = realm.objectForPrimaryKey('Cache', txid + cacheKeySuffix); // search for a realm object with a primary key
     if (jsonString && jsonString.cache_value) {
       try {
-        ret[txid] = JSON.parse(jsonString.cache_value);
+        ret[txid] = JSON.parse(jsonString.cache_value as string);
       } catch (error) {
         console.log(error, 'cache failed to parse', jsonString.cache_value);
       }
@@ -672,7 +832,7 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
         // in case of ElectrumPersonalServer it might not track some transactions (like source transactions for our transactions)
         // so we wrap it in try-catch. note, when `Promise.all` fails we will get _zero_ results, but we have a fallback for that
         const promises = [];
-        const index2txid = {};
+        const index2txid: Record<number, string> = {};
         for (let promiseIndex = 0; promiseIndex < chunk.length; promiseIndex++) {
           const txid = chunk[promiseIndex];
           index2txid[promiseIndex] = txid;
@@ -690,16 +850,16 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
           const txid = index2txid[resultIndex];
           results.push({ result: tx, param: txid });
         }
-      } catch (_) {
-        if (String(_?.message ?? _).startsWith('verbose transactions are currently unsupported')) {
+      } catch (error: any) {
+        if (String(error?.message ?? error).startsWith('verbose transactions are currently unsupported')) {
           // electrs-esplora. cant use verbose, so fetching txs one by one and decoding locally
           for (const txid of chunk) {
             try {
               let tx = await mainClient.blockchainTransaction_get(txid, false);
               tx = txhexToElectrumTransaction(tx);
               results.push({ result: tx, param: txid });
-            } catch (error) {
-              console.log(error);
+            } catch (err) {
+              console.log(err);
             }
           }
         } else {
@@ -714,8 +874,8 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
                 tx = txhexToElectrumTransaction(tx);
               }
               results.push({ result: tx, param: txid });
-            } catch (error) {
-              console.log(error);
+            } catch (err) {
+              console.log(err);
             }
           }
         }
@@ -733,13 +893,17 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
         txdata.result = txhexToElectrumTransaction(txdata.result);
       }
       ret[txdata.param] = txdata.result;
+      // @ts-ignore: hex property
       if (ret[txdata.param]) delete ret[txdata.param].hex; // compact
     }
   }
 
-  // in groestlcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
-  for (const txid of Object.keys(ret) ?? []) {
-    for (const vout of ret[txid]?.vout ?? []) {
+  // in bitcoin core 22.0.0+ they removed `.addresses` and replaced it with plain `.address`:
+  for (const txid of Object.keys(ret)) {
+    const tx = ret[txid];
+    if (typeof tx === 'string') continue;
+    for (const vout of tx?.vout ?? []) {
+      // @ts-ignore: address is not in type definition
       if (vout?.scriptPubKey?.address) vout.scriptPubKey.addresses = [vout.scriptPubKey.address];
     }
   }
@@ -747,9 +911,13 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
   // saving cache:
   realm.write(() => {
     for (const txid of Object.keys(ret)) {
-      if (verbose && (!ret[txid].confirmations || ret[txid].confirmations < 7)) continue;
+      const tx = ret[txid];
       // dont cache immature txs, but only for 'verbose', since its fully decoded tx jsons. non-verbose are just plain
       // strings txhex
+      if (verbose && typeof tx !== 'string' && (!tx.confirmations || tx.confirmations < 7)) {
+        continue;
+      }
+
       realm.create(
         'Cache',
         {
@@ -762,21 +930,18 @@ module.exports.multiGetTransactionByTxid = async function (txids, batchsize, ver
   });
 
   return ret;
-};
+}
 
 /**
  * Simple waiter till `mainConnected` becomes true (which means
  * it Electrum was connected in other function), or timeout 30 sec.
- *
- *
- * @returns {Promise<Promise<*> | Promise<*>>}
  */
-module.exports.waitTillConnected = async function () {
-  let waitTillConnectedInterval = false;
+export const waitTillConnected = async function (): Promise<boolean> {
+  let waitTillConnectedInterval: NodeJS.Timeout | undefined;
   let retriesCounter = 0;
   if (await isDisabled()) {
     console.warn('Electrum connections disabled by user. waitTillConnected skipping...');
-    return;
+    return false;
   }
   return new Promise(function (resolve, reject) {
     waitTillConnectedInterval = setInterval(() => {
@@ -804,7 +969,7 @@ module.exports.waitTillConnected = async function () {
 
 // Returns the value at a given percentile in a sorted numeric array.
 // "Linear interpolation between closest ranks" method
-function percentile(arr, p) {
+function percentile(arr: number[], p: number) {
   if (arr.length === 0) return 0;
   if (typeof p !== 'number') throw new TypeError('p must be a number');
   if (p <= 0) return arr[0];
@@ -822,12 +987,8 @@ function percentile(arr, p) {
 /**
  * The histogram is an array of [fee, vsize] pairs, where vsizen is the cumulative virtual size of mempool transactions
  * with a fee rate in the interval [feen-1, feen], and feen-1 > feen.
- *
- * @param numberOfBlocks {Number}
- * @param feeHistorgram {Array}
- * @returns {number}
  */
-module.exports.calcEstimateFeeFromFeeHistorgam = function (numberOfBlocks, feeHistorgram) {
+export const calcEstimateFeeFromFeeHistorgam = function (numberOfBlocks: number, feeHistorgram: number[][]) {
   // first, transforming histogram:
   let totalVsize = 0;
   const histogramToUse = [];
@@ -847,7 +1008,7 @@ module.exports.calcEstimateFeeFromFeeHistorgam = function (numberOfBlocks, feeHi
 
   // now we have histogram of precisely size for numberOfBlocks.
   // lets spread it into flat array so its easier to calculate percentile:
-  let histogramFlat = [];
+  let histogramFlat: number[] = [];
   for (const hh of histogramToUse) {
     histogramFlat = histogramFlat.concat(Array(Math.round(hh.vsize / 25000)).fill(hh.fee));
     // division is needed so resulting flat array is not too huge
@@ -860,7 +1021,7 @@ module.exports.calcEstimateFeeFromFeeHistorgam = function (numberOfBlocks, feeHi
   return Math.round(percentile(histogramFlat, 0.5) || 1);
 };
 
-module.exports.estimateFees = async function () {
+export const estimateFees = async function (): Promise<{ fast: number; medium: number; slow: number }> {
   let histogram;
   let timeoutId;
   try {
@@ -873,9 +1034,9 @@ module.exports.estimateFees = async function () {
   }
 
   // fetching what electrum (which uses bitcoin core) thinks about fees:
-  const _fast = await module.exports.estimateFee(1);
-  const _medium = await module.exports.estimateFee(18);
-  const _slow = await module.exports.estimateFee(144);
+  const _fast = await estimateFee(1);
+  const _medium = await estimateFee(18);
+  const _slow = await estimateFee(144);
 
   /**
    * sanity check, see
@@ -885,7 +1046,7 @@ module.exports.estimateFees = async function () {
   if (!histogram || histogram?.[0]?.[0] > 1000) return { fast: _fast, medium: _medium, slow: _slow };
 
   // calculating fast fees from mempool:
-  const fast = Math.max(2, module.exports.calcEstimateFeeFromFeeHistorgam(1, histogram));
+  const fast = Math.max(2, calcEstimateFeeFromFeeHistorgam(1, histogram));
   // recalculating medium and slow fees using bitcoincore estimations only like relative weights:
   // (minimum 1 sat, just for any case)
   const medium = Math.max(1, Math.round((fast * _medium) / _fast));
@@ -899,7 +1060,7 @@ module.exports.estimateFees = async function () {
  * @param numberOfBlocks {number} The number of blocks to target for confirmation
  * @returns {Promise<number>} Satoshis per byte
  */
-module.exports.estimateFee = async function (numberOfBlocks) {
+export const estimateFee = async function (numberOfBlocks: number): Promise<number> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   numberOfBlocks = numberOfBlocks || 1;
   const coinUnitsPerKilobyte = await mainClient.blockchainEstimatefee(numberOfBlocks);
@@ -907,31 +1068,31 @@ module.exports.estimateFee = async function (numberOfBlocks) {
   return Math.round(new BigNumber(coinUnitsPerKilobyte).dividedBy(1024).multipliedBy(100000000).toNumber());
 };
 
-module.exports.serverFeatures = async function () {
+export const serverFeatures = async function () {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return mainClient.server_features();
 };
 
-module.exports.broadcast = async function (hex) {
+export const broadcast = async function (hex: string) {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   try {
-    const broadcast = await mainClient.blockchainTransaction_broadcast(hex);
-    return broadcast;
+    const res = await mainClient.blockchainTransaction_broadcast(hex);
+    return res;
   } catch (error) {
     return error;
   }
 };
 
-module.exports.broadcastV2 = async function (hex) {
+export const broadcastV2 = async function (hex: string): Promise<string> {
   if (!mainClient) throw new Error('Electrum-GRS client is not connected');
   return mainClient.blockchainTransaction_broadcast(hex);
 };
 
-module.exports.estimateCurrentBlockheight = function () {
-  if (latestBlockheight) {
-    const timeDiff = Math.floor(+new Date() / 1000) - latestBlockheightTimestamp;
+export const estimateCurrentBlockheight = function (): number {
+  if (latestBlock.height) {
+    const timeDiff = Math.floor(+new Date() / 1000) - latestBlock.time;
     const extraBlocks = Math.floor(timeDiff / (9.93 * 60));
-    return latestBlockheight + extraBlocks;
+    return latestBlock.height + extraBlocks;
   }
 
   const baseTs = 1587570465609; // uS
@@ -939,14 +1100,9 @@ module.exports.estimateCurrentBlockheight = function () {
   return Math.floor(baseHeight + (+new Date() - baseTs) / 1000 / 60 / 9.93);
 };
 
-/**
- *
- * @param height
- * @returns {number} Timestamp in seconds
- */
-module.exports.calculateBlockTime = function (height) {
-  if (latestBlockheight) {
-    return Math.floor(latestBlockheightTimestamp + (height - latestBlockheight) * 9.93 * 60);
+export const calculateBlockTime = function (height: number): number {
+  if (latestBlock.height) {
+    return Math.floor(latestBlock.time + (height - latestBlock.height) * 9.93 * 60);
   }
 
   const baseTs = 1585837504; // sec
@@ -955,17 +1111,13 @@ module.exports.calculateBlockTime = function (height) {
 };
 
 /**
- *
- * @param host
- * @param tcpPort
- * @param sslPort
- * @returns {Promise<boolean>} Whether provided host:port is a valid electrum-grs server
+ * @returns {Promise<boolean>} Whether provided host:port is a valid electrum server
  */
-module.exports.testConnection = async function (host, tcpPort, sslPort) {
+export const testConnection = async function (host: string, tcpPort?: number, sslPort?: number): Promise<boolean> {
   const client = new ElectrumClient(net, tls, sslPort || tcpPort, host, sslPort ? 'tls' : 'tcp');
 
   client.onError = () => {}; // mute
-  let timeoutId = false;
+  let timeoutId: NodeJS.Timeout | undefined;
   try {
     const rez = await Promise.race([
       new Promise(resolve => {
@@ -987,27 +1139,19 @@ module.exports.testConnection = async function (host, tcpPort, sslPort) {
   return false;
 };
 
-module.exports.forceDisconnect = () => {
+export const forceDisconnect = (): void => {
   mainClient.close();
 };
 
-module.exports.setBatchingDisabled = () => {
+export const setBatchingDisabled = () => {
   disableBatching = true;
 };
 
-module.exports.setBatchingEnabled = () => {
+export const setBatchingEnabled = () => {
   disableBatching = false;
 };
-module.exports.connectMain = connectMain;
-module.exports.isDisabled = isDisabled;
-module.exports.setDisabled = setDisabled;
-module.exports.hardcodedPeers = hardcodedPeers;
-module.exports.ELECTRUM_HOST = ELECTRUM_HOST;
-module.exports.ELECTRUM_TCP_PORT = ELECTRUM_TCP_PORT;
-module.exports.ELECTRUM_SSL_PORT = ELECTRUM_SSL_PORT;
-module.exports.ELECTRUM_SERVER_HISTORY = ELECTRUM_SERVER_HISTORY;
 
-const splitIntoChunks = function (arr, chunkSize) {
+const splitIntoChunks = function (arr: any[], chunkSize: number) {
   const groups = [];
   let i;
   for (i = 0; i < arr.length; i += chunkSize) {
@@ -1016,97 +1160,13 @@ const splitIntoChunks = function (arr, chunkSize) {
   return groups;
 };
 
-const semVerToInt = function (semver) {
+const semVerToInt = function (semver: string): number {
   if (!semver) return 0;
   if (semver.split('.').length !== 3) return 0;
 
-  const ret = semver.split('.')[0] * 1000000 + semver.split('.')[1] * 1000 + semver.split('.')[2] * 1;
+  const ret = Number(semver.split('.')[0]) * 1000000 + Number(semver.split('.')[1]) * 1000 + Number(semver.split('.')[2]) * 1;
 
   if (isNaN(ret)) return 0;
 
   return ret;
 };
-
-function txhexToElectrumTransaction(txhex) {
-  const tx = bitcoin.Transaction.fromHex(txhex);
-
-  const ret = {
-    txid: tx.getId(),
-    hash: tx.getId(),
-    version: tx.version,
-    size: Math.ceil(txhex.length / 2),
-    vsize: tx.virtualSize(),
-    weight: tx.weight(),
-    locktime: tx.locktime,
-    vin: [],
-    vout: [],
-    hex: txhex,
-    blockhash: '',
-    confirmations: 0,
-    time: 0,
-    blocktime: 0,
-  };
-
-  if (txhashHeightCache[ret.txid]) {
-    // got blockheight where this tx was confirmed
-    ret.confirmations = module.exports.estimateCurrentBlockheight() - txhashHeightCache[ret.txid];
-    if (ret.confirmations < 0) {
-      // ugly fix for when estimator lags behind
-      ret.confirmations = 1;
-    }
-    ret.time = module.exports.calculateBlockTime(txhashHeightCache[ret.txid]);
-    ret.blocktime = module.exports.calculateBlockTime(txhashHeightCache[ret.txid]);
-  }
-
-  for (const inn of tx.ins) {
-    const txinwitness = [];
-    if (inn.witness[0]) txinwitness.push(inn.witness[0].toString('hex'));
-    if (inn.witness[1]) txinwitness.push(inn.witness[1].toString('hex'));
-
-    ret.vin.push({
-      txid: Buffer.from(inn.hash).reverse().toString('hex'),
-      vout: inn.index,
-      scriptSig: { hex: inn.script.toString('hex'), asm: '' },
-      txinwitness,
-      sequence: inn.sequence,
-    });
-  }
-
-  let n = 0;
-  for (const out of tx.outs) {
-    const value = new BigNumber(out.value).dividedBy(100000000).toNumber();
-    let address = false;
-    let type = false;
-
-    if (SegwitBech32Wallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
-      address = SegwitBech32Wallet.scriptPubKeyToAddress(out.script.toString('hex'));
-      type = 'witness_v0_keyhash';
-    } else if (SegwitP2SHWallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
-      address = SegwitP2SHWallet.scriptPubKeyToAddress(out.script.toString('hex'));
-      type = '???'; // TODO
-    } else if (LegacyWallet.scriptPubKeyToAddress(out.script.toString('hex'))) {
-      address = LegacyWallet.scriptPubKeyToAddress(out.script.toString('hex'));
-      type = '???'; // TODO
-    } else {
-      address = TaprootWallet.scriptPubKeyToAddress(out.script.toString('hex'));
-      type = 'witness_v1_taproot';
-    }
-
-    ret.vout.push({
-      value,
-      n,
-      scriptPubKey: {
-        asm: '',
-        hex: out.script.toString('hex'),
-        reqSigs: 1, // todo
-        type,
-        addresses: [address],
-      },
-    });
-    n++;
-  }
-  return ret;
-}
-
-// exported only to be used in unit tests
-module.exports.txhexToElectrumTransaction = txhexToElectrumTransaction;

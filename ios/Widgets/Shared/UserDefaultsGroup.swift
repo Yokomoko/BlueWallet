@@ -14,16 +14,24 @@ struct UserDefaultsElectrumSettings {
   let sslPort: Int32?
 }
 
-let DefaultElectrumPeers = [UserDefaultsElectrumSettings(host: "electrum1.groestlcoin.org", port: 50001, sslPort: 50002),
-                              UserDefaultsElectrumSettings(host: "electrum2.groestlcoin.org", port: 50001, sslPort: 50002),
-                              UserDefaultsElectrumSettings(host: "electrum3.groestlcoin.org", port: 50001, sslPort: 50002)]
+let hardcodedPeers = [
+    UserDefaultsElectrumSettings(host: "electrum1.groestlcoin.org", port: 50001, sslPort: 50002),
+    UserDefaultsElectrumSettings(host: "electrum2.groestlcoin.org", port: 50001, sslPort: 50002),
+    UserDefaultsElectrumSettings(host: "electrum11.groestlcoin.org", port: 50001, sslPort: 50002),
+    UserDefaultsElectrumSettings(host: "electrum12.groestlcoin.org", port: 50001, sslPort: 50002),
+    UserDefaultsElectrumSettings(host: "electrum13.groestlcoin.org", port: 50001, sslPort: 50002),
+]
+
+let DefaultElectrumPeers = [
+    UserDefaultsElectrumSettings(host: "electrum1.groestlcoin.org", port: 50001, sslPort: 50002), //
+] + hardcodedPeers
 
 class UserDefaultsGroup {
   static private let suite = UserDefaults(suiteName: UserDefaultsGroupKey.GroupName.rawValue)
 
   static func getElectrumSettings() -> UserDefaultsElectrumSettings {
     guard let electrumSettingsHost = suite?.string(forKey: UserDefaultsGroupKey.ElectrumSettingsHost.rawValue) else {
-      return UserDefaultsElectrumSettings(host: "electrum1.groestlcoin.org", port: 50001, sslPort: 50002)
+      return DefaultElectrumPeers.randomElement()!
     }
 
     let electrumSettingsTCPPort = suite?.string(forKey: UserDefaultsGroupKey.ElectrumSettingsTCPPort.rawValue) ?? "50001"

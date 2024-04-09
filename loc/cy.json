@@ -3,6 +3,7 @@
     "bad_password": "Cyfrinair anghywir. Tria eto. ",
     "cancel": "Canslo",
     "continue": "Parhau",
+    "discard_changes": "Gwaredu newidiadau?",
     "enter_password": "Cyfrinair",
     "never": "Byth",
     "of": "{number} o {total}",
@@ -62,7 +63,6 @@
     "details_create": "Creu",
     "details_label": "Disgrifiad",
     "details_setAmount": "Derbyn efo swm",
-    "details_share": "Rhannu",
     "header": "Derbyn"
   },
   "send": {
@@ -200,7 +200,6 @@
   "multisig": {
     "confirm": "Cadarnhau",
     "header": "Anfon",
-    "share": "Rhannu",
     "view": "Golwg",
     "create": "Creu",
     "co_sign_transaction": "Arwyddo trafodyn",

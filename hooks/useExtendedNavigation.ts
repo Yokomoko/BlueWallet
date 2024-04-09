@@ -51,6 +51,7 @@ export const useExtendedNavigation = (): NavigationProp<ParamListBase> => {
           } else {
             console.error('Biometric authentication failed');
             // Decide if navigation should proceed or not after failed authentication
+            return; // Prevent proceeding with the original navigation if bio fails
           }
         }
       }
@@ -73,11 +74,13 @@ export const useExtendedNavigation = (): NavigationProp<ParamListBase> => {
             wallet.setUserHasSavedExport(true);
             await saveToDisk(); // Assuming saveToDisk() returns a Promise.
             proceedWithNavigation();
-          } catch {
-            originalNavigation.navigate('WalletExportRoot', {
-              screen: 'WalletExport',
-              params: { walletID },
-            });
+          } catch (error) {
+            if (error) {
+              originalNavigation.navigate('WalletExportRoot', {
+                screen: 'WalletExport',
+                params: { walletID },
+              });
+            }
           }
 
           return; // Prevent proceeding with the original navigation if the reminder is shown

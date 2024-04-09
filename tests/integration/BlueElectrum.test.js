@@ -259,6 +259,7 @@ describe('BlueElectrum', () => {
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9',
         'c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9', // duplicate intended
       ],
+      true,
       3,
     );
 
@@ -286,7 +287,7 @@ describe('BlueElectrum', () => {
     // eslint-disable-next-line prettier/prettier
     const vinTxids =
     ['063094fd5303c1f461e88ac1e654459a20715d108a35de677c39f8bb1f3a115f','1f18dc7f1d44b4dd2f2d5c511c981cb707dc8a2ba1a88b9ea10b14b9d07bac58','aff5ba0f3b9a1d4d8af05ef86aa2ec5f4262830e7dab0eb4ea65eb50a72f0e2f','d3c474f883ca895542242ef9b1c253746ed8970b362e0595bd4fb716e2484cdd','a33d863c4ff7d8e0718575973d8d96484b2cf06823b079eac3ec41a4f1956019','cbb135b9f61434b3f5dafb2ff1f86e3b0dee033f2fb828df08ad6d936501e7c7','5b0f9bda166d194688a87c31a252dc30452b9f33b0e8e43ebf93081b178f8cd3','c69bb07f076dac74353c4529a6447d9db0391cd677e9dbd092d4bae55888ec96','e6aa2a2a047c54b099bbb79badcc37c052347ac044538b38585cb695dbce37ff','c5b0f74d6ef75c9dd4d824780a433da183cd714c315c84b87eb4b8e5907450d2','480ba7b00d527e4228f3112271ed71c270a202378fe33b6f2877263e9cfb44fa','ef6883158692221913fc0eb3d4411bd7f2be568b1e8587a6460301f1c26cca6e','786e2ea59907fbf3c6b020c6dac5064fc6d4cf1453e3632dd16bcecbb41ecdf2','744cd20d6d36e6a61e19952b00569173d35e5aa977d201124f28f74ba6d21151','7cb77edb8c3e85ddbe6bbe10cc6e8264aece3b518ab2ed9855cf8d683b291ab9','1c6bc43cecd635cb0d05bdd0d0a71067d222334ce03f1a16604f51609b9c12b0','9376198fa2fdd6b3edcbd9cee6fab57492be75d172ec3c2ac54962ebdcefa1f9','7fc65dc0c1134d5e704947c2fd75c4a7df450153a1063f3e7846409fd053cdef','bca70d89229fb8af301864107e05f01976788b329bd7ae0da6347b9f5f293d6f','b770c524453c1a94ef040198ce8526831e3df88d17b116b9a226eb67ddb2ec3c','b44447956583ef038ac7299442e381dec1bd6cf58b3f866359b7573d1ad0f70f','33d3f54ce38db2bf8ba4503c395aa59e69cef370091db8ab1d960e11dc23e895','c2a8be9340a94a0041a53721050b5142d4bf87abd7c3c970808aad061d4b0af0','e3eaa41ae2dafc5ffe7a2fa43bc3493e3df2f8be85063c7231f1d0dd40cb215c','27307b282db60f2d188464b5540ff9fa83a50f430998c292a33de3f3bb0447c9','3fd026b475f07b02617a2bb79bca56c8335ba29092b0628fb44e3d1318d2d2d8','e2ff5a0efe5454118d8aa279292ebc37dbcddc05bc5b949912b6225c6f271c18','d0e243147f29dbc94b45961e4c79700dc0c07942d2651154106de452304d45d6','712507bbe69e7ed9c647ad9e47a108309257aadda0f32b339292ebb8f2a49eaf','6e689a4f55393b01b2f6174aff201e4641f32f94c227ee3d7d11ef1f06d66344','c5dda15b5d1d4332dc4975874fc95294b8605ec0a74612cb3071a9e5e6389e88','063094fd5303c1f461e88ac1e654459a20715d108a35de677c39f8bb1f3a115f','fd568a4a665d0492da34a8c9d5942fa4cd24fa10e7104f40e92eb0cf47d0f143','119f14fcc32b3199a597362efe012c424de29de9cfb10eab5797810b882bf8ec','56c5501b7d996713671934bbaaa3289d75543dac17b7ac9c3aeaabb3b0e99eeb','aba4bd7c54e8fc1b06b61ba793e894554008b98cdbf23dfb6c3ba24c0cadb995','968c84b796a7533d551b665b1727c7b63452b554977b303377c48c4187b8b2e8','bb0138cba362207ab347a2a7e1adfd4e29c0f8d3adf8785da964a0f61b0fbe9d','c234a9c73c533284b63e24a670b381e218c888c62a0d218b871c45684f544ec9','d02da628a54fce702e52b10e942a1376091e88ae15bc0789cec78e8210a17043',];
-    const vintxdatas = await BlueElectrum.multiGetTransactionByTxid(vinTxids);
+    const vintxdatas = await BlueElectrum.multiGetTransactionByTxid(vinTxids, true);
     assert.ok(vintxdatas['968c84b796a7533d551b665b1727c7b63452b554977b303377c48c4187b8b2e8']);
   });
 
@@ -300,7 +301,10 @@ describe('BlueElectrum', () => {
     // possible solution: fetch it without verbose and decode locally. unfortunatelly it omits such info as confirmations, time etc
     // so whoever uses it should be prepared for this.
     // tbh consumer wallets dont usually work with such big txs, so probably we dont need it
-    const txdatas = await BlueElectrum.multiGetTransactionByTxid(['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
+    const txdatas = await BlueElectrum.multiGetTransactionByTxid(
+      ['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c'],
+      true,
+    );
     assert.ok(txdatas['484a11c5e086a281413b9192b4f60c06abf745f08c2c28c4b4daefe6df3b9e5c']);
   });
 
@@ -308,8 +312,8 @@ describe('BlueElectrum', () => {
     if (disableBatching) BlueElectrum.setBatchingDisabled();
     const txdatas = await BlueElectrum.multiGetTransactionByTxid(
       ['7fc65dc0c1134d5e704947c2fd75c4a7df450153a1063f3e7846409fd053cdef'],
-      3,
       false,
+      3,
     );
 
     assert.strictEqual(
