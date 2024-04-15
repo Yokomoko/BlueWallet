@@ -1,6 +1,6 @@
 {
   "name": "bluewallet",
-  "version": "6.6.1",
+  "version": "6.6.3",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,6 +16,7 @@
     "@types/bip38grs": "^3.1.0",
     "@types/bs58grscheck": "^2.1.0",
     "@types/create-hash": "^1.2.2",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.4.0",
     "@types/react": "^18.2.16",
     "@types/react-native": "^0.72.0",
@@ -135,7 +136,7 @@
     "events": "3.3.0",
     "frisbee": "3.1.0",
     "junderw-crc32c": "1.2.0",
-    "lottie-react-native": "6.7.0",
+    "lottie-react-native": "6.7.2",
     "metro-react-native-babel-preset": "0.77.0",
     "path-browserify": "1.0.1",
     "payjoin-client": "1.0.1",

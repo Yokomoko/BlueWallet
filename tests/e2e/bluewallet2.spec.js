@@ -1,7 +1,7 @@
 import { extractTextFromElementById, hashIt, helperImportWallet, sleep, sup, yo } from './helperz';
 
-const bitcoin = require('groestlcoinjs-lib');
-const assert = require('assert');
+import * as bitcoin from 'groestlcoinjs-lib';
+import assert from 'assert';
 
 /**
  * in this suite each test requires that there is one specific wallet present, thus, we import it

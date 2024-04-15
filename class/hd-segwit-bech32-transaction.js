@@ -1,8 +1,9 @@
+import * as bitcoin from 'groestlcoinjs-lib';
+import BigNumber from 'bignumber.js';
+
 import { HDSegwitBech32Wallet } from './wallets/hd-segwit-bech32-wallet';
 import { SegwitBech32Wallet } from './wallets/segwit-bech32-wallet';
 import * as BlueElectrum from '../blue_modules/BlueElectrum';
-const bitcoin = require('groestlcoinjs-lib');
-const BigNumber = require('bignumber.js');
 
 /**
  * Represents transaction of a BIP84 wallet.

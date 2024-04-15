@@ -1,5 +1,5 @@
+import assert from 'assert';
 import { HDAezeedWallet, WatchOnlyWallet } from '../../class';
-const assert = require('assert');
 
 describe('HDAezeedWallet', () => {
   // TODO: determine why aezeed wallet's are not working

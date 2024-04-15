@@ -1,6 +1,6 @@
+import * as bitcoin from 'groestlcoinjs-lib';
+import assert from 'assert';
 import { SegwitBech32Wallet } from '../../class';
-const bitcoin = require('groestlcoinjs-lib');
-const assert = require('assert');
 
 describe('Segwit P2SH wallet', () => {
   it('can create transaction', async () => {

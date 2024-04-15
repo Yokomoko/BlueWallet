@@ -102,7 +102,7 @@ struct WalletInformationWidget: Widget {
 
 struct WalletInformationWidget_Previews: PreviewProvider {
   static var previews: some View {
-    WalletInformationWidgetEntryView(entry: WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100,000,000", price: "$1", rate: Double(0)), allWalletsBalance: WalletData(balance: 10000, latestTransactionTime: LatestTransaction(isUnconfirmed: false, epochValue: 1568804029000))))
+    WalletInformationWidgetEntryView(entry: WalletInformationWidgetEntry(date: Date(), marketData: MarketData(nextBlock: "1", sats: "100,000,000", price: "$1", rate: Double(0)), allWalletsBalance: WalletData(balance: 10000, latestTransactionTime: LatestTransaction(isUnconfirmed: nil, epochValue: nil))))
       .previewContext(WidgetPreviewContext(family: .systemSmall))
   }
 }

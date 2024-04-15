@@ -9,8 +9,8 @@ import {
   helperCreateWallet,
   helperSwitchAdvancedMode,
 } from './helperz';
-const bitcoin = require('groestlcoinjs-lib');
-const assert = require('assert');
+import * as bitcoin from 'groestlcoinjs-lib';
+import assert from 'assert';
 
 /**
  * this testsuite is for test cases that require no wallets to be present

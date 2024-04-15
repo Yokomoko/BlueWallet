@@ -4,7 +4,7 @@ import assert from 'assert';
 
 import { HDSegwitBech32Wallet, WatchOnlyWallet } from '../../class';
 import { ECPairFactory } from 'ecpairgrs';
-const bitcoin = require('groestlcoinjs-lib');
+import * as bitcoin from 'groestlcoinjs-lib';
 
 const ECPair = ECPairFactory(ecc);
 
