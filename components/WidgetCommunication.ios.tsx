@@ -19,7 +19,7 @@ export const reloadAllTimelines = (): void => {
 
 export const isBalanceDisplayAllowed = async (): Promise<boolean> => {
   try {
-    await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+    await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
     const displayBalance = await DefaultPreference.get(WidgetCommunicationKeys.DisplayBalanceAllowed);
     return displayBalance === '1';
   } catch {
@@ -28,7 +28,7 @@ export const isBalanceDisplayAllowed = async (): Promise<boolean> => {
 };
 
 export const setBalanceDisplayAllowed = async (value: boolean): Promise<void> => {
-  await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+  await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
   if (value) {
     await DefaultPreference.set(WidgetCommunicationKeys.DisplayBalanceAllowed, '1');
   } else {
@@ -38,7 +38,7 @@ export const setBalanceDisplayAllowed = async (value: boolean): Promise<void> =>
 };
 
 export const syncWidgetBalanceWithWallets = async (wallets: TWallet[], walletsInitialized: boolean): Promise<void> => {
-  await DefaultPreference.setName('group.io.bluewallet.bluewallet');
+  await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
   const { allWalletsBalance, latestTransactionTime } = await allWalletsBalanceAndTransactionTime(wallets, walletsInitialized);
   await DefaultPreference.set(WidgetCommunicationKeys.AllWalletsSatoshiBalance, String(allWalletsBalance));
   await DefaultPreference.set(WidgetCommunicationKeys.AllWalletsLatestTransactionTime, String(latestTransactionTime));

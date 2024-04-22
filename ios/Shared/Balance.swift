@@ -5,12 +5,12 @@ class Balance {
         switch toUnit {
         case .BTC:
             let value = balance / Decimal(100_000_000)
-            completion("\(value) BTC") // Localize unit names as needed.
+            completion("\(value) GRS") // Localize unit names as needed.
         case .SATS:
             if withFormatting {
-                completion(NumberFormatter.localizedString(from: balance as NSNumber, number: .decimal) + " SATS")
+                completion(NumberFormatter.localizedString(from: balance as NSNumber, number: .decimal) + " GROS")
             } else {
-                completion("\(balance) SATS")
+                completion("\(balance) GROS")
             }
         case .LOCAL_CURRENCY:
             fetchLocalCurrencyEquivalent(satoshi: balance, completion: completion)
@@ -18,7 +18,7 @@ class Balance {
     }
 
     private static func fetchLocalCurrencyEquivalent(satoshi: Decimal, completion: @escaping (String) -> Void) {
-      
+
         let currency = Currency.getUserPreferredCurrency() // Ensure this method retrieves the correct currency code.
         MarketAPI.fetchPrice(currency: currency) { dataStore, error in
             DispatchQueue.main.async {

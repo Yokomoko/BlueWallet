@@ -9,7 +9,7 @@
 import Foundation
 
 enum BitcoinUnit: String {
-    case BTC = "BTC"
-    case SATS = "SATS"
+    case BTC = "GRS"
+    case SATS = "GROS"
     case LOCAL_CURRENCY = "LOCAL_CURRENCY"
 }
