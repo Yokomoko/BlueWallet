@@ -424,7 +424,7 @@ export class BlueReplaceFeeSuggestions extends Component {
   }
 }
 
-export function BlueBigCheckmark({ style }) {
+export function BlueBigCheckmark({ style = {} }) {
   const defaultStyles = {
     backgroundColor: '#006593',
     width: 120,

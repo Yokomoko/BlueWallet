@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Image, Text, TouchableOpacity, View, I18nManager, StyleSheet, LayoutAnimation } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import LinearGradient from 'react-native-linear-gradient';
@@ -6,11 +6,11 @@ import { HDSegwitBech32Wallet, LightningCustodianWallet, LightningLdkWallet, Mul
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import WalletGradient from '../class/wallet-gradient';
 import loc, { formatBalance, formatBalanceWithoutSuffix } from '../loc';
-import { BlueStorageContext } from '../blue_modules/storage-context';
 import ToolTipMenu from './TooltipMenu';
 import { FiatUnit } from '../models/fiatUnit';
 import { TWallet } from '../class/wallets/types';
 import { BlurredBalanceView } from './BlurredBalanceView';
+import { useSettings } from './Context/SettingsContext';
 
 interface TransactionsNavigationHeaderProps {
   wallet: TWallet;
@@ -43,8 +43,8 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
 }) => {
   const [wallet, setWallet] = useState(initialWallet);
   const [allowOnchainAddress, setAllowOnchainAddress] = useState(false);
+  const { preferredFiatCurrency } = useSettings();
 
-  const { preferredFiatCurrency } = useContext(BlueStorageContext);
   const menuRef = useRef(null);
 
   const verifyIfWalletAllowsOnchainAddress = useCallback(() => {
@@ -208,9 +208,9 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
                   // @ts-ignore: Ugh
                   key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
                   numberOfLines={1}
+                  minimumFontScale={0.5}
                   adjustsFontSizeToFit
                   style={styles.walletBalanceText}
-                  ellipsizeMode="middle"
                 >
                   {balance}
                 </Text>
@@ -250,24 +250,23 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
       )}
 
       {wallet.allowBIP47() && wallet.isBIP47Enabled() && (
-        <TouchableOpacity accessibilityRole="button" onPress={handleOnPaymentCodeButtonPressed}>
-          <View style={styles.manageFundsButton}>
-            <Text style={styles.manageFundsButtonText}>{loc.bip47.payment_code}</Text>
-          </View>
+        <TouchableOpacity style={styles.manageFundsButton} accessibilityRole="button" onPress={handleOnPaymentCodeButtonPressed}>
+          <Text style={styles.manageFundsButtonText}>{loc.bip47.payment_code}</Text>
         </TouchableOpacity>
       )}
       {wallet.type === LightningLdkWallet.type && (
-        <TouchableOpacity accessibilityRole="button" accessibilityLabel={loc.lnd.title} onPress={handleManageFundsPressed}>
-          <View style={styles.manageFundsButton}>
-            <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
-          </View>
+        <TouchableOpacity
+          style={styles.manageFundsButton}
+          accessibilityRole="button"
+          accessibilityLabel={loc.lnd.title}
+          onPress={handleManageFundsPressed}
+        >
+          <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
         </TouchableOpacity>
       )}
       {wallet.type === MultisigHDWallet.type && (
-        <TouchableOpacity accessibilityRole="button" onPress={handleManageFundsPressed}>
-          <View style={styles.manageFundsButton}>
-            <Text style={styles.manageFundsButtonText}>{loc.multisig.manage_keys}</Text>
-          </View>
+        <TouchableOpacity style={styles.manageFundsButton} accessibilityRole="button" onPress={handleManageFundsPressed}>
+          <Text style={styles.manageFundsButtonText}>{loc.multisig.manage_keys}</Text>
         </TouchableOpacity>
       )}
     </LinearGradient>
@@ -297,6 +296,7 @@ const styles = StyleSheet.create({
   walletBalance: {
     flexShrink: 1,
     marginRight: 6,
+    height: 34,
   },
   manageFundsButton: {
     marginTop: 14,

@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   View,
-  Dimensions,
   FlatList,
   Pressable,
 } from 'react-native';
@@ -21,9 +20,10 @@ import { LightningCustodianWallet, LightningLdkWallet, MultisigHDWallet } from '
 import WalletGradient from '../class/wallet-gradient';
 import { BlueSpacing10 } from '../BlueComponents';
 import { BlueStorageContext, WalletTransactionsStatus } from '../blue_modules/storage-context';
-import { isTablet, isDesktop } from '../blue_modules/environment';
 import { useTheme } from './themes';
 import { BlurredBalanceView } from './BlurredBalanceView';
+import { useIsLargeScreen } from '../hooks/useIsLargeScreen';
+import { useSettings } from './Context/SettingsContext';
 
 const nStyles = StyleSheet.create({
   container: {
@@ -56,7 +56,7 @@ const NewWalletPanel = ({ onPress }) => {
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : (width >= Dimensions.get('screen').width / 2 && isTablet()) || isDesktop;
+  const isLargeScreen = useIsLargeScreen();
   const nStylesHooks = StyleSheet.create({
     container: isLargeScreen
       ? {
@@ -102,6 +102,9 @@ const iStyles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     minHeight: 164,
+  },
+  balanceContainer: {
+    height: 40,
   },
   image: {
     width: 99,
@@ -157,7 +160,7 @@ export const WalletCarouselItem = ({ item, _, onPress, handleLongPress, isSelect
   const { walletTransactionUpdateStatus } = useContext(BlueStorageContext);
   const { width } = useWindowDimensions();
   const itemWidth = width * 0.82 > 375 ? 375 : width * 0.82;
-  const isLargeScreen = Platform.OS === 'android' ? isTablet() : (width >= Dimensions.get('screen').width / 2 && isTablet()) || isDesktop;
+  const isLargeScreen = useIsLargeScreen();
   const onPressedIn = () => {
     Animated.spring(scaleValue, { duration: 50, useNativeDriver: true, toValue: 0.9 }).start();
   };
@@ -218,21 +221,23 @@ export const WalletCarouselItem = ({ item, _, onPress, handleLongPress, isSelect
             <Text numberOfLines={1} style={[iStyles.label, { color: colors.inverseForegroundColor }]}>
               {item.getLabel()}
             </Text>
-            {item.hideBalance ? (
-              <>
-                <BlueSpacing10 />
-                <BlurredBalanceView />
-              </>
-            ) : (
-              <Text
-                numberOfLines={1}
-                key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
-                ellipsizeMode="middle"
-                style={[iStyles.balance, { color: colors.inverseForegroundColor }]}
-              >
-                {`${balance} `}
-              </Text>
-            )}
+            <View style={iStyles.balanceContainer}>
+              {item.hideBalance ? (
+                <>
+                  <BlueSpacing10 />
+                  <BlurredBalanceView />
+                </>
+              ) : (
+                <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  key={balance} // force component recreation on balance change. To fix right-to-left languages, like Farsi
+                  style={[iStyles.balance, { color: colors.inverseForegroundColor }]}
+                >
+                  {`${balance} `}
+                </Text>
+              )}
+            </View>
             <Text style={iStyles.br} />
             <Text numberOfLines={1} style={[iStyles.latestTx, { color: colors.inverseForegroundColor }]}>
               {loc.wallets.list_latest_transaction}
@@ -271,7 +276,7 @@ const cStyles = StyleSheet.create({
 const ListHeaderComponent = () => <View style={cStyles.separatorStyle} />;
 
 const WalletsCarousel = forwardRef((props, ref) => {
-  const { preferredFiatCurrency, language } = useContext(BlueStorageContext);
+  const { preferredFiatCurrency, language } = useSettings();
   const { horizontal, data, handleLongPress, onPress, selectedWallet } = props;
   const renderItem = useCallback(
     ({ item, index }) =>

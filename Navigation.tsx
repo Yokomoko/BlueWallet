@@ -1,7 +1,7 @@
 import { DrawerNavigationOptions, createDrawerNavigator } from '@react-navigation/drawer';
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useContext, useMemo } from 'react';
-import { Dimensions, I18nManager, Platform, useWindowDimensions } from 'react-native';
+import { I18nManager, Platform } from 'react-native';
 
 import PlausibleDeniability from './screen/PlausibleDeniability';
 import Selftest from './screen/selftest';
@@ -14,7 +14,7 @@ import About from './screen/settings/about';
 import DefaultView from './screen/settings/DefaultView';
 import ElectrumSettings from './screen/settings/electrumSettings';
 import EncryptStorage from './screen/settings/encryptStorage';
-import Language from './screen/settings/language';
+import Language from './screen/settings/Language';
 import LightningSettings from './screen/settings/lightningSettings';
 import NotificationSettings from './screen/settings/notificationSettings';
 import ReleaseNotes from './screen/settings/releasenotes';
@@ -33,7 +33,7 @@ import ImportWallet from './screen/wallets/import';
 import ImportCustomDerivationPath from './screen/wallets/importCustomDerivationPath';
 import ImportWalletDiscovery from './screen/wallets/importDiscovery';
 import ImportSpeed from './screen/wallets/importSpeed';
-import WalletsList from './screen/wallets/list';
+import WalletsList from './screen/wallets/WalletsList';
 import PleaseBackup from './screen/wallets/pleaseBackup';
 import PleaseBackupLNDHub from './screen/wallets/pleaseBackupLNDHub';
 import PleaseBackupLdk from './screen/wallets/pleaseBackupLdk';
@@ -55,7 +55,7 @@ import AztecoRedeem from './screen/receive/aztecoRedeem';
 import ReceiveDetails from './screen/receive/details';
 
 import ScanQRCode from './screen/send/ScanQRCode';
-import Broadcast from './screen/send/broadcast';
+import Broadcast from './screen/send/Broadcast';
 import CoinControl from './screen/send/coinControl';
 import Confirm from './screen/send/confirm';
 import SendCreate from './screen/send/create';
@@ -67,11 +67,10 @@ import PsbtWithHardwareWallet from './screen/send/psbtWithHardwareWallet';
 import Success from './screen/send/success';
 
 import UnlockWith from './screen/UnlockWith';
-import { isDesktop, isHandset, isTablet } from './blue_modules/environment';
+import { isDesktop, isHandset } from './blue_modules/environment';
 import navigationStyle from './components/navigationStyle';
 import { useTheme } from './components/themes';
 import loc from './loc';
-import LappBrowser from './screen/lnd/browser';
 import LdkInfo from './screen/lnd/ldkInfo';
 import LdkOpenChannel from './screen/lnd/ldkOpenChannel';
 import LNDCreateInvoice from './screen/lnd/lndCreateInvoice';
@@ -88,6 +87,7 @@ import LdkViewLogs from './screen/wallets/ldkViewLogs';
 import PaymentCode from './screen/wallets/paymentCode';
 import PaymentCodesList from './screen/wallets/paymentCodesList';
 import { BlueStorageContext } from './blue_modules/storage-context';
+import { useIsLargeScreen } from './hooks/useIsLargeScreen';
 
 const WalletsStack = createNativeStackNavigator();
 
@@ -96,7 +96,11 @@ const WalletsRoot = () => {
 
   return (
     <WalletsStack.Navigator screenOptions={{ headerShadowVisible: false }}>
-      <WalletsStack.Screen name="WalletsList" component={WalletsList} options={WalletsList.navigationOptions(theme)} />
+      <WalletsStack.Screen
+        name="WalletsList"
+        component={WalletsList}
+        options={navigationStyle({ title: '', headerBackTitle: loc.wallets.list_title })(theme)}
+      />
       <WalletsStack.Screen name="WalletTransactions" component={WalletTransactions} options={WalletTransactions.navigationOptions(theme)} />
       <WalletsStack.Screen name="LdkOpenChannel" component={LdkOpenChannel} options={LdkOpenChannel.navigationOptions(theme)} />
       <WalletsStack.Screen name="LdkInfo" component={LdkInfo} options={LdkInfo.navigationOptions(theme)} />
@@ -161,7 +165,8 @@ const WalletsRoot = () => {
         component={LNDViewAdditionalInvoicePreImage}
         options={LNDViewAdditionalInvoicePreImage.navigationOptions(theme)}
       />
-      <WalletsStack.Screen name="Broadcast" component={Broadcast} options={Broadcast.navigationOptions(theme)} />
+
+      <WalletsStack.Screen name="Broadcast" component={Broadcast} options={navigationStyle({ title: loc.send.create_broadcast })(theme)} />
       <WalletsStack.Screen name="IsItMyAddress" component={IsItMyAddress} options={IsItMyAddress.navigationOptions(theme)} />
       <WalletsStack.Screen name="GenerateWord" component={GenerateWord} options={GenerateWord.navigationOptions(theme)} />
       <WalletsStack.Screen name="LnurlPay" component={LnurlPay} options={LnurlPay.navigationOptions(theme)} />
@@ -402,10 +407,7 @@ const DrawerListContent = (props: any) => {
 
 const Drawer = createDrawerNavigator();
 const DrawerRoot = () => {
-  const dimensions = useWindowDimensions();
-  const isLargeScreen = useMemo(() => {
-    return Platform.OS === 'android' ? isTablet() : (dimensions.width >= Dimensions.get('screen').width / 2 && isTablet()) || isDesktop;
-  }, [dimensions.width]);
+  const isLargeScreen = useIsLargeScreen();
 
   const drawerStyle: DrawerNavigationOptions = useMemo(
     () => ({
@@ -488,17 +490,6 @@ const WalletExportStackRoot = () => {
     >
       <WalletExportStack.Screen name="WalletExport" component={WalletExport} options={WalletExport.navigationOptions(theme)} />
     </WalletExportStack.Navigator>
-  );
-};
-
-const LappBrowserStack = createNativeStackNavigator();
-const LappBrowserStackRoot = () => {
-  const theme = useTheme();
-
-  return (
-    <LappBrowserStack.Navigator id="LappBrowserRoot" screenOptions={{ headerShadowVisible: false }} initialRouteName="LappBrowser">
-      <LappBrowserStack.Screen name="LappBrowser" component={LappBrowser} options={LappBrowser.navigationOptions(theme)} />
-    </LappBrowserStack.Navigator>
   );
 };
 
@@ -637,7 +628,6 @@ const Navigation = () => {
       />
       <RootStack.Screen name="SelectWallet" component={SelectWallet} />
       <RootStack.Screen name="ReceiveDetailsRoot" component={ReceiveDetailsStackRoot} options={NavigationDefaultOptions} />
-      <RootStack.Screen name="LappBrowserRoot" component={LappBrowserStackRoot} options={NavigationDefaultOptions} />
       <RootStack.Screen name="LDKOpenChannelRoot" component={LDKOpenChannelRoot} options={NavigationDefaultOptions} />
 
       <RootStack.Screen
