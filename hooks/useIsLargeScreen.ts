@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Dimensions } from 'react-native';
 import { isTablet } from 'react-native-device-info';
+import { isDesktop } from '../blue_modules/environment';
 
 // Custom hook to determine if the screen is large
 export const useIsLargeScreen = () => {
@@ -11,7 +12,7 @@ export const useIsLargeScreen = () => {
     const updateScreenUsage = () => {
       const newWindowWidth = Dimensions.get('window').width;
       if (newWindowWidth !== windowWidth) {
-        console.log(`Window width changed: ${newWindowWidth}`);
+        console.debug(`Window width changed: ${newWindowWidth}`);
         setWindowWidth(newWindowWidth);
       }
     };
@@ -27,12 +28,11 @@ export const useIsLargeScreen = () => {
 
   // Determine if the window width is at least half of the screen width
   const isLargeScreen = useMemo(() => {
-    // we dont want to return true on phones. only on tablets for now
-    const isRunningOnTablet = isTablet();
+    const isRunningOnTabletOrDesktop = isTablet() || isDesktop;
     const halfScreenWidth = windowWidth >= screenWidth / 2;
-    const condition = isRunningOnTablet && halfScreenWidth;
-    console.log(
-      `Window width: ${windowWidth}, Screen width: ${screenWidth}, Is tablet or desktop: ${isRunningOnTablet}, Is large screen: ${condition}`,
+    const condition = isRunningOnTabletOrDesktop && halfScreenWidth;
+    console.debug(
+      `Window width: ${windowWidth}, Screen width: ${screenWidth}, Is tablet: ${isRunningOnTabletOrDesktop}, Is large screen: ${condition}`,
     );
     return condition;
   }, [windowWidth, screenWidth]);

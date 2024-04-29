@@ -125,7 +125,8 @@
     "maxSats": "Maximum amount is {max} gros",
     "maxSatsFull": "Maximum amount is {max} gros or {currency}",
     "minSats": "Minimal amount is {min} gros",
-    "minSatsFull": "Minimal amount is {min} gros or {currency}"
+    "minSatsFull": "Minimal amount is {min} gros or {currency}",
+    "qrcode_for_the_address": "QR Code for the address"
   },
   "send": {
     "provided_address_is_invoice": "This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.",

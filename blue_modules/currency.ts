@@ -9,7 +9,7 @@ const PREFERRED_CURRENCY_STORAGE_KEY = 'preferredCurrency';
 const PREFERRED_CURRENCY_LOCALE_STORAGE_KEY = 'preferredCurrencyLocale';
 const EXCHANGE_RATES_STORAGE_KEY = 'exchangeRates';
 const LAST_UPDATED = 'LAST_UPDATED';
-const GROUP_IO_BLUEWALLET = 'group.org.groestlcoin.bluewallet123';
+export const GROUP_IO_BLUEWALLET = 'group.org.groestlcoin.bluewallet123';
 const BTC_PREFIX = 'GRS_';
 
 export interface CurrencyRate {
@@ -111,6 +111,11 @@ async function isRateOutdated(): Promise<boolean> {
   } catch {
     return true;
   }
+}
+
+async function restoreSavedPreferredFiatCurrencyAndExchangeFromStorage(): Promise<void> {
+  await _restoreSavedExchangeRatesFromStorage();
+  await _restoreSavedPreferredFiatCurrencyFromStorage();
 }
 
 async function initCurrencyDaemon(clearLastUpdatedTime: boolean = false): Promise<void> {
@@ -235,4 +240,5 @@ export {
   LAST_UPDATED,
   mostRecentFetchedRate,
   isRateOutdated,
+  restoreSavedPreferredFiatCurrencyAndExchangeFromStorage,
 };

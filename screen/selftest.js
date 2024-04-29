@@ -6,6 +6,7 @@ import * as bip39 from 'bip39';
 import bip38 from 'bip38grs';
 import BIP32Factory from 'bip32grs';
 import * as bitcoin from 'groestlcoinjs-lib';
+import BlueCrypto from 'react-native-blue-crypto';
 
 import loc from '../loc';
 import { BlueSpacing20, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
@@ -26,8 +27,6 @@ import * as encryption from '../blue_modules/encryption';
 import * as fs from '../blue_modules/fs';
 import SaveFileButton from '../components/SaveFileButton';
 import * as BlueElectrum from '../blue_modules/BlueElectrum';
-
-const BlueCrypto = require('react-native-blue-crypto');
 
 const bip32 = BIP32Factory(ecc);
 
