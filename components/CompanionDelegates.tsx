@@ -25,7 +25,7 @@ const WatchConnectivity = lazy(() => import('../WatchConnectivity'));
 const eventEmitter = Platform.OS === 'ios' ? new NativeEventEmitter(NativeModules.EventEmitter) : undefined;
 
 const ClipboardContentType = Object.freeze({
-  BITCOIN: 'BITCOIN',
+  BITCOIN: 'GROESTLCOIN',
   LIGHTNING: 'LIGHTNING',
 });
 
