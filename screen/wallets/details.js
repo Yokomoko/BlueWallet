@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -7,7 +7,6 @@ import {
   InteractionManager,
   Keyboard,
   KeyboardAvoidingView,
-  Linking,
   Platform,
   ScrollView,
   StyleSheet,
@@ -18,11 +17,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import RNFS from 'react-native-fs';
-import { PERMISSIONS, RESULTS, request } from 'react-native-permissions';
-import Share from 'react-native-share';
 import { BlueCard, BlueLoading, BlueSpacing10, BlueSpacing20, BlueText } from '../../BlueComponents';
-import { isDesktop } from '../../blue_modules/environment';
 import triggerHapticFeedback, { HapticFeedbackTypes } from '../../blue_modules/hapticFeedback';
 // import Notifications from '../../blue_modules/notifications';
 import { BlueStorageContext } from '../../blue_modules/storage-context';
@@ -43,7 +38,6 @@ import presentAlert from '../../components/Alert';
 import Button from '../../components/Button';
 import ListItem from '../../components/ListItem';
 import { SecondButton } from '../../components/SecondButton';
-import navigationStyle from '../../components/navigationStyle';
 import { useTheme } from '../../components/themes';
 import prompt from '../../helpers/prompt';
 import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
@@ -51,6 +45,8 @@ import loc, { formatBalanceWithoutSuffix } from '../../loc';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import SaveFileButton from '../../components/SaveFileButton';
 import { useSettings } from '../../components/Context/SettingsContext';
+import HeaderRightButton from '../../components/HeaderRightButton';
+import { writeFileAndExport } from '../../blue_modules/fs';
 
 const styles = StyleSheet.create({
   scrollViewContent: {
@@ -108,17 +104,6 @@ const styles = StyleSheet.create({
   marginRight16: {
     marginRight: 16,
   },
-  save: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 80,
-    borderRadius: 8,
-    height: 34,
-  },
-  saveText: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
 });
 
 const WalletDetails = () => {
@@ -174,12 +159,6 @@ const WalletDetails = () => {
 
       backgroundColor: colors.inputBackgroundColor,
     },
-    save: {
-      backgroundColor: colors.lightButton,
-    },
-    saveText: {
-      color: colors.buttonTextColor,
-    },
     delete: {
       color: isToolTipMenuVisible ? colors.buttonDisabledTextColor : '#d0021b',
     },
@@ -190,7 +169,7 @@ const WalletDetails = () => {
     }
   }, [wallet]);
 
-  const save = () => {
+  const handleSave = useCallback(() => {
     setIsLoading(true);
     if (walletName.trim().length > 0) {
       wallet.setLabel(walletName.trim());
@@ -211,25 +190,18 @@ const WalletDetails = () => {
         console.log(error.message);
         setIsLoading(false);
       });
-  };
+  }, [walletName, saveToDisk, wallet, hideTransactionsInWalletsList, useWithHardwareWallet, isBIP47Enabled, goBack]);
 
-  useLayoutEffect(() => {
+  const SaveButton = useMemo(
+    () => <HeaderRightButton title={loc.wallets.details_save} onPress={handleSave} disabled={isLoading} testID="Save" />,
+    [isLoading, handleSave],
+  );
+
+  useEffect(() => {
     setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => (
-        <TouchableOpacity
-          accessibilityRole="button"
-          testID="Save"
-          disabled={isLoading || isToolTipMenuVisible}
-          style={[styles.save, stylesHook.save]}
-          onPress={save}
-        >
-          <Text style={[styles.saveText, stylesHook.saveText]}>{loc.wallets.details_save}</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () => SaveButton,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, colors, walletName, useWithHardwareWallet, hideTransactionsInWalletsList, isBIP47Enabled, isToolTipMenuVisible]);
+  }, [SaveButton, setOptions]);
 
   useEffect(() => {
     if (wallets.some(w => w.getID() === walletID)) {
@@ -293,7 +265,7 @@ const WalletDetails = () => {
     navigate('ViewEditMultisigCosignersRoot', {
       screen: 'ViewEditMultisigCosigners',
       params: {
-        walletId: wallet.getID(),
+        walletID,
       },
     });
   };
@@ -356,46 +328,8 @@ const WalletDetails = () => {
       null,
       2,
     );
-    if (Platform.OS === 'ios') {
-      const filePath = RNFS.TemporaryDirectoryPath + `/${fileName}`;
-      await RNFS.writeFile(filePath, contents);
-      Share.open({
-        url: 'file://' + filePath,
-        saveToFiles: isDesktop,
-        failOnCancel: false,
-      })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          RNFS.unlink(filePath);
-        });
-    } else if (Platform.OS === 'android') {
-      const granted = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
-      if (granted === RESULTS.GRANTED) {
-        console.log('Storage Permission: Granted');
-        const filePath = RNFS.DownloadDirectoryPath + `/${fileName}`;
-        try {
-          await RNFS.writeFile(filePath, contents);
-          presentAlert({ message: loc.formatString(loc.send.txSaved, { filePath: fileName }) });
-        } catch (e) {
-          console.log(e);
-          presentAlert({ message: e.message });
-        }
-      } else {
-        console.log('Storage Permission: Denied');
-        Alert.alert(loc.send.permission_storage_title, loc.send.permission_storage_denied_message, [
-          {
-            text: loc.send.open_settings,
-            onPress: () => {
-              Linking.openSettings();
-            },
-            style: 'default',
-          },
-          { text: loc._.cancel, onPress: () => {}, style: 'cancel' },
-        ]);
-      }
-    }
+
+    await writeFileAndExport(fileName, contents, false);
   };
 
   const purgeTransactions = async () => {
@@ -760,11 +694,5 @@ const WalletDetails = () => {
     </ScrollView>
   );
 };
-
-WalletDetails.navigationOptions = navigationStyle({}, opts => ({
-  ...opts,
-  headerTitle: loc.wallets.details_title,
-  statusBarStyle: 'auto',
-}));
 
 export default WalletDetails;

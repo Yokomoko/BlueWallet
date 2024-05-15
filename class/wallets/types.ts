@@ -15,6 +15,7 @@ import { SegwitBech32Wallet } from './segwit-bech32-wallet';
 import { SegwitP2SHWallet } from './segwit-p2sh-wallet';
 import { SLIP39LegacyP2PKHWallet, SLIP39SegwitBech32Wallet, SLIP39SegwitP2SHWallet } from './slip39-wallets';
 import { WatchOnlyWallet } from './watch-only-wallet';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
 
 export type Utxo = {
   // Returned by BlueElectrum
@@ -78,6 +79,17 @@ export type TransactionOutput = {
   };
 };
 
+export type LightningTransaction = {
+  memo?: string;
+  type?: 'user_invoice' | 'payment_request' | 'bitcoind_tx' | 'paid_invoice';
+  payment_hash?: string | { data: string };
+  category?: 'receive';
+  timestamp?: number;
+  expire_time?: number;
+  ispaid?: boolean;
+  walletID?: string;
+};
+
 export type Transaction = {
   txid: string;
   hash: string;
@@ -94,6 +106,20 @@ export type Transaction = {
   blocktime: number;
   received?: number;
   value?: number;
+
+  /**
+   * if known, who is on the other end of the transaction (BIP47 payment code)
+   */
+  counterparty?: string;
+};
+
+/**
+ * in some cases we add additional data to each tx object so the code that works with that transaction can find the
+ * wallet that owns it etc
+ */
+export type ExtendedTransaction = Transaction & {
+  walletID: string;
+  walletPreferredBalanceUnit: BitcoinUnit;
 };
 
 export type TWallet =

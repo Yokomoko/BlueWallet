@@ -7,10 +7,8 @@ import bip38 from 'bip38grs';
 import BIP32Factory from 'bip32grs';
 import * as bitcoin from 'groestlcoinjs-lib';
 import BlueCrypto from 'react-native-blue-crypto';
-
 import loc from '../loc';
 import { BlueSpacing20, BlueCard, BlueText, BlueLoading } from '../BlueComponents';
-import navigationStyle from '../components/navigationStyle';
 import {
   SegwitP2SHWallet,
   LegacyWallet,
@@ -344,7 +342,3 @@ Selftest.propTypes = {
     goBack: PropTypes.func,
   }),
 };
-
-Selftest.navigationOptions = navigationStyle({
-  title: loc.settings.selfTest,
-});

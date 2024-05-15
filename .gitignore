@@ -85,8 +85,7 @@ artifacts/
 *.mx
 *.realm
 *.realm.lock
-
-# GRS
-*.apk
-output-metadata.json
-sing.sh
+android/app/.project
+android/app/.classpath
+android/.settings/org.eclipse.buildship.core.prefs
+android/.project

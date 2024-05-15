@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { startAndDecrypt } from './start-and-decrypt';
 // import Notifications from '../blue_modules/notifications';
-import { LegacyWallet, TTXMetadata, WatchOnlyWallet, BlueApp as BlueAppClass } from '../class';
+import { LegacyWallet, TTXMetadata, WatchOnlyWallet, BlueApp as BlueAppClass, TCounterpartyMetadata } from '../class';
 import type { TWallet } from '../class/wallets/types';
 import presentAlert from '../components/Alert';
 import loc from '../loc';
 import * as BlueElectrum from './BlueElectrum';
 import triggerHapticFeedback, { HapticFeedbackTypes } from './hapticFeedback';
 import A from '../blue_modules/analytics';
+import { InteractionManager } from 'react-native';
 
 const BlueApp = BlueAppClass.getInstance();
 
@@ -18,6 +19,7 @@ interface BlueStorageContextType {
   wallets: TWallet[];
   setWalletsWithNewOrder: (wallets: TWallet[]) => void;
   txMetadata: TTXMetadata;
+  counterpartyMetadata: TCounterpartyMetadata;
   saveToDisk: (force?: boolean) => Promise<void>;
   selectedWalletID: string | undefined;
   setSelectedWalletID: (walletID: string | undefined) => void;
@@ -71,29 +73,28 @@ export const BlueStorageProvider = ({ children }: { children: React.ReactNode })
   const [reloadTransactionsMenuActionFunction, setReloadTransactionsMenuActionFunction] = useState<() => void>(() => {});
 
   useEffect(() => {
-    BlueElectrum.isDisabled().then(setIsElectrumDisabled);
-  }, []);
+    setWallets(BlueApp.getWallets());
 
-  useEffect(() => {
+    BlueElectrum.isDisabled().then(setIsElectrumDisabled);
     if (walletsInitialized) {
       BlueElectrum.connectMain();
     }
   }, [walletsInitialized]);
 
   const saveToDisk = async (force: boolean = false) => {
-    if (BlueApp.getWallets().length === 0 && !force) {
-      console.log('not saving empty wallets array');
-      return;
-    }
-    BlueApp.tx_metadata = txMetadata;
-    await BlueApp.saveToDisk();
-    setWallets([...BlueApp.getWallets()]);
-    txMetadata = BlueApp.tx_metadata;
+    InteractionManager.runAfterInteractions(async () => {
+      if (BlueApp.getWallets().length === 0 && !force) {
+        console.log('not saving empty wallets array');
+        return;
+      }
+      BlueApp.tx_metadata = txMetadata;
+      BlueApp.counterparty_metadata = counterpartyMetadata;
+      await BlueApp.saveToDisk();
+      setWallets([...BlueApp.getWallets()]);
+      txMetadata = BlueApp.tx_metadata;
+      counterpartyMetadata = BlueApp.counterparty_metadata;
+    });
   };
-
-  useEffect(() => {
-    setWallets(BlueApp.getWallets());
-  }, []);
 
   const resetWallets = () => {
     setWallets(BlueApp.getWallets());
@@ -105,61 +106,65 @@ export const BlueStorageProvider = ({ children }: { children: React.ReactNode })
   };
 
   const refreshAllWalletTransactions = async (lastSnappedTo?: number, showUpdateStatusIndicator: boolean = true) => {
-    let noErr = true;
-    try {
-      await BlueElectrum.waitTillConnected();
-      if (showUpdateStatusIndicator) {
-        setWalletTransactionUpdateStatus(WalletTransactionsStatus.ALL);
+    InteractionManager.runAfterInteractions(async () => {
+      let noErr = true;
+      try {
+        await BlueElectrum.waitTillConnected();
+        if (showUpdateStatusIndicator) {
+          setWalletTransactionUpdateStatus(WalletTransactionsStatus.ALL);
+        }
+        const paymentCodesStart = Date.now();
+        await BlueApp.fetchSenderPaymentCodes(lastSnappedTo);
+        const paymentCodesEnd = Date.now();
+        console.log('fetch payment codes took', (paymentCodesEnd - paymentCodesStart) / 1000, 'sec');
+        const balanceStart = +new Date();
+        await fetchWalletBalances(lastSnappedTo);
+        const balanceEnd = +new Date();
+        console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
+        const start = +new Date();
+        await fetchWalletTransactions(lastSnappedTo);
+        const end = +new Date();
+        console.log('fetch tx took', (end - start) / 1000, 'sec');
+      } catch (err) {
+        noErr = false;
+        console.warn(err);
+      } finally {
+        setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
       }
-      const paymentCodesStart = Date.now();
-      await BlueApp.fetchSenderPaymentCodes(lastSnappedTo);
-      const paymentCodesEnd = Date.now();
-      console.log('fetch payment codes took', (paymentCodesEnd - paymentCodesStart) / 1000, 'sec');
-      const balanceStart = +new Date();
-      await fetchWalletBalances(lastSnappedTo);
-      const balanceEnd = +new Date();
-      console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      await fetchWalletTransactions(lastSnappedTo);
-      const end = +new Date();
-      console.log('fetch tx took', (end - start) / 1000, 'sec');
-    } catch (err) {
-      noErr = false;
-      console.warn(err);
-    } finally {
-      setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
-    }
-    if (noErr) await saveToDisk(); // caching
+      if (noErr) await saveToDisk(); // caching
+    });
   };
 
   const fetchAndSaveWalletTransactions = async (walletID: string) => {
-    const index = wallets.findIndex(wallet => wallet.getID() === walletID);
-    let noErr = true;
-    try {
-      // 5sec debounce:
-      if (+new Date() - _lastTimeTriedToRefetchWallet[walletID] < 5000) {
-        console.log('re-fetch wallet happens too fast; NOP');
-        return;
-      }
-      _lastTimeTriedToRefetchWallet[walletID] = +new Date();
+    InteractionManager.runAfterInteractions(async () => {
+      const index = wallets.findIndex(wallet => wallet.getID() === walletID);
+      let noErr = true;
+      try {
+        // 5sec debounce:
+        if (+new Date() - _lastTimeTriedToRefetchWallet[walletID] < 5000) {
+          console.log('re-fetch wallet happens too fast; NOP');
+          return;
+        }
+        _lastTimeTriedToRefetchWallet[walletID] = +new Date();
 
-      await BlueElectrum.waitTillConnected();
-      setWalletTransactionUpdateStatus(walletID);
-      const balanceStart = +new Date();
-      await fetchWalletBalances(index);
-      const balanceEnd = +new Date();
-      console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
-      const start = +new Date();
-      await fetchWalletTransactions(index);
-      const end = +new Date();
-      console.log('fetch tx took', (end - start) / 1000, 'sec');
-    } catch (err) {
-      noErr = false;
-      console.warn(err);
-    } finally {
-      setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
-    }
-    if (noErr) await saveToDisk(); // caching
+        await BlueElectrum.waitTillConnected();
+        setWalletTransactionUpdateStatus(walletID);
+        const balanceStart = +new Date();
+        await fetchWalletBalances(index);
+        const balanceEnd = +new Date();
+        console.log('fetch balance took', (balanceEnd - balanceStart) / 1000, 'sec');
+        const start = +new Date();
+        await fetchWalletTransactions(index);
+        const end = +new Date();
+        console.log('fetch tx took', (end - start) / 1000, 'sec');
+      } catch (err) {
+        noErr = false;
+        console.warn(err);
+      } finally {
+        setWalletTransactionUpdateStatus(WalletTransactionsStatus.NONE);
+      }
+      if (noErr) await saveToDisk(); // caching
+    });
   };
 
   const addWallet = (wallet: TWallet) => {
@@ -197,6 +202,7 @@ export const BlueStorageProvider = ({ children }: { children: React.ReactNode })
   };
 
   let txMetadata = BlueApp.tx_metadata;
+  let counterpartyMetadata = BlueApp.counterparty_metadata || {}; // init
   const getTransactions = BlueApp.getTransactions;
   const fetchWalletBalances = BlueApp.fetchWalletBalances;
   const fetchWalletTransactions = BlueApp.fetchWalletTransactions;
@@ -216,6 +222,7 @@ export const BlueStorageProvider = ({ children }: { children: React.ReactNode })
     wallets,
     setWalletsWithNewOrder,
     txMetadata,
+    counterpartyMetadata,
     saveToDisk,
     getTransactions,
     selectedWalletID,

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'groestlcoinjs-lib';
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -41,7 +41,6 @@ import CoinsSelected from '../../components/CoinsSelected';
 import InputAccessoryAllFunds from '../../components/InputAccessoryAllFunds';
 import ListItem from '../../components/ListItem';
 import ToolTipMenu from '../../components/TooltipMenu';
-import { navigationStyleTx } from '../../components/navigationStyle';
 import { useTheme } from '../../components/themes';
 import prompt from '../../helpers/prompt';
 import { requestCameraAuthorization, scanQrHelper } from '../../helpers/scan-qr';
@@ -103,7 +102,7 @@ const SendDetails = () => {
     return initialFee;
   }, [customFee, feePrecalc, networkTransactionFees]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (wallet) {
       setHeaderRightOptions();
     }
@@ -1653,11 +1652,3 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
 });
-
-SendDetails.navigationOptions = navigationStyleTx({}, options => ({
-  ...options,
-  title: loc.send.header,
-  statusBarStyle: 'light',
-}));
-
-SendDetails.initialParams = { isEditable: true };

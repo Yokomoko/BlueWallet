@@ -1,26 +1,12 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useReducer, useRef } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  SectionList,
-  Image,
-  useWindowDimensions,
-  findNodeHandle,
-  I18nManager,
-  InteractionManager,
-} from 'react-native';
-import { Icon } from 'react-native-elements';
-
-import { BlueHeaderDefaultMain } from '../../BlueComponents';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
+import { View, Text, StyleSheet, SectionList, Image, useWindowDimensions, findNodeHandle, InteractionManager } from 'react-native';
 import WalletsCarousel from '../../components/WalletsCarousel';
 import DeeplinkSchemaMatch from '../../class/deeplink-schema-match';
 import ActionSheet from '../ActionSheet';
 import loc from '../../loc';
 import { FContainer, FButton } from '../../components/FloatButtons';
 import { useFocusEffect, useIsFocused, useRoute } from '@react-navigation/native';
-import { BlueStorageContext } from '../../blue_modules/storage-context';
+import { useStorage } from '../../blue_modules/storage-context';
 import { isDesktop } from '../../blue_modules/environment';
 import BlueClipboard from '../../blue_modules/clipboard';
 import { TransactionListItem } from '../../components/TransactionListItem';
@@ -31,8 +17,9 @@ import presentAlert from '../../components/Alert';
 import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
 import A from '../../blue_modules/analytics';
 import * as fs from '../../blue_modules/fs';
-import { TWallet, Transaction } from '../../class/wallets/types';
+import { TWallet, Transaction, ExtendedTransaction } from '../../class/wallets/types';
 import { useIsLargeScreen } from '../../hooks/useIsLargeScreen';
+import { Header } from '../../components/Header';
 
 const WalletsListSections = { CAROUSEL: 'CAROUSEL', TRANSACTIONS: 'TRANSACTIONS' };
 
@@ -113,10 +100,10 @@ const WalletsList: React.FC = () => {
     setSelectedWalletID,
     isElectrumDisabled,
     setReloadTransactionsMenuActionFunction,
-  } = useContext(BlueStorageContext);
+  } = useStorage();
   const { width } = useWindowDimensions();
   const { colors, scanImage } = useTheme();
-  const { navigate, setOptions } = useExtendedNavigation();
+  const { navigate } = useExtendedNavigation();
   const isFocused = useIsFocused();
   const routeName = useRoute().name;
   const dataSource = getTransactions(undefined, 10);
@@ -137,12 +124,13 @@ const WalletsList: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      verifyBalance();
-      setSelectedWalletID(undefined);
-      InteractionManager.runAfterInteractions(() => {
+      const task = InteractionManager.runAfterInteractions(() => {
         setReloadTransactionsMenuActionFunction(() => onRefresh);
+        verifyBalance();
+        setSelectedWalletID(undefined);
       });
       return () => {
+        task.cancel();
         setReloadTransactionsMenuActionFunction(() => {});
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,47 +152,6 @@ const WalletsList: React.FC = () => {
     } else {
       A(A.ENUM.GOT_ZERO_BALANCE);
     }
-  };
-
-  useLayoutEffect(() => {
-    setOptions({
-      navigationBarColor: colors.navigationBarColor,
-      headerShown: !isDesktop,
-      headerStyle: {
-        backgroundColor: colors.customHeader,
-      },
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () =>
-        I18nManager.isRTL ? null : (
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityLabel={loc._.more}
-            testID="SettingsButton"
-            style={styles.headerTouch}
-            onPress={navigateToSettings}
-          >
-            <Icon size={22} name="more-horiz" type="material" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ),
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () =>
-        I18nManager.isRTL ? (
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityLabel={loc._.more}
-            testID="SettingsButton"
-            style={styles.headerTouch}
-            onPress={navigateToSettings}
-          >
-            <Icon size={22} name="more-horiz" type="material" color={colors.foregroundColor} />
-          </TouchableOpacity>
-        ) : null,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colors]);
-
-  const navigateToSettings = () => {
-    navigate('Settings');
   };
 
   /**
@@ -279,11 +226,10 @@ const WalletsList: React.FC = () => {
     }
   };
 
-  const renderTransactionListsRow = (data: { item: Transaction }) => {
+  const renderTransactionListsRow = (item: ExtendedTransaction) => {
     return (
       <View style={styles.transaction}>
-        {/** @ts-ignore: Fix later **/}
-        <TransactionListItem item={data.item} itemPriceUnit={data.item.walletPreferredBalanceUnit} walletID={data.item.walletID} />
+        <TransactionListItem item={item} itemPriceUnit={item.walletPreferredBalanceUnit} walletID={item.walletID} />
       </View>
     );
   };
@@ -305,13 +251,12 @@ const WalletsList: React.FC = () => {
     );
   };
 
-  const renderSectionItem = (item: { section?: any; item?: Transaction }) => {
+  const renderSectionItem = (item: { section: any; item: ExtendedTransaction }) => {
     switch (item.section.key) {
       case WalletsListSections.CAROUSEL:
         return isLargeScreen ? null : renderWalletsCarousel();
       case WalletsListSections.TRANSACTIONS:
-        /* @ts-ignore: fix later */
-        return renderTransactionListsRow(item);
+        return renderTransactionListsRow(item.item);
       default:
         return null;
     }
@@ -320,9 +265,7 @@ const WalletsList: React.FC = () => {
   const renderSectionHeader = (section: { section: { key: any } }) => {
     switch (section.section.key) {
       case WalletsListSections.CAROUSEL:
-        return isLargeScreen ? null : (
-          <BlueHeaderDefaultMain leftText={loc.wallets.list_title} onNewWalletPress={() => navigate('AddWalletRoot')} />
-        );
+        return isLargeScreen ? null : <Header leftText={loc.wallets.list_title} onNewWalletPress={() => navigate('AddWalletRoot')} />;
       case WalletsListSections.TRANSACTIONS:
         return renderListHeaderComponent();
       default:
@@ -473,10 +416,6 @@ const styles = StyleSheet.create({
   },
   walletsListWrapper: {
     flex: 1,
-  },
-  headerTouch: {
-    height: 48,
-    paddingVertical: 10,
   },
   listHeaderBack: {
     flexDirection: 'row',
