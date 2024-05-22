@@ -8,7 +8,7 @@ import A from '../blue_modules/analytics';
 import BlueClipboard from '../blue_modules/clipboard';
 import { updateExchangeRate } from '../blue_modules/currency';
 import triggerHapticFeedback, { HapticFeedbackTypes } from '../blue_modules/hapticFeedback';
-import Notifications from '../blue_modules/notifications';
+// import Notifications from '../blue_modules/notifications';
 import { useStorage } from '../blue_modules/storage-context';
 import { LightningCustodianWallet } from '../class';
 import DeeplinkSchemaMatch from '../class/deeplink-schema-match';
