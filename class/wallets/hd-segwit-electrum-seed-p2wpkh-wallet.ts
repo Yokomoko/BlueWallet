@@ -2,6 +2,7 @@ import BIP32Factory from 'bip32grs';
 import * as bitcoin from 'groestlcoinjs-lib';
 import b58 from 'bs58grscheck';
 import * as mn from 'electrum-mnemonic';
+
 import ecc from '../../blue_modules/noble_ecc';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
 

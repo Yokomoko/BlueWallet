@@ -1,16 +1,17 @@
+import assert from 'assert';
+import * as bitcoin from 'groestlcoinjs-lib';
+
 import {
-  helperDeleteWallet,
-  sleep,
+  expectToBeVisible,
+  extractTextFromElementById,
   hashIt,
+  helperCreateWallet,
+  helperDeleteWallet,
+  helperSwitchAdvancedMode,
+  sleep,
   sup,
   yo,
-  extractTextFromElementById,
-  expectToBeVisible,
-  helperCreateWallet,
-  helperSwitchAdvancedMode,
 } from './helperz';
-import * as bitcoin from 'groestlcoinjs-lib';
-import assert from 'assert';
 
 /**
  * this testsuite is for test cases that require no wallets to be present

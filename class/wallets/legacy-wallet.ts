@@ -1,16 +1,16 @@
 import BigNumber from 'bignumber.js';
-import bitcoinMessage from 'groestlcoinjs-message';
-import { randomBytes } from '../rng';
-import { AbstractWallet } from './abstract-wallet';
-import { HDSegwitBech32Wallet } from '..';
 import * as bitcoin from 'groestlcoinjs-lib';
-import * as BlueElectrum from '../../blue_modules/BlueElectrum';
+import bitcoinMessage from 'groestlcoinjs-message';
 import coinSelect, { CoinSelectOutput, CoinSelectReturnInput, CoinSelectTarget } from 'coinselect';
 import coinSelectSplit from 'coinselect/split';
-import { CreateTransactionResult, CreateTransactionTarget, CreateTransactionUtxo, Transaction, Utxo } from './types';
 import { ECPairAPI, ECPairFactory, Signer } from 'ecpairgrs';
 
+import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import ecc from '../../blue_modules/noble_ecc';
+import { HDSegwitBech32Wallet } from '..';
+import { randomBytes } from '../rng';
+import { AbstractWallet } from './abstract-wallet';
+import { CreateTransactionResult, CreateTransactionTarget, CreateTransactionUtxo, Transaction, Utxo } from './types';
 const ECPair: ECPairAPI = ECPairFactory(ecc);
 // fix-groestlcoinjs-lib bitcoin.initEccLib(ecc);
 

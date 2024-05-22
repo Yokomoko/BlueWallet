@@ -1,9 +1,10 @@
 import * as bitcoin from 'groestlcoinjs-lib';
+import { CoinSelectTarget } from 'coinselect';
 import { ECPairFactory } from 'ecpairgrs';
+
 import ecc from '../../blue_modules/noble_ecc';
 import { LegacyWallet } from './legacy-wallet';
 import { CreateTransactionResult, CreateTransactionUtxo } from './types';
-import { CoinSelectTarget } from 'coinselect';
 
 const ECPair = ECPairFactory(ecc);
 

@@ -1,13 +1,12 @@
 // import assert from 'assert';
-import { ECPairFactory } from 'ecpairgrs';
-
-import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet } from '../../class';
-import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import BIP47Factory from '@spsina/bip47';
 import assert from 'assert';
-
 import * as bitcoin from 'groestlcoinjs-lib';
+import { ECPairFactory } from 'ecpairgrs';
+
+import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import ecc from '../../blue_modules/noble_ecc';
+import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet } from '../../class';
 
 const ECPair = ECPairFactory(ecc);
 

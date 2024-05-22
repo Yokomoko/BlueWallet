@@ -1,6 +1,6 @@
 import assert from 'assert';
-import wif from 'wifgrs';
 import bip38 from 'bip38grs';
+import wif from 'wifgrs';
 
 jest.setTimeout(180 * 1000);
 
