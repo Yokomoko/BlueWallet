@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { FlatList, NativeSyntheticEvent, StyleSheet, View } from 'react-native';
+import { FlatList, NativeSyntheticEvent, StyleSheet, View, LayoutAnimation, UIManager, Platform } from 'react-native';
 
 import {
   CurrencyRate,
@@ -21,19 +21,27 @@ import { FiatUnit, FiatUnitSource, FiatUnitType, getFiatRate } from '../../model
 
 dayjs.extend(calendar);
 
+// Enable LayoutAnimation for Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
 const Currency: React.FC = () => {
   const { setPreferredFiatCurrencyStorage } = useSettings();
-  const [isSavingNewPreferredCurrency, setIsSavingNewPreferredCurrency] = useState(false);
+  const [isSavingNewPreferredCurrency, setIsSavingNewPreferredCurrency] = useState<FiatUnitType | undefined>();
   const [selectedCurrency, setSelectedCurrency] = useState<FiatUnitType>(FiatUnit.USD);
   const [currencyRate, setCurrencyRate] = useState<CurrencyRate>({ LastUpdated: null, Rate: null });
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { colors } = useTheme();
   const { setOptions } = useExtendedNavigation();
   const [search, setSearch] = useState('');
 
-  const data = useMemo(
-    () => Object.values(FiatUnit).filter(item => item.endPointKey.toLowerCase().includes(search.toLowerCase())),
-    [search],
-  );
+  const data = useMemo(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    return Object.values(FiatUnit).filter(
+      item => item.endPointKey.toLowerCase().includes(search.toLowerCase()) || item.country.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [search]);
 
   const stylesHook = StyleSheet.create({
     flex: {
@@ -64,18 +72,22 @@ const Currency: React.FC = () => {
     setOptions({
       headerSearchBarOptions: {
         onChangeText: (event: NativeSyntheticEvent<{ text: string }>) => setSearch(event.nativeEvent.text),
+        onFocus: () => setIsSearchFocused(true),
+        onBlur: () => setIsSearchFocused(false),
       },
     });
   }, [setOptions]);
 
   const renderItem = ({ item }: { item: FiatUnitType }) => (
     <ListItem
-      disabled={isSavingNewPreferredCurrency || selectedCurrency.endPointKey === item.endPointKey}
+      disabled={isSavingNewPreferredCurrency === item || selectedCurrency.endPointKey === item.endPointKey}
       title={`${item.endPointKey} (${item.symbol})`}
       containerStyle={StyleSheet.flatten([styles.flex, stylesHook.flex, { minHeight: 60 }])}
       checkmark={selectedCurrency.endPointKey === item.endPointKey}
+      isLoading={isSavingNewPreferredCurrency && selectedCurrency.endPointKey === item.endPointKey}
+      subtitle={item.country}
       onPress={async () => {
-        setIsSavingNewPreferredCurrency(true);
+        setIsSavingNewPreferredCurrency(item);
         try {
           await getFiatRate(item.endPointKey);
           await setPreferredCurrency(item);
@@ -86,13 +98,18 @@ const Currency: React.FC = () => {
         } catch (error: any) {
           console.log(error);
           presentAlert({
-            message: error.message ? `${loc.settings.currency_fetch_error}: ${error.message}}` : loc.settings.currency_fetch_error,
+            message: error.message ? `${loc.settings.currency_fetch_error}: ${error.message}` : loc.settings.currency_fetch_error,
           });
         } finally {
-          setIsSavingNewPreferredCurrency(false);
+          setIsSavingNewPreferredCurrency(undefined);
         }
       }}
     />
+  );
+
+  const selectedCurrencyVisible = useMemo(
+    () => data.some(item => item.endPointKey === selectedCurrency.endPointKey),
+    [data, selectedCurrency],
   );
 
   return (
@@ -105,19 +122,21 @@ const Currency: React.FC = () => {
         initialNumToRender={30}
         renderItem={renderItem}
       />
-      <BlueCard>
-        <BlueText>
-          {loc.settings.currency_source} {selectedCurrency?.source ?? FiatUnitSource.CoinGecko}
-        </BlueText>
-        <BlueSpacing10 />
-        <BlueText>
-          {loc.settings.rate}: {currencyRate.Rate ?? loc._.never}
-        </BlueText>
-        <BlueSpacing10 />
-        <BlueText>
-          {loc.settings.last_updated}: {dayjs(currencyRate.LastUpdated).calendar() ?? loc._.never}
-        </BlueText>
-      </BlueCard>
+      {!isSearchFocused || selectedCurrencyVisible ? (
+        <BlueCard>
+          <BlueText>
+            {loc.settings.currency_source} {selectedCurrency?.source ?? FiatUnitSource.CoinDesk}
+          </BlueText>
+          <BlueSpacing10 />
+          <BlueText>
+            {loc.settings.rate}: {currencyRate.Rate ?? loc._.never}
+          </BlueText>
+          <BlueSpacing10 />
+          <BlueText>
+            {loc.settings.last_updated}: {dayjs(currencyRate.LastUpdated).calendar() ?? loc._.never}
+          </BlueText>
+        </BlueCard>
+      ) : null}
     </View>
   );
 };

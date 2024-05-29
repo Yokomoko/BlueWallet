@@ -1,6 +1,5 @@
 //
-//  WidgetAPI.swift
-//  TodayExtension
+//  MarketAPI.swift
 //
 //  Created by Marcos Rodriguez on 11/2/19.
 
@@ -33,7 +32,6 @@ class MarketAPI {
               return
           }
 
-          // Parse the JSON based on the source and format the response
           parseJSONBasedOnSource(json: json, source: source, endPointKey: endPointKey, completion: completion)
     }
 
@@ -56,7 +54,6 @@ class MarketAPI {
       }
   }
 
-  // Handles XML data for BNR source
   private static func handleBNRData(data: Data, completion: @escaping ((WidgetDataStore?, Error?) -> Void)) {
       let parser = XMLParser(data: data)
       let delegate = BNRXMLParserDelegate()

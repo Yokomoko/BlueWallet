@@ -26,6 +26,7 @@ export type TFiatUnit = {
   endPointKey: string;
   symbol: string;
   locale: string;
+  country: string;
   source: 'CoinGecko';
 };
 
@@ -39,6 +40,7 @@ export type FiatUnitType = {
   endPointKey: string;
   symbol: string;
   locale: string;
+  country: string;
   source: keyof typeof FiatUnitSource;
 };
 

@@ -11,10 +11,10 @@ const NetworkSettings = lazy(() => import('../screen/settings/NetworkSettings'))
 const About = lazy(() => import('../screen/settings/about'));
 const DefaultView = lazy(() => import('../screen/settings/DefaultView'));
 const ElectrumSettings = lazy(() => import('../screen/settings/electrumSettings'));
-const EncryptStorage = lazy(() => import('../screen/settings/encryptStorage'));
+const EncryptStorage = lazy(() => import('../screen/settings/EncryptStorage'));
 const LightningSettings = lazy(() => import('../screen/settings/lightningSettings'));
 const NotificationSettings = lazy(() => import('../screen/settings/notificationSettings'));
-const Selftest = lazy(() => import('../screen/selftest'));
+const SelfTest = lazy(() => import('../screen/settings/SelfTest'));
 const ReleaseNotes = lazy(() => import('../screen/settings/ReleaseNotes'));
 const Tools = lazy(() => import('../screen/settings/tools'));
 const SettingsPrivacy = lazy(() => import('../screen/settings/SettingsPrivacy'));
@@ -84,9 +84,9 @@ export const NotificationSettingsComponent = () => (
   </Suspense>
 );
 
-export const SelftestComponent = () => (
+export const SelfTestComponent = () => (
   <Suspense fallback={<LazyLoadingIndicator />}>
-    <Selftest />
+    <SelfTest />
   </Suspense>
 );
 

@@ -90,7 +90,7 @@ export const writeFileAndExport = async function (fileName: string, contents: st
 /**
  * Opens & reads *.psbt files, and returns base64 psbt. FALSE if something went wrong (wont throw).
  */
-export const openSignedTransaction = async function (): Promise<string | boolean> {
+export const openSignedTransaction = async function (): Promise<string | false> {
   try {
     const res = await DocumentPicker.pickSingle({
       type: Platform.OS === 'ios' ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn'] : [DocumentPicker.types.allFiles],
@@ -121,7 +121,7 @@ const _readPsbtFileIntoBase64 = async function (uri: string): Promise<string> {
   }
 };
 
-export const showImagePickerAndReadImage = () => {
+export const showImagePickerAndReadImage = (): Promise<string | undefined> => {
   return new Promise((resolve, reject) =>
     launchImageLibrary(
       {

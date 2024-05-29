@@ -1,18 +1,17 @@
-import BIP32Factory from 'bip32grs';
-import bip38 from 'bip38grs';
+import BIP32Factory from 'bip32';
+import bip38 from 'bip38';
 import * as bip39 from 'bip39';
-import * as bitcoin from 'groestlcoinjs-lib';
-import PropTypes from 'prop-types';
+import * as bitcoin from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import BlueCrypto from 'react-native-blue-crypto';
 import wif from 'wif';
 
-import * as BlueElectrum from '../blue_modules/BlueElectrum';
-import * as encryption from '../blue_modules/encryption';
-import * as fs from '../blue_modules/fs';
-import ecc from '../blue_modules/noble_ecc';
-import { BlueCard, BlueLoading, BlueSpacing20, BlueText } from '../BlueComponents';
+import * as BlueElectrum from '../../blue_modules/BlueElectrum';
+import * as encryption from '../../blue_modules/encryption';
+import * as fs from '../../blue_modules/fs';
+import ecc from '../../blue_modules/noble_ecc';
+import { BlueCard, BlueLoading, BlueSpacing20, BlueText } from '../../BlueComponents';
 import {
   HDAezeedWallet,
   HDSegwitBech32Wallet,
@@ -20,12 +19,12 @@ import {
   LegacyWallet,
   SegwitP2SHWallet,
   SLIP39LegacyP2PKHWallet,
-} from '../class';
-import presentAlert from '../components/Alert';
-import Button from '../components/Button';
-import SafeArea from '../components/SafeArea';
-import SaveFileButton from '../components/SaveFileButton';
-import loc from '../loc';
+} from '../../class';
+import presentAlert from '../../components/Alert';
+import Button from '../../components/Button';
+import SafeArea from '../../components/SafeArea';
+import SaveFileButton from '../../components/SaveFileButton';
+import loc from '../../loc';
 
 const bip32 = BIP32Factory(ecc);
 
@@ -58,6 +57,7 @@ export default class SelfTest extends Component {
   };
 
   async componentDidMount() {
+    console.debug('SelfTest - componentDidMount');
     let errorMessage = '';
     let isOk = true;
 
@@ -81,9 +81,9 @@ export default class SelfTest extends Component {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         await BlueElectrum.ping();
         await BlueElectrum.waitTillConnected();
-        const addr4elect = '3JEmL9KXWK3r6cmd2s4HDNWS61FSj4J3SD';
+        const addr4elect = '3GCvDBAktgQQtsbN6x5DYiQCMmgZ9Yk8BK';
         const electrumBalance = await BlueElectrum.getBalanceByAddress(addr4elect);
-        if (electrumBalance.confirmed !== 496360)
+        if (electrumBalance.confirmed !== 51432)
           throw new Error('BlueElectrum getBalanceByAddress failure, got ' + JSON.stringify(electrumBalance));
 
         const electrumTxs = await BlueElectrum.getTransactionsByAddress(addr4elect);
@@ -92,55 +92,54 @@ export default class SelfTest extends Component {
         // skipping RN-specific test'
       }
 
-      /*
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         const aezeed = new HDAezeedWallet();
         aezeed.setSecret(
           'abstract rhythm weird food attract treat mosquito sight royal actor surround ride strike remove guilt catch filter summer mushroom protect poverty cruel chaos pattern',
         );
         assertStrictEqual(await aezeed.validateMnemonicAsync(), true, 'Aezeed failed');
-        assertStrictEqual(aezeed._getExternalAddressByIndex(0), 'grs1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn', 'Aezeed failed');
+        assertStrictEqual(aezeed._getExternalAddressByIndex(0), 'bc1qdjj7lhj9lnjye7xq3dzv3r4z0cta294xy78txn', 'Aezeed failed');
       } else {
         // skipping RN-specific test
       }
-      */
+
       let l = new LegacyWallet();
-      l.setSecret('L1NwUPQZKwGuPMS9R36rjezZpxKFYLmugFvDQBZCwYFukJ3pzWdb');
-      assertStrictEqual(l.getAddress(), 'FbThBimw1krwL3QWf6XEk2Xen6NigyzGBT');
+      l.setSecret('L4ccWrPMmFDZw4kzAKFqJNxgHANjdy6b7YKNXMwB4xac4FLF3Tov');
+      assertStrictEqual(l.getAddress(), '14YZ6iymQtBVQJk6gKnLCk49UScJK7SH4M');
       let utxos = [
         {
-          txid: '83b97118cbc82932f5cd6b4232247a6729b9b04975171b500199e2597896d0dd',
+          txid: 'cc44e933a094296d9fe424ad7306f16916253a3d154d52e4f1a757c18242cec4',
           vout: 0,
           value: 100000,
           txhex:
-            '01000000000101a518573c27dc6bfc6fcedbed81957d5ea3acbd50b2014dfbda6e7da925a364820100000017160014a3b2e49860a9e7296e2a769ac7bcdca033f4236ffeffffff0150da1100000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac024730440220315b6ed73ab1d27bef74c38dff0be000357a0a4f932bfa26bdfdc17aa442bb2e022043b0688e8e6a44c56c6745ac0d298278979a45bec3ad3edeebcfab01e566f160012102957467ae6eb2fa89458dff90b0c3a563e01865aa2a4a603c97c9f7c0f4eb7b2600000000',
+            '0200000000010161890cd52770c150da4d7d190920f43b9f88e7660c565a5a5ad141abb6de09de00000000000000008002a0860100000000001976a91426e01119d265aa980390c49eece923976c218f1588ac3e17000000000000160014c1af8c9dd85e0e55a532a952282604f820746fcd02473044022072b3f28808943c6aa588dd7a4e8f29fad7357a2814e05d6c5d767eb6b307b4e6022067bc6a8df2dbee43c87b8ce9ddd9fe678e00e0f7ae6690d5cb81eca6170c47e8012102e8fba5643e15ab70ec79528833a2c51338c1114c4eebc348a235b1a3e13ab07100000000',
         },
       ];
 
-      let txNew = l.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, l.getAddress());
+      let txNew = l.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, l.getAddress());
       const txBitcoin = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '0200000001ddd0967859e29901501b177549b0b929677a2432426bcdf53229c8cb1871b983000000006b483045022100aa45ad57d62c58a871ff22b7151c5ab80a246dec3a088d71b15040070d2a176e022044e2c255b79fd61a995aa40d3f071c90cad4bedb8b3b1defceb81d3ba28d5f73012103a371ab521dfdefefb6bce17ef9d066cbadd33cfb061e2482ac496c065ecddb45ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988ac2e260000000000001976a9144506c5cf10815e05a318e94fba6be7604d485ccc88ac00000000',
+        '0200000001c4ce4282c157a7f1e4524d153d3a251669f10673ad24e49f6d2994a033e944cc000000006b48304502210091e58bd2021f2eeea8d39d7f7b053c9ccc52a747b60f1c3584ba33285e2d150602205b2d35a2536cbe157015e8c54a26f5fc350cc7c72b5ca80b9e548917993f652201210337c09b3cb889801638078fd4e6998218b28c92d338ea2602720a88847aedceb3ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88ac2e260000000000001976a91426e01119d265aa980390c49eece923976c218f1588ac00000000',
       );
       assertStrictEqual(txBitcoin.ins.length, 1);
       assertStrictEqual(txBitcoin.outs.length, 2);
-      assertStrictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(txBitcoin.outs[0].script)); // to address
+      assertStrictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(txBitcoin.outs[0].script)); // to address
       assertStrictEqual(l.getAddress(), bitcoin.address.fromOutputScript(txBitcoin.outs[1].script)); // change address
 
       //
 
       l = new SegwitP2SHWallet();
-      l.setSecret('L1PfnzGXgSH8gVXYs5RbdtGPDQsUobnEih7uHgWSYg9yR17WMBha');
-      if (l.getAddress() !== '36CZdzjnFDvdsTvHLqu3Fq64DgTKYqaf4x') {
+      l.setSecret('Kxr9tQED9H44gCmp6HAdmemAzU3n84H3dGkuWTKvE23JgHMW8gct');
+      if (l.getAddress() !== '34AgLJhwXrvmkZS1o5TrcdeevMt22Nar53') {
         throw new Error('failed to generate segwit P2SH address from WIF');
       }
 
       //
 
       const wallet = new SegwitP2SHWallet();
-      wallet.setSecret('KwZoFNfgbp62JyQY571j639L5cRJxKcx8AUJr4hBvt3hN82Sg5VV');
-      assertStrictEqual(wallet.getAddress(), '3J5xoxEVcoWV9Eam9Af2223nNwuTj36HNw');
+      wallet.setSecret('Ky1vhqYGCiCbPd8nmbUeGfwLdXB1h5aGwxHwpXrzYRfY5cTZPDo4');
+      assertStrictEqual(wallet.getAddress(), '3CKN8HTCews4rYJYsyub5hjAVm5g5VFdQJ');
 
       utxos = [
         {
@@ -150,15 +149,15 @@ export default class SelfTest extends Component {
         },
       ];
 
-      txNew = wallet.createTransaction(utxos, [{ value: 90000, address: 'FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs' }], 1, wallet.getAddress());
+      txNew = wallet.createTransaction(utxos, [{ value: 90000, address: '1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB' }], 1, wallet.getAddress());
       const tx = bitcoin.Transaction.fromHex(txNew.tx.toHex());
       assertStrictEqual(
         txNew.tx.toHex(),
-        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014928d55aca4d60ec0fb6d5b379befdecc59ba4a46ffffffff02905f0100000000001976a914120ad7854152901ebeb269acb6cef20e71b3cf5988aca73303000000000017a914b3d8fb042ed64b6cdf94b556ae46af2f5ca7d05e870247304402203192f04859d3866a58c67b743e6a6c420c8f71ec035b7627df6dfaefa8714e7e02204f7d1bf215aae5caa96a846176e45cb70026a1122b74bca8cd4afd5c2351bfd1012103ba358af62e085e166801cba8865e771a4cfb1bda000c3e053dc54c3ebe0c050f00000000',
+        '020000000001010c86eb9013616e38b4752e56e5683e864cb34fcd7fe790bdc006b60c08446ba50000000017160014139dc70d73097f9d775f8a3280ba3e3435515641ffffffff02905f0100000000001976a914aa381cd428a4e91327fd4434aa0a08ff131f1a5a88aca73303000000000017a914749118baa93fb4b88c28909c8bf0a8202a0484f4870248304502210080545d30e3d30dff272ab11c91fd6150170b603239b48c3d56a3fa66bf240085022003762404e1b45975adc89f61ec1569fa19d6d4a8d405e060897754c489ebeade012103a5de146762f84055db3202c1316cd9008f16047f4f408c1482fdb108217eda0800000000',
       );
       assertStrictEqual(tx.ins.length, 1);
       assertStrictEqual(tx.outs.length, 2);
-      assertStrictEqual('FWp7bfoFEfczt1pVQrQddqVXBN9hPvUYqs', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
+      assertStrictEqual('1GX36PGBUrF8XahZEGQqHqnJGW2vCZteoB', bitcoin.address.fromOutputScript(tx.outs[0].script)); // to address
       assertStrictEqual(bitcoin.address.fromOutputScript(tx.outs[1].script), wallet.getAddress()); // change address
 
       //
@@ -177,7 +176,7 @@ export default class SelfTest extends Component {
       const seed = bip39.mnemonicToSeedSync(mnemonic);
       const root = bip32.fromSeed(seed);
 
-      const path = "m/49'/17'/0'/0/0";
+      const path = "m/49'/0'/0'/0/0";
       const child = root.derivePath(path);
       const address = bitcoin.payments.p2sh({
         redeem: bitcoin.payments.p2wpkh({
@@ -187,7 +186,7 @@ export default class SelfTest extends Component {
         network: bitcoin.networks.bitcoin,
       }).address;
 
-      if (address !== '395AFhKYJCYGGR7P4rwvgqBTTfQukiHrWy') {
+      if (address !== '3GcKN7q7gZuZ8eHygAhHrvPa5zZbG5Q1rK') {
         throw new Error('bip49 is not ok');
       }
 
@@ -214,14 +213,13 @@ export default class SelfTest extends Component {
         }
 
         //
+
         const hd4 = new HDSegwitBech32Wallet();
-        hd4._xpub = 'zpub6rkSL2KXiwrQePLhUkf7gNi4XBKuNP4nXA31jxULPsjYaD4EzYHcMFP3SpEwmz4ya5xtuCWXsRVxYHd4XU2YmZe5i6ovvmwbfuSEqRkig23';
+        hd4._xpub = 'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP';
         await hd4.fetchBalance();
-        // console.log("selftest balance = " + hd4.getBalance());
-        if (hd4.getBalance() === undefined) throw new Error('Could not fetch HD Bech32 balance');
+        if (hd4.getBalance() !== 200000) throw new Error('Could not fetch HD Bech32 balance');
         await hd4.fetchTransactions();
-        // console.log("selftest tx count = " + hd4.getTransactions().length);
-        if (hd4.getTransactions().length === 0) throw new Error('Could not fetch HD Bech32 transactions');
+        if (hd4.getTransactions().length !== 4) throw new Error('Could not fetch HD Bech32 transactions');
       } else {
         // skipping RN-specific test
       }
@@ -237,13 +235,13 @@ export default class SelfTest extends Component {
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         let callbackWasCalled = false;
         const decryptedKey = await bip38.decryptAsync(
-          '6PYWosLNqFysPwJxhifKSoop7dB4xtYQd9cxsAPzeXjF9kjD6Xhtda1nni',
+          '6PnU5voARjBBykwSddwCdcn6Eu9EcsK24Gs5zWxbJbPZYW7eiYQP8XgKbN',
           'qwerty',
           () => (callbackWasCalled = true),
         );
         assertStrictEqual(
           wif.encode(0x80, decryptedKey.privateKey, decryptedKey.compressed),
-          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycTMtut3',
+          'KxqRtpd9vFju297ACPKHrGkgXuberTveZPXbRDiQ3MXZycSQYtjc',
           'bip38 failed',
         );
         // bip38 with BlueCrypto doesn't support progress callback
@@ -257,23 +255,24 @@ export default class SelfTest extends Component {
           'shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed\n' +
             'shadow pistol academic acid actress prayer class unknown daughter sweater depict flip twice unkind craft early superior advocate guest smoking',
         );
-        assertStrictEqual(w._getExternalAddressByIndex(0), 'FaRzD8hmNC8BWb82gP4CtTv9WECsjDrzff', 'SLIP39 failed');
+        assertStrictEqual(w._getExternalAddressByIndex(0), '18pvMjy7AJbCDtv4TLYbGPbR7SzGzjqUpj', 'SLIP39 failed');
       }
 
       //
-      /*
+
       if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-        assertStrictEqual(await Linking.canOpenURL('https://github.com/Groestlcoin/BlueWallet/'), true, 'Linking can not open https url');
+        assertStrictEqual(await Linking.canOpenURL('https://github.com/BlueWallet/BlueWallet/'), true, 'Linking can not open https url');
       } else {
         // skipping RN-specific test'
       }
-      */
+
       //
 
       assertStrictEqual(Buffer.from('00ff0f', 'hex').reverse().toString('hex'), '0fff00');
 
       //
     } catch (Err) {
+      console.log(Err);
       errorMessage += Err;
       isOk = false;
     }
@@ -336,10 +335,3 @@ function assertStrictEqual(actual, expected, message) {
     throw new Error('Assertion failed that ' + JSON.stringify(expected) + ' equals ' + JSON.stringify(actual));
   }
 }
-
-SelfTest.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    goBack: PropTypes.func,
-  }),
-};
