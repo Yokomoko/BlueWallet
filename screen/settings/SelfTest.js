@@ -1,11 +1,11 @@
-import BIP32Factory from 'bip32';
-import bip38 from 'bip38';
+import BIP32Factory from 'bip32grs';
+import bip38 from 'bip38grs';
 import * as bip39 from 'bip39';
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 import React, { Component } from 'react';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import BlueCrypto from 'react-native-blue-crypto';
-import wif from 'wif';
+import wif from 'wifgrs';
 
 import * as BlueElectrum from '../../blue_modules/BlueElectrum';
 import * as encryption from '../../blue_modules/encryption';
