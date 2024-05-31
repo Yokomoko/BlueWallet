@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StackActions, useFocusEffect, useRoute } from '@react-navigation/native';
+import { RouteProp, StackActions, useFocusEffect, useRoute } from '@react-navigation/native';
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'groestlcoinjs-lib';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -49,31 +49,17 @@ import { requestCameraAuthorization, scanQrHelper } from '../../helpers/scan-qr'
 import loc, { formatBalance, formatBalanceWithoutSuffix } from '../../loc';
 import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
-import { CreateTransactionUtxo, TWallet } from '../../class/wallets/types';
+import { CreateTransactionTarget, CreateTransactionUtxo, TWallet } from '../../class/wallets/types';
 import { TOptions } from 'bip21';
 import assert from 'assert';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { SendDetailsStackParamList } from '../../navigation/SendDetailsStackParamList';
 import { isTablet } from '../../blue_modules/environment';
 import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
-
-const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
-
-interface IParams {
-  memo: string;
-  address: string;
-  walletID: string;
-  amount: number;
-  amountSats: number;
-  unit: BitcoinUnit;
-  noRbf: boolean;
-  launchedBy: string;
-  isEditable: boolean;
-  uri: string; // payjoin uri
-}
+import { ContactList } from '../../class/contact-list';
 
 interface IPaymentDestinations {
-  address: string;
+  address: string; // btc address or payment code
   amountSats?: number | string;
   amount?: string | number | 'MAX';
   key: string; // random id to look up this record
@@ -86,13 +72,14 @@ interface IFee {
   fastestFee: number | null;
 }
 type NavigationProps = NativeStackNavigationProp<SendDetailsStackParamList, 'SendDetails'>;
+type RouteProps = RouteProp<SendDetailsStackParamList, 'SendDetails'>;
 
 const SendDetails = () => {
   const { wallets, setSelectedWalletID, sleep, txMetadata, saveToDisk } = useContext(BlueStorageContext);
   const navigation = useExtendedNavigation<NavigationProps>();
-  const route = useRoute();
+  const route = useRoute<RouteProps>();
   const name = route.name;
-  const routeParams = route.params as IParams;
+  const routeParams = route.params;
   const scrollView = useRef<FlatList<any>>(null);
   const scrollIndex = useRef(0);
   const { colors } = useTheme();
@@ -410,13 +397,14 @@ const SendDetails = () => {
 
     return change;
   };
-
   /**
    * TODO: refactor this mess, get rid of regexp, use https://github.com/bitcoinjs/bitcoinjs-lib/issues/890 etc etc
    *
    * @param data {String} Can be address or `groestlcoin:xxxxxxx` uri scheme, or invalid garbage
    */
+
   const processAddressData = (data: string | { data?: any }) => {
+    assert(wallet, 'Internal error: wallet not set');
     if (typeof data !== 'string') {
       data = String(data.data);
     }
@@ -428,8 +416,10 @@ const SendDetails = () => {
       return presentAlert({ title: loc.errors.error, message: loc.send.details_address_field_is_not_valid });
     }
 
+    const cl = new ContactList();
+
     const dataWithoutSchema = data.replace('groestlcoin:', '').replace('GROESTLCOIN:', '');
-    if (wallet?.isAddressValid(dataWithoutSchema)) {
+    if (wallet.isAddressValid(dataWithoutSchema) || cl.isPaymentCodeValid(dataWithoutSchema)) {
       setAddresses(addrs => {
         addrs[scrollIndex.current].address = dataWithoutSchema;
         return [...addrs];
@@ -455,7 +445,7 @@ const SendDetails = () => {
     }
 
     console.log('options', options);
-    if (btcAddressRx.test(address) || address.startsWith('grs1') || address.startsWith('GRS1')) {
+    if (wallet.isAddressValid(address)) {
       setAddresses(addrs => {
         addrs[scrollIndex.current].address = address;
         addrs[scrollIndex.current].amount = options?.amount ?? 0;
@@ -477,6 +467,7 @@ const SendDetails = () => {
   };
 
   const createTransaction = async () => {
+    assert(wallet, 'Internal error: wallet is not set');
     Keyboard.dismiss();
     setIsLoading(true);
     const requestedSatPerByte = feeRate;
@@ -507,7 +498,8 @@ const SendDetails = () => {
       }
 
       if (!error) {
-        if (!wallet?.isAddressValid(transaction.address)) {
+        const cl = new ContactList();
+        if (!wallet.isAddressValid(transaction.address) && !cl.isPaymentCodeValid(transaction.address)) {
           console.log('validation error');
           error = loc.send.details_address_field_is_not_valid;
         }
@@ -539,7 +531,7 @@ const SendDetails = () => {
     const lutxo: CreateTransactionUtxo[] = utxo || (wallet?.getUtxo() ?? []);
     console.log({ requestedSatPerByte, lutxo: lutxo.length });
 
-    const targets = [];
+    const targets: CreateTransactionTarget[] = [];
     for (const transaction of addresses) {
       if (transaction.amount === BitcoinUnit.MAX) {
         // output with MAX
@@ -555,6 +547,9 @@ const SendDetails = () => {
         }
       }
     }
+
+    const targetsOrig = JSON.parse(JSON.stringify(targets));
+    // preserving original since it will be mutated
 
     // without forcing `HDSegwitBech32Wallet` i had a weird ts error, complaining about last argument (fp)
     const { tx, outputs, psbt, fee } = (wallet as HDSegwitBech32Wallet)?.createTransaction(
@@ -618,6 +613,7 @@ const SendDetails = () => {
       memo: transactionMemo,
       walletID: wallet.getID(),
       tx: tx.toHex(),
+      targets: targetsOrig,
       recipients,
       satoshiPerByte: requestedSatPerByte,
       payjoinUrl,
