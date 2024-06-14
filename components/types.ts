@@ -36,9 +36,9 @@ export interface ToolTipMenuProps {
 }
 
 export enum HandOffActivityType {
-  ReceiveOnchain = 'io.bluewallet.bluewallet.receiveonchain',
-  Xpub = 'io.bluewallet.bluewallet.xpub',
-  ViewInBlockExplorer = 'io.bluewallet.bluewallet.blockexplorer',
+  ReceiveOnchain = 'org.groestlcoin.bluewallet123.receiveonchain',
+  Xpub = 'org.groestlcoin.bluewallet123.xpub',
+  ViewInBlockExplorer = 'org.groestlcoin.bluewallet123.blockexplorer',
 }
 
 export interface HandOffComponentProps {

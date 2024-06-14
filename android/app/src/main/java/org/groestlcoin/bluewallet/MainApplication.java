@@ -65,7 +65,7 @@ public class MainApplication extends Application implements ReactApplication {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
-    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("group.io.bluewallet.bluewallet", Context.MODE_PRIVATE);
+    SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("group.org.groestlcoin.bluewallet123", Context.MODE_PRIVATE);
 
     // Retrieve the "donottrack" value. Default to "0" if not found.
     String isDoNotTrackEnabled = sharedPref.getString("donottrack", "0");

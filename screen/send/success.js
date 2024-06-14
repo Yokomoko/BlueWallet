@@ -52,7 +52,7 @@ const Success = () => {
         <HandOffComponent
           title={loc.transactions.details_title}
           type={HandOffActivityType.ViewInBlockExplorer}
-          url={`https://mempool.space/tx/${txid}`}
+          url={`https://esplora.groestlcoin.org/tx/${txid}`}
         />
       )}
     </SafeArea>

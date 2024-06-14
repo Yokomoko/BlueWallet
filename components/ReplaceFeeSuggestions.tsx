@@ -133,7 +133,7 @@ const ReplaceFeeSuggestions: React.FC<ReplaceFeeSuggestionsProps> = ({ onFeeSele
               </View>
             </View>
             <View style={styles.rateContainer}>
-              <Text style={stylesHook.rateText}>{rate} sat/byte</Text>
+              <Text style={stylesHook.rateText}>{rate} gro/byte</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -157,7 +157,7 @@ const ReplaceFeeSuggestions: React.FC<ReplaceFeeSuggestionsProps> = ({ onFeeSele
             placeholder={loc.send.fee_satvbyte}
             placeholderTextColor="#81868e"
           />
-          <Text style={stylesHook.rateText}>sat/byte</Text>
+          <Text style={stylesHook.rateText}>gro/byte</Text>
         </View>
       </TouchableOpacity>
       <BlueText style={stylesHook.alternativeText}>{loc.formatString(loc.send.fee_replace_minvb, { min: transactionMinimum })}</BlueText>
