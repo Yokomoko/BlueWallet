@@ -87,30 +87,47 @@ class MarketAPI {
   }
 
   static func fetchPrice(currency: String, completion: @escaping ((WidgetDataStore?, Error?) -> Void)) {
-         let currencyToFiatUnit = fiatUnit(currency: currency)
-         guard let source = currencyToFiatUnit?.source, let endPointKey = currencyToFiatUnit?.endPointKey else {
-             completion(nil, CurrencyError(errorDescription: "Invalid currency unit or endpoint."))
-             return
-         }
+      let currencyToFiatUnit = fiatUnit(currency: currency)
+      guard let source = currencyToFiatUnit?.source, let endPointKey = currencyToFiatUnit?.endPointKey else {
+          completion(nil, CurrencyError(errorDescription: "Invalid currency unit or endpoint."))
+          return
+      }
 
-         let urlString = buildURLString(source: source, endPointKey: endPointKey)
-         guard let url = URL(string: urlString) else {
-             completion(nil, CurrencyError(errorDescription: "Invalid URL."))
-             return
-         }
+      let urlString = buildURLString(source: source, endPointKey: endPointKey)
+      guard let url = URL(string: urlString) else {
+          completion(nil, CurrencyError(errorDescription: "Invalid URL."))
+          return
+      }
 
-         URLSession.shared.dataTask(with: url) { data, response, error in
-             guard let data = data, error == nil else {
-                 completion(nil, error ?? CurrencyError(errorDescription: "Network error or data not found."))
-                 return
-             }
+      fetchData(url: url, source: source, endPointKey: endPointKey, completion: completion)
+  }
 
-             if source == "BNR" {
-                 handleBNRData(data: data, completion: completion)
-             } else {
-                 handleDefaultData(data: data, source: source, endPointKey: endPointKey, completion: completion)
-             }
-         }.resume()
-     }
+  private static func fetchData(url: URL, source: String, endPointKey: String, retries: Int = 3, completion: @escaping ((WidgetDataStore?, Error?) -> Void)) {
+      URLSession.shared.dataTask(with: url) { data, response, error in
+          if let error = error {
+              if retries > 0 {
+                  fetchData(url: url, source: source, endPointKey: endPointKey, retries: retries - 1, completion: completion)
+              } else {
+                  completion(nil, error)
+              }
+              return
+          }
+
+          guard let data = data else {
+              if retries > 0 {
+                  fetchData(url: url, source: source, endPointKey: endPointKey, retries: retries - 1, completion: completion)
+              } else {
+                  completion(nil, CurrencyError(errorDescription: "Data not found."))
+              }
+              return
+          }
+
+          if source == "BNR" {
+              handleBNRData(data: data, completion: completion)
+          } else {
+              handleDefaultData(data: data, source: source, endPointKey: endPointKey, completion: completion)
+          }
+      }.resume()
+  }
 
 }

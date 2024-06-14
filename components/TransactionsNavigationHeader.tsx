@@ -10,7 +10,7 @@ import loc, { formatBalance, formatBalanceWithoutSuffix } from '../loc';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import { FiatUnit } from '../models/fiatUnit';
 import { BlurredBalanceView } from './BlurredBalanceView';
-import { useSettings } from './Context/SettingsContext';
+import { useSettings } from '../hooks/context/useSettings';
 import ToolTipMenu from './TooltipMenu';
 import { ToolTipMenuProps } from './types';
 
@@ -105,13 +105,6 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
     if (onManageFundsPressed) {
       onManageFundsPressed(actionKeyID);
     }
-  };
-
-  const handleOnPaymentCodeButtonPressed = () => {
-    navigation.navigate('PaymentCodeRoot', {
-      screen: 'PaymentCodesList',
-      params: { walletID: wallet.getID() },
-    });
   };
 
   const onPressMenuItem = (id: string) => {
@@ -246,11 +239,6 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
         >
           <Text style={styles.manageFundsButtonText}>{loc.lnd.title}</Text>
         </ToolTipMenu>
-      )}
-      {wallet.allowBIP47() && wallet.isBIP47Enabled() && (
-        <TouchableOpacity style={styles.manageFundsButton} accessibilityRole="button" onPress={handleOnPaymentCodeButtonPressed}>
-          <Text style={styles.manageFundsButtonText}>{loc.bip47.contacts}</Text>
-        </TouchableOpacity>
       )}
       {wallet.type === LightningLdkWallet.type && (
         <TouchableOpacity
