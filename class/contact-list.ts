@@ -3,7 +3,7 @@ import BIP47Factory from '@spsina/bip47';
 import { SilentPayment } from 'silent-payments';
 
 import ecc from '../blue_modules/noble_ecc';
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from 'groestlcoinjs-lib';
 
 export class ContactList {
   isBip47PaymentCodeValid(pc: string) {
@@ -27,7 +27,7 @@ export class ContactList {
     try {
       bitcoin.address.toOutputScript(address); // throws, no?
 
-      if (!address.toLowerCase().startsWith('bc1')) return true;
+      if (!address.toLowerCase().startsWith('grs1')) return true;
       const decoded = bitcoin.address.fromBech32(address);
       if (decoded.version === 0) return true;
       if (decoded.version === 1 && decoded.data.length !== 32) return false;
