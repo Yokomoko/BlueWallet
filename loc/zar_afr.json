@@ -78,7 +78,7 @@
     "open_direct_channel": "Open direkte kanaal met hierdie knoop-punt:",
     "please_pay_between_and": "Betaal asseblief tussen {min} en {max}",
     "please_pay": "Betaal asseblief",
-    "sats": "sats.",
+    "sats": "gros.",
     "wasnt_paid_and_expired": "Die faktuur was nie betaal nie en het verval."
   },
   "plausibledeniability": {
@@ -109,10 +109,10 @@
     "details_setAmount": "Bedrag ontvang",
     "details_share": "Deel...",
     "header": "Ontvang",
-    "maxSats": "Die maksimum bedrag is {max} sats",
-    "maxSatsFull": "Die maksimum bedrag is {max} sats of {currency}",
-    "minSats": "Die Minimale bedrag is {min} sats",
-    "minSatsFull": "Die minimum bedrag is {min} sats of {currency}",
+    "maxSats": "Die maksimum bedrag is {max} gros",
+    "maxSatsFull": "Die maksimum bedrag is {max} gros of {currency}",
+    "minSats": "Die Minimale bedrag is {min} gros",
+    "minSatsFull": "Die minimum bedrag is {min} gros of {currency}",
     "qrcode_for_the_address": "QR Code vir die adres"
   },
   "send": {
@@ -147,8 +147,8 @@
     "fee_3h": "3h",
     "fee_fast": "Vinnig",
     "fee_medium": "Medium",
-    "fee_replace_minvb": "Die totale fooi (satoshi per vByte) wat jy wil betaal, moet meer wees as {min} sat/vByte.",
-    "fee_satvbyte": "in sat/vByte",
+    "fee_replace_minvb": "Die totale fooi (gro per vByte) wat jy wil betaal, moet meer wees as {min} gro/vByte.",
+    "fee_satvbyte": "in gro/vByte",
     "fee_slow": "Stadig",
     "header": "Stuur",
     "input_clear": "Maak skoon",
