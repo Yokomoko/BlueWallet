@@ -2,7 +2,7 @@
     "USD": {
         "endPointKey": "USD",
         "locale": "en-US",
-        "source": "Kraken",
+        "source": "CoinGecko",
         "symbol": "$",
         "country": "United States (US Dollar)"
     },
@@ -16,14 +16,14 @@
     "ANG": {
         "endPointKey": "ANG",
         "locale": "en-SX",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "ƒ",
         "country": "Sint Maarten (Netherlands Antillean Guilder)"
     },
     "ARS": {
         "endPointKey": "ARS",
         "locale": "es-AR",
-        "source": "Yadio",
+        "source": "CoinGecko",
         "symbol": "$",
         "country": "Argentina (Argentine Peso)"
     },
@@ -37,7 +37,7 @@
     "AWG": {
         "endPointKey": "AWG",
         "locale": "nl-AW",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "ƒ",
         "country": "Aruba (Aruban Florin)"
     },
@@ -72,21 +72,21 @@
     "CLP": {
         "endPointKey": "CLP",
         "locale": "es-CL",
-        "source": "Yadio",
+        "source": "CoinGecko",
         "symbol": "$",
         "country": "Chile (Chilean Peso)"
     },
     "CNY": {
         "endPointKey": "CNY",
         "locale": "zh-CN",
-        "source": "Coinbase",
+        "source": "CoinGecko",
         "symbol": "¥",
         "country": "China (Chinese Yuan)"
     },
     "COP": {
         "endPointKey": "COP",
         "locale": "es-CO",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "$",
         "country": "Colombia (Colombian Peso)"
     },
@@ -107,21 +107,21 @@
     "EUR": {
         "endPointKey": "EUR",
         "locale": "en-IE",
-        "source": "Kraken",
+        "source": "CoinGecko",
         "symbol": "€",
         "country": "European Union (Euro)"
     },
     "GBP": {
         "endPointKey": "GBP",
         "locale": "en-GB",
-        "source": "Kraken",
+        "source": "CoinGecko",
         "symbol": "£",
         "country": "United Kingdom (British Pound)"
     },
     "HRK": {
         "endPointKey": "HRK",
         "locale": "hr-HR",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "HRK",
         "country": "Croatia (Croatian Kuna)"
     },
@@ -149,28 +149,28 @@
     "INR": {
         "endPointKey": "INR",
         "locale": "hi-IN",
-        "source": "wazirx",
+        "source": "CoinGecko",
         "symbol": "₹",
         "country": "India (Indian Rupee)"
     },
     "IRR": {
         "endPointKey": "IRR",
         "locale": "fa-IR",
-        "source": "Exir",
+        "source": "CoinGecko",
         "symbol": "﷼",
         "country": "Iran (Iranian Rial)"
     },
     "IRT": {
         "endPointKey": "IRT",
         "locale": "fa-IR",
-        "source": "Exir",
+        "source": "CoinGecko",
         "symbol": "تومان",
         "country": "Iran (Iranian Toman)"
     },
     "ISK": {
         "endPointKey": "ISK",
         "locale": "is-IS",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "kr",
         "country": "Iceland (Icelandic Króna)"
     },
@@ -184,7 +184,7 @@
     "KES": {
         "endPointKey": "KES",
         "locale": "en-KE",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "Ksh",
         "country": "Kenya (Kenyan Shilling)"
     },
@@ -205,7 +205,7 @@
     "LBP": {
         "endPointKey": "LBP",
         "locale": "ar-LB",
-        "source": "YadioConvert",
+        "source": "CoinGecko",
         "symbol": "ل.ل.",
         "country": "Lebanon (Lebanese Pound)"
     },
@@ -233,7 +233,7 @@
     "MZN": {
         "endPointKey": "MZN",
         "locale": "seh-MZ",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "MTn",
         "country": "Mozambique (Mozambican Metical)"
     },
@@ -261,7 +261,7 @@
     "OMR": {
         "endPointKey": "OMR",
         "locale": "ar-OM",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "ر.ع.",
         "country": "Oman (Omani Rial)"
     },
@@ -282,14 +282,14 @@
     "QAR": {
         "endPointKey": "QAR",
         "locale": "ar-QA",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "ر.ق.",
         "country": "Qatar (Qatari Riyal)"
     },
     "RON": {
         "endPointKey": "RON",
         "locale": "ro-RO",
-        "source": "BNR",
+        "source": "CoinGecko",
         "symbol": "lei",
         "country": "Romania (Romanian Leu)"
     },
@@ -345,7 +345,7 @@
     "TZS": {
         "endPointKey": "TZS",
         "locale": "en-TZ",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "TSh",
         "country": "Tanzania (Tanzanian Shilling)"
     },
@@ -359,14 +359,14 @@
     "UGX": {
         "endPointKey": "UGX",
         "locale": "en-UG",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "USh",
         "country": "Uganda (Ugandan Shilling)"
     },
     "UYU": {
         "endPointKey": "UYU",
         "locale": "es-UY",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "$",
         "country": "Uruguay (Uruguayan Peso)"
     },
@@ -380,14 +380,14 @@
     "VES": {
         "endPointKey": "VES",
         "locale": "es-VE",
-        "source": "Yadio",
+        "source": "CoinGecko",
         "symbol": "Bs.",
         "country": "Venezuela (Venezuelan Bolívar Soberano)"
     },
     "XAF": {
         "endPointKey": "XAF",
         "locale": "fr-CF",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "Fr",
         "country": "Central African Republic (Central African Franc)"
     },
@@ -401,7 +401,7 @@
     "GHS": {
         "endPointKey": "GHS",
         "locale": "en-GH",
-        "source": "CoinDesk",
+        "source": "CoinGecko",
         "symbol": "₵",
         "country": "Ghana (Ghanaian Cedi)"
     }
