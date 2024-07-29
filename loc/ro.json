@@ -307,6 +307,7 @@
     "eta_1d": "Estimat: în ~1 minute",
     "view_wallet": "Vezi {walletLabel}",
     "list_title": "Tranzacții",
+    "transaction": "Tranzacție",
     "rbf_title": "Crește comisionul (RBF)",
     "status_bump": "Crește comisionul",
     "status_cancel": "Anulează tranzacția",

@@ -1,4 +1,4 @@
-import { hashIt, helperDeleteWallet, helperImportWallet, sleep, sup, yo } from './helperz';
+import { hashIt, helperDeleteWallet, helperImportWallet, sleep, yo } from './helperz';
 
 beforeAll(async () => {
   // reinstalling the app just for any case to clean up app's storage
@@ -42,9 +42,11 @@ describe('BlueWallet UI Tests - import Watch-only wallet (zpub)', () => {
     await element(by.id('SetCustomAmountButton')).tap();
     await element(by.id('BitcoinAmountInput')).replaceText('1');
     await element(by.id('CustomAmountDescription')).typeText('Test');
+    await element(by.id('CustomAmountDescription')).tapReturnKey();
     await element(by.id('CustomAmountSaveButton')).tap();
-    await sup('1 GRS');
-    await sup('Test');
+    await expect(element(by.id('CustomAmountDescriptionText'))).toHaveText('Test');
+    await expect(element(by.id('BitcoinAmountText'))).toHaveText('1 GRS');
+
     await expect(element(by.id('BitcoinAddressQRCodeContainer'))).toBeVisible();
 
     await expect(element(by.text('groestlcoin:grs1q5vzs7ea3z5e2wt53mp97mfy927eu75l7tdf0nq?amount=1&label=Test'))).toBeVisible();

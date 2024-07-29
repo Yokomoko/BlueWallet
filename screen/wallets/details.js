@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
 import {
   ActivityIndicator,
   Alert,
@@ -48,6 +47,7 @@ import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import { useSettings } from '../../hooks/context/useSettings';
 import { useStorage } from '../../hooks/context/useStorage';
 import { popToTop } from '../../NavigationService';
+import { useRoute } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   scrollViewContent: {
@@ -113,7 +113,6 @@ const WalletDetails = () => {
   const { walletID } = useRoute().params;
   const [isLoading, setIsLoading] = useState(false);
   const [backdoorPressed, setBackdoorPressed] = useState(0);
-  const [backdoorBip47Pressed, setBackdoorBip47Pressed] = useState(0);
   const wallet = useRef(wallets.find(w => w.getID() === walletID)).current;
   const [walletName, setWalletName] = useState(wallet.getLabel());
   const [useWithHardwareWallet, setUseWithHardwareWallet] = useState(wallet.useWithHardwareWalletEnabled());
@@ -252,7 +251,7 @@ const WalletDetails = () => {
     navigate('WalletExportRoot', {
       screen: 'WalletExport',
       params: {
-        walletID: wallet.getID(),
+        walletID,
       },
     });
   };
@@ -260,7 +259,7 @@ const WalletDetails = () => {
     navigate('ExportMultisigCoordinationSetupRoot', {
       screen: 'ExportMultisigCoordinationSetup',
       params: {
-        walletID: wallet.getID(),
+        walletID,
       },
     });
   };
@@ -283,7 +282,7 @@ const WalletDetails = () => {
     navigate('SignVerifyRoot', {
       screen: 'SignVerify',
       params: {
-        walletID: wallet.getID(),
+        walletID,
         address: wallet.getAllExternalAddresses()[0], // works for both single address and HD wallets
       },
     });
@@ -295,7 +294,7 @@ const WalletDetails = () => {
 
   const navigateToAddresses = () =>
     navigate('WalletAddresses', {
-      walletID: wallet.getID(),
+      walletID,
     });
 
   const navigateToContacts = () => navigate('PaymentCodeList', { walletID });
@@ -528,7 +527,7 @@ const WalletDetails = () => {
                   {loc.transactions.list_title.toLowerCase()}
                 </Text>
                 <View style={styles.hardware}>
-                  <BlueText onPress={() => setBackdoorBip47Pressed(prevState => prevState + 1)}>{loc.wallets.details_display}</BlueText>
+                  <BlueText>{loc.wallets.details_display}</BlueText>
                   <Switch
                     disabled={isToolTipMenuVisible}
                     value={hideTransactionsInWalletsList}
@@ -543,7 +542,7 @@ const WalletDetails = () => {
                 <BlueText>{wallet.getTransactions().length}</BlueText>
               </>
 
-              {backdoorBip47Pressed >= 10 && wallet.allowBIP47() ? (
+              {wallet.allowBIP47() ? (
                 <>
                   <Text style={[styles.textLabel2, stylesHook.textLabel2]}>{loc.bip47.payment_code}</Text>
                   <View style={styles.hardware}>
