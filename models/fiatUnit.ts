@@ -16,9 +16,12 @@ const RateExtractors = {
     let rate = json?.market_data?.current_price?.[ticker.toLowerCase()]; // eslint-disable-line
     if (!rate) throw new Error(`Could not update rate for ${ticker}: data is wrong`);
 
-    rate = Number(rate);
-    if (!(rate >= 0)) throw new Error(`Could not update rate for ${ticker}: data is wrong`);
-    return rate;
+    const parsedRate = Number(rate);
+    if (isNaN(parsedRate) || parsedRate <= 0) {
+      throw new Error(`Could not update rate for ${ticker}: data is wrong`);
+    }
+
+    return parsedRate;
   },
 } as const;
 
