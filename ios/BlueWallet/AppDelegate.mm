@@ -72,7 +72,7 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
-} 
+}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
@@ -170,42 +170,48 @@
 }
 
 - (void)buildMenuWithBuilder:(id<UIMenuBuilder>)builder {
-  [super buildMenuWithBuilder:builder];
-  [builder removeMenuForIdentifier:UIMenuServices];
-  [builder removeMenuForIdentifier:UIMenuFormat];
-  [builder removeMenuForIdentifier:UIMenuToolbar];
+    [super buildMenuWithBuilder:builder];
 
-  // File -> Add Wallet (Command + A)
- UIKeyCommand *addWalletCommand = [UIKeyCommand keyCommandWithInput:@"A"
-                                                      modifierFlags:UIKeyModifierCommand | UIKeyModifierShift
-                                                            action:@selector(addWalletAction:)];
-[addWalletCommand setTitle:@"Add Wallet"];
+    // Remove unnecessary menus
+    [builder removeMenuForIdentifier:UIMenuServices];
+    [builder removeMenuForIdentifier:UIMenuFormat];
+    [builder removeMenuForIdentifier:UIMenuToolbar];
 
-  // File -> Import Wallet
-  UIKeyCommand *importWalletCommand = [UIKeyCommand keyCommandWithInput:@"I" modifierFlags:UIKeyModifierCommand action:@selector(importWalletAction:)];
-  [importWalletCommand setTitle:@"Import Wallet"];
+    // Remove the original Settings menu item
+    [builder removeMenuForIdentifier:UIMenuPreferences];
 
-  // Group Add Wallet and Import Wallet in a displayInline menu
-  UIMenu *walletOperationsMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[addWalletCommand, importWalletCommand]];
+    // File -> Add Wallet (Command + A)
+    UIKeyCommand *addWalletCommand = [UIKeyCommand keyCommandWithInput:@"A"
+                                                        modifierFlags:UIKeyModifierCommand | UIKeyModifierShift
+                                                              action:@selector(addWalletAction:)];
+    [addWalletCommand setTitle:@"Add Wallet"];
 
-  // Modify the existing File menu to include Wallet Operations
-  UIMenu *fileMenu = [builder menuForIdentifier:UIMenuFile];
-  if (fileMenu) {
-      // Add "Reload Transactions"
-      UIKeyCommand *reloadTransactionsCommand = [UIKeyCommand keyCommandWithInput:@"R" modifierFlags:UIKeyModifierCommand action:@selector(reloadTransactionsAction:)];
-      [reloadTransactionsCommand setTitle:@"Reload Transactions"];
+    // File -> Import Wallet
+    UIKeyCommand *importWalletCommand = [UIKeyCommand keyCommandWithInput:@"I" modifierFlags:UIKeyModifierCommand action:@selector(importWalletAction:)];
+    [importWalletCommand setTitle:@"Import Wallet"];
 
-      // Combine wallet operations and Reload Transactions into the new File menu
-      UIMenu *newFileMenu = [UIMenu menuWithTitle:fileMenu.title image:nil identifier:fileMenu.identifier options:fileMenu.options children:@[walletOperationsMenu, reloadTransactionsCommand]];
-      [builder replaceMenuForIdentifier:UIMenuFile withMenu:newFileMenu];
-  }
+    // Group Add Wallet and Import Wallet in a displayInline menu
+    UIMenu *walletOperationsMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[addWalletCommand, importWalletCommand]];
 
-  // BlueWallet -> Settings (Command + ,)
-  UIKeyCommand *settingsCommand = [UIKeyCommand keyCommandWithInput:@"," modifierFlags:UIKeyModifierCommand action:@selector(openSettings:)];
-  [settingsCommand setTitle:@"Settings..."];
-  UIMenu *settings = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[settingsCommand]];
+    // Modify the existing File menu to include Wallet Operations
+    UIMenu *fileMenu = [builder menuForIdentifier:UIMenuFile];
+    if (fileMenu) {
+        // Add "Reload Transactions"
+        UIKeyCommand *reloadTransactionsCommand = [UIKeyCommand keyCommandWithInput:@"R" modifierFlags:UIKeyModifierCommand action:@selector(reloadTransactionsAction:)];
+        [reloadTransactionsCommand setTitle:@"Reload Transactions"];
 
-  [builder insertSiblingMenu:settings afterMenuForIdentifier:UIMenuAbout];
+        // Combine wallet operations and Reload Transactions into the new File menu
+        UIMenu *newFileMenu = [UIMenu menuWithTitle:fileMenu.title image:nil identifier:fileMenu.identifier options:fileMenu.options children:@[walletOperationsMenu, reloadTransactionsCommand]];
+        [builder replaceMenuForIdentifier:UIMenuFile withMenu:newFileMenu];
+    }
+
+    // BlueWallet -> Settings (Command + ,)
+    UIKeyCommand *settingsCommand = [UIKeyCommand keyCommandWithInput:@"," modifierFlags:UIKeyModifierCommand action:@selector(openSettings:)];
+    [settingsCommand setTitle:@"Settings..."];
+    UIMenu *settings = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[settingsCommand]];
+
+    // Insert the new Settings menu after the About menu
+    [builder insertSiblingMenu:settings afterMenuForIdentifier:UIMenuAbout];
 }
 
 - (void)openSettings:(UIKeyCommand *)keyCommand {

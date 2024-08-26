@@ -969,8 +969,27 @@ PODS:
     - React
   - react-native-bw-file-access (1.0.0):
     - React-Core
-  - react-native-document-picker (9.3.0):
+  - react-native-document-picker (9.3.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-idle-timer (2.2.2):
     - React-Core
   - react-native-image-picker (7.1.2):
@@ -1240,7 +1259,7 @@ PODS:
     - React-utils (= 0.74.5)
   - ReactNativeCameraKit (13.0.0):
     - React-Core
-  - RealmJS (12.13.0):
+  - RealmJS (12.13.1):
     - React
   - RNCAsyncStorage (1.24.0):
     - React-Core
@@ -1399,7 +1418,7 @@ PODS:
     - Yoga
   - RNShare (10.2.1):
     - React-Core
-  - RNSVG (15.5.0):
+  - RNSVG (15.6.0):
     - React-Core
   - RNVectorIcons (10.1.0):
     - DoubleConversion
@@ -1782,7 +1801,7 @@ SPEC CHECKSUMS:
   react-native-biometrics: 352e5a794bfffc46a0c86725ea7dc62deb085bdc
   react-native-blue-crypto: 23f1558ad3d38d7a2edb7e2f6ed1bc520ed93e56
   react-native-bw-file-access: b232fd1d902521ca046f3fc5990ab1465e1878d7
-  react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
+  react-native-document-picker: c4f197741c327270453aa9840932098e0064fd52
   react-native-idle-timer: ee2053f2cd458f6fef1db7bebe5098ca281cce07
   react-native-image-picker: c3afe5472ef870d98a4b28415fc0b928161ee5f7
   react-native-ios-context-menu: e529171ba760a1af7f2ef0729f5a7f4d226171c5
@@ -1816,7 +1835,7 @@ SPEC CHECKSUMS:
   React-utils: f242eb7e7889419d979ca0e1c02ccc0ea6e43b29
   ReactCommon: f7da14a8827b72704169a48c929bcde802698361
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
-  RealmJS: a8c77aa700951e22403015390b33135f7ad4ace9
+  RealmJS: 325a7b621587dd9945306d4cbfd6b641bc20e2dd
   RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
@@ -1835,7 +1854,7 @@ SPEC CHECKSUMS:
   RNReanimated: 45553a3ae29a75a76269595f8554d07d4090e392
   RNScreens: aa943ad421c3ced3ef5a47ede02b0cbfc43a012e
   RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
-  RNSVG: b986585e367f4a49d8aa43065066cc9c290b3d9b
+  RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
   RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90
   RNWatch: fd30ca40a5b5ef58dcbc195638e68219bc455236
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d

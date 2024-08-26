@@ -21,6 +21,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DetailViewStackParamList } from '../../navigation/DetailViewStackParamList';
 import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
 import { useStorage } from '../../hooks/context/useStorage';
+import TotalWalletsBalance from '../../components/TotalWalletsBalance';
+import { useSettings } from '../../hooks/context/useSettings';
 
 const WalletsListSections = { CAROUSEL: 'CAROUSEL', TRANSACTIONS: 'TRANSACTIONS' };
 
@@ -105,6 +107,7 @@ const WalletsList: React.FC = () => {
     isElectrumDisabled,
     setReloadTransactionsMenuActionFunction,
   } = useStorage();
+  const { isTotalBalanceEnabled } = useSettings();
   const { width } = useWindowDimensions();
   const { colors, scanImage } = useTheme();
   const { navigate } = useExtendedNavigation<NavigationProps>();
@@ -256,18 +259,20 @@ const WalletsList: React.FC = () => {
 
   const renderWalletsCarousel = useCallback(() => {
     return (
-      <WalletsCarousel
-        data={wallets}
-        extraData={[wallets]}
-        onPress={handleClick}
-        handleLongPress={handleLongPress}
-        onMomentumScrollEnd={onSnapToItem}
-        ref={walletsCarousel}
-        onNewWalletPress={handleClick}
-        testID="WalletsList"
-        horizontal
-        scrollEnabled={isFocused}
-      />
+      <>
+        <WalletsCarousel
+          data={wallets}
+          extraData={[wallets]}
+          onPress={handleClick}
+          handleLongPress={handleLongPress}
+          onMomentumScrollEnd={onSnapToItem}
+          ref={walletsCarousel}
+          onNewWalletPress={handleClick}
+          testID="WalletsList"
+          horizontal
+          scrollEnabled={isFocused}
+        />
+      </>
     );
   }, [handleClick, handleLongPress, isFocused, onSnapToItem, wallets]);
 
@@ -290,11 +295,19 @@ const WalletsList: React.FC = () => {
       switch (section.section.key) {
         case WalletsListSections.TRANSACTIONS:
           return renderListHeaderComponent();
+        case WalletsListSections.CAROUSEL: {
+          return !isLargeScreen && isTotalBalanceEnabled ? (
+            <View style={stylesHook.walletsListWrapper}>
+              <TotalWalletsBalance />
+            </View>
+          ) : null;
+        }
+
         default:
           return null;
       }
     },
-    [renderListHeaderComponent],
+    [isLargeScreen, isTotalBalanceEnabled, renderListHeaderComponent, stylesHook.walletsListWrapper],
   );
 
   const renderSectionFooter = useCallback(
