@@ -482,8 +482,8 @@
     "manage_wallets_search_placeholder": "Buscar billeteras, notas"
   },
   "total_balance_view": {
-    "view_in_bitcoin": "Ver en Bitcoin",
-    "view_in_sats": "Ver en sats",
+    "view_in_bitcoin": "Ver en Groestlcoin",
+    "view_in_sats": "Ver en gros",
     "view_in_fiat": "Ver en {currency}",
     "title": "Balance Total",
     "explanation": "Ve el saldo total de todas tus billeteras en la pantalla de descripción general."
