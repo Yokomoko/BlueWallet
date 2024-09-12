@@ -38,7 +38,7 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
         .allowOnchainAddress()
         .then((value: boolean) => setAllowOnchainAddress(value))
         .catch((e: Error) => {
-          console.log('This Lndhub wallet does not have an onchain address API.');
+          console.log('This LNDhub wallet does not have an onchain address API.');
           setAllowOnchainAddress(false);
         });
     }
@@ -218,7 +218,7 @@ const TransactionsNavigationHeader: React.FC<TransactionsNavigationHeaderProps> 
         <TouchableOpacity style={styles.walletPreferredUnitView} onPress={changeWalletBalanceUnit}>
           <Text style={styles.walletPreferredUnitText}>
             {wallet.getPreferredBalanceUnit() === BitcoinUnit.LOCAL_CURRENCY
-              ? (preferredFiatCurrency?.endPointKey ?? FiatUnit.USD)
+              ? preferredFiatCurrency?.endPointKey ?? FiatUnit.USD
               : wallet.getPreferredBalanceUnit()}
           </Text>
         </TouchableOpacity>
