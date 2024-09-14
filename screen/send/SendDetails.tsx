@@ -110,7 +110,7 @@ const SendDetails = () => {
   const [dumb, setDumb] = useState(false);
   const { isEditable } = routeParams;
   // if utxo is limited we use it to calculate available balance
-  const balance: number = utxo ? utxo.reduce((prev, curr) => prev + curr.value, 0) : wallet?.getBalance() ?? 0;
+  const balance: number = utxo ? utxo.reduce((prev, curr) => prev + curr.value, 0) : (wallet?.getBalance() ?? 0);
   const allBalance = formatBalanceWithoutSuffix(balance, BitcoinUnit.BTC, true);
 
   // if cutomFee is not set, we need to choose highest possible fee for wallet balance
@@ -741,7 +741,7 @@ const SendDetails = () => {
       const res = await DocumentPicker.pickSingle({
         type:
           Platform.OS === 'ios'
-            ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn', DocumentPicker.types.plainText, 'public.json']
+            ? ['org.groestlcoin.psbt', 'org.groestlcoin.psbt.txn', DocumentPicker.types.plainText, DocumentPicker.types.json]
             : [DocumentPicker.types.allFiles],
       });
 
