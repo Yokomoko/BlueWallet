@@ -1,18 +1,15 @@
 #!/bin/zsh
 
-# fail if any command fails
-
 echo "🧩 Stage: Post-clone is activated .... "
 
 set -e
 # debug log
 set -x
 
-# Install dependencies using Homebrew.
+echo "===== Installing CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-brew install node@18 cocoapods
-brew link node@18
-brew install yarn
+brew install cocoapods
+echo "CocoaPods installation complete."
 
 echo "===== Installing Node.js ====="
 brew install node@20
