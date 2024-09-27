@@ -9,6 +9,7 @@ import Realm from 'realm';
 import { LegacyWallet, SegwitBech32Wallet, SegwitP2SHWallet, TaprootWallet } from '../class';
 import presentAlert from '../components/Alert';
 import loc from '../loc';
+import { GROUP_IO_BLUEWALLET } from './currency';
 
 const ElectrumClient = require('electrum-client');
 const net = require('net');
@@ -226,7 +227,7 @@ export async function connectMain(): Promise<void> {
     usingPeer = savedPeer;
   }
 
-  await DefaultPreference.setName('group.org.groestlcoin.bluewallet123');
+  await DefaultPreference.setName(GROUP_IO_BLUEWALLET);
   try {
     if (usingPeer.host.endsWith('onion')) {
       const randomPeer = getCurrentPeer();
