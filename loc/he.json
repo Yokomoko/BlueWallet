@@ -375,7 +375,7 @@
     "add_wallet_seed_length_message": "בחרו את אורך צירוף הגרעין שברצונכם להשתמש בשביל ארנק זה.",
     "add_wallet_seed_length_12": "12 מילים",
     "add_wallet_seed_length_24": "24 מילים",
-    "clipboard_bitcoin": n
+    "clipboard_bitcoin": "ישנה כתובת גרוסטלקוין בלוח. האם תרצו להשתמש בה בשביל העברה?",
     "clipboard_lightning": "ישנה חשבונית ברק בלוח שלך. האם להשתמש בה להעברה?",
     "details_address": "כתובת",
     "details_advanced": "מתקדם",
