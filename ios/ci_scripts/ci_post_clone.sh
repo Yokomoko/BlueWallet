@@ -34,8 +34,7 @@ npm prune --production | tee npm-prune-log.txt
 echo "npm ci complete. Full log output in npm-ci-log.txt and npm-prune-log.txt"
 
 echo "===== Running pod install ====="
-cd ios
-pod install | tee pod-install-log.txt
+cd .. && npx pod-install
 echo "pod install complete. Full log output in pod-install-log.txt"
 cd ..
 
